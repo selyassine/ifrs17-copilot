@@ -42,6 +42,8 @@ class Settings:
     rag_mode: str = field(default_factory=lambda: _env("RAG_MODE", "bm25"))
     rag_embed_model: str = field(default_factory=lambda: _env("RAG_EMBED_MODEL"))
     rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
+    # version du prompt rag_answer : fixée tant qu'une nouvelle version n'a pas été mesurée (D-024)
+    rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "1")))
     api_token: str = field(default_factory=lambda: _env("API_TOKEN"))
     trace_path: Path = field(
         default_factory=lambda: ROOT / _env("TRACE_PATH", "logs/traces.jsonl")

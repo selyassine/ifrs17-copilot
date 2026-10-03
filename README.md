@@ -17,6 +17,8 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Notebook 00 (test T4 + tunnel) | à exécuter sur Colab |
 | RAG : ingestion du règlement 2021/2036 (397 paragraphes), découpages A/B, BM25, dense, hybride, `/v1/search` | fait ; dense à mesurer avec BGE-M3 |
 | Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
+| Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
+| Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine : 39/50 fidèles et complètes (F-011) ; prompt v2 à mesurer |
 | Extraction multimodale, vérificateur, rédacteur | S3 |
 
 ## Installation (sans Docker)
@@ -77,6 +79,17 @@ $bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
 Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/v1/search -Headers @{"X-API-Token"="change-moi"} `
   -ContentType "application/json; charset=utf-8" -Body $bytes | ConvertTo-Json -Depth 5
 ```
+
+### Poser une question sur la norme
+
+```powershell
+$body = @{question = "Comment la CSM est-elle libérée en résultat ?"} | ConvertTo-Json
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/v1/ask -Headers @{"X-API-Token"="change-moi"} `
+  -ContentType "application/json; charset=utf-8" -Body $bytes | ConvertTo-Json -Depth 6
+```
+
+Réponse : `plan` (décision du routeur), `answer` (texte avec [§…], citations vérifiées ou refus motivé), `sources` (extraits fournis au LLM), `warnings`, `corrections`.
 
 ### Brancher un vrai LLM
 

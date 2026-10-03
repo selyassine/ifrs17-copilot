@@ -119,6 +119,12 @@ class SentenceTransformerEncoder:
 
     def __init__(self, model_name: str = "BAAI/bge-m3", device: str | None = None,
                  batch_size: int = 16):
+        # Windows : plantages intermittents 0xC0000005 dans PyTorch quand OpenMP/MKL lancent
+        # trop de fils en parallèle (F-010). Valeurs prudentes, modifiables dans l'environnement.
+        import os
+        os.environ.setdefault("OMP_NUM_THREADS", "4")
+        os.environ.setdefault("MKL_NUM_THREADS", "4")
+        os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
         from sentence_transformers import (
             SentenceTransformer,  # dépendance lourde, chargée à la demande
         )

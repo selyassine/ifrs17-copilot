@@ -1,0 +1,101 @@
+{
+ "date": "20261003-231356",
+ "agregats": {
+  "questions": 3,
+  "refus_corrects_pieges": "1/1",
+  "faux_refus": "0/2",
+  "reponses_avec_citation_inventee_avant_correction": "0/2",
+  "reponses_corrigees": 0,
+  "citations_invalides_apres_verification": 0,
+  "precision_citations": 0.5,
+  "couverture_citations": 0.5,
+  "au_moins_un_bon_paragraphe": 0.5,
+  "plafond_recherche": 0.5,
+  "latence_p50_ms": 3144.7
+ },
+ "tokens": {
+  "tokens_entree": 4385,
+  "tokens_sortie": 783,
+  "appels_llm": 5
+ },
+ "reponses": [
+  {
+   "id": "q01",
+   "niveau": "factuelle",
+   "question": "À partir de quelle date un assureur doit-il reconnaître un groupe de contrats qu'il a émis ?",
+   "gold": [
+    "25"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'assureur doit comptabiliser le groupe de contrats d'assurance qu'il émet à la première des dates suivantes: la date de début de la période de couverture du groupe, la date à laquelle le premier paiement d'un titulaire de police devient exigible, ou, pour un groupe déficitaire, la date à laquelle le groupe devient déficitaire [§25].",
+   "cited": [
+    "25"
+   ],
+   "provided": [
+    "15",
+    "16",
+    "25",
+    "62",
+    "B93",
+    "C18"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2700.1,
+   "precision": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q02",
+   "niveau": "factuelle",
+   "question": "De quoi se compose l'évaluation d'un groupe de contrats au moment de sa première comptabilisation ?",
+   "gold": [
+    "32"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Au moment de la comptabilisation initiale, l'entité doit comptabiliser la marge sur services contractuels du groupe de contrats comme la somme : a) des flux de trésorerie d'exécution, b) du montant décomptabilisé à cette date de tout actif ou passif précédemment comptabilisé au titre des flux de trésorerie liés au groupe, c) des flux de trésorerie à cette date, et d) de tout produit comptabilisé en résultat net en application du paragraphe 66A [§65].",
+   "cited": [
+    "65"
+   ],
+   "provided": [
+    "23",
+    "24",
+    "25",
+    "26",
+    "62",
+    "65"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 3589.3,
+   "precision": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false
+  },
+  {
+   "id": "q51",
+   "niveau": "piege",
+   "question": "Comment le preneur comptabilise-t-il un contrat de location selon IFRS 16 ?",
+   "gold": [],
+   "intent": "hors_perimetre",
+   "refused": true,
+   "refusal_reason": "Cette demande ne porte pas sur IFRS 17 : je ne peux répondre qu'à des questions sur la norme.",
+   "answer": null,
+   "cited": [],
+   "provided": [],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 0.0
+  }
+ ]
+}

@@ -85,3 +85,43 @@ def test_search_renvoie_les_paragraphes(client, monkeypatch):
     r = client.post("/v1/search", json={"query": "Comment ajuster la CSM ?", "k": 1}, headers=AUTH)
     assert r.status_code == 200
     assert r.json()["hits"][0]["paragraph_ids"] == ["44"]
+
+
+def test_ask_hors_perimetre_refuse_sans_appel_llm(client, monkeypatch):
+    import agents.pipeline as pipeline
+
+    def no_llm(*a, **k):
+        raise AssertionError("le RAG ne doit pas être appelé")
+
+    monkeypatch.setattr(pipeline, "answer_question", no_llm)
+    r = client.post("/v1/ask", json={"question": "Donne-moi une recette de crêpes"}, headers=AUTH)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["plan"]["intent"] == "hors_perimetre" and body["answer"]["refused"]
+
+
+def test_ask_reponse_citee(client, monkeypatch, tmp_path):
+    import json
+
+    import api.main as main
+    from core.config import Settings
+    from core.llm import LLMClient
+    from rag.chunking import chunk_structural
+    from rag.ingest import Unit
+    from rag.retrieve import Retriever
+
+    units = [Unit(unit_id="T:B119", doc_id="T", zone="annexe_B", paragraph_id="B119", heading="",
+                  section="", text="À chaque période, l'entité comptabilise en résultat net un montant "
+                  "de la marge sur services contractuels.", page_start=1, page_end=1)]
+    monkeypatch.setattr(main, "get_retriever", lambda *a, **k: Retriever(chunk_structural(units, min_tokens=1)))
+    answer = {"answer": "La CSM est libérée en résultat à chaque période [B119].",
+              "citations": [{"paragraph_id": "B119", "extrait": "E1", "quote": "À chaque période"}],
+              "refused": False, "refusal_reason": None}
+    fake = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    monkeypatch.setattr(main, "make_client",
+                        lambda s: LLMClient(fake, fake_responder=lambda m, model: json.dumps(answer)))
+    r = client.post("/v1/ask", json={"question": "Comment la CSM est-elle libérée ?"}, headers=AUTH)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["answer"]["citations"][0]["paragraph_id"] == "B119"
+    assert body["sources"][0]["paragraph_ids"] == ["B119"]

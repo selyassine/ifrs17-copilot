@@ -27,7 +27,24 @@ PRICES_PER_MTOK: dict[str, tuple[float, float]] = {}
 
 
 class LLMError(RuntimeError):
-    pass
+    retryable = True
+
+
+class LLMRateLimit(LLMError):
+    """HTTP 429 : quota par minute atteint ; ``wait`` = secondes conseillées par le fournisseur."""
+
+    def __init__(self, message: str, wait: float):
+        super().__init__(message)
+        self.wait = wait
+
+
+class LLMFatal(LLMError):
+    """Erreur qu'un nouvel essai ne corrigera pas (clé invalide, modèle inconnu, requête refusée)."""
+
+    retryable = False
+
+
+MAX_RATE_LIMIT_WAITS = 5
 
 
 @dataclass
@@ -120,15 +137,25 @@ class LLMClient:
     def _call_with_retries(self, messages, model, temperature, max_tokens, json_mode,
                            base_url, api_key) -> LLMResponse:
         last: Exception | None = None
-        for attempt in range(self.s.llm_max_retries + 1):
+        attempt, waits = 0, 0
+        while attempt <= self.s.llm_max_retries:
             try:
                 return self._call_once(messages, model, temperature, max_tokens, json_mode,
                                        base_url, api_key)
+            except LLMRateLimit as exc:
+                # quota par minute : on attend ce que demande le fournisseur, sans consommer d'essai
+                last, waits = exc, waits + 1
+                if waits > MAX_RATE_LIMIT_WAITS:
+                    break
+                time.sleep(min(exc.wait, 60))
             except LLMError as exc:
                 last = exc
-                if attempt < self.s.llm_max_retries:
+                if not exc.retryable:
+                    raise
+                attempt += 1
+                if attempt <= self.s.llm_max_retries:
                     time.sleep(min(2 ** attempt, 8))
-        raise LLMError(f"échec après {self.s.llm_max_retries + 1} tentatives : {last}")
+        raise LLMError(f"échec après {attempt} tentatives et {waits} attentes de quota : {last}")
 
     def _call_once(self, messages, model, temperature, max_tokens, json_mode,
                    base_url, api_key) -> LLMResponse:
@@ -167,6 +194,14 @@ class LLMClient:
             )
         except httpx.HTTPError as exc:
             raise LLMError(f"réseau : {exc}") from exc
+        if r.status_code == 429:
+            try:
+                wait = float(r.headers.get("retry-after", "10"))
+            except ValueError:
+                wait = 10.0
+            raise LLMRateLimit(f"HTTP 429 (quota) : {r.text[:200]}", wait=wait + 0.5)
+        if r.status_code in (400, 401, 403, 404, 413, 422):
+            raise LLMFatal(f"HTTP {r.status_code} : {r.text[:300]}")
         if r.status_code >= 400:
             raise LLMError(f"HTTP {r.status_code} : {r.text[:300]}")
         data = r.json()

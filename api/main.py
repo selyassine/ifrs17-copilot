@@ -3,8 +3,9 @@
     uvicorn api.main:app --reload --port 8000
     → documentation interactive : http://localhost:8000/docs
 
-Endpoints : santé, routage, calcul du CSM (S1), recherche dans la norme (S2).
-Les agents extraction, vérification et rédaction s'ajoutent en S3 derrière /v1/case.
+Endpoints : santé, routage, calcul du CSM (S1), recherche dans la norme (S2),
+question sur la norme avec réponse citée (S3, /v1/ask). Extraction, vérification et
+rédaction s'ajoutent en S3-S4 derrière /v1/case.
 """
 
 from __future__ import annotations
@@ -15,14 +16,16 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from agents.pipeline import ask as run_ask
 from agents.router import route_heuristic, route_llm
-from agents.schemas import CsmResult, Plan, PortfolioData
+from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData
 from core.config import Settings, get_settings
+from core.llm import LLMClient, LLMError
 from core.tracing import traced
 from engine.csm import compute_csm
 from rag.service import IndexMissing, get_retriever
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 class UTF8JSONResponse(JSONResponse):
     """Annonce explicitement l'UTF-8 : sans « charset », Windows PowerShell 5.1 décode les
@@ -138,3 +141,44 @@ def search(body: SearchRequest, settings: Settings = Depends(get_settings)) -> S
                         heading=h.chunk.heading, page_start=h.chunk.page_start, text=h.chunk.text)
               for h in hits],
     )
+
+
+class AskRequest(BaseModel):
+    question: str = Field(min_length=2, max_length=2000)
+    k: int = Field(default=5, ge=1, le=10)
+    case_id: str | None = None
+
+
+class AskResponse(BaseModel):
+    case_id: str
+    plan: Plan
+    answer: GroundedAnswer
+    sources: list[dict]
+    warnings: list[str]
+    corrections: int
+    latency_ms: float
+
+
+def make_client(settings: Settings) -> LLMClient:
+    """Point d'injection (remplacé par un LLM factice dans les tests)."""
+    return LLMClient(settings)
+
+
+@app.post("/v1/ask", response_model=AskResponse, dependencies=[Depends(check_token)])
+def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResponse:
+    """Routeur → (hors périmètre : refus immédiat, sans appel au RAG) → agent Chercheur RAG."""
+    case_id = body.case_id or uuid.uuid4().hex[:12]
+    mode = settings.rag_mode
+    model = settings.rag_embed_model if mode in ("dense", "hybrid") else ""
+    try:
+        res = run_ask(body.question, settings, make_client(settings),
+                      lambda: get_retriever(settings.rag_strategy, model), k=body.k, case_id=case_id)
+    except IndexMissing as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
+    rag = res.rag
+    return AskResponse(case_id=case_id, plan=res.plan, answer=res.answer,
+                       sources=rag.sources if rag else [], warnings=res.warnings,
+                       corrections=rag.corrections if rag else 0,
+                       latency_ms=rag.latency_ms if rag else 0.0)

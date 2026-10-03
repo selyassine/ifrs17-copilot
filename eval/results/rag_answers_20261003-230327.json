@@ -1,0 +1,307 @@
+{
+ "date": "20261003-230327",
+ "agregats": {
+  "questions": 10,
+  "refus_corrects_pieges": "2/2",
+  "faux_refus": "0/8",
+  "reponses_avec_citation_inventee_avant_correction": "0/8",
+  "reponses_corrigees": 0,
+  "citations_invalides_apres_verification": 0,
+  "precision_citations": 0.385,
+  "couverture_citations": 0.625,
+  "au_moins_un_bon_paragraphe": 0.625,
+  "plafond_recherche": 0.75,
+  "latence_p50_ms": 1601.8
+ },
+ "tokens": {
+  "tokens_entree": 18444,
+  "tokens_sortie": 3521,
+  "appels_llm": 18
+ },
+ "reponses": [
+  {
+   "id": "q01",
+   "niveau": "factuelle",
+   "question": "À partir de quelle date un assureur doit-il reconnaître un groupe de contrats qu'il a émis ?",
+   "gold": [
+    "25"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'assureur doit comptabiliser un groupe de contrats d'assurance qu'il émet à la première des dates suivantes : la date de début de la période de couverture du groupe, la date à laquelle le premier paiement d'un titulaire de police devient exigible, ou, pour un groupe déficitaire, la date à laquelle le groupe devient déficitaire [§25].",
+   "cited": [
+    "25"
+   ],
+   "provided": [
+    "15",
+    "16",
+    "25",
+    "62",
+    "B93",
+    "C18"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 3170.0,
+   "precision": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q02",
+   "niveau": "factuelle",
+   "question": "De quoi se compose l'évaluation d'un groupe de contrats au moment de sa première comptabilisation ?",
+   "gold": [
+    "32"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'évaluation d'un groupe de contrats au moment de sa première comptabilisation comprend: a) les flux de trésorerie d'exécution, b) le montant décomptabilisé à cette date de tout actif ou passif précédemment comptabilisé au titre des flux de trésorerie liés au groupe, c) les flux de trésorerie à cette date, et d) tout produit comptabilisé en résultat net en application du paragraphe 66A [§65].",
+   "cited": [
+    "65"
+   ],
+   "provided": [
+    "23",
+    "24",
+    "25",
+    "26",
+    "62",
+    "65"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1513.4,
+   "precision": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false
+  },
+  {
+   "id": "q03",
+   "niveau": "factuelle",
+   "question": "Quels flux futurs faut-il intégrer dans l'évaluation d'un groupe, et peut-on les estimer à un niveau plus agrégé que le groupe ?",
+   "gold": [
+    "33"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'entité doit inclure tous les flux de trésorerie futurs compris dans le périmètre de chaque contrat du groupe, en intégrant les montants, l'échéancier et l'incertitude de ces flux de façon objective et à jour [§33]. Elle peut estimer ces flux à un niveau de regroupement supérieur au groupe, à condition de pouvoir les répartir de façon systématique et rationnelle entre les groupes de contrats concernés [§24][§B70].",
+   "cited": [
+    "33",
+    "24",
+    "B70"
+   ],
+   "provided": [
+    "23",
+    "24",
+    "33",
+    "63",
+    "B59",
+    "B70"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1523.0,
+   "precision": 0.3333333333333333,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q04",
+   "niveau": "factuelle",
+   "question": "Comment savoir si un flux de trésorerie fait partie du périmètre d'un contrat d'assurance ?",
+   "gold": [
+    "34"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Il faut d'abord appliquer le critère du paragraphe 34 qui définit les flux compris dans le périmètre comme ceux découlant de droits et obligations substantiels existant pendant la période de reporting où l’assureur peut contraindre le paiement des primes ou a une obligation substantielle de fournir les services prévus [§34]. Ensuite, le paragraphe B61 précise que l’estimation doit inclure uniquement ces flux et aucun autre [§B61]. Le paragraphe B66 liste les flux explicitement exclus, comme les rendements des placements ou les flux de réassurance, ce qui aide à identifier ceux qui ne sont pas dans le périmètre [§B66]. Enfin, les flux liés aux frais d’acquisition sont inclus lorsqu’ils sont directement attribuables au portefeuille de contrats [def:flux de trésorerie liés aux frais d'acquisition].",
+   "cited": [
+    "34",
+    "B61",
+    "B66",
+    "def:flux de trésorerie liés aux frais d'acquisition"
+   ],
+   "provided": [
+    "34",
+    "B61",
+    "B63",
+    "B66",
+    "def:flux de trésorerie liés aux frais d'acquisition"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1583.0,
+   "precision": 0.25,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q05",
+   "niveau": "factuelle",
+   "question": "Que doivent refléter les taux utilisés pour actualiser les flux futurs ?",
+   "gold": [
+    "36"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Les taux d'actualisation doivent refléter la valeur temps de l'argent, les caractéristiques des flux de trésorerie et leur liquidité, ainsi que les prix de marché observables des instruments financiers comparables, tout en excluant les facteurs qui influent sur ces prix mais pas sur les flux de trésorerie des contrats d'assurance [§36]. Ils doivent également tenir compte de la variabilité des flux liée aux rendements des éléments sous‑jacent lorsqu’elle existe, ou être ajustés pour cette variabilité, et intégrer ou exclure l’effet de l’inflation selon que les flux sont nominaux ou réels [§B74].",
+   "cited": [
+    "36",
+    "B74"
+   ],
+   "provided": [
+    "36",
+    "B59",
+    "B74",
+    "B75",
+    "B79"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1526.9,
+   "precision": 0.5,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q06",
+   "niveau": "factuelle",
+   "question": "Que représente l'ajustement pour risque non financier ?",
+   "gold": [
+    "37"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'ajustement au titre du risque non financier représente l'indemnité que l'entité exigerait pour être indifférente entre assumer un passif incertain lié au risque non financier et un passif à flux de trésorerie fixes, reflétant ainsi l'incertitude sur le montant et l'échéancier des flux de trésorerie des contrats d'assurance [§B87]. Il vise à évaluer l'effet de cette incertitude, en incluant tous les risques non financiers attachés aux contrats d'assurance mais excluant les risques non liés aux contrats, comme le risque général d'exploitation [§B89]. Cet ajustement doit être présenté explicitement et ne doit pas être doublement comptabilisé avec les estimations de flux de trésorerie ou les taux d'actualisation [§B90].",
+   "cited": [
+    "B87",
+    "B89",
+    "B90"
+   ],
+   "provided": [
+    "B86",
+    "B87",
+    "B88",
+    "B89",
+    "B90"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1620.6,
+   "precision": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false
+  },
+  {
+   "id": "q07",
+   "niveau": "factuelle",
+   "question": "À l'origine, comment détermine-t-on le montant de la CSM d'un groupe de contrats ?",
+   "gold": [
+    "38"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Le montant de la CSM (marge sur services contractuels) d’un groupe de contrats est évalué à la comptabilisation initiale du groupe comme le profit non acquis que l’entité comptabilisera au fur et à mesure de la fourniture des services prévus. Cette évaluation doit être faite de façon à ce qu’aucun produit ou charge ne résulte de : (a) la comptabilisation initiale d’un montant pour les flux de trésorerie d’exécution, (b) les flux de trésorerie issus des contrats du groupe à cette date, et (c) la décomptabilisation à cette date de tout actif lié aux frais d’acquisition ou tout autre actif/passif antérieur lié au groupe [§38].",
+   "cited": [
+    "38"
+   ],
+   "provided": [
+    "38",
+    "45",
+    "B119",
+    "C15",
+    "C17"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1745.6,
+   "precision": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true
+  },
+  {
+   "id": "q08",
+   "niveau": "factuelle",
+   "question": "Que représente la CSM en fin de période ?",
+   "gold": [
+    "43"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "La CSM (Contractual Service Margin) correspond à la marge sur services contractuels, c’est‑à‑dire la composante de la valeur comptable de l’actif ou du passif d’un groupe de contrats d’assurance qui représente le profit non acquis que l’entité comptabilisera à mesure qu’elle fournit les services prévus aux contrats du groupe [def:marge sur services contractuels]. En fin de période, elle reflète la valeur comptable de ce profit non encore reconnu, ajustée pour les nouveaux contrats, l’intérêt capitalisé, les variations des flux de trésorerie d’exécution, les écarts de change et le montant déjà comptabilisé en produits d’assurance [§44].",
+   "cited": [
+    "def:marge sur services contractuels",
+    "44"
+   ],
+   "provided": [
+    "38",
+    "43",
+    "44",
+    "B119",
+    "def:marge sur services contractuels"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1697.5,
+   "precision": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": false
+  },
+  {
+   "id": "q51",
+   "niveau": "piege",
+   "question": "Comment le preneur comptabilise-t-il un contrat de location selon IFRS 16 ?",
+   "gold": [],
+   "intent": "hors_perimetre",
+   "refused": true,
+   "refusal_reason": "Cette demande ne porte pas sur IFRS 17 : je ne peux répondre qu'à des questions sur la norme.",
+   "answer": null,
+   "cited": [],
+   "provided": [],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 0.0
+  },
+  {
+   "id": "q52",
+   "niveau": "piege",
+   "question": "Quel est le taux de l'impôt sur les sociétés en Tunisie ?",
+   "gold": [],
+   "intent": "hors_perimetre",
+   "refused": true,
+   "refusal_reason": "Cette demande ne porte pas sur IFRS 17 : je ne peux répondre qu'à des questions sur la norme.",
+   "answer": null,
+   "cited": [],
+   "provided": [],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 0.0
+  }
+ ]
+}

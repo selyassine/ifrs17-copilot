@@ -80,6 +80,31 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
 - **Décision :** modèles pris dans le tableau des limites gratuites : `openai/gpt-oss-20b` (petit), `openai/gpt-oss-120b` (grand), `qwen/qwen3.8-27b` (secours). Le client affiche désormais les erreurs du principal et du secours. Pour les modèles à raisonnement (gpt-oss) : `reasoning_effort=low`, raisonnement non renvoyé, au moins 1 024 tokens de sortie.
 - **Leçon :** toujours vérifier les modèles réellement accessibles avec sa propre clé, pas seulement la documentation.
 
+## F-010 — Plantage silencieux de PyTorch sous Windows (0xC0000005)
+
+- **Date / auteur :** 2026-10-03, R5
+- **Obtenu :** `python -m eval.eval_rag` s'arrête juste après le chargement de BGE-M3, sans message ; code de sortie -1073741819 (violation d'accès). Le même programme fonctionne à la relance.
+- **Cause probable :** conflit intermittent entre les fils parallèles OpenMP/MKL de PyTorch et de NumPy sous Windows, au premier encodage.
+- **Décision :** nombre de fils limité (4) avant le chargement de PyTorch ; l'évaluation sauvegarde chaque réponse au fur et à mesure et peut reprendre (`--resume`), pour qu'un plantage ne gaspille ni temps ni quota Groq.
+- **Leçon :** une évaluation longue qui consomme un quota payant ou limité doit être reprenable.
+
+## F-011 — Réponses justes en apparence mais hors de portée
+
+- **Date / auteur :** 2026-10-03, R6
+- **Attendu :** une réponse fidèle aux paragraphes cités et à la question posée.
+- **Obtenu :** relecture humaine des 50 réponses du prompt v1 : 39 fidèles et complètes. Les 11 autres : 7 confusions de portée
+  (q02 répond à une question générale avec §65, propre à la réassurance détenue ; q25 présente le taux de transition C13 comme
+  la règle générale ; q32 mélange l'approche juste valeur et l'approche rétrospective modifiée…), 2 réponses reconstruites faute
+  du bon paragraphe (q22, q42), 1 mauvaise attribution (q50), 1 réponse incomplète (q43).
+  Les mesures automatiques ne voyaient rien : 0 citation inventée, et toutes les citations étaient bien dans les extraits.
+- **Cause :** le paragraphe cité existe et contient bien la phrase, mais il vise un cas particulier. L'extrait n'affichait que
+  le titre court (« Évaluation »), pas sa place dans la norme (annexe C, réassurance détenue…).
+- **Décision :** prompt v2 (chemin complet de chaque extrait, règles de portée, D-024) ; annotation élargie (D-023).
+  Le futur agent vérificateur devra contrôler la portée, pas seulement l'existence de la citation.
+- **Mesure avant / après :** v1 : 39/50 fidèles et complètes ; v2 : à mesurer.
+- **Leçon :** une citation vérifiable n'est pas forcément une citation juste. La vérification automatique prouve que le texte
+  existe, seule la relecture (ou un juge) dit s'il répond à la question.
+
 ## Gabarit
 
 ```
