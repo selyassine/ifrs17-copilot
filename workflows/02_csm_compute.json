@@ -2,34 +2,26 @@
   "name": "02 — Calcul du CSM",
   "nodes": [
     {
-      "id": "48c6103b-1de5-5893-af43-ec5762b91c33",
-      "name": "Webhook",
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        0,
-        0
-      ],
-      "webhookId": "a1ae83d3-5c3a-5086-afdf-952981af4290",
       "parameters": {
         "httpMethod": "POST",
         "path": "ifrs17/csm",
         "responseMode": "responseNode",
         "options": {}
-      }
+      },
+      "id": "8d847196-0420-4894-865a-ab9dbef38642",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        112
+      ],
+      "webhookId": "a1ae83d3-5c3a-5086-afdf-952981af4290"
     },
     {
-      "id": "f7e7ebbe-fdff-5b13-adac-3a9cb8b61e2d",
-      "name": "Appel API",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        260,
-        0
-      ],
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:8000/v1/csm/compute",
+        "url": "http://127.0.0.1:8000/v1/csm/compute",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -46,41 +38,50 @@
           "timeout": 30000
         }
       },
+      "id": "1bb51fd9-112f-4183-951f-0a4d531f5cf0",
+      "name": "Appel API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -256,
+        112
+      ],
       "onError": "continueErrorOutput"
     },
     {
-      "id": "131481ae-15fd-5a55-bc85-06eca6236e2f",
-      "name": "Réponse OK",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        520,
-        -100
-      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",
         "options": {}
-      }
-    },
-    {
-      "id": "0f713f09-b84b-5184-b371-8afa69c5a9fd",
-      "name": "Réponse erreur",
+      },
+      "id": "ea81c40c-ba32-45ea-9d25-c2e02194fed4",
+      "name": "Réponse OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        520,
-        100
-      ],
+        0,
+        0
+      ]
+    },
+    {
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ { \"erreur\": \"Le service IA est indisponible ou a refusé la requête.\", \"detail\": $json.error ?? $json } }}",
         "options": {
           "responseCode": 502
         }
-      }
+      },
+      "id": "6a658729-3099-45d6-8233-677663c16a3f",
+      "name": "Réponse erreur",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        208
+      ]
     }
   ],
+  "pinData": {},
   "connections": {
     "Webhook": {
       "main": [
@@ -114,8 +115,14 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "pinData": {},
+  "versionId": "a2797c95-0449-4614-a7b9-61a635a118f3",
+  "meta": {
+    "instanceId": "ac500a6d7ddc6a2d4ffa22e7d393d9fdd2e3fdff500318a6d28c5cdacbac7402"
+  },
+  "id": "hA2Jzeifu4wuwoiR",
   "tags": []
 }

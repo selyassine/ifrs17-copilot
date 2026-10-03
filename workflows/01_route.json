@@ -2,34 +2,26 @@
   "name": "01 — Routage d'une demande",
   "nodes": [
     {
-      "id": "5161ecbb-d3fd-5a8d-9daa-2677c1a237f3",
-      "name": "Webhook",
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        0,
-        0
-      ],
-      "webhookId": "a681bf1c-71da-5bde-b065-f06cdd6c6274",
       "parameters": {
         "httpMethod": "POST",
         "path": "ifrs17/route",
         "responseMode": "responseNode",
         "options": {}
-      }
+      },
+      "id": "370e08b3-47a7-40d5-81fb-d57ca79296e8",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        112
+      ],
+      "webhookId": "a681bf1c-71da-5bde-b065-f06cdd6c6274"
     },
     {
-      "id": "f7d3677c-289c-5d7a-965a-49aa0d11be7f",
-      "name": "Appel API",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        260,
-        0
-      ],
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:8000/v1/route",
+        "url": "http://127.0.0.1:8000/v1/route",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -46,41 +38,50 @@
           "timeout": 30000
         }
       },
+      "id": "ba706573-b150-432b-bd74-e4a129ceb1b5",
+      "name": "Appel API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -256,
+        112
+      ],
       "onError": "continueErrorOutput"
     },
     {
-      "id": "1370279c-82d9-5f17-b4ec-ded1a335241d",
-      "name": "Réponse OK",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        520,
-        -100
-      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",
         "options": {}
-      }
-    },
-    {
-      "id": "996ad1f2-adef-55f9-9fa3-ca637570523b",
-      "name": "Réponse erreur",
+      },
+      "id": "abf7047f-c37b-4da5-9934-c324ca270481",
+      "name": "Réponse OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        520,
-        100
-      ],
+        0,
+        0
+      ]
+    },
+    {
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ { \"erreur\": \"Le service IA est indisponible ou a refusé la requête.\", \"detail\": $json.error ?? $json } }}",
         "options": {
           "responseCode": 502
         }
-      }
+      },
+      "id": "6ffd6cf7-ddd0-43ec-91b3-be40705e02ce",
+      "name": "Réponse erreur",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        208
+      ]
     }
   ],
+  "pinData": {},
   "connections": {
     "Webhook": {
       "main": [
@@ -114,8 +115,14 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "pinData": {},
+  "versionId": "331a289f-4d42-4af1-ac6b-001db015634b",
+  "meta": {
+    "instanceId": "ac500a6d7ddc6a2d4ffa22e7d393d9fdd2e3fdff500318a6d28c5cdacbac7402"
+  },
+  "id": "TzOi37PWfggX03x0",
   "tags": []
 }
