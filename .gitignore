@@ -1,0 +1,31 @@
+# Secrets
+.env
+
+# Corpus et index : jamais dans Git (licences). Seul le manifeste est versionné.
+data/*
+!data/corpus_manifest.csv
+!data/README.md
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Traces et résultats lourds
+logs/
+eval/results/*.jsonl
+
+# Modèles et checkpoints
+*.safetensors
+*.bin
+checkpoints/
+adapters/
+
+# n8n local
+.n8n/
+
+# Divers
+.DS_Store
+.ipynb_checkpoints/

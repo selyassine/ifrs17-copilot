@@ -1,0 +1,10 @@
+# Ajouté en S2 (R1, R5) : ingestion, embeddings, index, retrieval.
+# Lourd (torch) : à installer seulement sur les machines qui indexent, ou sur Colab.
+-r requirements.txt
+pymupdf>=1.24
+sentence-transformers>=3.0
+FlagEmbedding>=1.2
+qdrant-client>=1.10
+rank-bm25>=0.2.2
+pandas>=2.2
+matplotlib>=3.8
