@@ -42,4 +42,5 @@ changes: "Version initiale."
 eval:
   test_set: eval/router_cases.jsonl
   metric: exactitude_intention
-  scores: {}
+  scores: {v1: 1.0, heuristique: 0.95}
+  notes: "gpt-oss-20b (Groq), 20 cas, 0 repli, 03/10/2026"

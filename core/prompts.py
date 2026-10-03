@@ -38,6 +38,7 @@ class PromptEval(BaseModel):
     test_set: str
     metric: str
     scores: dict[str, float] = Field(default_factory=dict, description="{'v1': 0.62, ...}")
+    notes: str = Field(default="", description="modèle, date, nombre de cas, replis")
 
 
 class PromptSpec(BaseModel):

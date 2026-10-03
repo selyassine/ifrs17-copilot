@@ -1,10 +1,5 @@
-# Ajouté en S2 (R1, R5) : ingestion, embeddings, index, retrieval.
-# Lourd (torch) : à installer seulement sur les machines qui indexent, ou sur Colab.
+# Recherche dense (S2-S3) : à installer sur les machines qui calculent les embeddings, ou sur Colab.
+# Lourd (torch, ~2 Go). BM25 et l'évaluation de base fonctionnent sans ce fichier.
 -r requirements.txt
-pymupdf>=1.24
 sentence-transformers>=3.0
-FlagEmbedding>=1.2
-qdrant-client>=1.10
-rank-bm25>=0.2.2
-pandas>=2.2
-matplotlib>=3.8
+qdrant-client>=1.10      # optionnel : --store qdrant

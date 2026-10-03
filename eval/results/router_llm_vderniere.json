@@ -1,0 +1,20 @@
+{
+  "n": 20,
+  "exactitude": 0.95,
+  "erreurs": [
+    {
+      "id": "r18",
+      "request": "Comment comptabiliser un leasing selon IFRS 16 ?",
+      "attendu": "hors_perimetre",
+      "obtenu": "question_norme",
+      "rationale": "repli heuristique (LLMError)"
+    }
+  ],
+  "confusion": {
+    "calcul -> calcul": 3,
+    "hors_perimetre -> hors_perimetre": 4,
+    "hors_perimetre -> question_norme": 1,
+    "question_norme -> question_norme": 8,
+    "traitement_document -> traitement_document": 4
+  }
+}

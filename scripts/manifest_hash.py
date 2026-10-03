@@ -57,6 +57,9 @@ def main() -> int:
             if args.write and not r["sha256"]:
                 r["sha256"] = digest
                 r["date_acces"] = r["date_acces"] or date.today().isoformat()
+                print(f"  {rid} : empreinte enregistrée ({digest[:12]}…)")
+            elif r["sha256"] == digest:
+                print(f"  {rid} : fichier présent, empreinte inchangée")
         elif r["statut"] == "ok":
             problems.append(f"{rid} : statut ok mais fichier absent ({local})")
 

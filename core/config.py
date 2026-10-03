@@ -36,6 +36,12 @@ class Settings:
     llm_max_retries: int = field(default_factory=lambda: int(_env("LLM_MAX_RETRIES", "2")))
 
     router_mode: str = field(default_factory=lambda: _env("ROUTER_MODE", "heuristic"))
+
+    # RAG : stratégie de découpage, mode de recherche et modèle d'embedding (si index dense)
+    rag_strategy: str = field(default_factory=lambda: _env("RAG_STRATEGY", "B"))
+    rag_mode: str = field(default_factory=lambda: _env("RAG_MODE", "bm25"))
+    rag_embed_model: str = field(default_factory=lambda: _env("RAG_EMBED_MODEL"))
+    rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
     api_token: str = field(default_factory=lambda: _env("API_TOKEN"))
     trace_path: Path = field(
         default_factory=lambda: ROOT / _env("TRACE_PATH", "logs/traces.jsonl")

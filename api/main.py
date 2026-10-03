@@ -3,8 +3,8 @@
     uvicorn api.main:app --reload --port 8000
     → documentation interactive : http://localhost:8000/docs
 
-Endpoints S1 : santé, routage, calcul du CSM. Les agents RAG, extraction,
-vérification et rédaction s'ajoutent en S2-S3 derrière /v1/case.
+Endpoints : santé, routage, calcul du CSM (S1), recherche dans la norme (S2).
+Les agents extraction, vérification et rédaction s'ajoutent en S3 derrière /v1/case.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ from __future__ import annotations
 import uuid
 
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from agents.router import route_heuristic, route_llm
@@ -19,13 +20,22 @@ from agents.schemas import CsmResult, Plan, PortfolioData
 from core.config import Settings, get_settings
 from core.tracing import traced
 from engine.csm import compute_csm
+from rag.service import IndexMissing, get_retriever
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
+
+class UTF8JSONResponse(JSONResponse):
+    """Annonce explicitement l'UTF-8 : sans « charset », Windows PowerShell 5.1 décode les
+    réponses en Latin-1 et affiche « libÃ©rÃ©e » au lieu de « libérée » (F-007)."""
+
+    media_type = "application/json; charset=utf-8"
+
 
 app = FastAPI(
     title="IFRS 17 Copilot",
     version=VERSION,
     description="Services IA appelés par les workflows n8n.",
+    default_response_class=UTF8JSONResponse,
 )
 
 
@@ -78,3 +88,53 @@ def csm_compute(portfolio: PortfolioData,
     with traced(settings.trace_path, kind="tool", agent="calculateur",
                 tool="compute_csm", group_id=portfolio.group_id):
         return compute_csm(portfolio)
+
+
+class SearchRequest(BaseModel):
+    query: str = Field(min_length=2, max_length=1000)
+    k: int = Field(default=5, ge=1, le=20)
+    mode: str | None = Field(default=None, pattern="^(bm25|dense|hybrid)$",
+                             description="par défaut : RAG_MODE du .env")
+    zones: list[str] | None = Field(default=None, description="ex. ['norme', 'annexe_B']")
+    glossary: bool | None = None
+
+
+class SearchHit(BaseModel):
+    rank: int
+    score: float
+    chunk_id: str
+    paragraph_ids: list[str]
+    zone: str
+    heading: str
+    page_start: int
+    text: str
+
+
+class SearchResponse(BaseModel):
+    query: str
+    mode: str
+    strategy: str
+    hits: list[SearchHit]
+
+
+@app.post("/v1/search", response_model=SearchResponse, dependencies=[Depends(check_token)])
+def search(body: SearchRequest, settings: Settings = Depends(get_settings)) -> SearchResponse:
+    mode = body.mode or settings.rag_mode
+    model = settings.rag_embed_model if mode in ("dense", "hybrid") else ""
+    if mode in ("dense", "hybrid") and not model:
+        raise HTTPException(status_code=400, detail=f"mode '{mode}' : définir RAG_EMBED_MODEL dans .env")
+    try:
+        retriever = get_retriever(settings.rag_strategy, model)
+    except IndexMissing as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    expand = settings.rag_glossary if body.glossary is None else body.glossary
+    with traced(settings.trace_path, kind="tool", agent="chercheur_rag", tool="search",
+                mode=mode, strategy=settings.rag_strategy):
+        hits = retriever.search(body.query, k=body.k, mode=mode, zones=body.zones, expand=expand)
+    return SearchResponse(
+        query=body.query, mode=mode, strategy=settings.rag_strategy,
+        hits=[SearchHit(rank=h.rank, score=round(h.score, 4), chunk_id=h.chunk.chunk_id,
+                        paragraph_ids=h.chunk.paragraph_ids, zone=h.chunk.zone,
+                        heading=h.chunk.heading, page_start=h.chunk.page_start, text=h.chunk.text)
+              for h in hits],
+    )

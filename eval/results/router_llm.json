@@ -1,0 +1,12 @@
+{
+  "n": 20,
+  "exactitude": 1.0,
+  "replis": [],
+  "erreurs": [],
+  "confusion": {
+    "calcul -> calcul": 3,
+    "hors_perimetre -> hors_perimetre": 5,
+    "question_norme -> question_norme": 8,
+    "traitement_document -> traitement_document": 4
+  }
+}

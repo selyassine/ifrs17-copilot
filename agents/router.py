@@ -99,4 +99,5 @@ def route_llm(
         )
     except (LLMError, ValidationError, KeyError, ValueError, TypeError) as exc:
         plan = route_heuristic(request, has_attachment)
-        return plan.model_copy(update={"rationale": f"repli heuristique ({type(exc).__name__})"})
+        detail = f"{type(exc).__name__}: {exc}"[:200]
+        return plan.model_copy(update={"rationale": f"repli heuristique ({detail})"})

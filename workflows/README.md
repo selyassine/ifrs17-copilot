@@ -11,7 +11,8 @@ Chaque workflow a une branche d'erreur : si l'API ne répond pas ou refuse la re
 
 1. Lancer l'API (`make serve`) puis n8n (`make n8n`) et ouvrir http://localhost:5678.
 2. Menu **Workflows → Import from file**, choisir le fichier JSON.
-3. Dans le nœud « Appel API », remplacer `change-moi` par la valeur d'`API_TOKEN` du `.env`. Si l'API tourne sur Colab, remplacer `http://localhost:8000` par l'URL du tunnel.
+3. Dans le nœud « Appel API », remplacer `change-moi` par la valeur d'`API_TOKEN` du `.env`. Si l'API tourne sur Colab, remplacer `http://127.0.0.1:8000` par l'URL du tunnel.
+   L'adresse est `127.0.0.1` et non `localhost` : Node.js résout `localhost` en IPv6 (`::1`) alors qu'uvicorn écoute en IPv4, ce qui donne `ECONNREFUSED ::1:8000` (voir docs/failures.md, F-002).
 4. Cliquer sur **Execute workflow** (mode test), puis dans un terminal :
 
 ```bash

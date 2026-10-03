@@ -25,9 +25,11 @@ def load_cases(path: Path = HERE / "router_cases.jsonl") -> list[dict]:
 
 
 def evaluate(router, cases: list[dict]) -> dict:
-    errors, confusion = [], Counter()
+    errors, confusion, fallbacks = [], Counter(), []
     for c in cases:
         plan = router(c["request"], c["has_attachment"])
+        if plan.rationale.startswith("repli heuristique"):
+            fallbacks.append({"id": c["id"], "raison": plan.rationale})
         confusion[(c["intent"], plan.intent.value)] += 1
         if plan.intent.value != c["intent"]:
             errors.append({"id": c["id"], "request": c["request"], "attendu": c["intent"],
@@ -36,6 +38,7 @@ def evaluate(router, cases: list[dict]) -> dict:
     return {
         "n": n,
         "exactitude": round((n - len(errors)) / n, 3),
+        "replis": fallbacks,
         "erreurs": errors,
         "confusion": {f"{a} -> {b}": k for (a, b), k in sorted(confusion.items())},
     }
@@ -50,7 +53,7 @@ def main() -> None:
     cases = load_cases()
     runs = {"heuristique": route_heuristic}
     if args.llm:
-        runs[f"llm_v{args.version or 'derniere'}"] = (
+        runs[f"llm_v{args.version}" if args.version else "llm"] = (
             lambda r, a: route_llm(r, a, version=args.version))
 
     out_dir = HERE / "results"
@@ -60,6 +63,11 @@ def main() -> None:
         (out_dir / f"router_{name}.json").write_text(
             json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"\n== {name} : exactitude {res['exactitude']:.0%} sur {res['n']} cas")
+        if res["replis"]:
+            # sans ce compteur, un LLM en panne passerait inaperçu : le repli renvoie
+            # exactement les réponses de l'heuristique (voir docs/failures.md, F-008)
+            print(f"  ATTENTION : {len(res['replis'])} cas sur {res['n']} ont basculé sur l'heuristique.")
+            print(f"  Première raison : {res['replis'][0]['raison']}")
         for e in res["erreurs"]:
             print(f"  [{e['id']}] attendu {e['attendu']}, obtenu {e['obtenu']} — {e['request']}")
 

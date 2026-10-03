@@ -3,7 +3,7 @@ PY ?= python3
 VENV := .venv
 BIN := $(VENV)/bin
 
-.PHONY: help setup serve n8n test lint fmt eval index clean
+.PHONY: help setup serve n8n test lint fmt eval index index-dense clean
 
 help:
 	@echo "setup  : crée .venv, installe les dépendances, copie .env"
@@ -12,7 +12,8 @@ help:
 	@echo "test   : lance les tests"
 	@echo "lint   : vérifie le style (ruff)"
 	@echo "eval   : lance les évaluations disponibles"
-	@echo "index  : construit l'index RAG (S2)"
+	@echo "index  : ingère le corpus, crée les chunks A et B (BM25)"
+	@echo "index-dense : + embeddings BGE-M3 (installe requirements-rag.txt)"
 
 setup:
 	$(PY) -m venv $(VENV)
@@ -39,9 +40,14 @@ fmt:
 
 eval:
 	$(BIN)/python -m eval.eval_router
+	$(BIN)/python -m eval.eval_retrieval
 
 index:
-	@echo "Arrive en S2 : python -m rag.build_index"
+	$(BIN)/python -m rag.build_index
+
+index-dense:
+	$(BIN)/pip install -r requirements-rag.txt
+	$(BIN)/python -m rag.build_index --dense --model BAAI/bge-m3
 
 clean:
 	rm -rf .pytest_cache .ruff_cache logs

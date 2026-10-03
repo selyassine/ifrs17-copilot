@@ -4,7 +4,7 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 
 > Projet pédagogique. Le moteur de calcul couvre un périmètre simplifié (modèle général) et n'a aucune valeur de conseil comptable.
 
-## État (sprint 1)
+## État (sprint 2 en cours)
 
 | Composant | Statut |
 | --- | --- |
@@ -13,9 +13,11 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Client LLM (tout fournisseur compatible, repli, réessais, traces) | fait, testé avec un fournisseur factice |
 | Routeur (heuristique + LLM) | fait ; heuristique 95 % sur 20 cas |
 | API FastAPI : `/health`, `/v1/route`, `/v1/csm/compute` | fait |
-| Workflows n8n 01 et 02 | à importer et vérifier |
+| Workflows n8n 01 et 02 | validés de bout en bout (n8n → API) |
 | Notebook 00 (test T4 + tunnel) | à exécuter sur Colab |
-| RAG, extraction multimodale, vérificateur, rédacteur | S2-S3 |
+| RAG : ingestion du règlement 2021/2036 (397 paragraphes), découpages A/B, BM25, dense, hybride, `/v1/search` | fait ; dense à mesurer avec BGE-M3 |
+| Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
+| Extraction multimodale, vérificateur, rédacteur | S3 |
 
 ## Installation (sans Docker)
 
@@ -55,6 +57,27 @@ curl -X POST http://localhost:8000/v1/csm/compute \
 
 Résultat attendu : `initial_csm` ≈ 14,22 (détail dans `docs/engine_hand_calcs.md`).
 
+### Construire l'index et chercher dans la norme
+
+```powershell
+# placer le PDF du règlement dans data\corpus\C002_reg_2021_2036_fr.pdf
+.\make.ps1 index           # unités + chunks A et B
+.\make.ps1 eval            # rapport eval\retrieval_report.md
+```
+
+Puis `POST /v1/search` avec `{"query": "Comment la CSM est-elle libérée ?"}` : renvoie les paragraphes (B119, 44…) avec leur texte. Recherche dense : `.\make.ps1 index-dense` puis `RAG_MODE=hybrid` et `RAG_EMBED_MODEL=BAAI/bge-m3` dans `.env`.
+
+### Tester l'API depuis PowerShell (accents)
+
+Windows PowerShell n'envoie pas l'UTF-8 par défaut : convertir le corps avant l'envoi (F-007).
+
+```powershell
+$body = @{query = "Comment la CSM est-elle libérée ?"; k = 3} | ConvertTo-Json
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/v1/search -Headers @{"X-API-Token"="change-moi"} `
+  -ContentType "application/json; charset=utf-8" -Body $bytes | ConvertTo-Json -Depth 5
+```
+
 ### Brancher un vrai LLM
 
 Dans `.env` : `LLM_PROVIDER=openai_compatible`, puis `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL_SMALL`, `LLM_MODEL_LARGE`. Tout service exposant `POST /chat/completions` fonctionne, y compris un modèle servi sur Colab derrière le tunnel. Ensuite : `ROUTER_MODE=llm` et `python -m eval.eval_router --llm` pour comparer au routeur heuristique.
@@ -82,7 +105,8 @@ Le LLM ne fait jamais de calcul (D-005) ; toutes les sorties d'agent sont valid�
 | `core/` | Configuration, client LLM, traces JSONL, chargement des prompts |
 | `engine/` | Moteur IFRS 17 (Python pur) |
 | `prompts/` | Bibliothèque de prompts versionnée (YAML) |
-| `rag/`, `multimodal/` | S2-S3 |
+| `rag/` | Ingestion, découpage, recherche (voir `rag/README.md`) |
+| `multimodal/` | S3 |
 | `workflows/` | Exports JSON n8n |
 | `eval/` | Jeux de test et scripts d'évaluation |
 | `notebooks/` | Expériences Colab (test T4, benchmarks, QLoRA) |

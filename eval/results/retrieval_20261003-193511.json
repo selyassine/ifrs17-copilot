@@ -1,0 +1,7918 @@
+{
+ "date": "20261003-193511",
+ "n_questions": 56,
+ "chunks": {
+  "A": 137,
+  "B": 380
+ },
+ "resultats": {
+  "A · bm25": {
+   "global": {
+    "recall@1": 0.323,
+    "recall@3": 0.56,
+    "recall@5": 0.64,
+    "recall@10": 0.78,
+    "recall@1000tok": 0.47,
+    "recall@2000tok": 0.6,
+    "mrr@10": 0.492,
+    "ndcg@5": 0.504,
+    "tokens@5": 2384,
+    "latence_p50_ms": 0.2,
+    "latence_p95_ms": 0.4
+   },
+   "par_niveau": {
+    "factuelle": {
+     "n": 42,
+     "recall@5": 0.667,
+     "mrr@10": 0.461
+    },
+    "multi": {
+     "n": 8,
+     "recall@5": 0.5,
+     "mrr@10": 0.651
+    }
+   },
+   "questions": [
+    {
+     "id": "q01",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0132",
+       "paragraphes": [
+        "C21",
+        "C22",
+        "C22A",
+        "C23",
+        "C24"
+       ]
+      },
+      {
+       "chunk": "A:C002:0129",
+       "paragraphes": [
+        "C18",
+        "C19"
+       ]
+      },
+      {
+       "chunk": "A:C002:0035",
+       "paragraphes": [
+        "77",
+        "78",
+        "79"
+       ]
+      }
+     ],
+     "tokens@5": 2423,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q02",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0028",
+       "paragraphes": [
+        "61",
+        "62",
+        "62A",
+        "63",
+        "64"
+       ]
+      },
+      {
+       "chunk": "A:C002:0027",
+       "paragraphes": [
+        "57",
+        "58",
+        "59",
+        "60",
+        "61"
+       ]
+      },
+      {
+       "chunk": "A:C002:0012",
+       "paragraphes": [
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25"
+       ]
+      }
+     ],
+     "tokens@5": 2452,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q03",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0016",
+       "paragraphes": [
+        "32",
+        "33",
+        "34"
+       ]
+      },
+      {
+       "chunk": "A:C002:0074",
+       "paragraphes": [
+        "B37",
+        "B38",
+        "B39"
+       ]
+      },
+      {
+       "chunk": "A:C002:0090",
+       "paragraphes": [
+        "B70",
+        "B71",
+        "B72"
+       ]
+      }
+     ],
+     "tokens@5": 2454,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q04",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0066",
+       "paragraphes": [
+        "B24",
+        "B25",
+        "B26"
+       ]
+      },
+      {
+       "chunk": "A:C002:0087",
+       "paragraphes": [
+        "B65",
+        "B66"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 2400,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "q05",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0082",
+       "paragraphes": [
+        "B58",
+        "B59",
+        "B60",
+        "B61",
+        "B62"
+       ]
+      },
+      {
+       "chunk": "A:C002:0017",
+       "paragraphes": [
+        "34",
+        "35",
+        "36",
+        "37"
+       ]
+      },
+      {
+       "chunk": "A:C002:0092",
+       "paragraphes": [
+        "B74",
+        "B75",
+        "B76",
+        "B77"
+       ]
+      }
+     ],
+     "tokens@5": 2478,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q06",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0018",
+       "paragraphes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+       ]
+      },
+      {
+       "chunk": "A:C002:0023",
+       "paragraphes": [
+        "48",
+        "49",
+        "50"
+       ]
+      },
+      {
+       "chunk": "A:C002:0053",
+       "paragraphes": [
+        "132",
+        "def:marge sur services contractuels",
+        "def:période de couverture",
+        "def:ajustements liés à l'expérience",
+        "def:risque financier"
+       ]
+      }
+     ],
+     "tokens@5": 2415,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q07",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0132",
+       "paragraphes": [
+        "C21",
+        "C22",
+        "C22A",
+        "C23",
+        "C24"
+       ]
+      },
+      {
+       "chunk": "A:C002:0058",
+       "paragraphes": [
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+       ]
+      }
+     ],
+     "tokens@5": 2464,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q08",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0080",
+       "paragraphes": [
+        "B54",
+        "B55"
+       ]
+      },
+      {
+       "chunk": "A:C002:0081",
+       "paragraphes": [
+        "B55",
+        "B56",
+        "B57",
+        "B58"
+       ]
+      },
+      {
+       "chunk": "A:C002:0053",
+       "paragraphes": [
+        "132",
+        "def:marge sur services contractuels",
+        "def:période de couverture",
+        "def:ajustements liés à l'expérience",
+        "def:risque financier"
+       ]
+      }
+     ],
+     "tokens@5": 2326,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q09",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0102",
+       "paragraphes": [
+        "B95F",
+        "B96"
+       ]
+      },
+      {
+       "chunk": "A:C002:0103",
+       "paragraphes": [
+        "B96",
+        "B97",
+        "B98"
+       ]
+      },
+      {
+       "chunk": "A:C002:0020",
+       "paragraphes": [
+        "42",
+        "43",
+        "44"
+       ]
+      }
+     ],
+     "tokens@5": 2347,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q10",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0058",
+       "paragraphes": [
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+       ]
+      },
+      {
+       "chunk": "A:C002:0014",
+       "paragraphes": [
+        "28A",
+        "28B",
+        "28C",
+        "28D",
+        "28E",
+        "28F"
+       ]
+      },
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      }
+     ],
+     "tokens@5": 2421,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q11",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0023",
+       "paragraphes": [
+        "48",
+        "49",
+        "50"
+       ]
+      },
+      {
+       "chunk": "A:C002:0058",
+       "paragraphes": [
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+       ]
+      },
+      {
+       "chunk": "A:C002:0022",
+       "paragraphes": [
+        "45",
+        "46",
+        "47"
+       ]
+      }
+     ],
+     "tokens@5": 2334,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q12",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0024",
+       "paragraphes": [
+        "50",
+        "51",
+        "52",
+        "53"
+       ]
+      },
+      {
+       "chunk": "A:C002:0031",
+       "paragraphes": [
+        "66B",
+        "67",
+        "68",
+        "69"
+       ]
+      },
+      {
+       "chunk": "A:C002:0014",
+       "paragraphes": [
+        "28A",
+        "28B",
+        "28C",
+        "28D",
+        "28E",
+        "28F"
+       ]
+      }
+     ],
+     "tokens@5": 2358,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q13",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0128",
+       "paragraphes": [
+        "C17",
+        "C17A",
+        "C18"
+       ]
+      },
+      {
+       "chunk": "A:C002:0026",
+       "paragraphes": [
+        "55",
+        "56",
+        "57"
+       ]
+      },
+      {
+       "chunk": "A:C002:0025",
+       "paragraphes": [
+        "53",
+        "54",
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 2409,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q14",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0012",
+       "paragraphes": [
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25"
+       ]
+      },
+      {
+       "chunk": "A:C002:0010",
+       "paragraphes": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+       ]
+      },
+      {
+       "chunk": "A:C002:0035",
+       "paragraphes": [
+        "77",
+        "78",
+        "79"
+       ]
+      }
+     ],
+     "tokens@5": 2400,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q15",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0099",
+       "paragraphes": [
+        "B91",
+        "B92",
+        "B93",
+        "B94"
+       ]
+      },
+      {
+       "chunk": "A:C002:0101",
+       "paragraphes": [
+        "B95B",
+        "B95C",
+        "B95D",
+        "B95E"
+       ]
+      }
+     ],
+     "tokens@5": 2343,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q16",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0009",
+       "paragraphes": [
+        "11",
+        "12",
+        "13",
+        "14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0008",
+       "paragraphes": [
+        "8A",
+        "9",
+        "10",
+        "11"
+       ]
+      },
+      {
+       "chunk": "A:C002:0070",
+       "paragraphes": [
+        "B29",
+        "B30",
+        "B31",
+        "B32"
+       ]
+      }
+     ],
+     "tokens@5": 2380,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q17",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0125",
+       "paragraphes": [
+        "C14A",
+        "C14B",
+        "C14C",
+        "C14D"
+       ]
+      },
+      {
+       "chunk": "A:C002:0133",
+       "paragraphes": [
+        "C24",
+        "C24A",
+        "C24B",
+        "C25"
+       ]
+      },
+      {
+       "chunk": "A:C002:0014",
+       "paragraphes": [
+        "28A",
+        "28B",
+        "28C",
+        "28D",
+        "28E",
+        "28F"
+       ]
+      }
+     ],
+     "tokens@5": 2469,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q18",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0004",
+       "paragraphes": [
+        "art-2",
+        "art-3",
+        "art-4",
+        "1",
+        "2"
+       ]
+      },
+      {
+       "chunk": "A:C002:0033",
+       "paragraphes": [
+        "71",
+        "72"
+       ]
+      },
+      {
+       "chunk": "A:C002:0072",
+       "paragraphes": [
+        "B35",
+        "B35A",
+        "B35B",
+        "B35C",
+        "B35D"
+       ]
+      }
+     ],
+     "tokens@5": 2441,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q19",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0111",
+       "paragraphes": [
+        "B119B",
+        "B119C",
+        "B119D",
+        "B119E",
+        "B119F"
+       ]
+      },
+      {
+       "chunk": "A:C002:0058",
+       "paragraphes": [
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+       ]
+      },
+      {
+       "chunk": "A:C002:0054",
+       "paragraphes": [
+        "def:flux de trésorerie d'exécution",
+        "def:groupe de contrats d'assurance",
+        "def:flux de trésorerie liés aux frais d'acquisition",
+        "def:contrat d'assurance",
+        "def:services prévus au contrat d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 2456,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q20",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0041",
+       "paragraphes": [
+        "97",
+        "98",
+        "99",
+        "100"
+       ]
+      },
+      {
+       "chunk": "A:C002:0035",
+       "paragraphes": [
+        "77",
+        "78",
+        "79"
+       ]
+      }
+     ],
+     "tokens@5": 2432,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q21",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0135",
+       "paragraphes": [
+        "C29",
+        "C30",
+        "C31"
+       ]
+      },
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      },
+      {
+       "chunk": "A:C002:0134",
+       "paragraphes": [
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29"
+       ]
+      }
+     ],
+     "tokens@5": 2465,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q22",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0129",
+       "paragraphes": [
+        "C18",
+        "C19"
+       ]
+      },
+      {
+       "chunk": "A:C002:0038",
+       "paragraphes": [
+        "87",
+        "87A",
+        "88",
+        "89",
+        "90",
+        "91"
+       ]
+      },
+      {
+       "chunk": "A:C002:0036",
+       "paragraphes": [
+        "80",
+        "81",
+        "82",
+        "83",
+        "84",
+        "85"
+       ]
+      }
+     ],
+     "tokens@5": 2342,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q23",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0062",
+       "paragraphes": [
+        "B15",
+        "B16",
+        "B17",
+        "B18",
+        "B19"
+       ]
+      },
+      {
+       "chunk": "A:C002:0064",
+       "paragraphes": [
+        "B21",
+        "B22"
+       ]
+      },
+      {
+       "chunk": "A:C002:0063",
+       "paragraphes": [
+        "B19",
+        "B20",
+        "B21"
+       ]
+      }
+     ],
+     "tokens@5": 2463,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q24",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0087",
+       "paragraphes": [
+        "B65",
+        "B66"
+       ]
+      },
+      {
+       "chunk": "A:C002:0108",
+       "paragraphes": [
+        "B111",
+        "B112",
+        "B113",
+        "B114",
+        "B115"
+       ]
+      },
+      {
+       "chunk": "A:C002:0023",
+       "paragraphes": [
+        "48",
+        "49",
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 2318,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q25",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0090",
+       "paragraphes": [
+        "B70",
+        "B71",
+        "B72"
+       ]
+      },
+      {
+       "chunk": "A:C002:0030",
+       "paragraphes": [
+        "66",
+        "66A",
+        "66B"
+       ]
+      },
+      {
+       "chunk": "A:C002:0126",
+       "paragraphes": [
+        "C14D",
+        "C15",
+        "C16",
+        "C16A"
+       ]
+      }
+     ],
+     "tokens@5": 2369,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q26",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0024",
+       "paragraphes": [
+        "50",
+        "51",
+        "52",
+        "53"
+       ]
+      },
+      {
+       "chunk": "A:C002:0107",
+       "paragraphes": [
+        "B107",
+        "B108",
+        "B109",
+        "B110",
+        "B111"
+       ]
+      },
+      {
+       "chunk": "A:C002:0103",
+       "paragraphes": [
+        "B96",
+        "B97",
+        "B98"
+       ]
+      }
+     ],
+     "tokens@5": 2342,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q27",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0131",
+       "paragraphes": [
+        "C20",
+        "C20A",
+        "C20B",
+        "C21"
+       ]
+      },
+      {
+       "chunk": "A:C002:0055",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance",
+        "def:contrat d'assurance avec éléments de participation directe",
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré",
+        "def:composante investissement"
+       ]
+      },
+      {
+       "chunk": "A:C002:0009",
+       "paragraphes": [
+        "11",
+        "12",
+        "13",
+        "14"
+       ]
+      }
+     ],
+     "tokens@5": 2375,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q28",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0110",
+       "paragraphes": [
+        "B117A",
+        "B118",
+        "B119",
+        "B119A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0030",
+       "paragraphes": [
+        "66",
+        "66A",
+        "66B"
+       ]
+      },
+      {
+       "chunk": "A:C002:0102",
+       "paragraphes": [
+        "B95F",
+        "B96"
+       ]
+      }
+     ],
+     "tokens@5": 2333,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q29",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0135",
+       "paragraphes": [
+        "C29",
+        "C30",
+        "C31"
+       ]
+      },
+      {
+       "chunk": "A:C002:0116",
+       "paragraphes": [
+        "B128",
+        "B129",
+        "B130"
+       ]
+      },
+      {
+       "chunk": "A:C002:0117",
+       "paragraphes": [
+        "B130",
+        "B131",
+        "B132"
+       ]
+      }
+     ],
+     "tokens@5": 2342,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "q30",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "C4",
+        "C5",
+        "C5A",
+        "C5B",
+        "C6"
+       ]
+      },
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0120",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 2441,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q31",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "C4",
+        "C5",
+        "C5A",
+        "C5B",
+        "C6"
+       ]
+      },
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0046",
+       "paragraphes": [
+        "110",
+        "111",
+        "112",
+        "113",
+        "114"
+       ]
+      }
+     ],
+     "tokens@5": 2424,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q32",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0132",
+       "paragraphes": [
+        "C21",
+        "C22",
+        "C22A",
+        "C23",
+        "C24"
+       ]
+      },
+      {
+       "chunk": "A:C002:0130",
+       "paragraphes": [
+        "C19",
+        "C19A",
+        "C20"
+       ]
+      },
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "C4",
+        "C5",
+        "C5A",
+        "C5B",
+        "C6"
+       ]
+      }
+     ],
+     "tokens@5": 2459,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q33",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0047",
+       "paragraphes": [
+        "114",
+        "115",
+        "116",
+        "117"
+       ]
+      },
+      {
+       "chunk": "A:C002:0041",
+       "paragraphes": [
+        "97",
+        "98",
+        "99",
+        "100"
+       ]
+      },
+      {
+       "chunk": "A:C002:0044",
+       "paragraphes": [
+        "105",
+        "105A",
+        "105B",
+        "106"
+       ]
+      }
+     ],
+     "tokens@5": 2420,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q34",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0051",
+       "paragraphes": [
+        "128",
+        "129",
+        "130"
+       ]
+      },
+      {
+       "chunk": "A:C002:0050",
+       "paragraphes": [
+        "124",
+        "125",
+        "126",
+        "127",
+        "128"
+       ]
+      },
+      {
+       "chunk": "A:C002:0053",
+       "paragraphes": [
+        "132",
+        "def:marge sur services contractuels",
+        "def:période de couverture",
+        "def:ajustements liés à l'expérience",
+        "def:risque financier"
+       ]
+      }
+     ],
+     "tokens@5": 2392,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q35",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0081",
+       "paragraphes": [
+        "B55",
+        "B56",
+        "B57",
+        "B58"
+       ]
+      },
+      {
+       "chunk": "A:C002:0079",
+       "paragraphes": [
+        "B51",
+        "B52",
+        "B53",
+        "B54"
+       ]
+      }
+     ],
+     "tokens@5": 2420,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q36",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0037",
+       "paragraphes": [
+        "85",
+        "86",
+        "87",
+        "87A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0028",
+       "paragraphes": [
+        "61",
+        "62",
+        "62A",
+        "63",
+        "64"
+       ]
+      },
+      {
+       "chunk": "A:C002:0029",
+       "paragraphes": [
+        "64",
+        "65",
+        "65A",
+        "66"
+       ]
+      }
+     ],
+     "tokens@5": 2402,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q37",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0063",
+       "paragraphes": [
+        "B19",
+        "B20",
+        "B21"
+       ]
+      },
+      {
+       "chunk": "A:C002:0007",
+       "paragraphes": [
+        "7",
+        "8",
+        "8A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0028",
+       "paragraphes": [
+        "61",
+        "62",
+        "62A",
+        "63",
+        "64"
+       ]
+      }
+     ],
+     "tokens@5": 2394,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q38",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0111",
+       "paragraphes": [
+        "B119B",
+        "B119C",
+        "B119D",
+        "B119E",
+        "B119F"
+       ]
+      },
+      {
+       "chunk": "A:C002:0030",
+       "paragraphes": [
+        "66",
+        "66A",
+        "66B"
+       ]
+      },
+      {
+       "chunk": "A:C002:0028",
+       "paragraphes": [
+        "61",
+        "62",
+        "62A",
+        "63",
+        "64"
+       ]
+      }
+     ],
+     "tokens@5": 2433,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q39",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0110",
+       "paragraphes": [
+        "B117A",
+        "B118",
+        "B119",
+        "B119A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 2456,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q40",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0089",
+       "paragraphes": [
+        "B67",
+        "B68",
+        "B69",
+        "B70"
+       ]
+      },
+      {
+       "chunk": "A:C002:0022",
+       "paragraphes": [
+        "45",
+        "46",
+        "47"
+       ]
+      },
+      {
+       "chunk": "A:C002:0015",
+       "paragraphes": [
+        "29",
+        "30",
+        "31",
+        "32",
+        "33"
+       ]
+      }
+     ],
+     "tokens@5": 2420,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q41",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0070",
+       "paragraphes": [
+        "B29",
+        "B30",
+        "B31",
+        "B32"
+       ]
+      },
+      {
+       "chunk": "A:C002:0009",
+       "paragraphes": [
+        "11",
+        "12",
+        "13",
+        "14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0008",
+       "paragraphes": [
+        "8A",
+        "9",
+        "10",
+        "11"
+       ]
+      }
+     ],
+     "tokens@5": 2399,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q42",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "A:C002:0022",
+       "paragraphes": [
+        "45",
+        "46",
+        "47"
+       ]
+      },
+      {
+       "chunk": "A:C002:0114",
+       "paragraphes": [
+        "B123",
+        "B123A",
+        "B124"
+       ]
+      },
+      {
+       "chunk": "A:C002:0026",
+       "paragraphes": [
+        "55",
+        "56",
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 2364,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q43",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0001",
+       "paragraphes": [
+        "cons-5",
+        "cons-6",
+        "cons-7",
+        "cons-8",
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0134",
+       "paragraphes": [
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29"
+       ]
+      }
+     ],
+     "tokens@5": 2437,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q44",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0120",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0123",
+       "paragraphes": [
+        "C9",
+        "C9A",
+        "C10",
+        "C11",
+        "C12",
+        "C13"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      }
+     ],
+     "tokens@5": 2464,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q45",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0094",
+       "paragraphes": [
+        "B78",
+        "B79",
+        "B80",
+        "B81",
+        "B82"
+       ]
+      },
+      {
+       "chunk": "A:C002:0103",
+       "paragraphes": [
+        "B96",
+        "B97",
+        "B98"
+       ]
+      },
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      }
+     ],
+     "tokens@5": 2414,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q46",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0124",
+       "paragraphes": [
+        "C13",
+        "C14",
+        "C14A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0057",
+       "paragraphes": [
+        "def:contrat de réassurance",
+        "def:ajustement au titre du risque non financier",
+        "def:éléments sous-jacents",
+        "B1",
+        "B2",
+        "B3"
+       ]
+      },
+      {
+       "chunk": "A:C002:0122",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      }
+     ],
+     "tokens@5": 2416,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q47",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0090",
+       "paragraphes": [
+        "B70",
+        "B71",
+        "B72"
+       ]
+      },
+      {
+       "chunk": "A:C002:0118",
+       "paragraphes": [
+        "B132",
+        "B133",
+        "B134"
+       ]
+      },
+      {
+       "chunk": "A:C002:0020",
+       "paragraphes": [
+        "42",
+        "43",
+        "44"
+       ]
+      }
+     ],
+     "tokens@5": 2334,
+     "recall@1": 0.5,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.9197207891481876
+    },
+    {
+     "id": "q48",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0104",
+       "paragraphes": [
+        "B98",
+        "B99",
+        "B100",
+        "B101"
+       ]
+      },
+      {
+       "chunk": "A:C002:0130",
+       "paragraphes": [
+        "C19",
+        "C19A",
+        "C20"
+       ]
+      },
+      {
+       "chunk": "A:C002:0075",
+       "paragraphes": [
+        "B39",
+        "B40",
+        "B41",
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 2466,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q49",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0026",
+       "paragraphes": [
+        "55",
+        "56",
+        "57"
+       ]
+      },
+      {
+       "chunk": "A:C002:0019",
+       "paragraphes": [
+        "40",
+        "41",
+        "42",
+        "43"
+       ]
+      },
+      {
+       "chunk": "A:C002:0027",
+       "paragraphes": [
+        "57",
+        "58",
+        "59",
+        "60",
+        "61"
+       ]
+      }
+     ],
+     "tokens@5": 2368,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q50",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "A:C002:0012",
+       "paragraphes": [
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25"
+       ]
+      },
+      {
+       "chunk": "A:C002:0010",
+       "paragraphes": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+       ]
+      },
+      {
+       "chunk": "A:C002:0011",
+       "paragraphes": [
+        "18",
+        "19",
+        "20",
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 2352,
+     "recall@1": 0.6666666666666666,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q51",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0006",
+       "paragraphes": [
+        "7"
+       ]
+      },
+      {
+       "chunk": "A:C002:0003",
+       "paragraphes": [
+        "cons-15",
+        "cons-16",
+        "art-1",
+        "art-2"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      }
+     ],
+     "tokens@5": 2352
+    },
+    {
+     "id": "q52",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0050",
+       "paragraphes": [
+        "124",
+        "125",
+        "126",
+        "127",
+        "128"
+       ]
+      },
+      {
+       "chunk": "A:C002:0087",
+       "paragraphes": [
+        "B65",
+        "B66"
+       ]
+      },
+      {
+       "chunk": "A:C002:0068",
+       "paragraphes": [
+        "B27"
+       ]
+      }
+     ],
+     "tokens@5": 2422
+    },
+    {
+     "id": "q53",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0001",
+       "paragraphes": [
+        "cons-5",
+        "cons-6",
+        "cons-7",
+        "cons-8",
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0095",
+       "paragraphes": [
+        "B82",
+        "B83"
+       ]
+      },
+      {
+       "chunk": "A:C002:0076",
+       "paragraphes": [
+        "B42",
+        "B43",
+        "B44",
+        "B45",
+        "B46"
+       ]
+      }
+     ],
+     "tokens@5": 2368
+    },
+    {
+     "id": "q54",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0001",
+       "paragraphes": [
+        "cons-5",
+        "cons-6",
+        "cons-7",
+        "cons-8",
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      }
+     ],
+     "tokens@5": 1453
+    },
+    {
+     "id": "q55",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0086",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "A:C002:0075",
+       "paragraphes": [
+        "B39",
+        "B40",
+        "B41",
+        "B42"
+       ]
+      },
+      {
+       "chunk": "A:C002:0048",
+       "paragraphes": [
+        "117",
+        "118",
+        "119"
+       ]
+      }
+     ],
+     "tokens@5": 2357
+    },
+    {
+     "id": "q56",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "A:C002:0085",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "A:C002:0011",
+       "paragraphes": [
+        "18",
+        "19",
+        "20",
+        "21"
+       ]
+      },
+      {
+       "chunk": "A:C002:0012",
+       "paragraphes": [
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25"
+       ]
+      }
+     ],
+     "tokens@5": 2349
+    }
+   ]
+  },
+  "B · bm25": {
+   "global": {
+    "recall@1": 0.277,
+    "recall@3": 0.523,
+    "recall@5": 0.563,
+    "recall@10": 0.703,
+    "recall@1000tok": 0.533,
+    "recall@2000tok": 0.703,
+    "mrr@10": 0.454,
+    "ndcg@5": 0.449,
+    "tokens@5": 942,
+    "latence_p50_ms": 0.4,
+    "latence_p95_ms": 0.6
+   },
+   "par_niveau": {
+    "factuelle": {
+     "n": 42,
+     "recall@5": 0.595,
+     "mrr@10": 0.43
+    },
+    "multi": {
+     "n": 8,
+     "recall@5": 0.396,
+     "mrr@10": 0.583
+    }
+   },
+   "questions": [
+    {
+     "id": "q01",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 634,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q02",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:60",
+       "paragraphes": [
+        "60",
+        "61"
+       ]
+      },
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      }
+     ],
+     "tokens@5": 790,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q03",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:33",
+       "paragraphes": [
+        "33"
+       ]
+      },
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:22",
+       "paragraphes": [
+        "22"
+       ]
+      }
+     ],
+     "tokens@5": 1041,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q04",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B66",
+       "paragraphes": [
+        "B66"
+       ]
+      },
+      {
+       "chunk": "B:C002:B61",
+       "paragraphes": [
+        "B61"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      }
+     ],
+     "tokens@5": 1059,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q05",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B59",
+       "paragraphes": [
+        "B59"
+       ]
+      },
+      {
+       "chunk": "B:C002:B74",
+       "paragraphes": [
+        "B74"
+       ]
+      },
+      {
+       "chunk": "B:C002:36",
+       "paragraphes": [
+        "36"
+       ]
+      }
+     ],
+     "tokens@5": 1050,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q06",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      },
+      {
+       "chunk": "B:C002:B90",
+       "paragraphes": [
+        "B90"
+       ]
+      }
+     ],
+     "tokens@5": 867,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q07",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      },
+      {
+       "chunk": "B:C002:C22",
+       "paragraphes": [
+        "C22"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 840,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q08",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B55",
+       "paragraphes": [
+        "B55"
+       ]
+      },
+      {
+       "chunk": "B:C002:52",
+       "paragraphes": [
+        "52"
+       ]
+      },
+      {
+       "chunk": "B:C002:B54",
+       "paragraphes": [
+        "B54"
+       ]
+      }
+     ],
+     "tokens@5": 1141,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q09",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 1117,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q10",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      },
+      {
+       "chunk": "B:C002:28F",
+       "paragraphes": [
+        "28F"
+       ]
+      },
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      }
+     ],
+     "tokens@5": 697,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q11",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      },
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      }
+     ],
+     "tokens@5": 1278,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q12",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      }
+     ],
+     "tokens@5": 934,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q13",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B35A",
+       "paragraphes": [
+        "B35A"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:ajustements liés à l'expérience",
+       "paragraphes": [
+        "def:ajustements liés à l'expérience"
+       ]
+      }
+     ],
+     "tokens@5": 956,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q14",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      }
+     ],
+     "tokens@5": 742,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q15",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B93",
+       "paragraphes": [
+        "B93"
+       ]
+      },
+      {
+       "chunk": "B:C002:5",
+       "paragraphes": [
+        "5"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 879,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q16",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:13",
+       "paragraphes": [
+        "13"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      },
+      {
+       "chunk": "B:C002:12",
+       "paragraphes": [
+        "12"
+       ]
+      }
+     ],
+     "tokens@5": 981,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q17",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:28B",
+       "paragraphes": [
+        "28B"
+       ]
+      },
+      {
+       "chunk": "B:C002:C14C",
+       "paragraphes": [
+        "C14C"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66A",
+       "paragraphes": [
+        "B66A"
+       ]
+      }
+     ],
+     "tokens@5": 1078,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q18",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:72",
+       "paragraphes": [
+        "72"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      },
+      {
+       "chunk": "B:C002:14",
+       "paragraphes": [
+        "14"
+       ]
+      }
+     ],
+     "tokens@5": 1021,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q19",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119B",
+       "paragraphes": [
+        "B119B"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:titulaire de police",
+       "paragraphes": [
+        "def:titulaire de police",
+        "def:portefeuille de contrats d'assurance",
+        "def:contrat de réassurance"
+       ]
+      }
+     ],
+     "tokens@5": 630,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q20",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:131",
+       "paragraphes": [
+        "131"
+       ]
+      }
+     ],
+     "tokens@5": 986,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q21",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C31",
+       "paragraphes": [
+        "C31"
+       ]
+      },
+      {
+       "chunk": "B:C002:C26",
+       "paragraphes": [
+        "C26"
+       ]
+      },
+      {
+       "chunk": "B:C002:C27",
+       "paragraphes": [
+        "C27"
+       ]
+      }
+     ],
+     "tokens@5": 945,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q22",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      }
+     ],
+     "tokens@5": 920,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q23",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B19",
+       "paragraphes": [
+        "B19"
+       ]
+      },
+      {
+       "chunk": "B:C002:B17",
+       "paragraphes": [
+        "B17"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      }
+     ],
+     "tokens@5": 1106,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q24",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B100",
+       "paragraphes": [
+        "B100"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66",
+       "paragraphes": [
+        "B66"
+       ]
+      },
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      }
+     ],
+     "tokens@5": 1014,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q25",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B59",
+       "paragraphes": [
+        "B59"
+       ]
+      },
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:B72",
+       "paragraphes": [
+        "B72"
+       ]
+      }
+     ],
+     "tokens@5": 1354,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q26",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      },
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 884,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q27",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B102",
+       "paragraphes": [
+        "B102"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:C20A",
+       "paragraphes": [
+        "C20A"
+       ]
+      }
+     ],
+     "tokens@5": 909,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q28",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:76",
+       "paragraphes": [
+        "76"
+       ]
+      },
+      {
+       "chunk": "B:C002:B126",
+       "paragraphes": [
+        "B126"
+       ]
+      }
+     ],
+     "tokens@5": 1201,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q29",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B130",
+       "paragraphes": [
+        "B130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B120",
+       "paragraphes": [
+        "B120"
+       ]
+      },
+      {
+       "chunk": "B:C002:C31",
+       "paragraphes": [
+        "C31"
+       ]
+      }
+     ],
+     "tokens@5": 908,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q30",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5B",
+       "paragraphes": [
+        "C5B"
+       ]
+      },
+      {
+       "chunk": "B:C002:C8",
+       "paragraphes": [
+        "C8"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q31",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C8",
+       "paragraphes": [
+        "C8"
+       ]
+      },
+      {
+       "chunk": "B:C002:C6",
+       "paragraphes": [
+        "C6"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q32",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C20",
+       "paragraphes": [
+        "C20"
+       ]
+      },
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      },
+      {
+       "chunk": "B:C002:C22",
+       "paragraphes": [
+        "C22"
+       ]
+      }
+     ],
+     "tokens@5": 899,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q33",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:105A",
+       "paragraphes": [
+        "105A"
+       ]
+      },
+      {
+       "chunk": "B:C002:101",
+       "paragraphes": [
+        "101"
+       ]
+      },
+      {
+       "chunk": "B:C002:100",
+       "paragraphes": [
+        "100"
+       ]
+      }
+     ],
+     "tokens@5": 909,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q34",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:128",
+       "paragraphes": [
+        "128"
+       ]
+      },
+      {
+       "chunk": "B:C002:129",
+       "paragraphes": [
+        "129"
+       ]
+      },
+      {
+       "chunk": "B:C002:132",
+       "paragraphes": [
+        "132"
+       ]
+      }
+     ],
+     "tokens@5": 1128,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q35",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 1023,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q36",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:62A",
+       "paragraphes": [
+        "62A"
+       ]
+      }
+     ],
+     "tokens@5": 967,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q37",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119E",
+       "paragraphes": [
+        "B119E"
+       ]
+      },
+      {
+       "chunk": "B:C002:C20B",
+       "paragraphes": [
+        "C20B"
+       ]
+      }
+     ],
+     "tokens@5": 871,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q38",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119D",
+       "paragraphes": [
+        "B119D"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:66A",
+       "paragraphes": [
+        "66A"
+       ]
+      }
+     ],
+     "tokens@5": 766,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q39",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:période de couverture",
+       "paragraphes": [
+        "def:période de couverture"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      }
+     ],
+     "tokens@5": 699,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q40",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      },
+      {
+       "chunk": "B:C002:B68",
+       "paragraphes": [
+        "B68"
+       ]
+      },
+      {
+       "chunk": "B:C002:31",
+       "paragraphes": [
+        "31"
+       ]
+      }
+     ],
+     "tokens@5": 766,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "q41",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B32",
+       "paragraphes": [
+        "B32"
+       ]
+      },
+      {
+       "chunk": "B:C002:B31",
+       "paragraphes": [
+        "B31"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      }
+     ],
+     "tokens@5": 823,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q42",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 929,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q43",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-12",
+       "paragraphes": [
+        "cons-12"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      }
+     ],
+     "tokens@5": 533,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q44",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 634,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q45",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      },
+      {
+       "chunk": "B:C002:B98",
+       "paragraphes": [
+        "B98"
+       ]
+      }
+     ],
+     "tokens@5": 794,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q46",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:114",
+       "paragraphes": [
+        "114"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 815,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q47",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:B98",
+       "paragraphes": [
+        "B98"
+       ]
+      },
+      {
+       "chunk": "B:C002:B72",
+       "paragraphes": [
+        "B72"
+       ]
+      }
+     ],
+     "tokens@5": 1621,
+     "recall@1": 0.0,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.3065735963827292
+    },
+    {
+     "id": "q48",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 885,
+     "recall@1": 0.0,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.3065735963827292
+    },
+    {
+     "id": "q49",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:56",
+       "paragraphes": [
+        "56"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      }
+     ],
+     "tokens@5": 928,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q50",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      }
+     ],
+     "tokens@5": 1204,
+     "recall@1": 0.3333333333333333,
+     "recall@3": 0.6666666666666666,
+     "recall@5": 0.6666666666666666,
+     "recall@10": 0.6666666666666666,
+     "recall@1000tok": 0.6666666666666666,
+     "recall@2000tok": 0.6666666666666666,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.7653606369886217
+    },
+    {
+     "id": "q51",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:6",
+       "paragraphes": [
+        "6",
+        "7"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      }
+     ],
+     "tokens@5": 1346
+    },
+    {
+     "id": "q52",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:127",
+       "paragraphes": [
+        "127"
+       ]
+      },
+      {
+       "chunk": "B:C002:B121",
+       "paragraphes": [
+        "B121"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      }
+     ],
+     "tokens@5": 1124
+    },
+    {
+     "id": "q53",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-6",
+       "paragraphes": [
+        "cons-6"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 832
+    },
+    {
+     "id": "q54",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-7",
+       "paragraphes": [
+        "cons-7"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-9",
+       "paragraphes": [
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-14",
+       "paragraphes": [
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 271
+    },
+    {
+     "id": "q55",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B44",
+       "paragraphes": [
+        "B44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      }
+     ],
+     "tokens@5": 1524
+    },
+    {
+     "id": "q56",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      },
+      {
+       "chunk": "B:C002:B54",
+       "paragraphes": [
+        "B54"
+       ]
+      }
+     ],
+     "tokens@5": 1089
+    }
+   ]
+  },
+  "B0 · bm25": {
+   "global": {
+    "recall@1": 0.277,
+    "recall@3": 0.473,
+    "recall@5": 0.503,
+    "recall@10": 0.663,
+    "recall@1000tok": 0.473,
+    "recall@2000tok": 0.663,
+    "mrr@10": 0.429,
+    "ndcg@5": 0.414,
+    "tokens@5": 929,
+    "latence_p50_ms": 0.4,
+    "latence_p95_ms": 0.6
+   },
+   "par_niveau": {
+    "factuelle": {
+     "n": 42,
+     "recall@5": 0.524,
+     "mrr@10": 0.401
+    },
+    "multi": {
+     "n": 8,
+     "recall@5": 0.396,
+     "mrr@10": 0.573
+    }
+   },
+   "questions": [
+    {
+     "id": "q01",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:B93",
+       "paragraphes": [
+        "B93"
+       ]
+      }
+     ],
+     "tokens@5": 724,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q02",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:60",
+       "paragraphes": [
+        "60",
+        "61"
+       ]
+      },
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 863,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q03",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:33",
+       "paragraphes": [
+        "33"
+       ]
+      },
+      {
+       "chunk": "B:C002:63",
+       "paragraphes": [
+        "63"
+       ]
+      },
+      {
+       "chunk": "B:C002:B70",
+       "paragraphes": [
+        "B70"
+       ]
+      }
+     ],
+     "tokens@5": 1164,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q04",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B61",
+       "paragraphes": [
+        "B61"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      }
+     ],
+     "tokens@5": 1059,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.125,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q05",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B59",
+       "paragraphes": [
+        "B59"
+       ]
+      },
+      {
+       "chunk": "B:C002:B74",
+       "paragraphes": [
+        "B74"
+       ]
+      },
+      {
+       "chunk": "B:C002:63",
+       "paragraphes": [
+        "63"
+       ]
+      }
+     ],
+     "tokens@5": 997,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "q06",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      },
+      {
+       "chunk": "B:C002:B90",
+       "paragraphes": [
+        "B90"
+       ]
+      }
+     ],
+     "tokens@5": 906,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q07",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      },
+      {
+       "chunk": "B:C002:C22",
+       "paragraphes": [
+        "C22"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      }
+     ],
+     "tokens@5": 772,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q08",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B55",
+       "paragraphes": [
+        "B55"
+       ]
+      },
+      {
+       "chunk": "B:C002:52",
+       "paragraphes": [
+        "52"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      }
+     ],
+     "tokens@5": 1141,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q09",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 1019,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q10",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      },
+      {
+       "chunk": "B:C002:28F",
+       "paragraphes": [
+        "28F"
+       ]
+      },
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      }
+     ],
+     "tokens@5": 584,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q11",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      },
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      }
+     ],
+     "tokens@5": 1278,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q12",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      }
+     ],
+     "tokens@5": 934,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q13",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:ajustements liés à l'expérience",
+       "paragraphes": [
+        "def:ajustements liés à l'expérience"
+       ]
+      },
+      {
+       "chunk": "B:C002:B35A",
+       "paragraphes": [
+        "B35A"
+       ]
+      }
+     ],
+     "tokens@5": 1171,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q14",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      }
+     ],
+     "tokens@5": 742,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q15",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B93",
+       "paragraphes": [
+        "B93"
+       ]
+      },
+      {
+       "chunk": "B:C002:5",
+       "paragraphes": [
+        "5"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 614,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q16",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:13",
+       "paragraphes": [
+        "13"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      },
+      {
+       "chunk": "B:C002:B31",
+       "paragraphes": [
+        "B31"
+       ]
+      }
+     ],
+     "tokens@5": 1011,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q17",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:28B",
+       "paragraphes": [
+        "28B"
+       ]
+      },
+      {
+       "chunk": "B:C002:C14C",
+       "paragraphes": [
+        "C14C"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66A",
+       "paragraphes": [
+        "B66A"
+       ]
+      }
+     ],
+     "tokens@5": 1078,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q18",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:72",
+       "paragraphes": [
+        "72"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      },
+      {
+       "chunk": "B:C002:B102",
+       "paragraphes": [
+        "B102"
+       ]
+      }
+     ],
+     "tokens@5": 1021,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q19",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119B",
+       "paragraphes": [
+        "B119B"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:titulaire de police",
+       "paragraphes": [
+        "def:titulaire de police",
+        "def:portefeuille de contrats d'assurance",
+        "def:contrat de réassurance"
+       ]
+      }
+     ],
+     "tokens@5": 568,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q20",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:131",
+       "paragraphes": [
+        "131"
+       ]
+      }
+     ],
+     "tokens@5": 922,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q21",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C31",
+       "paragraphes": [
+        "C31"
+       ]
+      },
+      {
+       "chunk": "B:C002:C26",
+       "paragraphes": [
+        "C26"
+       ]
+      },
+      {
+       "chunk": "B:C002:C27",
+       "paragraphes": [
+        "C27"
+       ]
+      }
+     ],
+     "tokens@5": 940,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q22",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      }
+     ],
+     "tokens@5": 920,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.125,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q23",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B19",
+       "paragraphes": [
+        "B19"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      },
+      {
+       "chunk": "B:C002:B17",
+       "paragraphes": [
+        "B17"
+       ]
+      }
+     ],
+     "tokens@5": 704,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q24",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B100",
+       "paragraphes": [
+        "B100"
+       ]
+      },
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66",
+       "paragraphes": [
+        "B66"
+       ]
+      }
+     ],
+     "tokens@5": 1014,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q25",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B59",
+       "paragraphes": [
+        "B59"
+       ]
+      },
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:B72",
+       "paragraphes": [
+        "B72"
+       ]
+      }
+     ],
+     "tokens@5": 1652,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q26",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      },
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 884,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q27",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:C20A",
+       "paragraphes": [
+        "C20A"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 719,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q28",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:76",
+       "paragraphes": [
+        "76"
+       ]
+      },
+      {
+       "chunk": "B:C002:B126",
+       "paragraphes": [
+        "B126"
+       ]
+      }
+     ],
+     "tokens@5": 1201,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q29",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B130",
+       "paragraphes": [
+        "B130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B120",
+       "paragraphes": [
+        "B120"
+       ]
+      },
+      {
+       "chunk": "B:C002:88",
+       "paragraphes": [
+        "88"
+       ]
+      }
+     ],
+     "tokens@5": 908,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q30",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5B",
+       "paragraphes": [
+        "C5B"
+       ]
+      },
+      {
+       "chunk": "B:C002:114",
+       "paragraphes": [
+        "114"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q31",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C8",
+       "paragraphes": [
+        "C8"
+       ]
+      },
+      {
+       "chunk": "B:C002:C6",
+       "paragraphes": [
+        "C6"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q32",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C20",
+       "paragraphes": [
+        "C20"
+       ]
+      },
+      {
+       "chunk": "B:C002:114",
+       "paragraphes": [
+        "114"
+       ]
+      },
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      }
+     ],
+     "tokens@5": 973,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q33",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:105A",
+       "paragraphes": [
+        "105A"
+       ]
+      },
+      {
+       "chunk": "B:C002:101",
+       "paragraphes": [
+        "101"
+       ]
+      },
+      {
+       "chunk": "B:C002:100",
+       "paragraphes": [
+        "100"
+       ]
+      }
+     ],
+     "tokens@5": 909,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q34",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:128",
+       "paragraphes": [
+        "128"
+       ]
+      },
+      {
+       "chunk": "B:C002:129",
+       "paragraphes": [
+        "129"
+       ]
+      },
+      {
+       "chunk": "B:C002:132",
+       "paragraphes": [
+        "132"
+       ]
+      }
+     ],
+     "tokens@5": 1128,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q35",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 963,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q36",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:62A",
+       "paragraphes": [
+        "62A"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      }
+     ],
+     "tokens@5": 967,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q37",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95D",
+       "paragraphes": [
+        "B95D"
+       ]
+      },
+      {
+       "chunk": "B:C002:C16B",
+       "paragraphes": [
+        "C16B"
+       ]
+      }
+     ],
+     "tokens@5": 871,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q38",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119D",
+       "paragraphes": [
+        "B119D"
+       ]
+      },
+      {
+       "chunk": "B:C002:66A",
+       "paragraphes": [
+        "66A"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      }
+     ],
+     "tokens@5": 767,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q39",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      },
+      {
+       "chunk": "B:C002:62A",
+       "paragraphes": [
+        "62A"
+       ]
+      }
+     ],
+     "tokens@5": 801,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q40",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      },
+      {
+       "chunk": "B:C002:B68",
+       "paragraphes": [
+        "B68"
+       ]
+      },
+      {
+       "chunk": "B:C002:31",
+       "paragraphes": [
+        "31"
+       ]
+      }
+     ],
+     "tokens@5": 843,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q41",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B32",
+       "paragraphes": [
+        "B32"
+       ]
+      },
+      {
+       "chunk": "B:C002:B31",
+       "paragraphes": [
+        "B31"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119B",
+       "paragraphes": [
+        "B119B"
+       ]
+      }
+     ],
+     "tokens@5": 823,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q42",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 929,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q43",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-12",
+       "paragraphes": [
+        "cons-12"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      }
+     ],
+     "tokens@5": 498,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q44",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C30",
+       "paragraphes": [
+        "C30"
+       ]
+      }
+     ],
+     "tokens@5": 634,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q45",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 737,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q46",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:114",
+       "paragraphes": [
+        "114"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:124",
+       "paragraphes": [
+        "124"
+       ]
+      }
+     ],
+     "tokens@5": 881,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q47",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:B119B",
+       "paragraphes": [
+        "B119B"
+       ]
+      },
+      {
+       "chunk": "B:C002:B132",
+       "paragraphes": [
+        "B132"
+       ]
+      },
+      {
+       "chunk": "B:C002:B98",
+       "paragraphes": [
+        "B98"
+       ]
+      }
+     ],
+     "tokens@5": 1537,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.2640681225725909
+    },
+    {
+     "id": "q48",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 722,
+     "recall@1": 0.0,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.3065735963827292
+    },
+    {
+     "id": "q49",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:56",
+       "paragraphes": [
+        "56"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      }
+     ],
+     "tokens@5": 928,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q50",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:40",
+       "paragraphes": [
+        "40"
+       ]
+      }
+     ],
+     "tokens@5": 993,
+     "recall@1": 0.3333333333333333,
+     "recall@3": 0.6666666666666666,
+     "recall@5": 0.6666666666666666,
+     "recall@10": 0.6666666666666666,
+     "recall@1000tok": 0.6666666666666666,
+     "recall@2000tok": 0.6666666666666666,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.7653606369886217
+    },
+    {
+     "id": "q51",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:6",
+       "paragraphes": [
+        "6",
+        "7"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:art-1",
+       "paragraphes": [
+        "art-1"
+       ]
+      }
+     ],
+     "tokens@5": 1411
+    },
+    {
+     "id": "q52",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:127",
+       "paragraphes": [
+        "127"
+       ]
+      },
+      {
+       "chunk": "B:C002:B121",
+       "paragraphes": [
+        "B121"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      }
+     ],
+     "tokens@5": 1031
+    },
+    {
+     "id": "q53",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-6",
+       "paragraphes": [
+        "cons-6"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      },
+      {
+       "chunk": "B:C002:B52",
+       "paragraphes": [
+        "B52"
+       ]
+      }
+     ],
+     "tokens@5": 832
+    },
+    {
+     "id": "q54",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-7",
+       "paragraphes": [
+        "cons-7"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-9",
+       "paragraphes": [
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-14",
+       "paragraphes": [
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 271
+    },
+    {
+     "id": "q55",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B44",
+       "paragraphes": [
+        "B44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      }
+     ],
+     "tokens@5": 1524
+    },
+    {
+     "id": "q56",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      },
+      {
+       "chunk": "B:C002:B54",
+       "paragraphes": [
+        "B54"
+       ]
+      }
+     ],
+     "tokens@5": 1089
+    }
+   ]
+  },
+  "B · bm25+glossaire": {
+   "global": {
+    "recall@1": 0.377,
+    "recall@3": 0.553,
+    "recall@5": 0.653,
+    "recall@10": 0.793,
+    "recall@1000tok": 0.623,
+    "recall@2000tok": 0.793,
+    "mrr@10": 0.546,
+    "ndcg@5": 0.54,
+    "tokens@5": 990,
+    "latence_p50_ms": 0.5,
+    "latence_p95_ms": 0.8
+   },
+   "par_niveau": {
+    "factuelle": {
+     "n": 42,
+     "recall@5": 0.69,
+     "mrr@10": 0.537
+    },
+    "multi": {
+     "n": 8,
+     "recall@5": 0.458,
+     "mrr@10": 0.598
+    }
+   },
+   "questions": [
+    {
+     "id": "q01",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 634,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q02",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:60",
+       "paragraphes": [
+        "60",
+        "61"
+       ]
+      },
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      }
+     ],
+     "tokens@5": 790,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q03",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:33",
+       "paragraphes": [
+        "33"
+       ]
+      },
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:22",
+       "paragraphes": [
+        "22"
+       ]
+      }
+     ],
+     "tokens@5": 1041,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q04",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B66",
+       "paragraphes": [
+        "B66"
+       ]
+      },
+      {
+       "chunk": "B:C002:B61",
+       "paragraphes": [
+        "B61"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      }
+     ],
+     "tokens@5": 1059,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q05",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B59",
+       "paragraphes": [
+        "B59"
+       ]
+      },
+      {
+       "chunk": "B:C002:B74",
+       "paragraphes": [
+        "B74"
+       ]
+      },
+      {
+       "chunk": "B:C002:36",
+       "paragraphes": [
+        "36"
+       ]
+      }
+     ],
+     "tokens@5": 1050,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "q06",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      },
+      {
+       "chunk": "B:C002:B90",
+       "paragraphes": [
+        "B90"
+       ]
+      }
+     ],
+     "tokens@5": 867,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q07",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      },
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      }
+     ],
+     "tokens@5": 1766,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q08",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:43",
+       "paragraphes": [
+        "43"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:marge sur services contractuels",
+       "paragraphes": [
+        "def:marge sur services contractuels"
+       ]
+      }
+     ],
+     "tokens@5": 1128,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q09",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B99",
+       "paragraphes": [
+        "B99"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      }
+     ],
+     "tokens@5": 1068,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q10",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      },
+      {
+       "chunk": "B:C002:18",
+       "paragraphes": [
+        "18"
+       ]
+      }
+     ],
+     "tokens@5": 610,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q11",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      },
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      }
+     ],
+     "tokens@5": 1496,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q12",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      }
+     ],
+     "tokens@5": 934,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q13",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      },
+      {
+       "chunk": "B:C002:28A",
+       "paragraphes": [
+        "28A"
+       ]
+      }
+     ],
+     "tokens@5": 1058,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q14",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:flux de trésorerie liés aux frais d'acquisition",
+       "paragraphes": [
+        "def:flux de trésorerie liés aux frais d'acquisition"
+       ]
+      }
+     ],
+     "tokens@5": 742,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q15",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B93",
+       "paragraphes": [
+        "B93"
+       ]
+      },
+      {
+       "chunk": "B:C002:5",
+       "paragraphes": [
+        "5"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 879,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q16",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:13",
+       "paragraphes": [
+        "13"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      },
+      {
+       "chunk": "B:C002:12",
+       "paragraphes": [
+        "12"
+       ]
+      }
+     ],
+     "tokens@5": 981,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q17",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:28B",
+       "paragraphes": [
+        "28B"
+       ]
+      },
+      {
+       "chunk": "B:C002:C14C",
+       "paragraphes": [
+        "C14C"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66A",
+       "paragraphes": [
+        "B66A"
+       ]
+      }
+     ],
+     "tokens@5": 1078,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q18",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:72",
+       "paragraphes": [
+        "72"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      },
+      {
+       "chunk": "B:C002:14",
+       "paragraphes": [
+        "14"
+       ]
+      }
+     ],
+     "tokens@5": 1021,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q19",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119B",
+       "paragraphes": [
+        "B119B"
+       ]
+      },
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      }
+     ],
+     "tokens@5": 807,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q20",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:99",
+       "paragraphes": [
+        "99"
+       ]
+      },
+      {
+       "chunk": "B:C002:79",
+       "paragraphes": [
+        "79"
+       ]
+      }
+     ],
+     "tokens@5": 922,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q21",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:83",
+       "paragraphes": [
+        "83"
+       ]
+      },
+      {
+       "chunk": "B:C002:105",
+       "paragraphes": [
+        "105"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 1303,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q22",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      }
+     ],
+     "tokens@5": 920,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q23",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B19",
+       "paragraphes": [
+        "B19"
+       ]
+      },
+      {
+       "chunk": "B:C002:B17",
+       "paragraphes": [
+        "B17"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      }
+     ],
+     "tokens@5": 1106,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q24",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B100",
+       "paragraphes": [
+        "B100"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66",
+       "paragraphes": [
+        "B66"
+       ]
+      },
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      }
+     ],
+     "tokens@5": 1014,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q25",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      },
+      {
+       "chunk": "B:C002:66",
+       "paragraphes": [
+        "66"
+       ]
+      }
+     ],
+     "tokens@5": 1819,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q26",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      },
+      {
+       "chunk": "B:C002:B113",
+       "paragraphes": [
+        "B113"
+       ]
+      },
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      }
+     ],
+     "tokens@5": 1087,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q27",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B102",
+       "paragraphes": [
+        "B102"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:C20A",
+       "paragraphes": [
+        "C20A"
+       ]
+      }
+     ],
+     "tokens@5": 909,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "q28",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      },
+      {
+       "chunk": "B:C002:76",
+       "paragraphes": [
+        "76"
+       ]
+      }
+     ],
+     "tokens@5": 1568,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q29",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B130",
+       "paragraphes": [
+        "B130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B120",
+       "paragraphes": [
+        "B120"
+       ]
+      },
+      {
+       "chunk": "B:C002:83",
+       "paragraphes": [
+        "83"
+       ]
+      }
+     ],
+     "tokens@5": 795,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q30",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5B",
+       "paragraphes": [
+        "C5B"
+       ]
+      },
+      {
+       "chunk": "B:C002:C8",
+       "paragraphes": [
+        "C8"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q31",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C8",
+       "paragraphes": [
+        "C8"
+       ]
+      },
+      {
+       "chunk": "B:C002:C6",
+       "paragraphes": [
+        "C6"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5",
+       "paragraphes": [
+        "C5"
+       ]
+      }
+     ],
+     "tokens@5": 718,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q32",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:C20",
+       "paragraphes": [
+        "C20"
+       ]
+      },
+      {
+       "chunk": "B:C002:114",
+       "paragraphes": [
+        "114"
+       ]
+      },
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      }
+     ],
+     "tokens@5": 899,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q33",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:101",
+       "paragraphes": [
+        "101"
+       ]
+      },
+      {
+       "chunk": "B:C002:100",
+       "paragraphes": [
+        "100"
+       ]
+      },
+      {
+       "chunk": "B:C002:105A",
+       "paragraphes": [
+        "105A"
+       ]
+      }
+     ],
+     "tokens@5": 909,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q34",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:128",
+       "paragraphes": [
+        "128"
+       ]
+      },
+      {
+       "chunk": "B:C002:129",
+       "paragraphes": [
+        "129"
+       ]
+      },
+      {
+       "chunk": "B:C002:132",
+       "paragraphes": [
+        "132"
+       ]
+      }
+     ],
+     "tokens@5": 1128,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q35",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 895,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q36",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:62A",
+       "paragraphes": [
+        "62A"
+       ]
+      }
+     ],
+     "tokens@5": 967,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q37",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:66",
+       "paragraphes": [
+        "66"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      }
+     ],
+     "tokens@5": 1128,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q38",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:66A",
+       "paragraphes": [
+        "66A"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119C",
+       "paragraphes": [
+        "B119C"
+       ]
+      },
+      {
+       "chunk": "B:C002:B119E",
+       "paragraphes": [
+        "B119E"
+       ]
+      }
+     ],
+     "tokens@5": 660,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "q39",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B119",
+       "paragraphes": [
+        "B119"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:période de couverture",
+       "paragraphes": [
+        "def:période de couverture"
+       ]
+      },
+      {
+       "chunk": "B:C002:B7",
+       "paragraphes": [
+        "B7"
+       ]
+      }
+     ],
+     "tokens@5": 699,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "q40",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B71",
+       "paragraphes": [
+        "B71"
+       ]
+      },
+      {
+       "chunk": "B:C002:B68",
+       "paragraphes": [
+        "B68"
+       ]
+      },
+      {
+       "chunk": "B:C002:31",
+       "paragraphes": [
+        "31"
+       ]
+      }
+     ],
+     "tokens@5": 766,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "q41",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:B32",
+       "paragraphes": [
+        "B32"
+       ]
+      },
+      {
+       "chunk": "B:C002:B31",
+       "paragraphes": [
+        "B31"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      }
+     ],
+     "tokens@5": 823,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q42",
+     "niveau": "factuelle",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:51",
+       "paragraphes": [
+        "51"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 929,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q43",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-12",
+       "paragraphes": [
+        "cons-12"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      },
+      {
+       "chunk": "B:C002:C23",
+       "paragraphes": [
+        "C23"
+       ]
+      }
+     ],
+     "tokens@5": 610,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q44",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-4",
+       "paragraphes": [
+        "cons-4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C10",
+       "paragraphes": [
+        "C10"
+       ]
+      }
+     ],
+     "tokens@5": 634,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q45",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:B99",
+       "paragraphes": [
+        "B99"
+       ]
+      },
+      {
+       "chunk": "B:C002:C11",
+       "paragraphes": [
+        "C11"
+       ]
+      },
+      {
+       "chunk": "B:C002:B97",
+       "paragraphes": [
+        "B97"
+       ]
+      }
+     ],
+     "tokens@5": 952,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "q46",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      },
+      {
+       "chunk": "B:C002:17",
+       "paragraphes": [
+        "17"
+       ]
+      },
+      {
+       "chunk": "B:C002:50",
+       "paragraphes": [
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 1077,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 0.5,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.2640681225725909
+    },
+    {
+     "id": "q47",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:C15",
+       "paragraphes": [
+        "C15"
+       ]
+      },
+      {
+       "chunk": "B:C002:B98",
+       "paragraphes": [
+        "B98"
+       ]
+      },
+      {
+       "chunk": "B:C002:44",
+       "paragraphes": [
+        "44"
+       ]
+      }
+     ],
+     "tokens@5": 1107,
+     "recall@1": 0.0,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.3065735963827292
+    },
+    {
+     "id": "q48",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:46",
+       "paragraphes": [
+        "46"
+       ]
+      },
+      {
+       "chunk": "B:C002:B113",
+       "paragraphes": [
+        "B113"
+       ]
+      },
+      {
+       "chunk": "B:C002:67",
+       "paragraphes": [
+        "67"
+       ]
+      }
+     ],
+     "tokens@5": 1087,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.5,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.23719771276929622
+    },
+    {
+     "id": "q49",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:56",
+       "paragraphes": [
+        "56"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B126",
+       "paragraphes": [
+        "B126"
+       ]
+      }
+     ],
+     "tokens@5": 900,
+     "recall@1": 0.5,
+     "recall@3": 0.5,
+     "recall@5": 0.5,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.5,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.6131471927654584
+    },
+    {
+     "id": "q50",
+     "niveau": "multi",
+     "top3": [
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      }
+     ],
+     "tokens@5": 1204,
+     "recall@1": 0.3333333333333333,
+     "recall@3": 0.6666666666666666,
+     "recall@5": 0.6666666666666666,
+     "recall@10": 0.6666666666666666,
+     "recall@1000tok": 0.6666666666666666,
+     "recall@2000tok": 0.6666666666666666,
+     "mrr@10": 1.0,
+     "ndcg@5": 0.7653606369886217
+    },
+    {
+     "id": "q51",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:6",
+       "paragraphes": [
+        "6",
+        "7"
+       ]
+      },
+      {
+       "chunk": "B:C002:15",
+       "paragraphes": [
+        "15",
+        "16"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      }
+     ],
+     "tokens@5": 1346
+    },
+    {
+     "id": "q52",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:127",
+       "paragraphes": [
+        "127"
+       ]
+      },
+      {
+       "chunk": "B:C002:B121",
+       "paragraphes": [
+        "B121"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      }
+     ],
+     "tokens@5": 1124
+    },
+    {
+     "id": "q53",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-6",
+       "paragraphes": [
+        "cons-6"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 832
+    },
+    {
+     "id": "q54",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-7",
+       "paragraphes": [
+        "cons-7"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-9",
+       "paragraphes": [
+        "cons-9"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-14",
+       "paragraphes": [
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 271
+    },
+    {
+     "id": "q55",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B44",
+       "paragraphes": [
+        "B44"
+       ]
+      },
+      {
+       "chunk": "B:C002:B82",
+       "paragraphes": [
+        "B82"
+       ]
+      }
+     ],
+     "tokens@5": 1524
+    },
+    {
+     "id": "q56",
+     "niveau": "piege",
+     "top3": [
+      {
+       "chunk": "B:C002:19",
+       "paragraphes": [
+        "19"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      },
+      {
+       "chunk": "B:C002:B54",
+       "paragraphes": [
+        "B54"
+       ]
+      }
+     ],
+     "tokens@5": 1089
+    }
+   ]
+  }
+ },
+ "comparaisons": {
+  "A · bm25 → B · bm25": {
+   "recall@5": [
+    -0.077,
+    -0.2,
+    0.043
+   ],
+   "recall@1000tok": [
+    0.063,
+    -0.09,
+    0.213
+   ],
+   "mrr@10": [
+    -0.037,
+    -0.143,
+    0.063
+   ]
+  },
+  "B · bm25 → B0 · bm25": {
+   "recall@5": [
+    -0.06,
+    -0.14,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.06,
+    -0.14,
+    0.0
+   ],
+   "mrr@10": [
+    -0.026,
+    -0.069,
+    0.015
+   ]
+  },
+  "B · bm25 → B · bm25+glossaire": {
+   "recall@5": [
+    0.09,
+    0.02,
+    0.16
+   ],
+   "recall@1000tok": [
+    0.09,
+    0.02,
+    0.17
+   ],
+   "mrr@10": [
+    0.092,
+    0.031,
+    0.165
+   ]
+  }
+ }
+}

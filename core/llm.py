@@ -97,15 +97,21 @@ class LLMClient:
                     messages, model_id, temperature, max_tokens, json_mode,
                     self.s.llm_base_url, self.s.llm_api_key,
                 )
-            except LLMError:
+            except LLMError as primary_error:
                 if not self.s.llm_fallback_model:
                     raise
                 rec["fallback"] = True
-                resp = self._call_with_retries(
-                    messages, self.s.llm_fallback_model, temperature, max_tokens, json_mode,
-                    self.s.llm_fallback_base_url or self.s.llm_base_url,
-                    self.s.llm_fallback_api_key or self.s.llm_api_key,
-                )
+                rec["primary_error"] = str(primary_error)[:300]
+                try:
+                    resp = self._call_with_retries(
+                        messages, self.s.llm_fallback_model, temperature, max_tokens, json_mode,
+                        self.s.llm_fallback_base_url or self.s.llm_base_url,
+                        self.s.llm_fallback_api_key or self.s.llm_api_key,
+                    )
+                except LLMError as fallback_error:
+                    # les deux causes sont utiles au diagnostic (F-009)
+                    raise LLMError(f"principal ({model_id}) : {primary_error} | secours "
+                                   f"({self.s.llm_fallback_model}) : {fallback_error}") from fallback_error
             rec.update(model=resp.model, tokens_in=resp.tokens_in,
                        tokens_out=resp.tokens_out, cost_usd=round(resp.cost_usd, 6))
             return resp
@@ -146,6 +152,12 @@ class LLMClient:
         }
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
+        if "gpt-oss" in model:
+            # modèles « à raisonnement » : raisonnement court et non renvoyé, et assez de
+            # tokens pour que le raisonnement ne consomme pas toute la réponse (Groq, doc reasoning)
+            payload["reasoning_effort"] = "low"
+            payload["include_reasoning"] = False
+            payload["max_tokens"] = max(max_tokens, 1024)
         try:
             r = httpx.post(
                 f"{base_url.rstrip('/')}/chat/completions",
