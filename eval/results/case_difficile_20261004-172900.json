@@ -1,0 +1,222 @@
+{
+ "date": "20261004-172900",
+ "agregats": {
+  "dossiers": 10,
+  "statuts": {
+   "note_prete": 3,
+   "validation_humaine": 6,
+   "document_illisible": 1
+  },
+  "csm_de_la_note_juste": "7/7",
+  "syntheses_verifiees_du_llm": "9/10",
+  "reponses_norme_validees": "15/20",
+  "duree_mediane_s": 89.5,
+  "appels_llm_par_dossier": 6.4,
+  "tokens_entree_par_dossier": 11245
+ },
+ "dossiers": [
+  {
+   "id": "dur01",
+   "case_id": "case-20261004-172900-dur01",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 40.5
+  },
+  {
+   "id": "dur02",
+   "case_id": "case-20261004-172900-dur02",
+   "attendu": "alerte",
+   "statut": "validation_humaine",
+   "csm_juste": null,
+   "statut_attendu_respecte": true,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [
+    "extraction : champ absent du document (risk_adjustment_pct)"
+   ],
+   "etapes": [
+    "extracteur:a_verifier",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 90.9
+  },
+  {
+   "id": "dur03",
+   "case_id": "case-20261004-172900-dur03",
+   "attendu": "exact",
+   "statut": "validation_humaine",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "1/2",
+   "controles": [
+    "norme : réponse non validée par le vérificateur (Comment la marge sur services contractuels est-elle comptabi…)"
+   ],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:validation_humaine",
+    "redacteur:ok"
+   ],
+   "secondes": 88.1
+  },
+  {
+   "id": "dur04",
+   "case_id": "case-20261004-172900-dur04",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 66.8
+  },
+  {
+   "id": "dur05",
+   "case_id": "case-20261004-172900-dur05",
+   "attendu": "exact",
+   "statut": "validation_humaine",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/3",
+   "controles": [
+    "norme : réponse non validée par le vérificateur (Comment la marge sur services contractuels est-elle comptabi…)"
+   ],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:validation_humaine",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 125.8
+  },
+  {
+   "id": "dur06",
+   "case_id": "case-20261004-172900-dur06",
+   "attendu": "exact",
+   "statut": "validation_humaine",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "1/2",
+   "controles": [
+    "norme : réponse non validée par le vérificateur (Comment la marge sur services contractuels est-elle comptabi…)"
+   ],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:validation_humaine",
+    "redacteur:ok"
+   ],
+   "secondes": 87.6
+  },
+  {
+   "id": "dur07",
+   "case_id": "case-20261004-172900-dur07",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "3/3",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 102.4
+  },
+  {
+   "id": "dur08",
+   "case_id": "case-20261004-172900-dur08",
+   "attendu": "exact",
+   "statut": "validation_humaine",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "1/2",
+   "controles": [
+    "norme : réponse non validée par le vérificateur (Comment la marge sur services contractuels est-elle comptabi…)"
+   ],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:validation_humaine",
+    "redacteur:ok"
+   ],
+   "secondes": 106.3
+  },
+  {
+   "id": "dur09",
+   "case_id": "case-20261004-172900-dur09",
+   "attendu": "alerte",
+   "statut": "document_illisible",
+   "csm_juste": null,
+   "statut_attendu_respecte": true,
+   "synthese": null,
+   "reponses_validees": "0/0",
+   "controles": [
+    "données : Value error, la somme des unités de couverture doit être > 0"
+   ],
+   "etapes": [
+    "extracteur:echec"
+   ],
+   "secondes": 12.1
+  },
+  {
+   "id": "dur10",
+   "case_id": "case-20261004-172900-dur10",
+   "attendu": "alerte",
+   "statut": "validation_humaine",
+   "csm_juste": null,
+   "statut_attendu_respecte": true,
+   "synthese": "llm",
+   "reponses_validees": "1/2",
+   "controles": [
+    "extraction : plusieurs groupes de contrats dans le document (PREV-2024-J, VIE-2025-D) : choisir le groupe à calculer",
+    "norme : réponse non validée par le vérificateur (Comment la marge sur services contractuels est-elle comptabi…)"
+   ],
+   "etapes": [
+    "extracteur:a_verifier",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:validation_humaine",
+    "redacteur:ok"
+   ],
+   "secondes": 97.5
+  }
+ ]
+}
