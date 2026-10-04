@@ -1,0 +1,51 @@
+{
+  "source": "Résultats mesurés du projet (docs/decisions.md, eval/*_report*.md), octobre 2026. Données de test fictives ou issues du règlement (UE) 2021/2036.",
+  "retrieval": {
+    "title": "Retrouver le bon paragraphe de la norme",
+    "metric": "Recall@5 sur 50 questions",
+    "items": [
+      {"label": "BM25, découpage fixe", "value": 0.650},
+      {"label": "BM25, un paragraphe par extrait", "value": 0.563},
+      {"label": "BM25 + glossaire", "value": 0.663},
+      {"label": "Dense BGE-M3", "value": 0.817},
+      {"label": "Hybride BGE-M3 + BM25 + glossaire", "value": 0.833, "chosen": true}
+    ],
+    "takeaway": "Le sens (BGE-M3) compte plus que les mots ; le glossaire des sigles (CSM, PAA…) ajoute le reste."
+  },
+  "iterations": {
+    "title": "Chaque version de prompt, mesurée avant et après",
+    "items": [
+      {"label": "Agent RAG : réponses sans erreur", "before": 40, "after": 43, "total": 50, "unit": "réponses"},
+      {"label": "Vérificateur : erreurs repérées", "before": 3, "after": 5, "total": 7, "unit": "erreurs"},
+      {"label": "Extracteur vision : cas dangereux", "before": 2, "after": 0, "total": 10, "unit": "documents", "lower_is_better": true},
+      {"label": "Voix : termes IFRS 17 bien transcrits", "before": 6, "after": 8, "total": 8, "unit": "enregistrements"}
+    ]
+  },
+  "extraction": {
+    "title": "Lire un état de portefeuille",
+    "rows": [
+      {"mode": "Texte du PDF (Groq)", "simple": "15/15", "pieges": "0 dangereux", "duree": "1 s"},
+      {"mode": "Image ou scan (Gemini, double lecture)", "simple": "15/15", "pieges": "0 dangereux", "duree": "117 s"},
+      {"mode": "Hybride texte + image", "simple": "15/15", "pieges": "—", "duree": "59 s"}
+    ],
+    "takeaway": "Un PDF passe par son texte, 30 fois plus vite ; un scan passe par la vision, lue deux fois."
+  },
+  "safety": {
+    "title": "Ce que la chaîne refuse de laisser passer",
+    "items": [
+      {"label": "Questions hors sujet refusées", "value": "6/6"},
+      {"label": "Citations inventées après vérification", "value": "0"},
+      {"label": "Dossiers piégés passés sans contrôle", "value": "0/10"},
+      {"label": "Alertes levées quand une donnée manque", "value": "3/3"}
+    ]
+  },
+  "endtoend": {
+    "title": "Dossier complet, du document à la note",
+    "items": [
+      {"label": "CSM de la note juste", "value": "7/7"},
+      {"label": "Synthèses du LLM acceptées par le contrôle", "value": "9/9"},
+      {"label": "Appels LLM par dossier", "value": "6,4"},
+      {"label": "Durée médiane", "value": "90 s"}
+    ]
+  }
+}

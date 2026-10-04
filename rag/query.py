@@ -41,7 +41,33 @@ GLOSSARY: dict[str, str] = {
 }
 
 
+# Question sur la norme dans son ensemble (« définition d'IFRS 17 », « c'est quoi IFRS 17 ? ») :
+# « IFRS 17 » figure dans presque tous les paragraphes, la recherche ne trouve donc rien de précis.
+# Le paragraphe 1 (objet de la norme) y répond ; on ajoute ses termes officiels (D-039).
+_GENERIC_WORDS = """
+a au aux avec bref c ce cela ces cest d de des definir definis definissez definition donne donner donnez
+du elle en est est-ce explique expliquer expliquez general generale globale il ifrs ifrs17 introduction
+j je l la le les m me moi mots norme objectif objet presentation presente presenter presentez
+pourquoi pouvez peux plait principe principes qu quoi que quel quelle qui resume resumer resumez s
+sert servir simple simplement sont svp t te toi tu un une votre vous 17
+"""
+_GENERIC = set(_GENERIC_WORDS.split())
+STANDARD_EXPANSION = ("objectif de la norme : principes de comptabilisation, d'évaluation et de "
+                      "présentation des contrats d'assurance et informations à fournir")
+
+
+def about_the_standard(query: str) -> bool:
+    """Vrai si la question porte sur IFRS 17 en général, sans sujet précis."""
+    q = fold(query)
+    if not re.search(r"\bifrs ?17\b", q):
+        return False
+    words = re.findall(r"[a-z0-9]+", q)
+    return bool(words) and all(w in _GENERIC for w in words)
+
+
 def expand_glossary(query: str) -> str:
     q = fold(query)
     extra = [target for pattern, target in GLOSSARY.items() if re.search(pattern, q)]
+    if about_the_standard(query):
+        extra.append(STANDARD_EXPANSION)
     return query if not extra else f"{query} ({'; '.join(dict.fromkeys(extra))})"

@@ -203,3 +203,42 @@ def test_extract_image_passe_par_le_mode_vision(client, monkeypatch, tmp_path):
 def test_extract_refuse_un_fichier_qui_n_est_pas_un_pdf(client):
     r = client.post("/v1/extract", headers=AUTH, files={"file": ("x.txt", b"bonjour", "text/plain")})
     assert r.status_code == 415
+
+
+def test_site_web_et_documents_exemple(client):
+    r = client.get("/", follow_redirects=False)
+    assert r.status_code in (302, 307) and r.headers["location"] == "/app/"
+    page = client.get("/app/")
+    assert page.status_code == 200 and "IFRS 17 Copilot" in page.text
+    assert client.get("/app/app.js").status_code == 200
+    samples = client.get("/v1/samples").json()
+    assert isinstance(samples, list)
+    assert client.get("/v1/samples/../../.env").status_code == 404
+    assert client.get("/v1/samples/zzz99").status_code == 404
+
+
+def test_dossier_en_flux(client, monkeypatch, tmp_path):
+    """/v1/case/stream : événements start, étapes (début puis fin), résultat final."""
+    import json
+
+    import api.main as main
+    from core.llm import LLMClient
+
+    def respond(messages, model):
+        system = messages[0]["content"]
+        if "rédige la synthèse" in system:
+            return json.dumps({"synthese": "Le groupe AB-1 est bénéficiaire."})
+        return json.dumps(GOOD_EXTRACTION)
+
+    fake = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    monkeypatch.setattr(main, "make_client", lambda s: LLMClient(fake, fake_responder=respond))
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    r = client.post("/v1/case/stream", headers=AUTH,
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    assert r.status_code == 200 and r.headers["content-type"].startswith("text/event-stream")
+    events = [json.loads(line[6:]) for line in r.text.splitlines() if line.startswith("data: ")]
+    assert events[0]["type"] == "start" and events[-1]["type"] == "result"
+    steps = [e for e in events if e["type"] == "step"]
+    assert steps[0]["agent"] == "extracteur" and steps[0]["status"] == "en cours"
+    assert {e["agent"] for e in steps} >= {"extracteur", "calculateur", "redacteur"}
+    assert events[-1]["data"]["csm"]["group_id"] == "AB-1" and events[-1]["data"]["note_html"]

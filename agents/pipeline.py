@@ -7,6 +7,7 @@ mesuré soit exactement ce qui tourne en démo.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 from agents.rag_agent import RagResult, answer_question
@@ -15,10 +16,35 @@ from agents.schemas import AgentName, GroundedAnswer, Intent, Plan, Verdict, Ver
 from agents.verifier import feedback_text, verify_answer
 from core.config import Settings
 from core.llm import LLMClient
-from rag.retrieve import Retriever
+from rag.retrieve import Retriever, fold
 
 OUT_OF_SCOPE_MESSAGE = ("Cette demande ne porte pas sur IFRS 17 : je ne peux répondre qu'à des "
                         "questions sur la norme.")
+SMALL_TALK_MESSAGE = ("Bonjour ! Je suis le copilote IFRS 17. Je réponds aux questions sur la norme, en "
+                      "citant les paragraphes du règlement (UE) 2021/2036, et j'analyse vos documents de "
+                      "portefeuille. Par exemple : « Comment la CSM est-elle libérée en résultat ? »")
+THANKS_MESSAGE = "Avec plaisir ! Posez-moi une autre question sur IFRS 17 quand vous voulez."
+
+# Échanges de politesse : réponse aimable, sans appel au LLM ni au RAG (D-039).
+_TRIGGER_WORDS = """salut bonjour bonsoir hello hey coucou cc slt bjr cv merci thanks
+qui presente presentes presenter va sais savez"""
+_POLITE_TRIGGERS = set(_TRIGGER_WORDS.split())
+_OTHER_WORDS = """a allez aller au beaucoup bien bonne ca comment d de e es est et
+etes fais faire je journee le les m moi ok peux pour qu que quoi sais savez super t te tes toi tres tu
+un une va vas vous votre ton toi"""
+_POLITE_WORDS = _POLITE_TRIGGERS | set(_OTHER_WORDS.split())
+
+
+def small_talk(question: str) -> str | None:
+    """Message de politesse adapté, ou None si la question doit suivre la chaîne normale."""
+    words = re.findall(r"[a-z]+", fold(question))
+    if not words or len(words) > 8 or not set(words) & _POLITE_TRIGGERS:
+        return None
+    if not all(w in _POLITE_WORDS for w in words):
+        return None
+    if "merci" in words or "thanks" in words:
+        return THANKS_MESSAGE
+    return SMALL_TALK_MESSAGE
 
 
 @dataclass
@@ -28,6 +54,7 @@ class AskResult:
     answer: GroundedAnswer
     warnings: list[str] = field(default_factory=list)
     verdict: Verdict | None = None          # None : vérificateur désactivé
+    small_talk: bool = False                # politesse : message d'accueil, pas un refus
     rounds: int = 0                         # corrections demandées par le vérificateur
     first_verdict: Verdict | None = None    # verdict sur la première réponse (évaluation)
 
@@ -35,6 +62,12 @@ class AskResult:
 def ask(question: str, settings: Settings, client: LLMClient, retriever_loader, k: int = 5,
         case_id: str = "") -> AskResult:
     """``retriever_loader`` : fonction sans argument qui renvoie le Retriever (chargé seulement si utile)."""
+    polite = small_talk(question)
+    if polite is not None:
+        plan = Plan(intent=Intent.OUT_OF_SCOPE, steps=[], confidence=1.0,
+                    rationale="échange de politesse : message d'accueil, aucun agent appelé")
+        return AskResult(plan=plan, rag=None, small_talk=True,
+                         answer=GroundedAnswer(answer=None, refused=True, refusal_reason=polite))
     if settings.router_mode == "llm":
         plan = route_llm(question, False, client=client, case_id=case_id)
     else:

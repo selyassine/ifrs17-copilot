@@ -23,6 +23,7 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Vérificateur (LLM-juge : soutien et portée de chaque phrase) + boucle de correction bornée → validation humaine ; `verdict` dans `/v1/ask` | juge ancré (v2) : 5/7 erreurs détectées, 6/41 fausses alertes, kappa 0,46 (v1 : 3/7, 3/41, 0,38) |
 | Question vocale : Whisper (Groq) avec vocabulaire IFRS 17 → même chaîne que `/v1/ask` ; `POST /v1/ask/audio` | 8 enregistrements : WER 0,9 % avec vocabulaire IFRS 17 (4,8 % sans), termes reconnus 8/8 (6/8 sans) |
 | **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; workflows n8n 03 et 04 | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) |
+| **Interface web** (`/app/`) : dossier suivi en direct (flux SSE), données extraites corrigeables puis validées, questions écrites ou vocales à la norme, résultats mesurés | servie par l'API, sans dépendance externe ; 2 tests |
 
 ## Installation (sans Docker)
 
@@ -114,6 +115,22 @@ curl.exe -X POST http://127.0.0.1:8000/v1/case -H "X-API-Token: change-moi" -F "
 ### Brancher un vrai LLM
 
 Dans `.env` : `LLM_PROVIDER=openai_compatible`, puis `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL_SMALL`, `LLM_MODEL_LARGE`. Tout service exposant `POST /chat/completions` fonctionne, y compris un modèle servi sur Colab derrière le tunnel. Ensuite : `ROUTER_MODE=llm` et `python -m eval.eval_router --llm` pour comparer au routeur heuristique.
+
+## Interface web
+
+```powershell
+.\make.ps1 serve          # puis ouvrir http://127.0.0.1:8000
+```
+
+L'adresse racine redirige vers `/app/`. Cinq pages :
+
+- **Accueil** : la chaîne des agents rejouée, ce que le code vérifie, un exemple de note.
+- **Analyser un dossier** : déposer un PDF ou une image (ou choisir un document d'exemple). Chaque agent s'allume pendant son travail (`POST /v1/case/stream`, flux SSE). Si le dossier part en validation humaine, les données extraites se corrigent dans un formulaire puis repartent par `POST /v1/case/validated`.
+- **Interroger la norme** : question écrite ou dictée au micro (`/v1/ask`, `/v1/ask/audio`) ; chaque citation ouvre le paragraphe cité ; verdict du vérificateur affiché.
+- **Résultats** : les mesures du projet (`api/web/data/metrics.json`).
+- **Fonctionnement** : schéma et rôle de chaque agent.
+
+Le jeton d'API (`API_TOKEN`, `change-moi` par défaut) se règle dans le bouton **Réglages** ; il reste dans le navigateur. Documents fictifs uniquement : les niveaux gratuits de Groq et Gemini peuvent utiliser les données envoyées.
 
 ## Architecture
 

@@ -76,30 +76,45 @@ def extract_document(data: bytes, mime: str, settings: Settings, text_client: Ca
                                double_read=settings.vision_double_read)
 
 
-def _timed(steps: list[Step], agent: str):
+def _timed(steps: list[Step], agent: str, notify: Callable[[int, Step], None] | None = None):
+    """Mesure une étape et prévient ``notify`` à son début et à sa fin (suivi en direct, SSE)."""
     class _T:
         def __enter__(self):
             self.t0 = time.perf_counter()
             self.step = Step(agent=agent, status="en cours")
             steps.append(self.step)
+            self.index = len(steps) - 1
+            if notify:
+                notify(self.index, self.step)
             return self.step
 
         def __exit__(self, *exc):
             self.step.ms = round((time.perf_counter() - self.t0) * 1000, 1)
+            if exc[0] is not None:
+                self.step.status = "erreur"
+            if notify:
+                notify(self.index, self.step)
             return False
     return _T()
 
 
 def run_case(data: bytes, mime: str, settings: Settings, text_client: Callable[[], LLMClient],
              vision_client: Callable[[], LLMClient], retriever_loader: Callable | None,
-             case_id: str, portfolio: PortfolioData | None = None) -> CaseOutcome:
-    """``portfolio`` fourni (données validées par un humain) : l'extraction est sautée."""
+             case_id: str, portfolio: PortfolioData | None = None,
+             on_step: Callable[[int, Step], None] | None = None) -> CaseOutcome:
+    """``portfolio`` fourni (données validées par un humain) : l'extraction est sautée.
+    ``on_step(index, étape)`` : appelé au début et à la fin de chaque étape (interface en direct)."""
     out = CaseOutcome(case_id=case_id, status="note_prete")
+
+    def add(step: Step) -> None:
+        out.steps.append(step)
+        if on_step:
+            on_step(len(out.steps) - 1, step)
     client = text_client()
 
     # 1. Extracteur
     if portfolio is None:
-        with _timed(out.steps, "extracteur") as st:
+        with _timed(out.steps, "extracteur", on_step) as st:
             ext = extract_document(data, mime, settings, text_client, vision_client, case_id)
             out.extraction = ext
             st.status = ext.status
@@ -112,10 +127,10 @@ def run_case(data: bytes, mime: str, settings: Settings, text_client: Callable[[
         out.controls += [f"extraction : {i}" for i in ext.issues]
         out.controls += [f"extraction : champ absent du document ({m})" for m in ext.missing]
     else:
-        out.steps.append(Step(agent="extracteur", status="saute", detail="données fournies (validées)"))
+        add(Step(agent="extracteur", status="saute", detail="données fournies (validées)"))
 
     # 2. Calculateur (Python, jamais le LLM)
-    with _timed(out.steps, "calculateur") as st:
+    with _timed(out.steps, "calculateur", on_step) as st:
         out.csm = compute_csm(portfolio)
         st.status = "ok"
         st.detail = "groupe déficitaire" if out.csm.onerous else "groupe bénéficiaire"
@@ -131,10 +146,10 @@ def run_case(data: bytes, mime: str, settings: Settings, text_client: Callable[[
             ref = reference.usable(refs.get(q))
             if ref is not None:          # réponse de référence déjà vérifiée : aucun appel LLM
                 out.norm.append(NormPoint(question=q, answer=ref, verdict="ok"))
-                out.steps.append(Step(agent="chercheur_rag", status="reference", detail=q[:80]))
+                add(Step(agent="chercheur_rag", status="reference", detail=q[:80]))
                 continue
             retriever = retriever or retriever_loader()
-            with _timed(out.steps, "chercheur_rag+verificateur") as st:
+            with _timed(out.steps, "chercheur_rag+verificateur", on_step) as st:
                 res = verified_answer(q, settings, client, retriever, case_id=case_id)
                 label = verdict_label(res.verdict)
                 out.norm.append(NormPoint(question=q, answer=res.answer, verdict=label))
@@ -149,7 +164,7 @@ def run_case(data: bytes, mime: str, settings: Settings, text_client: Callable[[
         checks.append(f"Chiffres extraits contrôlés contre le document ({out.extraction.grounding})")
     if out.norm:
         checks.append("Citations de la norme vérifiées par le code, réponses relues par le vérificateur")
-    with _timed(out.steps, "redacteur") as st:
+    with _timed(out.steps, "redacteur", on_step) as st:
         out.note = write_note(portfolio, out.csm, out.norm, out.controls, checks + [
             "Synthèse : chaque nombre et chaque paragraphe cité vérifiés par le code"], client, case_id)
         st.status = "ok" if out.note.synthesis_source == "llm" else "repli"

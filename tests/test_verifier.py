@@ -117,3 +117,16 @@ def test_juge_ancre_preuve_dans_le_mauvais_paragraphe():
     assert issues and issues[0].kind == "non_soutenu" and "[44]" in issues[0].detail
     # v1 (pas de champ « preuve ») : aucun contrôle supplémentaire
     assert evidence_issues([{"phrase": "x", "paragraphes": ["44"], "soutenue": True}], texts) == []
+
+
+def test_politesse_sans_appel_llm(tmp_path):
+    from agents.pipeline import SMALL_TALK_MESSAGE, THANKS_MESSAGE, small_talk
+    s, client, calls = scripted(tmp_path, [GOOD], [JUDGE_OK])
+    res = ask("salut", s, client, lambda: (_ for _ in ()).throw(AssertionError("RAG appelé")))
+    assert res.small_talk and res.answer.refusal_reason == SMALL_TALK_MESSAGE
+    assert not calls["rag"] and not calls["juge"]
+    assert small_talk("comment vous êtes cv") == SMALL_TALK_MESSAGE
+    assert small_talk("Merci beaucoup !") == THANKS_MESSAGE
+    # une vraie question qui commence par une salutation suit la chaîne normale
+    assert small_talk("Bonjour, comment la CSM est-elle libérée ?") is None
+    assert small_talk("Donne-moi une recette de crêpes.") is None

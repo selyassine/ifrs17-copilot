@@ -11,17 +11,23 @@ Vérification et rédaction s'ajoutent en S4.
 
 from __future__ import annotations
 
+import json
+import queue
+import re
+import threading
 import uuid
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from agents.orchestrator import UnreadableDocument, extract_document, run_case
 from agents.pipeline import ask as run_ask
 from agents.router import route_heuristic, route_llm
 from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData, Verdict
-from core.config import Settings, get_settings
+from core.config import ROOT, Settings, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import traced
 from engine.csm import compute_csm
@@ -30,7 +36,7 @@ from multimodal.speech import audio_type, transcribe
 from multimodal.vision import detect_mime, vision_client
 from rag.service import IndexMissing, get_retriever
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 class UTF8JSONResponse(JSONResponse):
@@ -161,6 +167,7 @@ class AskResponse(BaseModel):
     answer: GroundedAnswer
     verdict: Verdict | None = Field(default=None, description="ok | a_corriger | validation_humaine")
     rounds: int = 0
+    small_talk: bool = Field(default=False, description="salutation : message d'accueil, pas un refus")
     sources: list[dict]
     warnings: list[str]
     corrections: int
@@ -187,7 +194,7 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
     rag = res.rag
     return AskResponse(case_id=case_id, plan=res.plan, answer=res.answer, verdict=res.verdict,
-                       rounds=res.rounds,
+                       rounds=res.rounds, small_talk=res.small_talk,
                        sources=rag.sources if rag else [], warnings=res.warnings,
                        corrections=rag.corrections if rag else 0,
                        latency_ms=rag.latency_ms if rag else 0.0)
@@ -384,3 +391,90 @@ def case_validated(body: CaseFromDataRequest, settings: Settings = Depends(get_s
     except LLMError as exc:
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
     return _case_response(out)
+
+
+# --------------------------------------------------------------------------- #
+# Interface web (S4) : site servi par l'API, suivi des agents en direct, documents d'exemple
+# --------------------------------------------------------------------------- #
+WEB_DIR = Path(__file__).parent / "web"
+SAMPLE_ID = re.compile(r"^(ext|dur)\d{2}$")
+
+
+@app.get("/", include_in_schema=False)
+def home() -> RedirectResponse:
+    return RedirectResponse("/app/")
+
+
+if WEB_DIR.exists():
+    app.mount("/app", StaticFiles(directory=WEB_DIR, html=True), name="web")
+
+
+@app.post("/v1/case/stream", dependencies=[Depends(check_token)])
+def case_stream(file: UploadFile = File(...), case_id: str | None = Form(default=None),
+                settings: Settings = Depends(get_settings)) -> StreamingResponse:
+    """Comme /v1/case, mais en flux (text/event-stream) : un événement par début et fin d'étape,
+    puis le résultat complet. Permet à l'interface d'afficher les agents au travail."""
+    data, mime = _read_upload(file)
+    cid = case_id or uuid.uuid4().hex[:12]
+    events: queue.Queue = queue.Queue()
+
+    def worker() -> None:
+        try:
+            out = run_case(data, mime, settings, lambda: make_client(settings),
+                           lambda: make_vision_client(settings), _retriever_loader(settings), cid,
+                           on_step=lambda i, st: events.put({"type": "step", "index": i, **st.__dict__}))
+            events.put({"type": "result", "data": _case_response(out).model_dump(mode="json")})
+        except UnreadableDocument as exc:
+            events.put({"type": "error", "detail": str(exc)})
+        except LLMError as exc:
+            events.put({"type": "error", "detail": f"LLM indisponible : {exc}"[:500]})
+        except Exception as exc:  # noqa: BLE001 — l'interface doit toujours recevoir une fin
+            events.put({"type": "error", "detail": f"erreur interne : {type(exc).__name__}"})
+        finally:
+            events.put(None)
+
+    threading.Thread(target=worker, daemon=True).start()
+
+    def stream():
+        yield f"data: {json.dumps({'type': 'start', 'case_id': cid})}\n\n"
+        while (item := events.get()) is not None:
+            yield f"data: {json.dumps(item, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(stream(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+def _sample_cases() -> list[dict]:
+    out = []
+    for name, kind in (("extraction_cases.jsonl", "simple"), ("extraction_hard_cases.jsonl", "piege")):
+        path = ROOT / "eval" / name
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                c = json.loads(line)
+                images = c.get("images") or ([c["image"]] if c.get("image") else [])
+                out.append({"id": c["id"], "kind": kind, "layout": c["layout"], "scan": c.get("scan", False),
+                            "piege": c.get("piege", ""), "attendu": c.get("attendu", "exact"),
+                            "pdf": c["pdf"], "image": images[0] if images else None,
+                            "available": (ROOT / c["pdf"]).exists()})
+    return out
+
+
+@app.get("/v1/samples")
+def samples() -> list[dict]:
+    """Documents de démonstration (fictifs) : générés par `python -m multimodal.synth` et `synth_hard`."""
+    return [{k: v for k, v in c.items() if k not in ("pdf", "image")} | {"has_image": bool(c["image"])}
+            for c in _sample_cases()]
+
+
+@app.get("/v1/samples/{sample_id}")
+def sample_file(sample_id: str, format: str = "pdf") -> FileResponse:
+    if not SAMPLE_ID.match(sample_id):
+        raise HTTPException(status_code=404, detail="document inconnu")
+    case = next((c for c in _sample_cases() if c["id"] == sample_id), None)
+    rel = None if case is None else (case["image"] if format == "image" else case["pdf"])
+    if rel is None or not (ROOT / rel).exists():
+        raise HTTPException(status_code=404, detail="document absent : lancer python -m multimodal.synth")
+    media = "application/pdf" if rel.endswith(".pdf") else "image/jpeg" if rel.endswith(".jpg") else "image/png"
+    return FileResponse(ROOT / rel, media_type=media, filename=Path(rel).name)

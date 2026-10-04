@@ -181,6 +181,16 @@ def test_glossaire():
     assert expand_glossary("Question sans sigle") == "Question sans sigle"
 
 
+def test_question_sur_la_norme_entiere():
+    from rag.query import STANDARD_EXPANSION, about_the_standard
+    for q in ["donner definition de IFRS 17", "Qu’est-ce que IFRS 17 ?", "Présente-moi IFRS 17",
+              "À quoi sert IFRS 17 ?"]:
+        assert about_the_standard(q), q
+        assert STANDARD_EXPANSION in expand_glossary(q)
+    for q in ["Définition de la CSM selon IFRS 17", "IFRS 17 et la réassurance", "Qu'est-ce que la CSM ?"]:
+        assert not about_the_standard(q), q
+
+
 # --------------------------------------------------------------------------- métriques
 def C(pids, n=100):  # noqa: N802
     return Chunk(chunk_id="-".join(pids), strategy="B", doc_id="T", text="", embed_text="",
