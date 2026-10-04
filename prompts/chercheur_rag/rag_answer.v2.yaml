@@ -62,5 +62,5 @@ changes: "Une seule modification, la portée : chaque extrait affiche son chemin
 eval:
   test_set: eval/rag_questions.jsonl
   metric: refus_corrects, citations_valides, citations_justes, fidelite_humaine
-  scores: {}
-  notes: "À mesurer : RAG_PROMPT_VERSION=2 puis python -m eval.eval_rag --pause 20 ; relire q02, q17, q22, q25, q26, q32, q42, q45, q46, q48, q50 et 5 réponses tirées au hasard"
+  scores: {v2_couverture: 0.823, v2_precision: 0.605, v2_precision_elargie: 0.84, v2_au_moins_un: 0.88, v2_refus_pieges: 1.0, v2_faux_refus: 0.0, v2_citations_inventees: 0.02, v2_fidele: 0.84, v2_fidele_complete: 0.78}
+  notes: "04/10/2026, mêmes conditions que v1 (gpt-oss-120b, hybride B + glossaire, 56 questions). Relecture : eval/results/rag_human_review_v2.md. Fidèles 42/50 contre 40/50 ; fidèles et complètes 39/50 dans les deux cas ; +14 % de tokens d'entrée. Corrige q32, q45, q50 ; dégrade q28 ; ne corrige pas les erreurs dues à une information absente des extraits (q02, q22, q42, q46). v1_precision_elargie recalculée à 0,83 avec les mêmes acceptables. citations_inventees : 1 réponse sur 50 avant vérification, corrigée par la relance"
