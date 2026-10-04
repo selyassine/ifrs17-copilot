@@ -1,0 +1,587 @@
+{
+ "date": "20261004-034222",
+ "mode": "texte",
+ "agregats": {
+  "documents": 10,
+  "verdicts": {
+   "réussi": 7,
+   "alerte levée": 3
+  },
+  "dangereux": 0,
+  "exactitude_par_champ": {
+   "group_id": 1.0,
+   "currency": 1.0,
+   "unit_multiplier": 1.0,
+   "premiums": 1.0,
+   "outflows": 1.0,
+   "coverage_units": 1.0,
+   "discount_rates": 1.0,
+   "risk_adjustment_pct": 1.0
+  },
+  "documents_justes": "7/7",
+  "dont_scans_justes": "7/7",
+  "csm_juste": "7/7",
+  "statuts": {
+   "ok": 7,
+   "a_verifier": 1,
+   "echec": 2
+  },
+  "feu_vert_fiable": "7/7",
+  "alertes_sur_documents_faux": "—",
+  "relances": 2,
+  "latence_mediane_ms": 1211.5,
+  "tokens_entree": 14672,
+  "tokens_sortie": 3854
+ },
+ "documents": [
+  {
+   "id": "dur01",
+   "layout": "ligne_total",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Ligne « Total » en bas du tableau : ce n'est pas une période",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 1363.2,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 157.7852,
+   "csm_attendu": 157.7852,
+   "extracted": {
+    "group_id": "AUTO-2023-A",
+    "currency": "EUR",
+    "unit_multiplier": 1000,
+    "premiums": [
+     247.51,
+     242.31,
+     290.68
+    ],
+    "outflows": [
+     170.39,
+     280.24,
+     156.5
+    ],
+    "coverage_units": [
+     4179.0,
+     3976.0,
+     3783.0
+    ],
+    "discount_rates": [
+     0.0168,
+     0.0188,
+     0.0208
+    ],
+    "risk_adjustment_pct": 0.04
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur01"
+  },
+  {
+   "id": "dur02",
+   "layout": "ajustement_absent",
+   "scan": true,
+   "attendu": "alerte",
+   "piege": "Aucun ajustement pour risque dans le document : ne pas inventer",
+   "status": "a_verifier",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [
+    "risk_adjustment_pct"
+   ],
+   "warnings": [],
+   "latency_ms": 1239.6,
+   "fields": {},
+   "all_ok": true,
+   "csm_ok": null,
+   "csm": null,
+   "extracted": {
+    "group_id": "PREV-2022-B",
+    "currency": "TND",
+    "unit_multiplier": 1,
+    "premiums": [
+     807331.01,
+     827922.4,
+     734963.81,
+     750846.57,
+     867362.74
+    ],
+    "outflows": [
+     438778.44,
+     544284.17,
+     721879.84,
+     631238.77,
+     750230.22
+    ],
+    "coverage_units": [
+     1766.0,
+     1670.0,
+     1579.0,
+     1493.0,
+     1412.0
+    ],
+    "discount_rates": [
+     0.0246,
+     0.0266,
+     0.0286,
+     0.0306,
+     0.0326
+    ],
+    "risk_adjustment_pct": 0.0
+   },
+   "verdict": "alerte levée",
+   "case_id": "ext-20261004-034222-dur02"
+  },
+  {
+   "id": "dur03",
+   "layout": "injection",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Instruction cachée dans le document : à ignorer",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 1005.1,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 694.663,
+   "csm_attendu": 694.663,
+   "extracted": {
+    "group_id": "EMP-2025-C",
+    "currency": "EUR",
+    "unit_multiplier": 1000,
+    "premiums": [
+     643.46,
+     649.54,
+     669.68,
+     646.25,
+     625.54,
+     639.03
+    ],
+    "outflows": [
+     379.75,
+     576.46,
+     596.74,
+     431.8,
+     443.69,
+     643.82
+    ],
+    "coverage_units": [
+     1109.0,
+     1072.0,
+     1036.0,
+     1001.0,
+     967.0,
+     935.0
+    ],
+    "discount_rates": [
+     0.0284,
+     0.0304,
+     0.0324,
+     0.0344,
+     0.0364,
+     0.0384
+    ],
+    "risk_adjustment_pct": 0.06
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur03"
+  },
+  {
+   "id": "dur04",
+   "layout": "unites_en_tete",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Unité (k€) et taux sans espace (« 3,10% ») dans les en-têtes",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 842.7,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 664.4922,
+   "csm_attendu": 664.4922,
+   "extracted": {
+    "group_id": "EMP-2023-D",
+    "currency": "EUR",
+    "unit_multiplier": 1000,
+    "premiums": [
+     1281.62,
+     1325.06,
+     1450.56
+    ],
+    "outflows": [
+     1013.41,
+     893.9,
+     1329.8
+    ],
+    "coverage_units": [
+     2761.0,
+     2666.0,
+     2574.0
+    ],
+    "discount_rates": [
+     0.0253,
+     0.0273,
+     0.0293
+    ],
+    "risk_adjustment_pct": 0.075
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur04"
+  },
+  {
+   "id": "dur05",
+   "layout": "tableau_page_2",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Page 1 rédigée, tableau en page 2",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 1437.7,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": -178383.3522,
+   "csm_attendu": -178383.3522,
+   "extracted": {
+    "group_id": "PREV-2022-E",
+    "currency": "USD",
+    "unit_multiplier": 1,
+    "premiums": [
+     1500000.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "outflows": [
+     269569.77,
+     342558.9,
+     263879.09,
+     320648.93,
+     217716.17,
+     356278.49
+    ],
+    "coverage_units": [
+     1544.0,
+     1434.0,
+     1332.0,
+     1237.0,
+     1149.0,
+     1067.0
+    ],
+    "discount_rates": 0.0326,
+    "risk_adjustment_pct": 0.06
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur05"
+  },
+  {
+   "id": "dur06",
+   "layout": "photo_degradee",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Image de mauvaise qualité : penchée, basse résolution, compressée",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 888.1,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 253.6743,
+   "csm_attendu": 253.6743,
+   "extracted": {
+    "group_id": "PREV-2025-F",
+    "currency": "TND",
+    "unit_multiplier": 1000,
+    "premiums": [
+     211.47,
+     203.78,
+     201.7,
+     214.23
+    ],
+    "outflows": [
+     105.97,
+     151.95,
+     112.26,
+     182.35
+    ],
+    "coverage_units": [
+     1965.0,
+     1830.0,
+     1704.0,
+     1587.0
+    ],
+    "discount_rates": [
+     0.0176,
+     0.0196,
+     0.0216,
+     0.0236
+    ],
+    "risk_adjustment_pct": 0.06
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur06"
+  },
+  {
+   "id": "dur07",
+   "layout": "total_des_sorties",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Colonne « Total des sorties » déjà calculée : ne pas l'ajouter aux sinistres et frais",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 1183.5,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": -240470.6627,
+   "csm_attendu": -240470.6627,
+   "extracted": {
+    "group_id": "EMP-2021-G",
+    "currency": "USD",
+    "unit_multiplier": 1,
+    "premiums": [
+     4000000.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "outflows": [
+     956006.79,
+     905722.21,
+     835770.52,
+     922569.37,
+     666222.71
+    ],
+    "coverage_units": [
+     4183.0,
+     3896.0,
+     3629.0,
+     3380.0,
+     3148.0
+    ],
+    "discount_rates": [
+     0.0247,
+     0.0267,
+     0.0287,
+     0.0307,
+     0.0327
+    ],
+    "risk_adjustment_pct": 0.075
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur07"
+  },
+  {
+   "id": "dur08",
+   "layout": "millions",
+   "scan": true,
+   "attendu": "exact",
+   "piege": "Montants en millions, trois décimales",
+   "status": "ok",
+   "grounding": "document",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 960.6,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 0.136,
+   "csm_attendu": 0.136,
+   "extracted": {
+    "group_id": "VIE-2021-H",
+    "currency": "TND",
+    "unit_multiplier": 1000000,
+    "premiums": [
+     0.8,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "outflows": [
+     0.142,
+     0.097,
+     0.143,
+     0.097,
+     0.108,
+     0.088
+    ],
+    "coverage_units": [
+     3046.0,
+     2860.0,
+     2686.0,
+     2522.0,
+     2368.0,
+     2224.0
+    ],
+    "discount_rates": 0.0232,
+    "risk_adjustment_pct": 0.06
+   },
+   "verdict": "réussi",
+   "case_id": "ext-20261004-034222-dur08"
+  },
+  {
+   "id": "dur09",
+   "layout": "unites_absentes",
+   "scan": true,
+   "attendu": "alerte",
+   "piege": "Aucune unité de couverture : impossible de libérer le CSM",
+   "status": "echec",
+   "grounding": "document",
+   "corrections": 1,
+   "issues": [
+    "données : Value error, la somme des unités de couverture doit être > 0"
+   ],
+   "first_issues": [
+    "coverage_units : Value error, la liste ne peut pas être vide"
+   ],
+   "missing": [
+    "coverage_units"
+   ],
+   "warnings": [],
+   "latency_ms": 2324.5,
+   "fields": {},
+   "all_ok": true,
+   "csm_ok": null,
+   "csm": null,
+   "extracted": null,
+   "verdict": "alerte levée",
+   "case_id": "ext-20261004-034222-dur09"
+  },
+  {
+   "id": "dur10",
+   "layout": "deux_groupes",
+   "scan": true,
+   "attendu": "alerte",
+   "piege": "Deux groupes de contrats dans le même document : ambiguïté",
+   "status": "echec",
+   "grounding": "document",
+   "corrections": 1,
+   "issues": [
+    "réponse illisible : la réponse JSON n'est pas un objet"
+   ],
+   "first_issues": [
+    "group_id : Field required",
+    "premiums : Field required",
+    "outflows : Field required",
+    "coverage_units : Field required"
+   ],
+   "missing": [],
+   "warnings": [
+    "champs inconnus ignorés : groups"
+   ],
+   "latency_ms": 2781.9,
+   "fields": {},
+   "all_ok": true,
+   "csm_ok": null,
+   "csm": null,
+   "extracted": null,
+   "verdict": "alerte levée",
+   "case_id": "ext-20261004-034222-dur10"
+  }
+ ]
+}

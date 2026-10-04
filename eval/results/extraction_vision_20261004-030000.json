@@ -1,0 +1,158 @@
+{
+ "date": "20261004-030000",
+ "mode": "vision",
+ "agregats": {
+  "documents": 2,
+  "exactitude_par_champ": {
+   "group_id": 1.0,
+   "currency": 1.0,
+   "unit_multiplier": 1.0,
+   "premiums": 1.0,
+   "outflows": 1.0,
+   "coverage_units": 1.0,
+   "discount_rates": 1.0,
+   "risk_adjustment_pct": 1.0
+  },
+  "documents_justes": "2/2",
+  "dont_scans_justes": "1/1",
+  "csm_juste": "2/2",
+  "statuts": {
+   "ok": 2,
+   "a_verifier": 0,
+   "echec": 0
+  },
+  "feu_vert_fiable": "2/2",
+  "alertes_sur_documents_faux": "—",
+  "relances": 0,
+  "latence_mediane_ms": 13601.6,
+  "tokens_entree": 4398,
+  "tokens_sortie": 1304
+ },
+ "documents": [
+  {
+   "id": "ext01",
+   "layout": "lignes",
+   "scan": false,
+   "status": "ok",
+   "grounding": "transcription",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 7744.8,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": 397.8927,
+   "csm_attendu": 397.8927,
+   "extracted": {
+    "group_id": "PREV-2023-A",
+    "currency": "USD",
+    "unit_multiplier": 1000,
+    "premiums": [
+     1500.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "outflows": [
+     231.77,
+     161.88,
+     151.33,
+     196.63,
+     242.55,
+     179.92
+    ],
+    "coverage_units": [
+     1309.0,
+     1253.0,
+     1199.0,
+     1147.0,
+     1098.0,
+     1051.0
+    ],
+    "discount_rates": [
+     0.0179,
+     0.0199,
+     0.0219,
+     0.0239,
+     0.0259,
+     0.0279
+    ],
+    "risk_adjustment_pct": 0.03
+   },
+   "case_id": "ext-20261004-030000-ext01"
+  },
+  {
+   "id": "ext02",
+   "layout": "colonnes",
+   "scan": true,
+   "status": "ok",
+   "grounding": "transcription",
+   "corrections": 0,
+   "issues": [],
+   "first_issues": [],
+   "missing": [],
+   "warnings": [],
+   "latency_ms": 19458.4,
+   "fields": {
+    "group_id": true,
+    "currency": true,
+    "unit_multiplier": true,
+    "premiums": true,
+    "outflows": true,
+    "coverage_units": true,
+    "discount_rates": true,
+    "risk_adjustment_pct": true
+   },
+   "all_ok": true,
+   "csm_ok": true,
+   "csm": -87.762,
+   "csm_attendu": -87.762,
+   "extracted": {
+    "group_id": "EMP-2023-B",
+    "currency": "EUR",
+    "unit_multiplier": 1000,
+    "premiums": [
+     135.25,
+     143.92,
+     139.7,
+     121.34,
+     132.73,
+     135.47
+    ],
+    "outflows": [
+     133.13,
+     143.16,
+     146.77,
+     220.27,
+     127.01,
+     127.65
+    ],
+    "coverage_units": [
+     3319.0,
+     2945.0,
+     2613.0,
+     2319.0,
+     2058.0,
+     1826.0
+    ],
+    "discount_rates": 0.025,
+    "risk_adjustment_pct": 0.03
+   },
+   "case_id": "ext-20261004-030000-ext02"
+  }
+ ]
+}

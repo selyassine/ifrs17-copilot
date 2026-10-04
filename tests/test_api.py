@@ -178,6 +178,28 @@ def test_case_document_validation_humaine_si_chiffre_invente(client, monkeypatch
     assert body["csm"] is None and any("premiums" in i for i in body["issues"])
 
 
+def test_extract_image_passe_par_le_mode_vision(client, monkeypatch, tmp_path):
+    import io
+    import json
+
+    import api.main as main
+    from core.llm import LLMClient
+
+    PIL = pytest.importorskip("PIL.Image")
+    buf = io.BytesIO()
+    PIL.new("RGB", (40, 20), "white").save(buf, format="PNG")
+    transcription = ["Groupe AB-1 en milliers d'euros. Taux : 3,00 %. Ajustement pour risque : 5,00 %.",
+                     "Période | Primes | Sinistres | Frais | Contrats",
+                     "Année 1 | 100,00 | 40,00 | 5,00 | 1 000", "Année 2 | 0,00 | 45,50 | 4,50 | 900"]
+    fake = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    answer = {**GOOD_EXTRACTION, "transcription": transcription}
+    monkeypatch.setattr(main, "make_vision_client",
+                        lambda s: LLMClient(fake, fake_responder=lambda m, model: json.dumps(answer)))
+    r = client.post("/v1/extract", headers=AUTH, files={"file": ("scan.png", buf.getvalue(), "image/png")})
+    assert r.status_code == 200, r.text
+    assert r.json()["mode"] == "vision" and r.json()["status"] == "ok"
+
+
 def test_extract_refuse_un_fichier_qui_n_est_pas_un_pdf(client):
     r = client.post("/v1/extract", headers=AUTH, files={"file": ("x.txt", b"bonjour", "text/plain")})
     assert r.status_code == 415

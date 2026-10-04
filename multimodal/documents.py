@@ -77,22 +77,28 @@ def pdf_text(source: str | Path | bytes, max_pages: int = MAX_PAGES,
     with pdfplumber.open(stream) as pdf:
         n_pages = len(pdf.pages)
         for p_no, page in enumerate(pdf.pages[:max_pages], start=1):
+            # texte et tableaux remis dans l'ordre de la page (de haut en bas) : sinon un titre
+            # « Groupe B » se retrouve loin de son tableau
             tables = page.find_tables()
             rest = page
             for t in tables:
                 rest = rest.outside_bbox(t.bbox)
-            body = rest.extract_text() or ""
-            parts.append(f"[Page {p_no}]\n{body}".strip())
-            text_nums += numbers_in_text(body)
+            items: list[tuple[float, str]] = []
+            text_lines = rest.extract_text_lines()
+            for line in text_lines:
+                items.append((line["top"], line["text"]))
+            # « 7,50 » en fin de ligne et « % » au début de la suivante : lecture d'un seul bloc
+            text_nums += numbers_in_text("\n".join(line["text"] for line in text_lines))
             for k, t in enumerate(tables, start=1):
-                rows = t.extract()
                 lines = []
-                for row in rows:
+                for row in t.extract():
                     cells = [(c or "").replace("\n", " ").strip() for c in row]
                     lines.append(" | ".join(cells))
                     for c in cells:
                         table_nums += _cell_number(c)
-                parts.append(f"[Tableau {k}, page {p_no}]\n" + "\n".join(lines))
+                items.append((t.bbox[1], f"[Tableau {k}, page {p_no}]\n" + "\n".join(lines)))
+            items.sort(key=lambda it: it[0])
+            parts.append(f"[Page {p_no}]\n" + "\n".join(text for _, text in items))
     text = "\n\n".join(parts)
     truncated = len(text) > max_chars or n_pages > max_pages
     return DocumentText(text=text[:max_chars], table_numbers=table_nums, text_numbers=text_nums,

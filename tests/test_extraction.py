@@ -126,3 +126,86 @@ def test_lecture_pdf_et_score_bout_en_bout(tmp_path):
     res = extract_from_text(doc, c)
     row = score(case, res)
     assert res.status == "ok" and row["all_ok"] and row["csm_ok"]
+
+
+def test_mode_vision_ancrage_sur_la_transcription(tmp_path):
+    """Sans couche texte, les chiffres saisis sont vérifiés contre la transcription du modèle."""
+    from multimodal.extract import extract_from_images
+    from multimodal.vision import vision_client
+
+    transcription = ["Groupe AB-1 · en milliers d'euros. Taux : 3,00 %. Ajustement pour risque : 5,00 %.",
+                     "Période | Primes | Sinistres | Frais | Contrats",
+                     "Année 1 | 100,00 | 40,00 | 5,00 | 1 000",
+                     "Année 2 | 0,00 | 45,50 | 4,50 | 900"]
+    calls = []
+
+    def respond(messages, model):
+        calls.append(messages)
+        answer = {**GOOD, "transcription": transcription}
+        if len(calls) == 1:
+            answer["premiums"] = [120.0, 0.0]        # absent de sa propre lecture
+        return json.dumps(answer, ensure_ascii=False)
+
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    res = extract_from_images([(b"\xff\xd8\xff fausse image", "image/jpeg")], vision_client(s, respond))
+    assert res.mode == "vision" and res.grounding == "transcription"
+    assert res.status == "ok" and res.corrections == 1
+    assert any("premiums[0]" in i for i in res.first_attempt_issues)
+    content = calls[0][1]["content"]
+    assert content[1]["type"] == "image_url" and content[1]["image_url"]["url"].startswith("data:image/jpeg;base64,")
+
+
+def test_mode_vision_sans_transcription_a_verifier(tmp_path):
+    from multimodal.extract import extract_from_images
+    from multimodal.vision import vision_client
+
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    res = extract_from_images([(b"x", "image/png")], vision_client(s, lambda m, model: json.dumps(GOOD)))
+    assert res.status == "a_verifier" and "transcription" in res.issues[0]
+
+
+def test_mode_hybride_ancre_sur_la_couche_texte(tmp_path):
+    from multimodal.extract import extract_from_images
+    from multimodal.vision import vision_client
+
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    res = extract_from_images([(b"x", "image/png")], vision_client(s, lambda m, model: json.dumps(GOOD)),
+                              doc=DOC)
+    assert res.mode == "hybride" and res.grounding == "document" and res.status == "ok"
+
+
+def test_detection_du_format():
+    from multimodal.vision import detect_mime
+
+    assert detect_mime(b"%PDF-1.7") == "application/pdf"
+    assert detect_mime(b"\x89PNG\r\n") == "image/png"
+    assert detect_mime(b"\xff\xd8\xff\xe0") == "image/jpeg"
+    assert detect_mime(b"bonjour") is None
+
+
+def test_verdicts_du_jeu_difficile():
+    from eval.eval_extraction import verdict
+
+    assert verdict("exact", "ok", True) == "réussi"
+    assert verdict("exact", "a_verifier", True) == "fausse alerte"
+    assert verdict("exact", "a_verifier", False) == "erreur rattrapée"
+    assert verdict("exact", "ok", False) == "DANGEREUX"
+    assert verdict("alerte", "a_verifier", False) == "alerte levée"
+    assert verdict("alerte", "ok", True) == "DANGEREUX"
+
+
+def test_jeu_difficile_reproductible_et_ancre(tmp_path):
+    """Les 10 documents piégés se régénèrent à l'identique et leur vérité est ancrée dans le PDF."""
+    pytest.importorskip("reportlab")
+    from eval.eval_extraction import HERE
+    from multimodal.documents import pdf_text
+    from multimodal.synth_hard import generate
+
+    cases = generate(out_dir=tmp_path / "synth_hard", cases_path=tmp_path / "hard.jsonl", images=False)
+    committed = load_cases(HERE / "extraction_hard_cases.jsonl")
+    assert [c["truth"] for c in cases] == [c["truth"] for c in committed]
+    assert sum(c["attendu"] == "alerte" for c in cases) == 3
+    for c in cases:
+        if c["truth"]:
+            doc = pdf_text(tmp_path / "synth_hard" / f"{c['id']}.pdf")
+            assert grounding_issues(PortfolioData(**c["truth"]), NumberIndex(doc)) == [], c["id"]

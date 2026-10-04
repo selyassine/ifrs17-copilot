@@ -55,5 +55,5 @@ changes: "Version initiale : règles de saisie numérotées, un exemple (somme s
 eval:
   test_set: eval/extraction_cases.jsonl
   metric: exactitude par champ, documents entièrement justes, erreur sur le CSM
-  scores: {}
-  notes: "À mesurer : python -m eval.eval_extraction --mode texte"
+  scores: {v1_texte_documents_justes: 1.0, v1_texte_csm_justes: 1.0, v1_texte_feu_vert_fiable: 1.0}
+  notes: "04/10/2026, mode texte, gpt-oss-120b (Groq), 15 documents synthétiques : 15/15 justes, 15/15 CSM justes, 15/15 « ok », 1 relance (ext10, corrigée par le contrôle d'ancrage), 18 300 tokens d'entrée. Documents propres et couche texte parfaite : test facile, le vrai défi est l'image"

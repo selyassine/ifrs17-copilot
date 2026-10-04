@@ -25,7 +25,8 @@ from core.llm import LLMClient, LLMError
 from core.tracing import traced
 from engine.csm import compute_csm
 from multimodal.documents import pdf_text
-from multimodal.extract import extract_from_text
+from multimodal.extract import ExtractionResult, extract_from_images, extract_from_text
+from multimodal.vision import detect_mime, normalize_image, pdf_page_images, vision_client
 from rag.service import IndexMissing, get_retriever
 
 VERSION = "0.4.0"
@@ -193,6 +194,7 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
 # --------------------------------------------------------------------------- #
 class ExtractResponse(BaseModel):
     case_id: str
+    mode: str = Field(description="texte | vision | hybride")
     status: str = Field(description="ok | a_verifier | echec")
     portfolio: PortfolioData | None
     issues: list[str]
@@ -207,30 +209,49 @@ class CaseDocumentResponse(ExtractResponse):
     csm: CsmResult | None = None
 
 
-def _read_pdf(file: UploadFile) -> bytes:
+def _read_upload(file: UploadFile) -> tuple[bytes, str]:
     data = file.file.read(MAX_UPLOAD_BYTES + 1)
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="fichier trop volumineux (10 Mo maximum)")
-    if not data.startswith(b"%PDF"):
-        raise HTTPException(status_code=415, detail="format non pris en charge : envoyer un PDF "
-                                                    "(les images arrivent avec le mode vision)")
-    return data
+    mime = detect_mime(data)
+    if mime is None:
+        raise HTTPException(status_code=415, detail="format non pris en charge : PDF, PNG ou JPEG")
+    return data, mime
+
+
+def make_vision_client(settings: Settings) -> LLMClient:
+    """Point d'injection du client vision (remplacé dans les tests)."""
+    return vision_client(settings)
+
+
+def _run_extraction(data: bytes, mime: str, case_id: str, settings: Settings) -> ExtractionResult:
+    """PDF à couche texte → mode texte (ou hybride selon EXTRACT_PDF_MODE) ;
+    PDF scanné ou image → mode vision."""
+    if mime == "application/pdf":
+        try:
+            doc = pdf_text(data)
+        except Exception as exc:   # PDF corrompu ou chiffré : refus clair plutôt qu'une erreur 500
+            raise HTTPException(status_code=422, detail=f"PDF illisible : {exc}"[:300]) from exc
+        has_text = len(doc.table_numbers) + len(doc.text_numbers) >= 3
+        if has_text and settings.extract_pdf_mode != "hybride":
+            return extract_from_text(doc, make_client(settings), case_id=case_id)
+        images = pdf_page_images(data, max_pages=2)
+        return extract_from_images(images, make_vision_client(settings),
+                                   doc=doc if has_text else None, case_id=case_id)
+    try:
+        image = normalize_image(data)
+    except Exception as exc:
+        raise HTTPException(status_code=422, detail=f"image illisible : {exc}"[:300]) from exc
+    return extract_from_images([image], make_vision_client(settings), case_id=case_id)
 
 
 def _extract(file: UploadFile, case_id: str, settings: Settings) -> ExtractResponse:
-    data = _read_pdf(file)
+    data, mime = _read_upload(file)
     try:
-        doc = pdf_text(data)
-    except Exception as exc:   # PDF corrompu ou chiffré : refus clair plutôt qu'une erreur 500
-        raise HTTPException(status_code=422, detail=f"PDF illisible : {exc}"[:300]) from exc
-    if len(doc.table_numbers) + len(doc.text_numbers) < 3:
-        raise HTTPException(status_code=422, detail="PDF sans couche texte exploitable (scan ?) : "
-                                                    "utiliser le mode image")
-    try:
-        res = extract_from_text(doc, make_client(settings), case_id=case_id)
+        res = _run_extraction(data, mime, case_id, settings)
     except LLMError as exc:
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
-    return ExtractResponse(case_id=case_id, status=res.status, portfolio=res.portfolio,
+    return ExtractResponse(case_id=case_id, mode=res.mode, status=res.status, portfolio=res.portfolio,
                            issues=res.issues, missing=res.missing, warnings=res.warnings,
                            corrections=res.corrections, latency_ms=res.latency_ms)
 
@@ -238,7 +259,7 @@ def _extract(file: UploadFile, case_id: str, settings: Settings) -> ExtractRespo
 @app.post("/v1/extract", response_model=ExtractResponse, dependencies=[Depends(check_token)])
 def extract(file: UploadFile = File(...), case_id: str | None = Form(default=None),
             settings: Settings = Depends(get_settings)) -> ExtractResponse:
-    """PDF d'un état de portefeuille → données du groupe, avec contrôle d'ancrage des chiffres."""
+    """État de portefeuille (PDF, PNG ou JPEG) → données du groupe, avec contrôle d'ancrage."""
     return _extract(file, case_id or uuid.uuid4().hex[:12], settings)
 
 

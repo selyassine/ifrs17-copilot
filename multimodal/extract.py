@@ -28,10 +28,10 @@ from pydantic import ValidationError
 from agents.schemas import PortfolioData
 from core.llm import LLMClient, LLMError
 from core.prompts import load_prompt
-from multimodal.documents import DocumentText, document_numbers, parse_number
+from multimodal.documents import DocumentText, document_numbers, numbers_in_text, parse_number
 
 MAX_CORRECTIONS = 1
-EXTRA_KEYS = ("manquants", "remarques")
+EXTRA_KEYS = ("manquants", "remarques", "transcription")
 Status = Literal["ok", "a_verifier", "echec"]
 
 
@@ -46,6 +46,8 @@ class ExtractionResult:
     corrections: int = 0
     latency_ms: float = 0.0
     first_attempt_issues: list[str] = field(default_factory=list)   # pour l'évaluation
+    mode: str = "texte"                                   # texte | vision | hybride
+    grounding: str = "document"                           # document | transcription
 
 
 # --------------------------------------------------------------------------- #
@@ -60,9 +62,10 @@ class NumberIndex:
         self.values2 = {round(v, 2) for v in nums}
         # sinistres + frais : sommes des montants du tableau (ou du texte s'il n'y a pas de tableau)
         source = doc.table_numbers or doc.text_numbers
-        table = sorted({round(v, 2) for v in source if v > 0})
-        self.pair_sums = {round(a + b, 2) for a, b in combinations(table, 2)} | \
-                         {round(2 * a, 2) for a in table}
+        table = sorted({round(v, 6) for v in source if v > 0})
+        pairs = [a + b for a, b in combinations(table, 2)] + [2 * a for a in table]
+        self.pair_sums4 = {round(x, 4) for x in pairs}          # exact (montants en millions…)
+        self.pair_sums = {round(x, 2) for x in pairs}           # à un centime près
 
     def has(self, v: float, allow_sum: bool = False) -> bool:
         if v == 0:
@@ -70,7 +73,11 @@ class NumberIndex:
         if round(v, 4) in self.values4 or (abs(v) >= 1 and round(v, 2) in self.values2):
             return True
         # somme de deux montants arrondis : tolérance d'un centime
-        return allow_sum and any(round(v + d, 2) in self.pair_sums for d in (0, 0.01, -0.01))
+        if not allow_sum:
+            return False
+        if round(v, 4) in self.pair_sums4:
+            return True
+        return abs(v) >= 1 and any(round(v + d, 2) in self.pair_sums for d in (0, 0.01, -0.01))
 
 
 def grounding_issues(p: PortfolioData, idx: NumberIndex) -> list[str]:
@@ -128,15 +135,35 @@ def _validation_messages(exc: ValidationError) -> list[str]:
 # --------------------------------------------------------------------------- #
 # Agent
 # --------------------------------------------------------------------------- #
-def extract_from_text(doc: DocumentText, client: LLMClient | None = None, version: int | None = None,
-                      case_id: str = "") -> ExtractionResult:
-    t0 = time.perf_counter()
-    client = client or LLMClient()
-    spec = load_prompt("extract_portfolio", version)
-    idx = NumberIndex(doc)
-    messages = [{"role": "system", "content": spec.system},
-                {"role": "user", "content": spec.render(document=doc.text)}]
+def transcription_doc(data: dict) -> DocumentText:
+    """Mode vision : le modèle recopie aussi le tableau tel qu'il le lit (« transcription »).
+    Les chiffres structurés sont ensuite ancrés sur cette transcription : on vérifie que le
+    modèle n'a rien inventé ni mal additionné par rapport à sa propre lecture. Contrôle plus
+    faible que l'ancrage sur la couche texte (une erreur de lecture recopiée des deux côtés passe)."""
+    rows = data.get("transcription") or []
+    if isinstance(rows, str):
+        rows = rows.splitlines()
+    table: list[float] = []
+    prose: list[str] = []
+    for row in map(str, rows):
+        if "|" in row:
+            for cell in row.split("|"):
+                v = parse_number(cell)
+                if v is not None:
+                    table += [v, v / 100] if "%" in cell else [v]
+        else:
+            prose.append(row)
+    # phrases lues d'un bloc : « 7,50 » en fin de ligne et « % » au début de la suivante
+    return DocumentText(text="\n".join(map(str, rows)), table_numbers=table,
+                        text_numbers=numbers_in_text("\n".join(prose)))
 
+
+def _run(spec, user_content, client: LLMClient, case_id: str, mode: str,
+         fixed_doc: DocumentText | None) -> ExtractionResult:
+    """Boucle commune : appel → nettoyage → validation → ancrage → une relance au besoin.
+    ``fixed_doc`` : couche texte du PDF (ancrage fort) ; None : ancrage sur la transcription."""
+    t0 = time.perf_counter()
+    messages = [{"role": "system", "content": spec.system}, {"role": "user", "content": user_content}]
     portfolio: PortfolioData | None = None
     issues: list[str] = []
     first: list[str] = []
@@ -145,10 +172,11 @@ def extract_from_text(doc: DocumentText, client: LLMClient | None = None, versio
     warnings: list[str] = []
     corrections = 0
     data: dict = {}
+    fixed_idx = NumberIndex(fixed_doc) if fixed_doc is not None else None
     for attempt in range(MAX_CORRECTIONS + 1):
         resp = client.chat(messages, model=spec.params.model, temperature=spec.params.temperature,
                            max_tokens=spec.params.max_tokens, json_mode=True,
-                           trace={"agent": "extracteur", "prompt_id": spec.id,
+                           trace={"agent": "extracteur", "prompt_id": spec.id, "mode": mode,
                                   "prompt_version": spec.version, "case_id": case_id,
                                   "attempt": attempt})
         try:
@@ -161,7 +189,16 @@ def extract_from_text(doc: DocumentText, client: LLMClient | None = None, versio
             fields, missing, remarks, warnings = clean(data)
             try:
                 portfolio = PortfolioData(**fields)
-                issues = grounding_issues(portfolio, idx)
+                idx = fixed_idx
+                if idx is None:
+                    tdoc = transcription_doc(data)
+                    if len(tdoc.table_numbers) + len(tdoc.text_numbers) < 3:
+                        issues = ["transcription du tableau absente : impossible de vérifier les chiffres"]
+                        idx = None
+                    else:
+                        idx = NumberIndex(tdoc)
+                if idx is not None:
+                    issues = grounding_issues(portfolio, idx)
             except ValidationError as exc:
                 portfolio = None
                 issues = _validation_messages(exc)
@@ -179,15 +216,38 @@ def extract_from_text(doc: DocumentText, client: LLMClient | None = None, versio
                   "Réponds avec le même format JSON.")},
         ]
 
+    truncated = fixed_doc is not None and fixed_doc.truncated
     if portfolio is None:
         status: Status = "echec"
-    elif issues or missing or doc.truncated:
+    elif issues or missing or truncated:
         status = "a_verifier"
     else:
         status = "ok"
-    if doc.truncated:
-        issues.append(f"document tronqué : seules les premières pages ont été lues ({doc.pages} pages)")
+    if truncated:
+        issues.append(f"document tronqué : seules les premières pages ont été lues ({fixed_doc.pages} pages)")
     return ExtractionResult(portfolio=portfolio, status=status, issues=issues, missing=missing,
                             remarks=remarks, warnings=warnings, corrections=corrections,
                             latency_ms=round((time.perf_counter() - t0) * 1000, 1),
-                            first_attempt_issues=first)
+                            first_attempt_issues=first, mode=mode,
+                            grounding="document" if fixed_doc is not None else "transcription")
+
+
+def extract_from_text(doc: DocumentText, client: LLMClient | None = None, version: int | None = None,
+                      case_id: str = "") -> ExtractionResult:
+    """Mode texte : PDF à couche texte → LLM texte (Groq). Ancrage sur la couche texte."""
+    spec = load_prompt("extract_portfolio", version)
+    return _run(spec, spec.render(document=doc.text), client or LLMClient(), case_id, "texte", doc)
+
+
+def extract_from_images(images: list[tuple[bytes, str]], client: LLMClient,
+                        doc: DocumentText | None = None, version: int | None = None,
+                        case_id: str = "") -> ExtractionResult:
+    """Mode vision (images seules, ex. scan) ou hybride (images + couche texte du PDF).
+    En hybride, l'ancrage se fait sur la couche texte ; en vision, sur la transcription."""
+    from multimodal.vision import image_part
+
+    spec = load_prompt("extract_portfolio_vision", version)
+    text = doc.text if doc is not None else "(aucune couche texte : lire uniquement l'image)"
+    content = [{"type": "text", "text": spec.render(document=text)}]
+    content += [image_part(data, mime) for data, mime in images]
+    return _run(spec, content, client, case_id, "hybride" if doc is not None else "vision", doc)
