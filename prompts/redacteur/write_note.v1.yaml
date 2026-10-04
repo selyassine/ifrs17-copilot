@@ -38,5 +38,5 @@ changes: "Version initiale : chiffres fournis tout formatés et recopiés à l'i
 eval:
   test_set: eval/extraction_cases.jsonl
   metric: synthèses dont tous les nombres et toutes les citations sont vérifiés
-  scores: {}
-  notes: "À mesurer : python -m eval.eval_case"
+  scores: {v1_syntheses_acceptees: 1.0}
+  notes: "04/10/2026, gpt-oss-120b : 11 notes produites (ext01, 9 dossiers du jeu difficile, 1 dossier via n8n) : 11/11 synthèses du LLM acceptées par le contrôle (nombres et paragraphes), aucun repli sur la synthèse du code"

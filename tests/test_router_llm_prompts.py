@@ -74,3 +74,14 @@ def test_trace_ecrite_pour_chaque_appel(tmp_path):
     assert t["agent"] == "routeur" and t["prompt_id"] == "route" and t["case_id"] == "abc"
     assert t["status"] == "ok" and t["latency_ms"] >= 0 and t["tokens_in"] > 0
     json.dumps(t)
+
+
+def test_bibliotheque_de_prompts_generee():
+    from core.prompt_library import render
+    from core.prompts import all_prompt_files, load_prompt_file
+
+    specs = [load_prompt_file(p) for p in all_prompt_files()]
+    text = render(specs)
+    for s in specs:
+        assert f"### `{s.id}` v{s.version}" in text
+    assert "## Vue d'ensemble" in text and "llm_as_judge" in text

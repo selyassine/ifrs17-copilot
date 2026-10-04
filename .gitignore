@@ -29,3 +29,7 @@ adapters/
 # Divers
 .DS_Store
 .ipynb_checkpoints/
+
+# Sorties de démo (curl)
+/note.html
+/dossier.json

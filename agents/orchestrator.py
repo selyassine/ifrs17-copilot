@@ -16,7 +16,9 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
+from agents import reference
 from agents.pipeline import verified_answer
+from agents.reference import BASE_QUESTIONS, ONEROUS_QUESTION  # noqa: F401 (réexportées)
 from agents.schemas import CsmResult, PortfolioData, VerdictStatus
 from agents.writer import NormPoint, Note, verdict_label, write_note
 from core.config import Settings
@@ -25,13 +27,6 @@ from engine.csm import compute_csm
 from multimodal.documents import pdf_text
 from multimodal.extract import ExtractionResult, extract_from_images, extract_from_text
 from multimodal.vision import normalize_image, pdf_page_images
-
-BASE_QUESTIONS = [
-    "Comment la marge sur services contractuels est-elle déterminée lors de la comptabilisation initiale d'un groupe de contrats ?",
-    "Comment la marge sur services contractuels est-elle comptabilisée en résultat au fil des périodes, selon les unités de couverture ?",
-]
-ONEROUS_QUESTION = ("Comment comptabiliser un groupe de contrats d'assurance déficitaire lors de la "
-                    "comptabilisation initiale ?")
 
 
 class UnreadableDocument(ValueError):
@@ -130,8 +125,15 @@ def run_case(data: bytes, mime: str, settings: Settings, text_client: Callable[[
     if retriever_loader is None:
         out.warnings.append("norme non indexée : note sans fondements cités")
     else:
-        retriever = retriever_loader()
+        refs = reference.load(settings.norm_reference_path) if settings.use_norm_reference else {}
+        retriever = None
         for q in questions:
+            ref = reference.usable(refs.get(q))
+            if ref is not None:          # réponse de référence déjà vérifiée : aucun appel LLM
+                out.norm.append(NormPoint(question=q, answer=ref, verdict="ok"))
+                out.steps.append(Step(agent="chercheur_rag", status="reference", detail=q[:80]))
+                continue
+            retriever = retriever or retriever_loader()
             with _timed(out.steps, "chercheur_rag+verificateur") as st:
                 res = verified_answer(q, settings, client, retriever, case_id=case_id)
                 label = verdict_label(res.verdict)

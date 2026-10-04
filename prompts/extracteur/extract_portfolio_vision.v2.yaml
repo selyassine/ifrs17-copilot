@@ -2,7 +2,7 @@ id: extract_portfolio_vision
 version: 2
 agent: extracteur
 role: "Lire l'image d'un état de portefeuille (scan, photo ou page PDF), seule ou avec sa couche texte, et en extraire les données d'un groupe de contrats au format PortfolioData, avec une transcription du tableau pour vérification."
-techniques: [role_prompting, few_shot, structured_output, guardrails, delimiters, prompt_chaining]
+techniques: [role_prompting, few_shot, structured_output, guardrails, delimiters, prompt_chaining, self_consistency]
 params:
   model: large
   temperature: 0.0

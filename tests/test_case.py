@@ -40,7 +40,8 @@ def agents_llm(tmp_path, extraction=None, synthesis=None):
         return json.dumps(GOOD)
 
     s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl",
-                 router_mode="heuristic", rag_mode="bm25", verifier_enabled=True)
+                 router_mode="heuristic", rag_mode="bm25", verifier_enabled=True,
+                 norm_reference_path=tmp_path / "ref.json")
     client = LLMClient(s, fake_responder=respond)
     return s, (lambda: client), calls
 
@@ -99,3 +100,21 @@ def test_controle_de_la_synthese():
     assert synthesis_issues("La CSM est de 99,99 [§38].", f, refs) == ["nombre absent des faits : 99,99"]
     assert synthesis_issues(f"CSM de {f['csm_initiale']} [§47].", f, refs) == [
         "paragraphe cité hors des passages fournis : 47"]
+
+
+def test_reponses_de_reference_reutilisees(tmp_path):
+    """Une référence acceptée par le vérificateur ou validée par un humain évite les appels RAG."""
+    from agents.reference import BASE_QUESTIONS as QS
+    from agents.reference import usable
+
+    s, client, calls = agents_llm(tmp_path)
+    ok = {"question": QS[0], "answer": {"answer": "La CSM… [§38]", "citations": [
+        {"paragraph_id": "38", "doc": "C002", "quote": "profit non acquis", "chunk_id": "B:C002:38"}],
+        "refused": False, "refusal_reason": None}, "verdict": "ok", "valide": False}
+    doubtful = {**ok, "question": QS[1], "verdict": "validation_humaine", "valide": False}
+    (tmp_path / "ref.json").write_text(json.dumps([ok, doubtful]), encoding="utf-8")
+    assert usable(ok) is not None and usable(doubtful) is None
+    assert usable({**doubtful, "valide": True}) is not None
+    out = run_case(b"", "", s, client, client, retriever, "c5", portfolio=PORTFOLIO)
+    assert calls["rag"] == 1                                  # seule la réponse douteuse est recalculée
+    assert out.steps[2].agent == "chercheur_rag" and out.steps[2].status == "reference"
