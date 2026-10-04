@@ -4,15 +4,16 @@
     → documentation interactive : http://localhost:8000/docs
 
 Endpoints : santé, routage, calcul du CSM (S1), recherche dans la norme (S2),
-question sur la norme avec réponse citée (S3, /v1/ask). Extraction, vérification et
-rédaction s'ajoutent en S3-S4 derrière /v1/case.
+question sur la norme avec réponse citée (S3, /v1/ask), lecture d'un document client
+(S3, /v1/extract) et chaîne document → données vérifiées → CSM (S3, /v1/case/document).
+Vérification et rédaction s'ajoutent en S4.
 """
 
 from __future__ import annotations
 
 import uuid
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -23,9 +24,12 @@ from core.config import Settings, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import traced
 from engine.csm import compute_csm
+from multimodal.documents import pdf_text
+from multimodal.extract import extract_from_text
 from rag.service import IndexMissing, get_retriever
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 class UTF8JSONResponse(JSONResponse):
     """Annonce explicitement l'UTF-8 : sans « charset », Windows PowerShell 5.1 décode les
@@ -182,3 +186,72 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
                        sources=rag.sources if rag else [], warnings=res.warnings,
                        corrections=rag.corrections if rag else 0,
                        latency_ms=rag.latency_ms if rag else 0.0)
+
+
+# --------------------------------------------------------------------------- #
+# Extracteur multimodal (S3) : document client → PortfolioData vérifié
+# --------------------------------------------------------------------------- #
+class ExtractResponse(BaseModel):
+    case_id: str
+    status: str = Field(description="ok | a_verifier | echec")
+    portfolio: PortfolioData | None
+    issues: list[str]
+    missing: list[str]
+    warnings: list[str]
+    corrections: int
+    latency_ms: float
+
+
+class CaseDocumentResponse(ExtractResponse):
+    next_step: str = Field(description="calcul_fait | validation_humaine | document_illisible")
+    csm: CsmResult | None = None
+
+
+def _read_pdf(file: UploadFile) -> bytes:
+    data = file.file.read(MAX_UPLOAD_BYTES + 1)
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="fichier trop volumineux (10 Mo maximum)")
+    if not data.startswith(b"%PDF"):
+        raise HTTPException(status_code=415, detail="format non pris en charge : envoyer un PDF "
+                                                    "(les images arrivent avec le mode vision)")
+    return data
+
+
+def _extract(file: UploadFile, case_id: str, settings: Settings) -> ExtractResponse:
+    data = _read_pdf(file)
+    try:
+        doc = pdf_text(data)
+    except Exception as exc:   # PDF corrompu ou chiffré : refus clair plutôt qu'une erreur 500
+        raise HTTPException(status_code=422, detail=f"PDF illisible : {exc}"[:300]) from exc
+    if len(doc.table_numbers) + len(doc.text_numbers) < 3:
+        raise HTTPException(status_code=422, detail="PDF sans couche texte exploitable (scan ?) : "
+                                                    "utiliser le mode image")
+    try:
+        res = extract_from_text(doc, make_client(settings), case_id=case_id)
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
+    return ExtractResponse(case_id=case_id, status=res.status, portfolio=res.portfolio,
+                           issues=res.issues, missing=res.missing, warnings=res.warnings,
+                           corrections=res.corrections, latency_ms=res.latency_ms)
+
+
+@app.post("/v1/extract", response_model=ExtractResponse, dependencies=[Depends(check_token)])
+def extract(file: UploadFile = File(...), case_id: str | None = Form(default=None),
+            settings: Settings = Depends(get_settings)) -> ExtractResponse:
+    """PDF d'un état de portefeuille → données du groupe, avec contrôle d'ancrage des chiffres."""
+    return _extract(file, case_id or uuid.uuid4().hex[:12], settings)
+
+
+@app.post("/v1/case/document", response_model=CaseDocumentResponse, dependencies=[Depends(check_token)])
+def case_document(file: UploadFile = File(...), case_id: str | None = Form(default=None),
+                  settings: Settings = Depends(get_settings)) -> CaseDocumentResponse:
+    """Document → extraction vérifiée → CSM. Le calcul ne part que si l'extraction est « ok » ;
+    sinon n8n demande une validation humaine, puis appelle /v1/csm/compute avec les données corrigées."""
+    ext = _extract(file, case_id or uuid.uuid4().hex[:12], settings)
+    if ext.status == "ok" and ext.portfolio is not None:
+        with traced(settings.trace_path, kind="tool", agent="calculateur", tool="compute_csm",
+                    group_id=ext.portfolio.group_id, case_id=ext.case_id):
+            csm = compute_csm(ext.portfolio)
+        return CaseDocumentResponse(**ext.model_dump(), next_step="calcul_fait", csm=csm)
+    step = "validation_humaine" if ext.status == "a_verifier" else "document_illisible"
+    return CaseDocumentResponse(**ext.model_dump(), next_step=step)

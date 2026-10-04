@@ -31,6 +31,7 @@ On ne modifie jamais une version existante : on crée `vN+1` et on garde l'ancie
 | --- | --- | --- | --- |
 | router | `route` | v1 | 100 % sur 20 cas (gpt-oss-20b) ; heuristique : 95 % |
 | chercheur_rag | `rag_answer` | v1 | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; précision 0,63 (élargie 0,83) ; relecture humaine 39/50 fidèles et complètes |
+| extracteur | `extract_portfolio` | v1 | à mesurer sur 15 documents synthétiques |
 | chercheur_rag | `rag_answer` | v2 (par défaut) | portée des paragraphes (D-024) : fidèles 42/50 (v1 : 40), fidèles et complètes 39/50 (v1 : 39), précision élargie 0,84 (v1 : 0,83) |
 
 Le livrable `prompt_library.md` sera généré à partir de ces fiches en S5.

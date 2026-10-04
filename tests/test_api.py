@@ -125,3 +125,59 @@ def test_ask_reponse_citee(client, monkeypatch, tmp_path):
     body = r.json()
     assert body["answer"]["citations"][0]["paragraph_id"] == "B119"
     assert body["sources"][0]["paragraph_ids"] == ["B119"]
+
+
+GOOD_EXTRACTION = {"group_id": "AB-1", "currency": "EUR", "unit_multiplier": 1000,
+                   "premiums": [100.0, 0.0], "outflows": [45.0, 50.0], "coverage_units": [1000, 900],
+                   "discount_rates": 0.03, "risk_adjustment_pct": 0.05, "manquants": []}
+
+
+def _pdf(tmp_path):
+    pytest.importorskip("reportlab")
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+
+    path = tmp_path / "doc.pdf"
+    c = canvas.Canvas(str(path), pagesize=A4)
+    lines = ["Groupe AB-1 - en milliers d'euros. Taux : 3,00 %. Ajustement pour risque : 5,00 %.",
+             "Primes 100,00 et 0,00. Sinistres 40,00 et 45,50. Frais 5,00 et 4,50.",
+             "Contrats en vigueur 1000 et 900."]
+    for k, line in enumerate(lines):
+        c.drawString(50, 800 - 20 * k, line)
+    c.save()
+    return path.read_bytes()
+
+
+def _fake_llm(monkeypatch, tmp_path, answer):
+    import json
+
+    import api.main as main
+    from core.llm import LLMClient
+
+    fake = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    monkeypatch.setattr(main, "make_client",
+                        lambda s: LLMClient(fake, fake_responder=lambda m, model: json.dumps(answer)))
+
+
+def test_case_document_calcul_si_extraction_ok(client, monkeypatch, tmp_path):
+    _fake_llm(monkeypatch, tmp_path, GOOD_EXTRACTION)
+    r = client.post("/v1/case/document", headers=AUTH,
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["status"] == "ok" and body["next_step"] == "calcul_fait"
+    assert body["csm"]["group_id"] == "AB-1"
+
+
+def test_case_document_validation_humaine_si_chiffre_invente(client, monkeypatch, tmp_path):
+    _fake_llm(monkeypatch, tmp_path, {**GOOD_EXTRACTION, "premiums": [130.0, 0.0]})
+    r = client.post("/v1/case/document", headers=AUTH,
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    body = r.json()
+    assert body["status"] == "a_verifier" and body["next_step"] == "validation_humaine"
+    assert body["csm"] is None and any("premiums" in i for i in body["issues"])
+
+
+def test_extract_refuse_un_fichier_qui_n_est_pas_un_pdf(client):
+    r = client.post("/v1/extract", headers=AUTH, files={"file": ("x.txt", b"bonjour", "text/plain")})
+    assert r.status_code == 415

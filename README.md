@@ -19,7 +19,8 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
 | Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
 | Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2, titres hiérarchiques) : 43/50 sans erreur, 37/50 complètes ; optimisation arrêtée (D-026) |
-| Extraction multimodale, vérificateur, rédacteur | S3 |
+| Extracteur (PDF texte → données → contrôle d'ancrage → CSM), `POST /v1/extract`, `POST /v1/case/document` | fait, testé avec un LLM factice ; à mesurer sur 15 documents synthétiques |
+| Mode image, voix, vérificateur, rédacteur | S3-S4 |
 
 ## Installation (sans Docker)
 
@@ -90,6 +91,15 @@ Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/v1/ask -Headers @{"X-A
 ```
 
 Réponse : `plan` (décision du routeur), `answer` (texte avec [§…], citations vérifiées ou refus motivé), `sources` (extraits fournis au LLM), `warnings`, `corrections`.
+
+### Lire un document client et calculer le CSM
+
+```powershell
+python -m multimodal.synth                     # 15 documents de test dans data\synth\
+curl.exe -X POST http://127.0.0.1:8000/v1/case/document -H "X-API-Token: change-moi" -F "file=@data/synth/ext01.pdf"
+```
+
+Réponse : `status` (ok / a_verifier / echec), `portfolio` (données extraites), `issues` (chiffres introuvables dans le document), `next_step` et `csm` si le calcul a pu partir.
 
 ### Brancher un vrai LLM
 
