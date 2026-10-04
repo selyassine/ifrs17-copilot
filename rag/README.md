@@ -8,7 +8,7 @@ PDF ──► ingest.py ──► unités (1 par paragraphe) ──► chunking.
 
 | Fichier | Rôle |
 | --- | --- |
-| `ingest.py` | PDF du Journal officiel → unités : considérants, articles, §1-132, définitions, B1-B137, C1-C34. Lit la mise en page (marge, polices, colonnes) avec pdfplumber |
+| `ingest.py` | PDF du Journal officiel → unités : considérants, articles, §1-132, définitions, B1-B137, C1-C34. Lit la mise en page (marge, polices, colonnes) avec pdfplumber. Intertitres sur trois niveaux (gras > italique > gras italique), parents conservés : « Contrats de réassurance détenus > Évaluation » (D-025) |
 | `chunking.py` | A : fenêtres de 512 tokens, chevauchement 64. B : un paragraphe par chunk avec en-tête de contexte (fusion des < 40 tokens, découpe des > 800) |
 | `retrieve.py` | BM25 avec analyseur français, encodeurs (BGE-M3, Qwen3-Embedding, factice), stockage NumPy ou Qdrant embarqué, fusion RRF |
 | `query.py` | Glossaire : CSM, PAA, VFA, onéreux, bilan… → termes officiels |
@@ -18,13 +18,15 @@ PDF ──► ingest.py ──► unités (1 par paragraphe) ──► chunking.
 ## Commandes
 
 ```powershell
-python -m rag.build_index                 # unités + chunks (BM25), 20 s
+python -m rag.build_index --force         # unités + chunks (BM25), 20 s ; --force relit le PDF
 python -m eval.eval_retrieval             # rapport eval/retrieval_report.md
 
 pip install -r requirements-rag.txt       # une fois (~2 Go)
 python -m rag.build_index --dense --model BAAI/bge-m3
 python -m eval.eval_retrieval --model BAAI/bge-m3
 ```
+
+Après une modification de l'ingestion ou du découpage, l'index dense est détecté comme périmé (empreinte des textes) : relancer `--dense`.
 
 Sans GPU, encoder ~520 chunks avec BGE-M3 prend quelques minutes. Sur Colab, cloner le dépôt, déposer le PDF dans `data/corpus/`, lancer les mêmes commandes, puis rapatrier `data/index/` et `data/processed/`.
 

@@ -21,10 +21,10 @@ switch ($cmd) {
     "lint"  { & "$bin\ruff.exe" check . }
     "fmt"   { & "$bin\ruff.exe" check --fix .; & "$bin\ruff.exe" format . }
     "eval"  { & "$bin\python.exe" -m eval.eval_router; & "$bin\python.exe" -m eval.eval_retrieval }
-    "index" { & "$bin\python.exe" -m rag.build_index }
+    "index" { & "$bin\python.exe" -m rag.build_index --force }
     "index-dense" {
         & "$bin\pip.exe" install -r requirements-rag.txt
-        & "$bin\python.exe" -m rag.build_index --dense --model BAAI/bge-m3
+        & "$bin\python.exe" -m rag.build_index --force --dense --model BAAI/bge-m3
     }
     default {
         Write-Host "Commandes : setup, serve, n8n, test, lint, fmt, eval, index, index-dense"

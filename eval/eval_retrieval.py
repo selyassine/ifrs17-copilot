@@ -181,8 +181,8 @@ def main() -> None:
                 if model not in encoders:          # un seul exemplaire du modèle en mémoire
                     encoders[model] = SentenceTransformerEncoder(model)
                 enc = encoders[model]
-                vecs = load_dense(INDEX_DIR, strategy, model, chunks[strategy])
-                if vecs is None:                   # ex. B0 : encodé une fois puis mis en cache
+                vecs = load_dense(INDEX_DIR, strategy, model, chunks[strategy], strict=False)
+                if vecs is None:                   # absent ou périmé (ex. B0) : encodé puis mis en cache
                     print(f"  encodage de {len(chunks[strategy])} chunks {strategy} ({model})…")
                     vecs = enc.encode([c.embed_text for c in chunks[strategy]])
                     save_dense(INDEX_DIR, strategy, model, vecs, chunks[strategy])

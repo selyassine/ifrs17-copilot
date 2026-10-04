@@ -43,11 +43,11 @@ eval:
 	$(BIN)/python -m eval.eval_retrieval
 
 index:
-	$(BIN)/python -m rag.build_index
+	$(BIN)/python -m rag.build_index --force
 
 index-dense:
 	$(BIN)/pip install -r requirements-rag.txt
-	$(BIN)/python -m rag.build_index --dense --model BAAI/bge-m3
+	$(BIN)/python -m rag.build_index --force --dense --model BAAI/bge-m3
 
 clean:
 	rm -rf .pytest_cache .ruff_cache logs

@@ -101,7 +101,7 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
   le titre court (« Évaluation »), pas sa place dans la norme (annexe C, réassurance détenue…).
 - **Décision :** prompt v2 (chemin complet de chaque extrait, règles de portée, D-024) ; annotation élargie (D-023).
   Le futur agent vérificateur devra contrôler la portée, pas seulement l'existence de la citation.
-- **Mesure avant / après :** fidèles 40 → 42/50, fidèles et complètes 39 → 39/50. v2 corrige q32, q45, q50, dégrade q28 ; q02, q22, q25, q42, q46 restent fausses : sauf q25, l'information nécessaire n'est pas dans les extraits (bon paragraphe non trouvé, ou chemin sans « réassurance » car les titres n'ont qu'un niveau). Prochaine étape : titres hiérarchiques et reranker.
+- **Mesure avant / après :** fidèles 40 → 42/50, fidèles et complètes 39 → 39/50. v2 corrige q32, q45, q50, dégrade q28 ; q02, q22, q25, q42, q46 restent fausses : sauf q25, l'information nécessaire n'est pas dans les extraits (bon paragraphe non trouvé, ou chemin sans « réassurance » car les titres n'ont qu'un niveau). Titres hiérarchiques (D-025) : q02 reste fausse alors que le titre affiche « Contrats de réassurance détenus » ; le modèle utilise l'extrait qui ressemble le plus à la question, quelle que soit sa portée. → contrôle de portée confié au vérificateur.
 - **Leçon :** une citation vérifiable n'est pas forcément une citation juste. La vérification automatique prouve que le texte
   existe, seule la relecture (ou un juge) dit s'il répond à la question.
 

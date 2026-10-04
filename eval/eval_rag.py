@@ -195,6 +195,7 @@ def main() -> None:
             res = ask(q["question"], settings, client, lambda: retriever, case_id=case_id)
             row = score_one(q, res)
             row["prompt_version"] = settings.rag_prompt_version
+            row["case_id"] = case_id
         except LLMError as exc:
             print(f"[{i}/{len(questions)}] {q['id']} ERREUR LLM : {str(exc)[:150]}")
             continue
@@ -209,9 +210,9 @@ def main() -> None:
     if not rows:
         raise SystemExit("Aucune réponse obtenue.")
     agg = aggregate(rows)
-    traces = [t for t in read_traces(settings.trace_path) if str(t.get("case_id", "")).startswith("eval-")
-              and t.get("case_id", "").rsplit("-", 1)[-1] in {r["id"] for r in rows}
-              and t.get("case_id", "") >= f"eval-{stamp[:8]}"]
+    # seulement les appels de CETTE évaluation (avant : toutes celles du jour étaient additionnées)
+    run_cases = {r.get("case_id", f"eval-{stamp}-{r['id']}") for r in rows}
+    traces = [t for t in read_traces(settings.trace_path) if t.get("case_id", "") in run_cases]
     agg_tokens = {"tokens_entree": sum(t.get("tokens_in", 0) for t in traces),
                   "tokens_sortie": sum(t.get("tokens_out", 0) for t in traces),
                   "appels_llm": len([t for t in traces if t.get("kind") == "llm"])}

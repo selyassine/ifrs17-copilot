@@ -58,6 +58,7 @@ failures_observed:
   - "q46 : utilise §18 et §19 (classement en groupes) pour décrire le traitement des contrats onéreux"
   - "q22, q42 : le paragraphe attendu manque ; la réponse est reconstruite à partir de voisins (§118/§80, §51/§41)"
   - "q50 : contenu de §16 attribué à §23"
+  - "après titres hiérarchiques (D-025) : q02 cite encore §65 alors que le chemin affiche « Contrats de réassurance détenus » ; q47 refuse à tort ; q42 refuse honnêtement (définition absente)"
 changes: "Une seule modification, la portée : chaque extrait affiche son chemin dans la norme (annexe, section, titre) au lieu du seul titre court, et les règles 3 et 4 demandent de respecter la portée et de ne pas reconstruire une réponse absente. Le reste est identique à v1."
 eval:
   test_set: eval/rag_questions.jsonl

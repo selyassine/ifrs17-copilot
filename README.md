@@ -18,7 +18,7 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | RAG : ingestion du règlement 2021/2036 (397 paragraphes), découpages A/B, BM25, dense, hybride, `/v1/search` | fait ; dense à mesurer avec BGE-M3 |
 | Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
 | Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
-| Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2) : 42/50 fidèles, 39/50 fidèles et complètes (F-011) |
+| Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2, titres hiérarchiques) : 43/50 sans erreur, 37/50 complètes ; optimisation arrêtée (D-026) |
 | Extraction multimodale, vérificateur, rédacteur | S3 |
 
 ## Installation (sans Docker)

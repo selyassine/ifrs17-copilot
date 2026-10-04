@@ -70,7 +70,8 @@ class Unit:
     doc_id: str
     zone: str
     paragraph_id: str     # ce qu'on cite : "44", "B119", "art-2", "cons-10", "def:marge sur services contractuels"
-    heading: str          # intertitre en vigueur (contexte)
+    heading: str          # intertitres en vigueur, du plus large au plus précis : « Contrats de
+                          # réassurance détenus > Évaluation » (gras, puis italique, puis gras italique)
     section: str          # grand titre en vigueur (ex. « ÉVALUATION »)
     text: str
     page_start: int
@@ -158,6 +159,17 @@ def _join(parts: list[str]) -> str:
     return re.sub(r"[ \t]+", " ", out.replace("­", "")).strip()
 
 
+# profondeur d'un intertitre selon sa police, dans la mise en page du Journal officiel
+_HEADING_DEPTH = {"bold": 0, "italic": 1, "bolditalic": 2}
+
+
+def _push_heading(levels: list[str], title: str, font: str) -> str:
+    """Range l'intertitre à son niveau, efface les niveaux inférieurs, renvoie le chemin complet."""
+    depth = _HEADING_DEPTH.get(font, 0)
+    levels[depth:] = [title] + [""] * (2 - depth)
+    return " > ".join(x for x in levels if x)
+
+
 def _is_major_heading(line: Line) -> bool:
     """Titres de section en petites capitales : OBJECTIF, CHAMP D'APPLICATION, ÉVALUATION…"""
     letters = [c for c in line.text if c.isalpha()]
@@ -168,13 +180,16 @@ def _is_major_heading(line: Line) -> bool:
 def _is_minor_heading(line: Line, nxt: Line | None, zone: str) -> bool:
     if line.font == "regular" or _LIST_RE.match(line.text) or line.gap < HEADING_GAP:
         return False
-    return not (zone in _PARA_RE and _PARA_RE[zone].match(line.text) and line.x0 < PARA_X_MAX)
+    is_paragraph_start = zone in _PARA_RE and _PARA_RE[zone].match(line.text) and line.x0 < PARA_X_MAX
+    return not is_paragraph_start
 
 
 def parse_units(lines: list[Line], doc_id: str) -> list[Unit]:
     units: list[Unit] = []
     zone = "reglement"
     section = heading = ""
+    levels = ["", "", ""]           # intertitres en vigueur : gras, italique, gras italique (D-025)
+    pending_font = "bold"
     cur: dict | None = None
     last_key: dict[str, tuple[int, str]] = {}
     pending_heading: list[str] = []
@@ -203,6 +218,7 @@ def parse_units(lines: list[Line], doc_id: str) -> list[Unit]:
             if new_zone == "annexe_D":
                 break
             zone, section, heading, pending_heading = new_zone, "", "", []
+            levels = ["", "", ""]
             continue
 
         t = line.text
@@ -249,6 +265,7 @@ def parse_units(lines: list[Line], doc_id: str) -> list[Unit]:
         if _is_major_heading(line):
             flush()
             section, heading, pending_heading = t, "", []
+            levels = ["", "", ""]
             continue
         prev = lines[i - 1] if i else None
         if (prev is not None and _is_major_heading(prev) and line.size < 9.0
@@ -263,7 +280,7 @@ def parse_units(lines: list[Line], doc_id: str) -> list[Unit]:
             prev = last_key.get(zone, (0, ""))
             if key > prev and key[0] - prev[0] <= 6:
                 if pending_heading:
-                    heading = _join(pending_heading)
+                    heading = _push_heading(levels, _join(pending_heading), pending_font)
                     pending_heading = []
                 last_key[zone] = key
                 start(pid, t[m.end():].strip(), line)
@@ -275,7 +292,10 @@ def parse_units(lines: list[Line], doc_id: str) -> list[Unit]:
                                                    and line.gap < HEADING_GAP):
             # un intertitre peut tenir sur deux lignes ; il s'applique au paragraphe suivant
             if not pending_heading or line.gap >= HEADING_GAP:
+                if pending_heading:     # deux intertitres de suite : le premier devient parent
+                    _push_heading(levels, _join(pending_heading), pending_font)
                 pending_heading = [t]
+                pending_font = line.font
             else:
                 pending_heading.append(t)
             continue

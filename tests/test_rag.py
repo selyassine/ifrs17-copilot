@@ -71,6 +71,28 @@ def test_parse_units_zones_et_identifiants():
     assert all(u.zone != "annexe_D" for u in units)
 
 
+def test_intertitres_hierarchiques():
+    """Gras = niveau 1, italique = niveau 2, gras italique = niveau 3 ; les parents sont gardés (D-025)."""
+    lines = [
+        L("ANNEXE", x0=282, size=8.5),
+        L("ÉVALUATION", x0=68, size=8.5),
+        L("Contrats de réassurance détenus", font="bold", gap=21),
+        L("Évaluation", font="italic", gap=21),
+        L("1 Premier paragraphe.", x0=68, gap=20),
+        L("Variables de marché", font="bolditalic", gap=21),
+        L("2 Deuxième paragraphe.", x0=68, gap=20),
+        L("Autre sous-titre", font="italic", gap=21),
+        L("3 Troisième paragraphe.", x0=68, gap=20),
+        L("Nouveau titre", font="bold", gap=21),
+        L("4 Quatrième paragraphe.", x0=68, gap=20),
+    ]
+    by = {u.paragraph_id: u.heading for u in parse_units(lines, "T")}
+    assert by["1"] == "Contrats de réassurance détenus > Évaluation"
+    assert by["2"] == "Contrats de réassurance détenus > Évaluation > Variables de marché"
+    assert by["3"] == "Contrats de réassurance détenus > Autre sous-titre"
+    assert by["4"] == "Nouveau titre"
+
+
 # --------------------------------------------------------------------------- découpage
 def units_fixture(n=12, words=60):
     return [Unit(unit_id=f"T:{i}", doc_id="T", zone="norme", paragraph_id=str(i),
@@ -191,3 +213,22 @@ def test_integration_reglement_2021_2036():
     by = {u.paragraph_id: u for u in units}
     assert by["44"].text.startswith("Dans le cas des contrats d'assurance sans éléments")
     assert by["B119"].heading.startswith("Comptabilisation de la marge sur services contractuels")
+    assert by["65"].heading == "Contrats de réassurance détenus > Évaluation"
+    assert by["C17"].heading.startswith("Approche rétrospective modifiée > Détermination")
+
+
+def test_index_dense_perime_si_les_textes_changent(tmp_path):
+    """Mêmes identifiants de chunks mais en-têtes modifiés : l'index dense doit être refait (D-025)."""
+    import numpy as np
+
+    from rag.retrieve import load_dense, save_dense
+
+    def ck(text):
+        return Chunk(chunk_id="B:T:1", strategy="B", doc_id="T", text="x", embed_text=text,
+                     paragraph_ids=["1"], zone="norme")
+
+    save_dense(tmp_path, "B", "m", np.ones((1, 3), dtype=np.float32), [ck("Évaluation\nx")])
+    assert load_dense(tmp_path, "B", "m", [ck("Évaluation\nx")]) is not None
+    with pytest.raises(RuntimeError, match="périmé"):
+        load_dense(tmp_path, "B", "m", [ck("Réassurance > Évaluation\nx")])
+    assert load_dense(tmp_path, "B", "m", [ck("Réassurance > Évaluation\nx")], strict=False) is None

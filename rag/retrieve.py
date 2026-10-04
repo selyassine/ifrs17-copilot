@@ -13,6 +13,7 @@ Stockage des vecteurs :
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -288,14 +289,31 @@ def save_dense(index_dir: Path, strategy: str, model_name: str, vectors: np.ndar
     vec_path, meta_path = index_paths(index_dir, strategy, model_name)
     NumpyStore(vectors).save(vec_path)
     meta_path.write_text(json.dumps({"model": model_name, "strategy": strategy,
-                                     "chunk_ids": [c.chunk_id for c in chunks]}), encoding="utf-8")
+                                     "chunk_ids": [c.chunk_id for c in chunks],
+                                     "texts_sha1": texts_fingerprint(chunks)}), encoding="utf-8")
 
 
-def load_dense(index_dir: Path, strategy: str, model_name: str, chunks: list[Chunk]) -> np.ndarray | None:
+def texts_fingerprint(chunks: list[Chunk]) -> str:
+    """Empreinte des textes encodés : un changement d'en-tête (D-025) rend l'index périmé même si
+    les identifiants de chunks sont identiques."""
+    h = hashlib.sha1()
+    for c in chunks:
+        h.update(c.embed_text.encode("utf-8") + b"\x00")
+    return h.hexdigest()
+
+
+def load_dense(index_dir: Path, strategy: str, model_name: str, chunks: list[Chunk],
+               strict: bool = True) -> np.ndarray | None:
+    """Vecteurs en cache, ou None s'ils sont absents. Index périmé (autres chunks ou autres textes) :
+    erreur si ``strict``, sinon None pour que l'appelant réencode."""
     vec_path, meta_path = index_paths(index_dir, strategy, model_name)
     if not vec_path.exists():
         return None
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    if meta["chunk_ids"] != [c.chunk_id for c in chunks]:
-        raise RuntimeError(f"index {vec_path.name} périmé : relancer make index --dense")
+    if (meta["chunk_ids"] != [c.chunk_id for c in chunks]
+            or meta.get("texts_sha1") != texts_fingerprint(chunks)):
+        if strict:
+            raise RuntimeError(f"index {vec_path.name} périmé (textes modifiés) : "
+                               f"relancer .\\make.ps1 index-dense")
+        return None
     return np.load(vec_path)
