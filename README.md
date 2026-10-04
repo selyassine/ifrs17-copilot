@@ -19,8 +19,9 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
 | Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
 | Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2, titres hiérarchiques) : 43/50 sans erreur, 37/50 complètes ; optimisation arrêtée (D-026) |
-| Extracteur multimodal : PDF texte (Groq), image ou scan (Gemini), hybride ; contrôle d'ancrage ; `POST /v1/extract`, `POST /v1/case/document` | texte, vision et hybride : 15/15 documents justes (dont 7/7 scans) ; le texte est 30 fois plus rapide |
-| Voix, vérificateur, rédacteur | S3-S4 |
+| Extracteur multimodal : PDF texte (Groq), image ou scan (Gemini), hybride ; contrôle d'ancrage ; `POST /v1/extract`, `POST /v1/case/document` | 15/15 documents justes dans les 3 modes ; jeu de 10 pièges : 0 cas dangereux (double lecture des scans) |
+| Vérificateur (LLM-juge : soutien et portée de chaque phrase) + boucle de correction bornée → validation humaine ; `verdict` dans `/v1/ask` | fait, testé avec un LLM factice ; accord avec la relecture humaine à mesurer |
+| Voix, rédacteur, chaîne `/v1/case` complète | S3-S4 |
 
 ## Installation (sans Docker)
 

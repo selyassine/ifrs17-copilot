@@ -44,6 +44,9 @@ class Settings:
     rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
     # version du prompt rag_answer : v2 mesurée et retenue (D-024) ; 1 pour reproduire la v1
     rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "2")))
+    # Vérificateur (LLM-juge) après l'agent RAG, et nombre de corrections autorisées (D-033)
+    verifier_enabled: bool = field(default_factory=lambda: _env("VERIFIER", "1") == "1")
+    verifier_max_rounds: int = field(default_factory=lambda: int(_env("VERIFIER_MAX_ROUNDS", "1")))
     # Vision (lecture d'images) : Gemini via son point d'accès compatible OpenAI (D-029)
     vision_base_url: str = field(default_factory=lambda: _env(
         "VISION_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"))
@@ -51,6 +54,8 @@ class Settings:
     vision_model: str = field(default_factory=lambda: _env("VISION_MODEL", "gemini-3.8-flash"))
     vision_fallback_model: str = field(default_factory=lambda: _env("VISION_FALLBACK_MODEL",
                                                                     "gemini-3.5-flash-lite"))
+    # mode vision : seconde lecture de l'image nettoyée, divergence → validation humaine (D-032)
+    vision_double_read: bool = field(default_factory=lambda: _env("VISION_DOUBLE_READ", "1") == "1")
     # lecture d'un PDF à couche texte : « texte » (Groq) ou « hybride » (texte + image, vision)
     extract_pdf_mode: str = field(default_factory=lambda: _env("EXTRACT_PDF_MODE", "texte"))
     api_token: str = field(default_factory=lambda: _env("API_TOKEN"))

@@ -1,6 +1,6 @@
 # Évaluation de l'extracteur — mode texte_difficile
 
-Généré le 20261004-034222 par `python -m eval.eval_extraction --mode texte_difficile`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
+Généré le 20261004-152115 par `python -m eval.eval_extraction --mode texte_difficile`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
 
 | Mesure | Valeur |
 | --- | --- |
@@ -10,11 +10,11 @@ Généré le 20261004-034222 par `python -m eval.eval_extraction --mode texte_di
 | Documents entièrement justes | 7/7 |
 | … dont images « scannées » justes | 7/7 |
 | CSM recalculé juste | 7/7 |
-| Statuts ok / à vérifier / échec | 7 / 1 / 2 |
+| Statuts ok / à vérifier / échec | 7 / 2 / 1 |
 | Feu vert fiable (justes parmi les « ok ») | 7/7 |
 | Alertes sur les documents faux | — |
-| Relances de correction | 2 |
-| Latence médiane (ms) | 1211.5 |
+| Relances de correction | 1 |
+| Latence médiane (ms) | 1205.2 |
 
 ## Exactitude par champ
 
@@ -42,4 +42,4 @@ Généré le 20261004-034222 par `python -m eval.eval_extraction --mode texte_di
 | dur07 | total_des_sorties | oui | ok | réussi | — | -240470.6627 | -240470.6627 | — |
 | dur08 | millions | oui | ok | réussi | — | 0.136 | 0.136 | — |
 | dur09 | unites_absentes | oui | echec | alerte levée | — | None |  | données : Value error, la somme des unités de couverture doit être > 0 |
-| dur10 | deux_groupes | oui | echec | alerte levée | — | None |  | réponse illisible : la réponse JSON n'est pas un objet |
+| dur10 | deux_groupes | oui | a_verifier | alerte levée | — | None |  | plusieurs groupes de contrats dans le document (PREV-2024-J, VIE-2025-D) : choisir le groupe à calculer |

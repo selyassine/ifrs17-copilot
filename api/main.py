@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 
 from agents.pipeline import ask as run_ask
 from agents.router import route_heuristic, route_llm
-from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData
+from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData, Verdict
 from core.config import Settings, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import traced
@@ -158,6 +158,8 @@ class AskResponse(BaseModel):
     case_id: str
     plan: Plan
     answer: GroundedAnswer
+    verdict: Verdict | None = Field(default=None, description="ok | a_corriger | validation_humaine")
+    rounds: int = 0
     sources: list[dict]
     warnings: list[str]
     corrections: int
@@ -183,7 +185,8 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
     except LLMError as exc:
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
     rag = res.rag
-    return AskResponse(case_id=case_id, plan=res.plan, answer=res.answer,
+    return AskResponse(case_id=case_id, plan=res.plan, answer=res.answer, verdict=res.verdict,
+                       rounds=res.rounds,
                        sources=rag.sources if rag else [], warnings=res.warnings,
                        corrections=rag.corrections if rag else 0,
                        latency_ms=rag.latency_ms if rag else 0.0)
@@ -237,12 +240,14 @@ def _run_extraction(data: bytes, mime: str, case_id: str, settings: Settings) ->
             return extract_from_text(doc, make_client(settings), case_id=case_id)
         images = pdf_page_images(data, max_pages=2)
         return extract_from_images(images, make_vision_client(settings),
-                                   doc=doc if has_text else None, case_id=case_id)
+                                   doc=doc if has_text else None, case_id=case_id,
+                                   double_read=settings.vision_double_read)
     try:
         image = normalize_image(data)
     except Exception as exc:
         raise HTTPException(status_code=422, detail=f"image illisible : {exc}"[:300]) from exc
-    return extract_from_images([image], make_vision_client(settings), case_id=case_id)
+    return extract_from_images([image], make_vision_client(settings), case_id=case_id,
+                               double_read=settings.vision_double_read)
 
 
 def _extract(file: UploadFile, case_id: str, settings: Settings) -> ExtractResponse:

@@ -32,7 +32,10 @@ On ne modifie jamais une version existante : on crée `vN+1` et on garde l'ancie
 | router | `route` | v1 | 100 % sur 20 cas (gpt-oss-20b) ; heuristique : 95 % |
 | chercheur_rag | `rag_answer` | v1 | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; précision 0,63 (élargie 0,83) ; relecture humaine 39/50 fidèles et complètes |
 | extracteur | `extract_portfolio` | v1 | mode texte (gpt-oss-120b) : 15/15 documents justes, 15/15 CSM justes, 1 relance |
+| extracteur | `extract_portfolio` | v2 (par défaut) | jeu facile 15/15 ; jeu difficile 0 cas dangereux |
+| extracteur | `extract_portfolio_vision` | v2 (par défaut) | jeu difficile : 0 cas dangereux (v1 : 2), photo dégradée rattrapée par la double lecture |
 | extracteur | `extract_portfolio_vision` | v1 | Gemini 3.8 Flash : vision 15/15 (dont 7/7 scans), hybride 15/15 ; 30 à 60 fois plus lent que le mode texte |
+| verificateur | `verify_answer` | v1 | à mesurer contre la relecture humaine (`python -m eval.eval_verifier`) |
 | chercheur_rag | `rag_answer` | v2 (par défaut) | portée des paragraphes (D-024) : fidèles 42/50 (v1 : 40), fidèles et complètes 39/50 (v1 : 39), précision élargie 0,84 (v1 : 0,83) |
 
 Le livrable `prompt_library.md` sera généré à partir de ces fiches en S5.

@@ -31,7 +31,9 @@ from core.prompts import load_prompt
 from multimodal.documents import DocumentText, document_numbers, numbers_in_text, parse_number
 
 MAX_CORRECTIONS = 1
-EXTRA_KEYS = ("manquants", "remarques", "transcription")
+EXTRA_KEYS = ("manquants", "remarques", "transcription", "groupes_detectes")
+COMPARED = ("group_id", "currency", "unit_multiplier", "premiums", "outflows", "coverage_units",
+            "discount_rates", "risk_adjustment_pct")
 Status = Literal["ok", "a_verifier", "echec"]
 
 
@@ -48,6 +50,8 @@ class ExtractionResult:
     first_attempt_issues: list[str] = field(default_factory=list)   # pour l'évaluation
     mode: str = "texte"                                   # texte | vision | hybride
     grounding: str = "document"                           # document | transcription
+    groups: list[str] = field(default_factory=list)      # groupes vus dans le document
+    reads: int = 1                                        # 2 = double lecture (mode vision)
 
 
 # --------------------------------------------------------------------------- #
@@ -216,6 +220,11 @@ def _run(spec, user_content, client: LLMClient, case_id: str, mode: str,
                   "Réponds avec le même format JSON.")},
         ]
 
+    groups = sorted({str(g).strip() for g in (data.get("groupes_detectes") or []) if str(g).strip()})
+    if portfolio is not None and len(groups) > 1:
+        # plusieurs groupes : le modèle ne doit pas choisir à la place de l'utilisateur (D-032)
+        issues.append(f"plusieurs groupes de contrats dans le document ({', '.join(groups)}) : "
+                      "choisir le groupe à calculer")
     truncated = fixed_doc is not None and fixed_doc.truncated
     if portfolio is None:
         status: Status = "echec"
@@ -229,7 +238,8 @@ def _run(spec, user_content, client: LLMClient, case_id: str, mode: str,
                             remarks=remarks, warnings=warnings, corrections=corrections,
                             latency_ms=round((time.perf_counter() - t0) * 1000, 1),
                             first_attempt_issues=first, mode=mode,
-                            grounding="document" if fixed_doc is not None else "transcription")
+                            grounding="document" if fixed_doc is not None else "transcription",
+                            groups=groups)
 
 
 def extract_from_text(doc: DocumentText, client: LLMClient | None = None, version: int | None = None,
@@ -239,15 +249,60 @@ def extract_from_text(doc: DocumentText, client: LLMClient | None = None, versio
     return _run(spec, spec.render(document=doc.text), client or LLMClient(), case_id, "texte", doc)
 
 
+def compare_portfolios(a: PortfolioData, b: PortfolioData) -> list[str]:
+    """Champs sur lesquels deux lectures du même document ne sont pas d'accord."""
+    diffs = []
+    da, db = a.model_dump(), b.model_dump()
+    for f in COMPARED:
+        x, y = da[f], db[f]
+        tol = 1e-6 if f in ("discount_rates", "risk_adjustment_pct") else 0.011
+        if isinstance(x, list) != isinstance(y, list):
+            diffs.append(f"{f} : {x} / {y}")
+        elif isinstance(x, list):
+            if len(x) != len(y):
+                diffs.append(f"{f} : {len(x)} périodes / {len(y)}")
+            else:
+                diffs += [f"{f}[{k}] : {u} / {v}" for k, (u, v) in enumerate(zip(x, y, strict=True))
+                          if abs(u - v) > tol]
+        elif isinstance(x, int | float) and not isinstance(x, bool):
+            if abs(x - y) > tol:
+                diffs.append(f"{f} : {x} / {y}")
+        elif str(x).strip().upper() != str(y).strip().upper():
+            diffs.append(f"{f} : {x} / {y}")
+    return diffs
+
+
 def extract_from_images(images: list[tuple[bytes, str]], client: LLMClient,
                         doc: DocumentText | None = None, version: int | None = None,
-                        case_id: str = "") -> ExtractionResult:
+                        case_id: str = "", double_read: bool = True) -> ExtractionResult:
     """Mode vision (images seules, ex. scan) ou hybride (images + couche texte du PDF).
-    En hybride, l'ancrage se fait sur la couche texte ; en vision, sur la transcription."""
-    from multimodal.vision import image_part
+
+    Hybride : ancrage sur la couche texte. Vision : ancrage sur la transcription du modèle, puis
+    **double lecture** (self-consistency, D-032) : une seconde lecture de l'image nettoyée
+    (contraste, netteté) ; si les deux lectures divergent, validation humaine. La transcription
+    seule ne voit pas un chiffre mal lu des deux côtés ; deux lectures indépendantes, souvent si."""
+    from multimodal.vision import enhance_variant, image_part
 
     spec = load_prompt("extract_portfolio_vision", version)
     text = doc.text if doc is not None else "(aucune couche texte : lire uniquement l'image)"
-    content = [{"type": "text", "text": spec.render(document=text)}]
-    content += [image_part(data, mime) for data, mime in images]
-    return _run(spec, content, client, case_id, "hybride" if doc is not None else "vision", doc)
+
+    def content(imgs):
+        return [{"type": "text", "text": spec.render(document=text)}] + [image_part(d, m) for d, m in imgs]
+
+    mode = "hybride" if doc is not None else "vision"
+    first = _run(spec, content(images), client, case_id, mode, doc)
+    if doc is not None or not double_read or first.portfolio is None:
+        return first
+    second = _run(spec, content([enhance_variant(d) for d, _ in images]), client, case_id, mode, None)
+    first.reads = 2
+    first.corrections += second.corrections
+    first.latency_ms = round(first.latency_ms + second.latency_ms, 1)
+    if second.portfolio is None:
+        first.issues.append("seconde lecture de l'image impossible : vérification humaine")
+    else:
+        diffs = compare_portfolios(first.portfolio, second.portfolio)
+        if diffs:
+            first.issues.append("les deux lectures de l'image divergent : " + " ; ".join(diffs[:8]))
+    if first.issues and first.status == "ok":
+        first.status = "a_verifier"
+    return first

@@ -178,7 +178,8 @@ class Issue(StrictModel):
     agent: AgentName
     kind: Literal[
         "citation_invalide", "chiffre_incoherent", "champ_manquant",
-        "injection", "hors_perimetre", "autre",
+        "injection", "hors_perimetre", "non_soutenu", "hors_portee", "incomplet", "hors_sujet",
+        "autre",
     ]
     detail: str
 

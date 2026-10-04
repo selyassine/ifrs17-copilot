@@ -40,6 +40,7 @@ class RagResult:
     corrections: int = 0
     latency_ms: float = 0.0
     raw_invalid_refs: list[str] = field(default_factory=list)   # avant nettoyage (pour l'évaluation)
+    extracts: str = ""                                          # extraits avec leur chemin (vérificateur)
 
 
 # --------------------------------------------------------------------------- #
@@ -196,7 +197,10 @@ def build_answer(data: dict, by_id: dict[str, Hit], allowed: list[str],
 # --------------------------------------------------------------------------- #
 def answer_question(question: str, retriever: Retriever, client: LLMClient | None = None,
                     k: int = 5, mode: str = "hybrid", expand: bool = True,
-                    version: int | None = None, case_id: str = "") -> RagResult:
+                    version: int | None = None, case_id: str = "",
+                    feedback: str = "") -> RagResult:
+    """``feedback`` : problèmes relevés par le vérificateur sur une première réponse (boucle de
+    correction de l'orchestrateur) ; ils sont ajoutés à la question, rien d'autre ne change."""
     t0 = time.perf_counter()
     client = client or LLMClient()
     spec = load_prompt("rag_answer", version)
@@ -211,7 +215,10 @@ def answer_question(question: str, retriever: Retriever, client: LLMClient | Non
         {"role": "system", "content": spec.system},
         {"role": "user", "content": spec.render(
             chunks=extracts, chunks_portee=extracts_path, question=question,
-            allowed=", ".join(_display(p) for p in allowed) or "(aucun)")},
+            allowed=", ".join(_display(p) for p in allowed) or "(aucun)")
+         + (f"\n\nUne première réponse a été rejetée par le vérificateur :\n{feedback}\n"
+            "Corrige ces points : ne garde que les phrases soutenues par l'extrait cité, respecte la "
+            "portée des paragraphes, et dis ce qui manque plutôt que de compléter." if feedback else "")},
     ]
     warnings: list[str] = []
     raw_invalid: list[str] = []
@@ -255,4 +262,4 @@ def answer_question(question: str, retriever: Retriever, client: LLMClient | Non
         answer = GroundedAnswer(answer=None, refused=True, refusal_reason="Réponse du modèle invalide.")
     return RagResult(answer=answer, sources=sources, warnings=warnings, corrections=corrections,
                      latency_ms=round((time.perf_counter() - t0) * 1000, 1),
-                     raw_invalid_refs=raw_invalid)
+                     raw_invalid_refs=raw_invalid, extracts=extracts_path)

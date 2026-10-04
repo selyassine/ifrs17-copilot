@@ -37,6 +37,26 @@ def normalize_image(data: bytes) -> tuple[bytes, str]:
     return out.getvalue(), "image/jpeg"
 
 
+def enhance_variant(data: bytes) -> tuple[bytes, str]:
+    """Seconde version d'une image pour la double lecture : niveaux de gris, contraste
+    automatique, netteté, légère mise à l'échelle. Lire deux versions différentes évite que
+    deux lectures identiques confirment la même erreur."""
+    from PIL import Image, ImageFilter, ImageOps, UnidentifiedImageError
+
+    try:
+        img = ImageOps.autocontrast(Image.open(io.BytesIO(data)).convert("L"), cutoff=1)
+    except (UnidentifiedImageError, OSError):
+        return data, detect_mime(data) or "image/jpeg"     # image illisible : même image relue
+    img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=160, threshold=2))
+    w, h = img.size
+    factor = min(1.3, MAX_IMAGE_SIDE / max(w, h)) if max(w, h) < MAX_IMAGE_SIDE else 1.0
+    if factor > 1.0:
+        img = img.resize((int(w * factor), int(h * factor)), Image.LANCZOS)
+    out = io.BytesIO()
+    img.save(out, format="JPEG", quality=90)
+    return out.getvalue(), "image/jpeg"
+
+
 def pdf_page_images(pdf: bytes, max_pages: int = 2, dpi: int = 150) -> list[tuple[bytes, str]]:
     import pypdfium2 as pdfium
 

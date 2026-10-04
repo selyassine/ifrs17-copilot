@@ -66,5 +66,5 @@ changes: "Dérivé de extract_portfolio v1 pour les images : transcription du ta
 eval:
   test_set: eval/extraction_cases.jsonl
   metric: exactitude par champ, documents justes, CSM juste, fiabilité du feu vert
-  scores: {v1_vision_documents_justes: 1.0, v1_vision_scans_justes: 1.0, v1_hybride_documents_justes: 1.0}
-  notes: "04/10/2026, gemini-3.8-flash (niveau gratuit), 15 documents dont 7 scans : vision 15/15 justes (7/7 scans), 0 relance, latence médiane 33 s, 33 000 tokens d'entrée ; hybride 15/15, 59 s, 39 000 tokens. Plafond atteint : le jeu est trop facile pour départager les modes (jeu difficile à créer)"
+  scores: {v1_vision_documents_justes: 1.0, v1_vision_scans_justes: 1.0, v1_hybride_documents_justes: 1.0, v1_vision_difficile_dangereux: 2.0}
+  notes: "04/10/2026, gemini-3.8-flash (niveau gratuit), 15 documents dont 7 scans : vision 15/15 justes (7/7 scans), 0 relance, latence médiane 33 s, 33 000 tokens d'entrée ; hybride 15/15, 59 s, 39 000 tokens. Plafond atteint : le jeu est trop facile pour départager les modes . Jeu difficile, vision : 6 réussis, 2 alertes levées, 2 DANGEREUX (dur06 photo dégradée : sorties et taux mal lus, transcription fausse aussi ; dur10 deux groupes : un groupe choisi sans le dire)"

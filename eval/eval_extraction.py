@@ -76,7 +76,7 @@ def score(case: dict, res: ExtractionResult) -> dict:
     expect = case.get("attendu", "exact")
     row = {"id": case["id"], "layout": case["layout"], "scan": case.get("scan", False),
            "attendu": expect, "piege": case.get("piege", ""),
-           "status": res.status, "grounding": res.grounding,
+           "status": res.status, "grounding": res.grounding, "reads": res.reads, "groups": res.groups,
            "corrections": res.corrections, "issues": res.issues, "first_issues": res.first_attempt_issues,
            "missing": res.missing, "warnings": res.warnings, "latency_ms": res.latency_ms}
     if expect == "alerte":

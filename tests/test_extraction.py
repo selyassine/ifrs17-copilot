@@ -209,3 +209,65 @@ def test_jeu_difficile_reproductible_et_ancre(tmp_path):
         if c["truth"]:
             doc = pdf_text(tmp_path / "synth_hard" / f"{c['id']}.pdf")
             assert grounding_issues(PortfolioData(**c["truth"]), NumberIndex(doc)) == [], c["id"]
+
+
+def test_plusieurs_groupes_validation_humaine(tmp_path):
+    c, _ = client(tmp_path, {**GOOD, "groupes_detectes": ["AB-1", "CD-2"]})
+    res = extract_from_text(DOC, c)
+    assert res.status == "a_verifier" and res.groups == ["AB-1", "CD-2"]
+    assert any("plusieurs groupes" in i for i in res.issues)
+
+
+def _vision_answers(*answers):
+    calls = []
+
+    def respond(messages, model):
+        calls.append(messages)
+        return json.dumps(answers[min(len(calls) - 1, len(answers) - 1)], ensure_ascii=False)
+
+    return respond, calls
+
+
+TRANSCRIPTION = ["Groupe AB-1 · en milliers d'euros. Taux : 3,00 %. Ajustement pour risque : 5,00 %.",
+                 "Période | Primes | Sinistres | Frais | Contrats",
+                 "Année 1 | 100,00 | 40,00 | 5,00 | 1 000", "Année 2 | 0,00 | 45,50 | 4,50 | 900"]
+
+
+def test_double_lecture_concordante_ok(tmp_path):
+    pytest.importorskip("PIL")
+    import io
+
+    from PIL import Image
+
+    from multimodal.extract import extract_from_images
+    from multimodal.vision import vision_client
+
+    buf = io.BytesIO()
+    Image.new("RGB", (60, 30), "white").save(buf, format="JPEG")
+    same = {**GOOD, "transcription": TRANSCRIPTION}
+    respond, calls = _vision_answers(same, same)
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    res = extract_from_images([(buf.getvalue(), "image/jpeg")], vision_client(s, respond))
+    assert res.reads == 2 and len(calls) == 2 and res.status == "ok"
+
+
+def test_double_lecture_divergente_validation_humaine(tmp_path):
+    """Chiffre mal lu des deux côtés (transcription et saisie) : seule la seconde lecture le voit."""
+    pytest.importorskip("PIL")
+    import io
+
+    from PIL import Image
+
+    from multimodal.extract import extract_from_images
+    from multimodal.vision import vision_client
+
+    buf = io.BytesIO()
+    Image.new("RGB", (60, 30), "white").save(buf, format="JPEG")
+    misread = {**GOOD, "outflows": [45.0, 56.0],
+               "transcription": [*TRANSCRIPTION[:3], "Année 2 | 0,00 | 51,50 | 4,50 | 900"]}
+    good = {**GOOD, "transcription": TRANSCRIPTION}
+    respond, _ = _vision_answers(misread, good)
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    res = extract_from_images([(buf.getvalue(), "image/jpeg")], vision_client(s, respond))
+    assert res.status == "a_verifier"
+    assert any("divergent" in i and "outflows[1]" in i for i in res.issues)

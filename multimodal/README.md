@@ -24,9 +24,14 @@ Il détecte les chiffres inventés ou mal lus et l'inclusion des produits financ
 **Limite connue** : il ne voit pas une colonne prise pour une autre quand le chiffre existe ailleurs (ex. sinistres sans les frais) ;
 c'est le rôle du vérificateur et de l'évaluation.
 
+Plusieurs groupes de contrats dans un même document : le modèle les liste (`groupes_detectes`) et le code bloque le calcul
+automatique (validation humaine), au lieu de laisser le modèle en choisir un.
+
 Mode vision (scan sans couche texte) : le modèle recopie d'abord le tableau (« transcription »), puis le code vérifie que
 chaque chiffre saisi figure dans cette transcription. Contrôle plus faible : il attrape les inventions et les erreurs
-d'addition ou d'unité, pas un chiffre mal lu de la même façon des deux côtés.
+d'addition ou d'unité, pas un chiffre mal lu de la même façon des deux côtés. D'où la **double lecture** (self-consistency) :
+une seconde lecture de l'image nettoyée (contraste, netteté) ; si les deux lectures divergent, validation humaine
+(`VISION_DOUBLE_READ=1`, deux fois plus d'appels Gemini).
 
 ## Commandes
 

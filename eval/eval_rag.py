@@ -88,6 +88,8 @@ def aggregate(rows: list[dict]) -> dict:
         "couverture_citations": mean([r["coverage"] for r in answered]),
         "au_moins_un_bon_paragraphe": mean([float(r["at_least_one"]) for r in answered]),
         "plafond_recherche": mean([r["retrieval_ceiling"] for r in answerable]),
+        "verdicts_verificateur": {v: sum(r.get("verdict") == v for r in rows)
+                                  for v in ("ok", "validation_humaine") if any(r.get("verdict") for r in rows)},
         "latence_p50_ms": mean([np.percentile([r["latency_ms"] for r in answered], 50)]) if answered else None,
     }
 
@@ -113,6 +115,7 @@ def render_report(stamp: str, settings, agg: dict, rows: list[dict]) -> str:
         "couverture_citations": "Couverture (attendus effectivement cités)",
         "au_moins_un_bon_paragraphe": "Réponses citant au moins un paragraphe attendu",
         "plafond_recherche": "Plafond fixé par la recherche (attendus présents dans les extraits)",
+        "verdicts_verificateur": "Verdicts du vérificateur (après au plus une correction)",
         "latence_p50_ms": "Latence médiane d'une réponse (ms)",
     }
     for k, label in labels.items():
@@ -196,6 +199,9 @@ def main() -> None:
             row = score_one(q, res)
             row["prompt_version"] = settings.rag_prompt_version
             row["case_id"] = case_id
+            row["verdict"] = res.verdict.status.value if res.verdict else None
+            row["first_verdict"] = res.first_verdict.status.value if res.first_verdict else None
+            row["rounds"] = res.rounds
         except LLMError as exc:
             print(f"[{i}/{len(questions)}] {q['id']} ERREUR LLM : {str(exc)[:150]}")
             continue
