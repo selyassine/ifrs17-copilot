@@ -1,0 +1,130 @@
+{
+  "name": "04 — Dossier validé par un humain (données → note)",
+  "nodes": [
+    {
+      "id": "870f4d06-ee74-4f9f-919e-aecf8d52cfbe",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "fabe67fa-6155-4e52-881e-ca27a7313c50",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/case/validated",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "bd6db474-b354-48f9-bd3b-6242faf00cf0",
+      "name": "Appel API /v1/case/validated",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/v1/case/validated",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "change-moi"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "d6732767-105c-4bbc-b06a-839e0c78c590",
+      "name": "Réponse : note",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        -100
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.note_html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "a9ca77c9-00e3-4894-a0f0-b73d7396b903",
+      "name": "Réponse erreur",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"erreur\": \"Le service IA est indisponible ou a refusé le document.\", \"detail\": $json.error ?? $json } }}",
+        "options": {
+          "responseCode": 502
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Appel API /v1/case/validated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API /v1/case/validated": {
+      "main": [
+        [
+          {
+            "node": "Réponse : note",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Réponse erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

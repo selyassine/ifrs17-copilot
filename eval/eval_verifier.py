@@ -65,6 +65,7 @@ def main() -> None:
     ap.add_argument("--answers", type=Path, default=HERE / "results" / "rag_answers_20261004-015143.json")
     ap.add_argument("--labels", type=Path, default=HERE / "rag_human_labels.jsonl")
     ap.add_argument("--model", default="large", help="large | small | nom exact du modèle")
+    ap.add_argument("--version", type=int, default=None, help="version du prompt verify_answer (défaut : la dernière)")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--pause", type=float, default=8.0)
     args = ap.parse_args()
@@ -81,7 +82,7 @@ def main() -> None:
     chunks = load_chunks(ROOT / "data" / "processed" / f"chunks_{settings.rag_strategy}.jsonl")
     client = LLMClient(settings)
     model_name = {"large": settings.llm_model_large, "small": settings.llm_model_small}.get(args.model, args.model)
-    spec = load_prompt("verify_answer")
+    spec = load_prompt("verify_answer", args.version)
     spec = spec.model_copy(update={"params": spec.params.model_copy(update={"model": args.model})})
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -133,10 +134,11 @@ def main() -> None:
     }
     out = HERE / "results"
     out.mkdir(exist_ok=True)
-    (out / f"verifier_{args.model}_{stamp}.json").write_text(
-        json.dumps({"date": stamp, "model": model_name, "agregats": agg, "jugements": rows},
+    tag = f"v{spec.version}_{args.model}"
+    (out / f"verifier_{tag}_{stamp}.json").write_text(
+        json.dumps({"date": stamp, "model": model_name, "prompt_version": spec.version, "agregats": agg, "jugements": rows},
                    ensure_ascii=False, indent=1), encoding="utf-8")
-    lines = [f"# Vérificateur (LLM-juge) contre la relecture humaine — {model_name}", "",
+    lines = [f"# Vérificateur (LLM-juge, prompt v{spec.version}) contre la relecture humaine — {model_name}", "",
              f"Généré le {stamp} par `python -m eval.eval_verifier --model {args.model}` sur "
              f"`{args.answers.name}` et `{args.labels.name}`.", "",
              "| Mesure | Valeur |", "| --- | --- |"]
@@ -146,11 +148,11 @@ def main() -> None:
     for r in rows:
         lines.append(f"| {r['id']} | {'fidèle' if r['humain_fidele'] else 'faux'} | {r['verdict']} | {r['outcome']} | "
                      f"{'; '.join(r['issues'])[:220] or '—'} | {r['humain_note']} |")
-    (HERE / f"verifier_report_{args.model}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (HERE / f"verifier_report_{tag}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n== Résultats")
     for k, v in agg.items():
         print(f"  {k:28} {v}")
-    print(f"\n→ eval/verifier_report_{args.model}.md")
+    print(f"\n→ eval/verifier_report_{tag}.md")
 
 
 if __name__ == "__main__":

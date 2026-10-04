@@ -47,6 +47,8 @@ class Settings:
     # Vérificateur (LLM-juge) après l'agent RAG, et nombre de corrections autorisées (D-033)
     verifier_enabled: bool = field(default_factory=lambda: _env("VERIFIER", "1") == "1")
     verifier_max_rounds: int = field(default_factory=lambda: int(_env("VERIFIER_MAX_ROUNDS", "1")))
+    # Voix : Whisper sur Groq (même clé que le LLM) (D-035)
+    speech_model: str = field(default_factory=lambda: _env("SPEECH_MODEL", "whisper-large-v3-turbo"))
     # Vision (lecture d'images) : Gemini via son point d'accès compatible OpenAI (D-029)
     vision_base_url: str = field(default_factory=lambda: _env(
         "VISION_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"))

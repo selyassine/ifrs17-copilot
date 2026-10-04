@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 
 from agents.rag_agent import RagResult, answer_question
 from agents.router import route_heuristic, route_llm
-from agents.schemas import GroundedAnswer, Intent, Plan, Verdict, VerdictStatus
+from agents.schemas import AgentName, GroundedAnswer, Intent, Plan, Verdict, VerdictStatus
 from agents.verifier import feedback_text, verify_answer
 from core.config import Settings
 from core.llm import LLMClient
@@ -45,6 +45,18 @@ def ask(question: str, settings: Settings, client: LLMClient, retriever_loader, 
         return AskResult(plan=plan, rag=None, answer=refusal)
 
     retriever: Retriever = retriever_loader()
+    res = verified_answer(question, settings, client, retriever, k=k, case_id=case_id)
+    res.plan = plan
+    return res
+
+
+def verified_answer(question: str, settings: Settings, client: LLMClient, retriever: Retriever,
+                    k: int = 5, case_id: str = "", plan: Plan | None = None) -> AskResult:
+    """Agent RAG puis vérificateur, avec au plus ``verifier_max_rounds`` corrections.
+    Utilisé par /v1/ask (après le routeur) et par l'orchestrateur d'un dossier (questions fixes)."""
+    plan = plan or Plan(intent=Intent.NORM_QUESTION, steps=[AgentName.RAG, AgentName.VERIFIER],
+                        confidence=1.0, rationale="question posée par l'orchestrateur")
+
     def run(feedback: str = "") -> RagResult:
         return answer_question(question, retriever, client=client, k=k, mode=settings.rag_mode,
                                expand=settings.rag_glossary, version=settings.rag_prompt_version,

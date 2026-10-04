@@ -15,7 +15,7 @@ PDF client ──► documents.py ──► texte + tableaux (cellules « | ») 
 | `extract.py` | Agent Extracteur, trois modes : **texte** (couche texte du PDF → Groq), **vision** (image seule → Gemini), **hybride** (couche texte + image → Gemini). Puis validation Pydantic → ancrage des chiffres → une relance si besoin |
 | `synth_hard.py` | 10 documents piégés : ligne Total, instruction cachée, unités dans les en-têtes, tableau en page 2, photo dégradée, colonne « Total des sorties », millions ; et 3 cas qui doivent lever une alerte (ajustement absent, unités absentes, deux groupes) |
 | `vision.py` | Rendu des pages PDF en images, détection du format, client Gemini (point d'accès compatible OpenAI) |
-| à venir | Question vocale (Whisper sur Groq) |
+| `speech.py` | Question vocale : Whisper (Groq) avec une consigne de vocabulaire IFRS 17 ; WER et termes reconnus |
 
 ## Contrôle d'ancrage
 

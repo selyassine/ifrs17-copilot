@@ -16,14 +16,53 @@ liste des problèmes (boucle bornée) ; si le problème persiste → ``validatio
 
 from __future__ import annotations
 
+import re
 import time
 from dataclasses import dataclass, field
 
+from agents.rag_agent import normalize_ref, quote_found
 from agents.schemas import AgentName, GroundedAnswer, Issue, Verdict, VerdictStatus
 from core.llm import LLMClient, LLMError
 from core.prompts import load_prompt
 
 KINDS = {"non_soutenu", "hors_portee", "incomplet", "hors_sujet"}
+_BLOCK_RE = re.compile(r"^\[E\d+\] Paragraphe\(s\) ([^\n]*)\n", re.M)
+
+
+def paragraph_texts(extracts: str) -> dict[str, str]:
+    """« [E1] Paragraphe(s) §65, §66 — chemin » + texte → {"65": texte, "66": texte}."""
+    out: dict[str, str] = {}
+    blocks = list(_BLOCK_RE.finditer(extracts))
+    for k, m in enumerate(blocks):
+        end = blocks[k + 1].start() if k + 1 < len(blocks) else len(extracts)
+        text = extracts[m.end():end].strip()
+        labels = m.group(1).split(" — ")[0]
+        for label in labels.split(", "):
+            pid = label.strip().removeprefix("§")
+            if pid:
+                out[pid] = text
+    return out
+
+
+def evidence_issues(analysis: list[dict], texts: dict[str, str]) -> list[Issue]:
+    """Juge « ancré » (verify_answer v2) : pour chaque phrase jugée soutenue, la preuve recopiée
+    doit se trouver dans un des paragraphes cités par la phrase. Sinon la phrase n'est pas
+    soutenue par SON paragraphe (contenu attribué au mauvais paragraphe)."""
+    issues = []
+    for item in analysis:
+        if not isinstance(item, dict) or item.get("soutenue") is False or "preuve" not in item:
+            continue
+        refs = [r for p in item.get("paragraphes") or [] for r in normalize_ref(str(p))]
+        cited = [texts[r] for r in refs if r in texts]
+        proof = str(item.get("preuve") or "")
+        phrase = str(item.get("phrase", ""))[:80]
+        if not cited:
+            continue        # paragraphe hors extraits : déjà contrôlé par l'agent RAG
+        if not proof or not any(quote_found(proof, t) for t in cited):
+            where = ", ".join(refs)
+            issues.append(Issue(agent=AgentName.VERIFIER, kind="non_soutenu",
+                                detail=f"[{where}] preuve introuvable dans le paragraphe cité pour « {phrase}… »"))
+    return issues
 
 
 @dataclass
@@ -88,7 +127,11 @@ def judge(question: str, answer: str, extracts: str, client: LLMClient,
         return VerifierResult(verdict=verdict, error=str(exc)[:300],
                               latency_ms=round((time.perf_counter() - t0) * 1000, 1))
     analysis = data.get("analyse") if isinstance(data.get("analyse"), list) else []
-    return VerifierResult(verdict=to_verdict(data), analysis=analysis,
+    verdict = to_verdict(data)
+    extra = evidence_issues(analysis, paragraph_texts(extracts))
+    if extra:
+        verdict = Verdict(status=VerdictStatus.FIX, issues=[*verdict.issues, *extra])
+    return VerifierResult(verdict=verdict, analysis=analysis,
                           latency_ms=round((time.perf_counter() - t0) * 1000, 1))
 
 

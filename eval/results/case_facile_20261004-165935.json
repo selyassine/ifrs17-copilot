@@ -1,0 +1,38 @@
+{
+ "date": "20261004-165935",
+ "agregats": {
+  "dossiers": 1,
+  "statuts": {
+   "note_prete": 1,
+   "validation_humaine": 0,
+   "document_illisible": 0
+  },
+  "csm_de_la_note_juste": "1/1",
+  "syntheses_verifiees_du_llm": "1/1",
+  "reponses_norme_validees": "2/2",
+  "duree_mediane_s": 73.7,
+  "appels_llm_par_dossier": 8.0,
+  "tokens_entree_par_dossier": 14507
+ },
+ "dossiers": [
+  {
+   "id": "ext01",
+   "case_id": "case-20261004-165935-ext01",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "chercheur_rag+verificateur:ok",
+    "redacteur:ok"
+   ],
+   "secondes": 73.7
+  }
+ ]
+}

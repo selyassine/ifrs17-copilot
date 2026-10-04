@@ -1,0 +1,188 @@
+{
+ "date": "20261004-162942",
+ "modele": "whisper-large-v3-turbo",
+ "agregats": {
+  "avec_vocabulaire": {
+   "enregistrements": 8,
+   "wer_moyen": 0.009,
+   "termes_tous_reconnus": "8/8",
+   "routage_correct": "5/8"
+  },
+  "sans_vocabulaire": {
+   "enregistrements": 8,
+   "wer_moyen": 0.048,
+   "termes_tous_reconnus": "6/8",
+   "routage_correct": "5/8"
+  }
+ },
+ "cas": [
+  {
+   "id": "v01",
+   "fichier": "v01.m4a",
+   "texte": "Comment la CSM est-elle libérée en résultat à l'aide des unités de couverture ?",
+   "avec_vocabulaire": {
+    "transcription": "Comment la CSM est-elle libérée en résultat à l'aide des unités de couverture ?",
+    "wer": 0.0,
+    "termes": "2/2",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.04
+   },
+   "sans_vocabulaire": {
+    "transcription": "Comment la CSM est-elle libérée en résultat à l'aide des unités de couverture ?",
+    "wer": 0.0,
+    "termes": "2/2",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.04
+   }
+  },
+  {
+   "id": "v02",
+   "fichier": "v02.m4a",
+   "texte": "À quelles conditions peut-on utiliser la méthode d'affectation des primes ?",
+   "avec_vocabulaire": {
+    "transcription": "A quelles conditions peut-on utiliser la méthode d'affectation des primes ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.4879999999999995
+   },
+   "sans_vocabulaire": {
+    "transcription": "A quelles conditions peut-on utiliser la méthode d'affectation des primes ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.4879999999999995
+   }
+  },
+  {
+   "id": "v03",
+   "fichier": "v03.m4a",
+   "texte": "Que représente l'ajustement au titre du risque non financier ?",
+   "avec_vocabulaire": {
+    "transcription": "Que représente l'ajustement au titre du risque non financier ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.248000256
+   },
+   "sans_vocabulaire": {
+    "transcription": "Que représente l'ajustement au titre du risque non financier ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.248000256
+   }
+  },
+  {
+   "id": "v04",
+   "fichier": "v04.m4a",
+   "texte": "Quand un contrat est-il déficitaire dès la comptabilisation initiale ?",
+   "avec_vocabulaire": {
+    "transcription": "Quand un contrat est-il déficitaire dès la comptabilisation initiale ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.608
+   },
+   "sans_vocabulaire": {
+    "transcription": "Quand un contrat est-il déficitaire dès la comptabilisation initiale ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": false,
+    "duree_s": 4.608
+   }
+  },
+  {
+   "id": "v05",
+   "fichier": "v05.m4a",
+   "texte": "Que dit le paragraphe B119 sur la répartition de la marge sur services contractuels ?",
+   "avec_vocabulaire": {
+    "transcription": "Que dit le paragraphe B119 sur la répartition de la marge sur services contractuels ?",
+    "wer": 0.0,
+    "termes": "2/2",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.664
+   },
+   "sans_vocabulaire": {
+    "transcription": "Que dit le paragraphe B119 sur la répartition de la marge sur service contractuel ?",
+    "wer": 0.143,
+    "termes": "1/2",
+    "termes_ok": false,
+    "routage_ok": true,
+    "duree_s": 5.664
+   }
+  },
+  {
+   "id": "v06",
+   "fichier": "v06.m4a",
+   "texte": "Quels taux d'actualisation faut-il utiliser pour l'intérêt capitalisé sur la CSM ?",
+   "avec_vocabulaire": {
+    "transcription": "Quel taux d'actualisation faut-il utiliser pour l'intérêt capitalisé sur la CSM ?",
+    "wer": 0.071,
+    "termes": "2/2",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.4
+   },
+   "sans_vocabulaire": {
+    "transcription": "Quel taux d'actualisation faut-il utiliser pour l'intérêt capitalisé sur la CSM ?",
+    "wer": 0.071,
+    "termes": "2/2",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.4
+   }
+  },
+  {
+   "id": "v07",
+   "fichier": "v07.m4a",
+   "texte": "Comment comptabiliser la réassurance détenue quand les contrats sous-jacents sont onéreux ?",
+   "avec_vocabulaire": {
+    "transcription": "Comment comptabiliser la réassurance détenue quand les contrats sous-jacents sont onéreux ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 5.16
+   },
+   "sans_vocabulaire": {
+    "transcription": "Comment comptabiliser la réassurance des tenues quand les contrats sous-jacents sont onéreux ?",
+    "wer": 0.167,
+    "termes": "0/1",
+    "termes_ok": false,
+    "routage_ok": true,
+    "duree_s": 5.16
+   }
+  },
+  {
+   "id": "v08",
+   "fichier": "v08.m4a",
+   "texte": "Quelle est la date d'entrée en vigueur d'IFRS 17 ?",
+   "avec_vocabulaire": {
+    "transcription": "Quelle est la date d'entrée en vigueur d'IFRS 17 ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 3.768
+   },
+   "sans_vocabulaire": {
+    "transcription": "Quelle est la date d'entrée en vigueur d'IFRS 17 ?",
+    "wer": 0.0,
+    "termes": "1/1",
+    "termes_ok": true,
+    "routage_ok": true,
+    "duree_s": 3.768
+   }
+  }
+ ]
+}

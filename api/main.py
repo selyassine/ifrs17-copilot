@@ -17,6 +17,7 @@ from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadF
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from agents.orchestrator import UnreadableDocument, extract_document, run_case
 from agents.pipeline import ask as run_ask
 from agents.router import route_heuristic, route_llm
 from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData, Verdict
@@ -24,9 +25,9 @@ from core.config import Settings, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import traced
 from engine.csm import compute_csm
-from multimodal.documents import pdf_text
-from multimodal.extract import ExtractionResult, extract_from_images, extract_from_text
-from multimodal.vision import detect_mime, normalize_image, pdf_page_images, vision_client
+from multimodal.extract import ExtractionResult
+from multimodal.speech import audio_type, transcribe
+from multimodal.vision import detect_mime, vision_client
 from rag.service import IndexMissing, get_retriever
 
 VERSION = "0.4.0"
@@ -228,26 +229,12 @@ def make_vision_client(settings: Settings) -> LLMClient:
 
 
 def _run_extraction(data: bytes, mime: str, case_id: str, settings: Settings) -> ExtractionResult:
-    """PDF à couche texte → mode texte (ou hybride selon EXTRACT_PDF_MODE) ;
-    PDF scanné ou image → mode vision."""
-    if mime == "application/pdf":
-        try:
-            doc = pdf_text(data)
-        except Exception as exc:   # PDF corrompu ou chiffré : refus clair plutôt qu'une erreur 500
-            raise HTTPException(status_code=422, detail=f"PDF illisible : {exc}"[:300]) from exc
-        has_text = len(doc.table_numbers) + len(doc.text_numbers) >= 3
-        if has_text and settings.extract_pdf_mode != "hybride":
-            return extract_from_text(doc, make_client(settings), case_id=case_id)
-        images = pdf_page_images(data, max_pages=2)
-        return extract_from_images(images, make_vision_client(settings),
-                                   doc=doc if has_text else None, case_id=case_id,
-                                   double_read=settings.vision_double_read)
+    """PDF à couche texte → mode texte (ou hybride selon EXTRACT_PDF_MODE) ; scan ou image → vision."""
     try:
-        image = normalize_image(data)
-    except Exception as exc:
-        raise HTTPException(status_code=422, detail=f"image illisible : {exc}"[:300]) from exc
-    return extract_from_images([image], make_vision_client(settings), case_id=case_id,
-                               double_read=settings.vision_double_read)
+        return extract_document(data, mime, settings, lambda: make_client(settings),
+                                lambda: make_vision_client(settings), case_id)
+    except UnreadableDocument as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 def _extract(file: UploadFile, case_id: str, settings: Settings) -> ExtractResponse:
@@ -281,3 +268,119 @@ def case_document(file: UploadFile = File(...), case_id: str | None = Form(defau
         return CaseDocumentResponse(**ext.model_dump(), next_step="calcul_fait", csm=csm)
     step = "validation_humaine" if ext.status == "a_verifier" else "document_illisible"
     return CaseDocumentResponse(**ext.model_dump(), next_step=step)
+
+
+# --------------------------------------------------------------------------- #
+# Question vocale (S3) : audio → Whisper → même chaîne que /v1/ask
+# --------------------------------------------------------------------------- #
+class AskAudioResponse(AskResponse):
+    transcription: str
+    audio_duration_s: float = 0.0
+
+
+def speech_fake() -> None:
+    """Point d'injection des tests (transcription scriptée) ; None en usage réel."""
+    return None
+
+
+@app.post("/v1/ask/audio", response_model=AskAudioResponse, dependencies=[Depends(check_token)])
+def ask_audio(file: UploadFile = File(...), case_id: str | None = Form(default=None),
+              settings: Settings = Depends(get_settings)) -> AskAudioResponse:
+    name = file.filename or "question.m4a"
+    if audio_type(name) is None:
+        raise HTTPException(status_code=415, detail="audio non pris en charge : mp3, wav, m4a, ogg, webm, flac")
+    data = file.file.read()
+    try:
+        tr = transcribe(data, name, settings, fake=speech_fake())
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"transcription impossible : {exc}"[:500]) from exc
+    if len(tr.text) < 2:
+        raise HTTPException(status_code=422, detail="aucune parole reconnue dans l'audio")
+    res = ask(AskRequest(question=tr.text[:2000], case_id=case_id), settings)
+    return AskAudioResponse(**res.model_dump(), transcription=tr.text, audio_duration_s=tr.duration_s)
+
+
+# --------------------------------------------------------------------------- #
+# Dossier complet (S4) : document → extracteur → calculateur → RAG + vérificateur → rédacteur
+# --------------------------------------------------------------------------- #
+class CaseStep(BaseModel):
+    agent: str
+    status: str
+    detail: str
+    ms: float
+
+
+class NormItem(BaseModel):
+    question: str
+    answer: GroundedAnswer
+    verdict: str
+
+
+class CaseResponse(BaseModel):
+    case_id: str
+    status: str = Field(description="note_prete | validation_humaine | document_illisible")
+    steps: list[CaseStep]
+    extraction_status: str | None = None
+    portfolio: PortfolioData | None = None
+    csm: CsmResult | None = None
+    norm: list[NormItem] = []
+    controls: list[str] = []
+    warnings: list[str] = []
+    note_markdown: str | None = None
+    note_html: str | None = None
+
+
+def _case_response(out) -> CaseResponse:
+    ext = out.extraction
+    return CaseResponse(
+        case_id=out.case_id, status=out.status,
+        steps=[CaseStep(**s.__dict__) for s in out.steps],
+        extraction_status=ext.status if ext else None,
+        portfolio=ext.portfolio if ext else None, csm=out.csm,
+        norm=[NormItem(question=n.question, answer=n.answer, verdict=n.verdict) for n in out.norm],
+        controls=out.controls, warnings=out.warnings,
+        note_markdown=out.note.markdown if out.note else None,
+        note_html=out.note.html if out.note else None)
+
+
+def _retriever_loader(settings: Settings):
+    model = settings.rag_embed_model if settings.rag_mode in ("dense", "hybrid") else ""
+    try:
+        get_retriever(settings.rag_strategy, model)       # vérifie que l'index existe
+    except IndexMissing:
+        return None
+    return lambda: get_retriever(settings.rag_strategy, model)
+
+
+@app.post("/v1/case", response_model=CaseResponse, dependencies=[Depends(check_token)])
+def case(file: UploadFile = File(...), case_id: str | None = Form(default=None),
+         settings: Settings = Depends(get_settings)) -> CaseResponse:
+    """Dossier complet à partir d'un document (PDF, PNG, JPEG). Toujours une réponse exploitable
+    par n8n : ``status`` dit si la note peut partir ou doit être validée par un humain."""
+    data, mime = _read_upload(file)
+    cid = case_id or uuid.uuid4().hex[:12]
+    try:
+        out = run_case(data, mime, settings, lambda: make_client(settings),
+                       lambda: make_vision_client(settings), _retriever_loader(settings), cid)
+    except UnreadableDocument as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
+    return _case_response(out)
+
+
+class CaseFromDataRequest(BaseModel):
+    portfolio: PortfolioData
+    case_id: str | None = None
+
+
+@app.post("/v1/case/validated", response_model=CaseResponse, dependencies=[Depends(check_token)])
+def case_validated(body: CaseFromDataRequest, settings: Settings = Depends(get_settings)) -> CaseResponse:
+    """Suite de la validation humaine dans n8n : données corrigées → calcul → norme → note."""
+    cid = body.case_id or uuid.uuid4().hex[:12]
+    try:
+        out = run_case(b"", "", settings, lambda: make_client(settings), lambda: make_vision_client(settings),
+                       _retriever_loader(settings), cid, portfolio=body.portfolio)
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
+    return _case_response(out)

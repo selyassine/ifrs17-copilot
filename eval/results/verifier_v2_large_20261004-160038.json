@@ -1,0 +1,618 @@
+{
+ "date": "20261004-160038",
+ "model": "openai/gpt-oss-120b",
+ "prompt_version": 2,
+ "agregats": {
+  "reponses_jugees": 48,
+  "erreurs_detectees": "5/7",
+  "fausses_alertes": "6/41",
+  "dont_reponses_incompletes": 2,
+  "precision_du_rejet": 0.455,
+  "kappa": 0.459,
+  "tokens_entree": 98781,
+  "tokens_sortie": 29051
+ },
+ "jugements": [
+  {
+   "id": "q01",
+   "case_id": "verif-20261004-160038-q01",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 1533.8,
+   "error": ""
+  },
+  {
+   "id": "q02",
+   "case_id": "verif-20261004-160038-q02",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "§65 (réassurance détenue) présenté comme la règle générale ; §32 non trouvé",
+   "verdict": "a_corriger",
+   "issues": [
+    "hors_portee : [65] La réponse utilise un extrait qui ne s'applique qu'aux contrats de réassurance détenus, alors que la question porte sur l'évaluation d'un groupe de contrats d'assurance général."
+   ],
+   "outcome": "erreur détectée",
+   "latency_ms": 1725.2,
+   "error": ""
+  },
+  {
+   "id": "q03",
+   "case_id": "verif-20261004-160038-q03",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "B70 (groupes qui influencent d'autres groupes) présenté comme règle générale",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "erreur manquée",
+   "latency_ms": 1627.9,
+   "error": ""
+  },
+  {
+   "id": "q04",
+   "case_id": "verif-20261004-160038-q04",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 2648.5,
+   "error": ""
+  },
+  {
+   "id": "q05",
+   "case_id": "verif-20261004-160038-q05",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 6183.0,
+   "error": ""
+  },
+  {
+   "id": "q06",
+   "case_id": "verif-20261004-160038-q06",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "a_corriger",
+   "issues": [
+    "autre : le juge rejette la réponse sans détailler"
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 7813.2,
+   "error": ""
+  },
+  {
+   "id": "q07",
+   "case_id": "verif-20261004-160038-q07",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 19240.7,
+   "error": ""
+  },
+  {
+   "id": "q08",
+   "case_id": "verif-20261004-160038-q08",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [def:marge sur services contractuels, 43] preuve introuvable dans le paragraphe cité pour « La CSM (marge sur services contractuels) à la fin de la période représente la co… »"
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 10324.0,
+   "error": ""
+  },
+  {
+   "id": "q09",
+   "case_id": "verif-20261004-160038-q09",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : Phrase d’introduction sans citation"
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 9649.9,
+   "error": ""
+  },
+  {
+   "id": "q10",
+   "case_id": "verif-20261004-160038-q10",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 14386.5,
+   "error": ""
+  },
+  {
+   "id": "q11",
+   "case_id": "verif-20261004-160038-q11",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 13932.0,
+   "error": ""
+  },
+  {
+   "id": "q12",
+   "case_id": "verif-20261004-160038-q12",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 9385.2,
+   "error": ""
+  },
+  {
+   "id": "q13",
+   "case_id": "verif-20261004-160038-q13",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 6951.3,
+   "error": ""
+  },
+  {
+   "id": "q14",
+   "case_id": "verif-20261004-160038-q14",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 1808.0,
+   "error": ""
+  },
+  {
+   "id": "q15",
+   "case_id": "verif-20261004-160038-q15",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 4734.9,
+   "error": ""
+  },
+  {
+   "id": "q16",
+   "case_id": "verif-20261004-160038-q16",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 7454.9,
+   "error": ""
+  },
+  {
+   "id": "q17",
+   "case_id": "verif-20261004-160038-q17",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 12226.8,
+   "error": ""
+  },
+  {
+   "id": "q18",
+   "case_id": "verif-20261004-160038-q18",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 12895.2,
+   "error": ""
+  },
+  {
+   "id": "q19",
+   "case_id": "verif-20261004-160038-q19",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 6224.1,
+   "error": ""
+  },
+  {
+   "id": "q20",
+   "case_id": "verif-20261004-160038-q20",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 3912.2,
+   "error": ""
+  },
+  {
+   "id": "q21",
+   "case_id": "verif-20261004-160038-q21",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 6884.1,
+   "error": ""
+  },
+  {
+   "id": "q22",
+   "case_id": "verif-20261004-160038-q22",
+   "humain_fidele": true,
+   "humain_complete": false,
+   "humain_note": "§88 non cité",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 11925.9,
+   "error": ""
+  },
+  {
+   "id": "q23",
+   "case_id": "verif-20261004-160038-q23",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [B19] La phrase attribue au paragraphe B19 l'idée que le risque peut être important même si la probabilité est faible au niveau du portefeuille, alors que cette nuance se trouve au paragraphe B22. Le B19 ne mentionne pas le niveau portefeuille."
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 15860.0,
+   "error": ""
+  },
+  {
+   "id": "q24",
+   "case_id": "verif-20261004-160038-q24",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 12373.1,
+   "error": ""
+  },
+  {
+   "id": "q25",
+   "case_id": "verif-20261004-160038-q25",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "C13 (transition) présenté comme la règle générale des taux",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [44] Affirmation que le paragraphe 44 indique que les mêmes taux sont appliqués aux flux d'exécution et aux variations de la CSM",
+    "hors_portee : [B72] Utilisation de B72(b) pour les variations de la CSM, alors que B72(b) ne couvre que l'intérêt capitalisé"
+   ],
+   "outcome": "erreur détectée",
+   "latency_ms": 22520.1,
+   "error": ""
+  },
+  {
+   "id": "q26",
+   "case_id": "verif-20261004-160038-q26",
+   "humain_fidele": true,
+   "humain_complete": false,
+   "humain_note": "B97(b) et (c) oubliés",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [B97] L'affirmation selon laquelle les variations de l'ajustement au titre du risque non financier (non liées aux services futurs) n'affectent pas la CSM n'est pas soutenue par le paragraphe B97, qui ne liste pas cet élément comme une exclusion directe de la CSM (il est traité dans B96 et B113)."
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 17993.8,
+   "error": ""
+  },
+  {
+   "id": "q27",
+   "case_id": "verif-20261004-160038-q27",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 12081.4,
+   "error": ""
+  },
+  {
+   "id": "q28",
+   "case_id": "verif-20261004-160038-q28",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "contenu de B119 attribué à la définition de la période de couverture et à §44",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [def:période de couverture] première phrase, les unités de couverture ne sont pas définies dans la définition de période de couverture",
+    "hors_portee : [44] troisième phrase cite le mauvais paragraphe, le contenu se trouve dans B119"
+   ],
+   "outcome": "erreur détectée",
+   "latency_ms": 12075.5,
+   "error": ""
+  },
+  {
+   "id": "q29",
+   "case_id": "verif-20261004-160038-q29",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 10008.3,
+   "error": ""
+  },
+  {
+   "id": "q30",
+   "case_id": "verif-20261004-160038-q30",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 6119.1,
+   "error": ""
+  },
+  {
+   "id": "q31",
+   "case_id": "verif-20261004-160038-q31",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 9006.5,
+   "error": ""
+  },
+  {
+   "id": "q32",
+   "case_id": "verif-20261004-160038-q32",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 14937.0,
+   "error": ""
+  },
+  {
+   "id": "q33",
+   "case_id": "verif-20261004-160038-q33",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 14730.8,
+   "error": ""
+  },
+  {
+   "id": "q34",
+   "case_id": "verif-20261004-160038-q34",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 11251.0,
+   "error": ""
+  },
+  {
+   "id": "q35",
+   "case_id": "verif-20261004-160038-q35",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 10429.2,
+   "error": ""
+  },
+  {
+   "id": "q36",
+   "case_id": "verif-20261004-160038-q36",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 10634.4,
+   "error": ""
+  },
+  {
+   "id": "q37",
+   "case_id": "verif-20261004-160038-q37",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 11452.5,
+   "error": ""
+  },
+  {
+   "id": "q38",
+   "case_id": "verif-20261004-160038-q38",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 5746.3,
+   "error": ""
+  },
+  {
+   "id": "q39",
+   "case_id": "verif-20261004-160038-q39",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 8688.3,
+   "error": ""
+  },
+  {
+   "id": "q40",
+   "case_id": "verif-20261004-160038-q40",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 8041.8,
+   "error": ""
+  },
+  {
+   "id": "q41",
+   "case_id": "verif-20261004-160038-q41",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 7675.4,
+   "error": ""
+  },
+  {
+   "id": "q43",
+   "case_id": "verif-20261004-160038-q43",
+   "humain_fidele": true,
+   "humain_complete": false,
+   "humain_note": "art-2 non cité",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 1429.1,
+   "error": ""
+  },
+  {
+   "id": "q44",
+   "case_id": "verif-20261004-160038-q44",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 4275.8,
+   "error": ""
+  },
+  {
+   "id": "q45",
+   "case_id": "verif-20261004-160038-q45",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "flux discrétionnaires attribués à B113",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [B113] la mention des variations discrétionnaires des flux de trésorerie n'est pas supportée par le paragraphe cité"
+   ],
+   "outcome": "erreur détectée",
+   "latency_ms": 10838.4,
+   "error": ""
+  },
+  {
+   "id": "q46",
+   "case_id": "verif-20261004-160038-q46",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "§18 et §19 (classement en groupes) utilisés pour le traitement des contrats onéreux",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "erreur manquée",
+   "latency_ms": 14025.5,
+   "error": ""
+  },
+  {
+   "id": "q48",
+   "case_id": "verif-20261004-160038-q48",
+   "humain_fidele": false,
+   "humain_complete": false,
+   "humain_note": "B113 (participation directe) présenté comme règle générale",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [B113] les variations de l’effet de la valeur temps de l'argent et des risques financiers qui ne résultent pas d’éléments sous‑jacents sont présentées comme n'ajustant pas la CSM alors que B113 indique le contraire",
+    "non_soutenu : [B113] les variations des flux d'exécution qui ne varient pas en fonction des rendements d’éléments sous‑jacents sont présentées comme n'ajustant pas la CSM alors que B113 indique qu'elles le font, sauf si B115 s'applique"
+   ],
+   "outcome": "erreur détectée",
+   "latency_ms": 18130.3,
+   "error": ""
+  },
+  {
+   "id": "q49",
+   "case_id": "verif-20261004-160038-q49",
+   "humain_fidele": true,
+   "humain_complete": true,
+   "humain_note": "",
+   "verdict": "ok",
+   "issues": [],
+   "outcome": "juste acceptée",
+   "latency_ms": 15623.8,
+   "error": ""
+  },
+  {
+   "id": "q50",
+   "case_id": "verif-20261004-160038-q50",
+   "humain_fidele": true,
+   "humain_complete": false,
+   "humain_note": "§22 oublié",
+   "verdict": "a_corriger",
+   "issues": [
+    "non_soutenu : [E3] Phrase sur la détermination du nombre de groupes à partir des paragraphes 14 à 23"
+   ],
+   "outcome": "fausse alerte",
+   "latency_ms": 18199.8,
+   "error": ""
+  }
+ ]
+}

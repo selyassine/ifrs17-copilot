@@ -58,5 +58,5 @@ changes: "Version initiale : jugement phrase par phrase (soutien + portée) avan
 eval:
   test_set: eval/rag_human_labels.jsonl
   metric: accord avec la relecture humaine (erreurs détectées, fausses alertes)
-  scores: {}
-  notes: "À mesurer : python -m eval.eval_verifier"
+  scores: {v1_erreurs_detectees: 0.429, v1_fausses_alertes: 0.073, v1_kappa: 0.378}
+  notes: "04/10/2026, gpt-oss-120b, 48 réponses relues : 3/7 erreurs détectées (q02, q25, q48), manquées q03, q28, q45, q46 ; 3/41 fausses alertes (q23, q26, q36) ; 93 000 tokens d'entrée"

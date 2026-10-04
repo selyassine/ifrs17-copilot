@@ -96,3 +96,24 @@ def test_kappa_et_extraits_reconstitues():
                   text="Pour la réassurance détenue, la CSM est égale à la somme…", page_start=1, page_end=1)]
     text = rebuild_extracts(["65", "inconnu"], chunk_structural(units, min_tokens=1))
     assert text.startswith("[E1] Paragraphe(s) §65") and "Contrats de réassurance détenus" in text
+
+
+def test_juge_ancre_preuve_dans_le_mauvais_paragraphe():
+    """v2 : contenu juste mais cité sous le mauvais paragraphe → « non soutenu » (q28, q45, q46)."""
+    from agents.verifier import evidence_issues, paragraph_texts
+
+    extracts = ("[E1] Paragraphe(s) §44 — IFRS 17 > Évaluation ultérieure\n"
+                "La valeur comptable de la marge est ajustée de l'intérêt capitalisé.\n\n"
+                "[E2] Paragraphe(s) B119 — IFRS 17, annexe B\n"
+                "L'entité répartit la marge entre les unités de couverture fournies.")
+    texts = paragraph_texts(extracts)
+    assert set(texts) == {"44", "B119"}
+    good = [{"phrase": "La marge est répartie…", "paragraphes": ["B119"],
+             "preuve": "répartit la marge entre les unités de couverture", "soutenue": True}]
+    wrong = [{"phrase": "La marge est répartie…", "paragraphes": ["§44"],
+              "preuve": "répartit la marge entre les unités de couverture", "soutenue": True}]
+    assert evidence_issues(good, texts) == []
+    issues = evidence_issues(wrong, texts)
+    assert issues and issues[0].kind == "non_soutenu" and "[44]" in issues[0].detail
+    # v1 (pas de champ « preuve ») : aucun contrôle supplémentaire
+    assert evidence_issues([{"phrase": "x", "paragraphes": ["44"], "soutenue": True}], texts) == []
