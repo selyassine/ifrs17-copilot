@@ -22,12 +22,12 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Extracteur multimodal : PDF texte (Groq), image ou scan (Gemini), hybride ; contrôle d'ancrage ; `POST /v1/extract`, `POST /v1/case/document` | 15/15 documents justes dans les 3 modes ; jeu de 10 pièges : 0 cas dangereux (double lecture des scans) |
 | Vérificateur (LLM-juge : soutien et portée de chaque phrase) + boucle de correction bornée → validation humaine ; `verdict` dans `/v1/ask` | juge ancré (v2) : 5/7 erreurs détectées, 6/41 fausses alertes, kappa 0,46 (v1 : 3/7, 3/41, 0,38) |
 | Question vocale : Whisper (Groq) avec vocabulaire IFRS 17 → même chaîne que `/v1/ask` ; `POST /v1/ask/audio` | 8 enregistrements : WER 0,9 % avec vocabulaire IFRS 17 (4,8 % sans), termes reconnus 8/8 (6/8 sans) |
-| **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; workflows n8n 03 et 04 | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) |
+| **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; workflows n8n 03 et 04 | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) ; workflow 05 : note et validation humaine par e-mail, formulaire pré-rempli (`workflows/README.md`) |
 | **Interface web** (`/app/`) : dossier suivi en direct (flux SSE), données extraites corrigeables puis validées, questions écrites ou vocales à la norme, résultats mesurés | servie par l'API, sans dépendance externe ; 2 tests |
 
 ## Installation (sans Docker)
 
-Prérequis : **Python 3.11 ou 3.12**, **Node.js 20 ou 22 LTS** (pour n8n ; vérifier les versions supportées dans la documentation n8n), Git.
+Prérequis : **Python 3.11 ou 3.12**, **Node.js 24 ou plus** (n8n 2.42, version fixée dans `make.ps1` et `Makefile`, refuse Node 22), Git.
 
 **Linux / macOS**
 

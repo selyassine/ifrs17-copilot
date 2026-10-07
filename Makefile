@@ -8,7 +8,7 @@ BIN := $(VENV)/bin
 help:
 	@echo "setup  : crée .venv, installe les dépendances, copie .env"
 	@echo "serve  : lance l'API sur http://localhost:8000 (docs : /docs)"
-	@echo "n8n    : lance n8n sur http://localhost:5678 (Node.js requis)"
+	@echo "n8n    : lance n8n sur http://localhost:5678 (Node.js 24 ou plus requis)"
 	@echo "test   : lance les tests"
 	@echo "lint   : vérifie le style (ruff)"
 	@echo "eval   : lance les évaluations disponibles"
@@ -27,7 +27,7 @@ serve:
 	$(BIN)/uvicorn api.main:app --reload --port 8000
 
 n8n:
-	N8N_USER_FOLDER=$(CURDIR)/.n8n npx n8n
+	N8N_USER_FOLDER=$(CURDIR)/.n8n npx --yes n8n@2.42.3
 
 test:
 	$(BIN)/pytest

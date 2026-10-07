@@ -16,7 +16,7 @@ switch ($cmd) {
         Write-Host "OK. Activez l'environnement : .\.venv\Scripts\Activate.ps1"
     }
     "serve" { & "$bin\uvicorn.exe" api.main:app --reload --port 8000 }
-    "n8n"   { $env:N8N_USER_FOLDER = "$PWD\.n8n"; npx n8n }
+    "n8n"   { $env:N8N_USER_FOLDER = "$PWD\.n8n"; npx --yes n8n@2.42.3 }
     "test"  { & "$bin\pytest.exe" }
     "lint"  { & "$bin\ruff.exe" check . }
     "fmt"   { & "$bin\ruff.exe" check --fix .; & "$bin\ruff.exe" format . }
