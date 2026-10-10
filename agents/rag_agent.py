@@ -41,6 +41,7 @@ class RagResult:
     latency_ms: float = 0.0
     raw_invalid_refs: list[str] = field(default_factory=list)   # avant nettoyage (pour l'évaluation)
     extracts: str = ""                                          # extraits avec leur chemin (vérificateur)
+    queries: list[str] = field(default_factory=list)            # requêtes de recherche (réécriture, D-045)
 
 
 # --------------------------------------------------------------------------- #
@@ -195,16 +196,53 @@ def build_answer(data: dict, by_id: dict[str, Hit], allowed: list[str],
 # --------------------------------------------------------------------------- #
 # Agent
 # --------------------------------------------------------------------------- #
+def rewrite_queries(question: str, client: LLMClient, case_id: str = "") -> list[str]:
+    """Reformulations de la question dans le vocabulaire du règlement (D-045). Liste vide si le
+    LLM échoue : la recherche se fait alors avec la seule question, comme sans réécriture."""
+    spec = load_prompt("rewrite_query")
+    try:
+        resp = client.chat([{"role": "system", "content": spec.system},
+                            {"role": "user", "content": spec.render(question=question)}],
+                           model=spec.params.model, temperature=spec.params.temperature,
+                           max_tokens=spec.params.max_tokens, json_mode=True,
+                           trace={"agent": "chercheur_rag", "prompt_id": spec.id,
+                                  "prompt_version": spec.version, "case_id": case_id})
+        data = resp.json()
+    except LLMError:
+        return []
+    queries = data.get("requetes") if isinstance(data, dict) else None
+    if not isinstance(queries, list):
+        return []
+    return [q.strip()[:300] for q in queries if isinstance(q, str) and q.strip()][:3]
+
+
+def search_fused(queries: list[str], retriever: Retriever, k: int, mode: str, expand: bool) -> list[Hit]:
+    """Recherche avec plusieurs formulations, classements fusionnés par RRF (k = 60) sur les morceaux."""
+    if len(queries) == 1:
+        return retriever.search(queries[0], k=k, mode=mode, expand=expand)
+    scores: dict[str, float] = {}
+    chunks: dict = {}
+    for q in queries:
+        for rank, h in enumerate(retriever.search(q, k=2 * k, mode=mode, expand=expand), start=1):
+            scores[h.chunk.chunk_id] = scores.get(h.chunk.chunk_id, 0.0) + 1.0 / (60 + rank)
+            chunks[h.chunk.chunk_id] = h.chunk
+    ranked = sorted(scores, key=scores.get, reverse=True)[:k]
+    return [Hit(rank=i, score=scores[cid], chunk=chunks[cid]) for i, cid in enumerate(ranked, start=1)]
+
+
 def answer_question(question: str, retriever: Retriever, client: LLMClient | None = None,
                     k: int = 5, mode: str = "hybrid", expand: bool = True,
                     version: int | None = None, case_id: str = "",
-                    feedback: str = "") -> RagResult:
+                    feedback: str = "", rewrite: bool = False) -> RagResult:
     """``feedback`` : problèmes relevés par le vérificateur sur une première réponse (boucle de
-    correction de l'orchestrateur) ; ils sont ajoutés à la question, rien d'autre ne change."""
+    correction de l'orchestrateur) ; ils sont ajoutés à la question, rien d'autre ne change.
+    ``rewrite`` : la question est d'abord reformulée par le LLM (D-045) ; la question d'origine
+    reste une des requêtes, et c'est elle que le LLM reçoit pour répondre."""
     t0 = time.perf_counter()
     client = client or LLMClient()
     spec = load_prompt("rag_answer", version)
-    hits = retriever.search(question, k=k, mode=mode, expand=expand)
+    queries = [question] + (rewrite_queries(question, client, case_id) if rewrite else [])
+    hits = search_fused(queries, retriever, k=k, mode=mode, expand=expand)
     extracts, by_id, allowed = format_extracts(hits)
     extracts_path, _, _ = format_extracts(hits, with_path=True)
     sources = [{"extrait": eid, "chunk_id": h.chunk.chunk_id, "paragraph_ids": h.chunk.paragraph_ids,
@@ -262,4 +300,4 @@ def answer_question(question: str, retriever: Retriever, client: LLMClient | Non
         answer = GroundedAnswer(answer=None, refused=True, refusal_reason="Réponse du modèle invalide.")
     return RagResult(answer=answer, sources=sources, warnings=warnings, corrections=corrections,
                      latency_ms=round((time.perf_counter() - t0) * 1000, 1),
-                     raw_invalid_refs=raw_invalid, extracts=extracts_path)
+                     raw_invalid_refs=raw_invalid, extracts=extracts_path, queries=queries)

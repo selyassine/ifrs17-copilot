@@ -7,6 +7,7 @@
 | `03_case_document.json` | `POST /webhook/ifrs17/case` (fichier PDF, PNG ou JPEG) | `POST /v1/case` | Dossier complet : extracteur → calculateur → RAG + vérificateur → rédacteur. Note prête → la note HTML (200) ; sinon → réponse « validation humaine » (202) avec les contrôles, les données extraites et la note provisoire |
 | `04_case_validated.json` | `POST /webhook/ifrs17/case/validated` (données JSON corrigées) | `POST /v1/case/validated` | Suite de la validation humaine : données corrigées → calcul → norme → note HTML |
 | `05_case_email.json` | `POST /webhook/ifrs17/case-email` (fichier PDF, PNG ou JPEG) | `POST /v1/case`, puis `POST /v1/case/validated` | Dossier complet **par e-mail**. Note prête → envoyée par e-mail. Sinon → e-mail de la note provisoire, puis e-mail de validation avec un **formulaire pré-rempli** (n8n attend la réponse) ; Approuver → note recalculée et envoyée ; Rejeter → e-mail de rejet |
+| `06_validation_email.json` | `POST /webhook/ifrs17/validation` (dossier déjà analysé, envoyé par l'API) | `POST /v1/case/validated` | Appelé **automatiquement par l'API** quand un dossier analysé sur le site web part en validation humaine : même e-mail et même formulaire que le 05, sans relancer l'analyse |
 
 Chaque workflow a une branche d'erreur : si l'API ne répond pas ou refuse la requête, n8n renvoie un message clair avec le code 502 au lieu de rester bloqué.
 
@@ -58,7 +59,20 @@ Il utilise le nœud **Send Email** (SMTP), opération *Send and Wait for Respons
 4. Ouvrir le nœud **Paramètres** et remplacer `votre.adresse@gmail.com` (deux fois) par votre adresse, et `change-moi` par la valeur d'`API_TOKEN`.
 5. **Ne jamais réexporter le workflow avec votre vraie adresse ou votre jeton** : remettre les valeurs d'exemple avant de committer. Les identifiants SMTP restent dans n8n, ils ne sont pas dans le fichier exporté.
 
-### Lancer un dossier
+### Depuis le site web : e-mail automatique (workflow 06)
+
+Quand un dossier analysé sur le site (`http://127.0.0.1:8000`, page « Analyser un dossier ») part en validation humaine, l'API envoie aussitôt le dossier au workflow 06 : le valideur reçoit la note provisoire et l'e-mail avec le formulaire, sans aucun bouton à cliquer sur le site. La page affiche « E-mail envoyé au valideur » (ou la raison de l'échec). L'analyse n'est pas relancée : n8n reçoit le résultat déjà calculé.
+
+1. Importer `06_validation_email.json`, choisir le credential SMTP dans ses 6 nœuds « E-mail : … », remplir le nœud **Paramètres** comme pour le 05, puis activer le workflow.
+2. Ajouter dans `.env` la ligne suivante, puis relancer l'API (`.\make.ps1 serve`) :
+
+```
+N8N_VALIDATION_URL=http://127.0.0.1:5678/webhook/ifrs17/validation
+```
+
+Sans cette ligne, le site fonctionne comme avant et indique « E-mail non envoyé ». Un dossier dont la note est prête n'envoie pas d'e-mail depuis le site : la note s'affiche directement.
+
+### Lancer un dossier (workflow 05)
 
 Activer le workflow (bouton **Active** ou **Publish** selon la version), puis, dans PowerShell :
 

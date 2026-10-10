@@ -242,3 +242,54 @@ def test_dossier_en_flux(client, monkeypatch, tmp_path):
     assert steps[0]["agent"] == "extracteur" and steps[0]["status"] == "en cours"
     assert {e["agent"] for e in steps} >= {"extracteur", "calculateur", "redacteur"}
     assert events[-1]["data"]["csm"]["group_id"] == "AB-1" and events[-1]["data"]["note_html"]
+
+
+def test_flux_validation_humaine_envoie_l_email_par_n8n(client, monkeypatch, tmp_path):
+    """Dossier du site en validation humaine : l'API transmet le dossier au workflow n8n 06 (D-041)."""
+    import json
+
+    import api.main as main
+
+    _fake_llm(monkeypatch, tmp_path, {**GOOD_EXTRACTION, "premiums": [130.0, 0.0]})
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    sent = []
+    monkeypatch.setattr(main, "notify_validation",
+                        lambda payload, s: sent.append(payload) or {"envoyee": True, "detail": "ok"})
+    r = client.post("/v1/case/stream", headers=AUTH,
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    events = [json.loads(line[6:]) for line in r.text.splitlines() if line.startswith("data: ")]
+    result = events[-1]["data"]
+    assert result["status"] == "validation_humaine" and result["notification"]["envoyee"]
+    assert any(e["type"] == "notification" for e in events)
+    assert sent and sent[0]["case_id"] == result["case_id"] and sent[0]["controls"]
+
+
+def test_notification_sans_url_ne_bloque_pas():
+    from api.main import notify_validation
+
+    out = notify_validation({"case_id": "x"}, Settings(n8n_validation_url=""))
+    assert out["envoyee"] is False and "N8N_VALIDATION_URL" in out["detail"]
+
+
+def test_rollforward_bba_exemple_du_cours(client):
+    """POST /v1/csm/rollforward : l'exemple du cours (p. 32 à 36) passe par l'API."""
+    body = {"group_id": "COURS", "single_premium": 1000000, "expected_claims": [200000] * 4,
+            "actual_claims": [200000, 220000, 220000, 220000], "rates": [0.042, 0.043, 0.044, 0.035, 0.03],
+            "ra_initial": 50000, "ra_changes": [0, 5000, 0, 0], "coverage_units": [100] * 4,
+            "claim_revisions": [{"at_end_of_year": 3, "expected_claims": [200000, 200000, 200000, 220000]}]}
+    r = client.post("/v1/csm/rollforward", json=body, headers=AUTH)
+    assert r.status_code == 200
+    y1 = r.json()["years"][0]
+    assert round(y1["bel_close"]) == 551873 and round(y1["csm_close"]) == 177736
+    bad = client.post("/v1/csm/rollforward", json={**body, "rates": [0.04]}, headers=AUTH)
+    assert bad.status_code == 422
+
+
+def test_paa_position(client):
+    body = {"contract": {"premium": 1000, "coverage_start": "2025-07-01", "coverage_months": 12,
+                         "acquisition_costs": 30, "expense_acquisition_costs": False},
+            "at": ["2025-12-31", "2026-06-30"]}
+    r = client.post("/v1/paa/position", json=body, headers=AUTH)
+    assert r.status_code == 200
+    first, second = r.json()
+    assert first["lrc"] == 485 and second["lrc"] == 0

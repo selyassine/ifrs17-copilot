@@ -105,6 +105,23 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
 - **Leçon :** une citation vérifiable n'est pas forcément une citation juste. La vérification automatique prouve que le texte
   existe, seule la relecture (ou un juge) dit s'il répond à la question.
 
+## F-012 — Le RAG ne généralise pas aux questions d'un enseignant, et la réécriture de requête n'y change rien
+
+- **Date / auteur :** 2026-10-10, R3
+- **Attendu :** sur les 15 questions des quiz d'un cours IFRS 17 (jeu hors échantillon, D-044), un niveau proche du jeu principal.
+- **Obtenu :** recherche hybride BGE-M3 + glossaire : Recall@5 0,267 contre 0,833 sur le jeu principal. Agent RAG : bon paragraphe
+  cité dans 27 % des réponses, 4 faux refus sur 15. Le vérificateur juge pourtant 14 réponses sur 15 « ok » : il contrôle la
+  fidélité aux extraits, pas le choix des extraits.
+- **Cause :** écart de vocabulaire. Le jeu principal a été écrit par l'équipe avec les mots de la norme ; le cours dit « maille »,
+  « option OCI », « tacite reconduction », la norme « niveau d'agrégation », « autres éléments du résultat global », « périmètre du contrat ».
+- **Décision :** réécriture de la question par le petit modèle avant la recherche (D-045), mesurée puis **non retenue** :
+  plafond de la recherche 0,267 → 0,267, bon paragraphe cité 0,273 → 0,300, faux refus 4 → 5, tokens +46 %, latence ×2,2.
+  Les reformulations restent dans le même voisinage sémantique que la question : elles ne font pas apparaître le paragraphe manquant.
+  Prochaine piste : adapter le modèle de vecteurs au domaine (fine-tuning de BGE-M3 sur des paires question–paragraphe), mesuré sur ce quiz.
+- **Mesure avant / après :** voir eval/rag_answer_report_v2_course_quiz.md et eval/rag_answer_report_v2_course_quiz_reecriture.md.
+- **Leçon :** un jeu de test écrit par l'équipe surestime la qualité ; un jeu écrit par quelqu'un d'autre est indispensable.
+  Et un vérificateur de fidélité ne détecte pas un mauvais choix de paragraphe : une réponse fidèle à de mauvais extraits passe.
+
 ## Gabarit
 
 ```

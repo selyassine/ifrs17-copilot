@@ -1,0 +1,353 @@
+{
+  "name": "06 — Validation humaine par e-mail (dossier analysé sur le site)",
+  "nodes": [
+    {
+      "id": "673238be-de87-4add-852d-c1e1c52a0a04",
+      "name": "Webhook (depuis l'API)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/validation",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "webhookId": "12919546-00e9-4f75-9fe5-9e024e0ef457"
+    },
+    {
+      "id": "52a969d6-38e6-41f0-861b-3ee54e63375a",
+      "name": "Paramètres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow (adresse e-mail, API, jeton).\n// Le jeton reste « change-moi » dans le fichier commité ; mettez la valeur d'API_TOKEN dans n8n.\n// Ce workflow est appelé par l'API quand un dossier analysé sur le site part en validation humaine.\nconst parametres = {\n  destinataire: 'votre.adresse@gmail.com',          // qui reçoit les notes et valide les dossiers\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n};\nconst corps = $input.first().json.body;  // le dossier envoyé par l'API (CaseResponse)\nreturn [{ json: { ...corps, parametres } }];\n"
+      }
+    },
+    {
+      "id": "a40b0baa-acae-472e-a0be-3147a75e72dd",
+      "name": "Préparer la validation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Prépare l'e-mail de validation et le formulaire pré-rempli avec les données extraites.\nconst r = $input.first().json;\nconst p = r.portfolio || {};\nconst liste = v => Array.isArray(v) ? v.join(' ; ') : (v ?? '');\nconst unite = { 1: 'unités', 1000: 'milliers', 1000000: 'millions' }[p.unit_multiplier] || '';\nconst controles = (r.controls || []).map(c => '- ' + c).join('\\n') || '- aucun contrôle détaillé';\nconst csm = r.csm\n  ? `${r.csm.onerous ? 'composante de perte' : 'CSM initiale'} provisoire : ${(r.csm.onerous ? r.csm.initial_loss_component : r.csm.initial_csm).toFixed(2)} ${p.currency || ''} (${unite})`\n  : 'CSM non calculée : aucune donnée exploitable';\n\nconst message = [\n  `Dossier ${r.case_id} : un contrôle n'est pas passé, la note ne peut pas partir sans vous.`,\n  '',\n  'Contrôles non passés :',\n  controles,\n  '',\n  csm,\n  '',\n  'La note provisoire vous a été envoyée dans un e-mail séparé.',\n  'Cliquez sur « Vérifier les données » : le formulaire est pré-rempli avec les données extraites.',\n  'Corrigez ce qui est faux, puis choisissez Approuver (la note définitive est recalculée et envoyée) ou Rejeter.',\n  'Listes : une valeur par période, séparées par des points-virgules ; la virgule sert de séparateur décimal.',\n].join('\\n');\n\nconst champ = (fieldLabel, defaultValue, extra = {}) =>\n  ({ fieldLabel, fieldType: 'text', defaultValue: String(defaultValue ?? ''), requiredField: true, ...extra });\nconst formulaire = [\n  { fieldLabel: 'Décision', fieldType: 'dropdown', defaultValue: 'Approuver',\n    fieldOptions: { values: [{ option: 'Approuver' }, { option: 'Rejeter' }] }, requiredField: true },\n  champ('Groupe de contrats', p.group_id),\n  champ('Devise', p.currency || 'EUR'),\n  champ('Unité (1, 1000 ou 1000000)', p.unit_multiplier ?? 1),\n  champ('Primes par période', liste(p.premiums), { fieldType: 'textarea' }),\n  champ('Sorties par période', liste(p.outflows), { fieldType: 'textarea' }),\n  champ('Unités de couverture par période', liste(p.coverage_units), { fieldType: 'textarea' }),\n  champ(\"Taux d'actualisation\", liste(p.discount_rates ?? 0)),\n  champ('Ajustement pour risque (0 à 1)', p.risk_adjustment_pct ?? 0),\n  { fieldLabel: 'Commentaire', fieldType: 'textarea', requiredField: false },\n];\n\nreturn [{ json: {\n  case_id: r.case_id,\n  statut: r.status,\n  sujet: `IFRS 17 · dossier ${r.case_id} à valider (${(r.controls || []).length} contrôle(s) non passé(s))`,\n  message,\n  formulaire,\n  portfolio_extrait: p,\n  note_provisoire_html: r.note_html || '<p>Aucune note provisoire : le document est illisible.</p>',\n} }];\n"
+      }
+    },
+    {
+      "id": "8f57c4a0-3015-4989-ac0c-4ca11d53f3eb",
+      "name": "E-mail : note provisoire",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.destinataire }}",
+        "subject": "=IFRS 17 · note provisoire · dossier {{ $json.case_id }} (à valider)",
+        "emailFormat": "html",
+        "html": "={{ $json.note_provisoire_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "d55134e0-3bfb-4f92-a34c-6dc6f859569b"
+    },
+    {
+      "id": "a7039cbb-1ad4-48bc-b145-48469fd8831b",
+      "name": "E-mail : validation humaine",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "operation": "sendAndWait",
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.destinataire }}",
+        "subject": "={{ $('Préparer la validation').first().json.sujet }}",
+        "message": "={{ $('Préparer la validation').first().json.message }}",
+        "responseType": "customForm",
+        "defineForm": "json",
+        "jsonOutput": "={{ $('Préparer la validation').first().json.formulaire }}",
+        "options": {
+          "messageButtonLabel": "Vérifier les données",
+          "responseFormTitle": "Validation du dossier IFRS 17",
+          "responseFormDescription": "Le formulaire est pré-rempli avec les données extraites du document. Corrigez ce qui est faux, puis choisissez une décision.",
+          "responseFormButtonLabel": "Envoyer ma décision",
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "5f7dca7d-b3c3-47bd-a0dd-a87c7219eb9d"
+    },
+    {
+      "id": "cf72ef12-3e24-4eb2-8ce6-2fc925ed9a6b",
+      "name": "Appliquer les corrections",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Lit la réponse du formulaire et reconstruit les données du portefeuille (PortfolioData).\nconst f = $input.first().json.data;\nconst prep = $('Préparer la validation').first().json;\n\nconst nombre = (s, nom) => {\n  const t = String(s ?? '').replace(/\\s/g, '').replace(',', '.');\n  const x = Number(t);\n  if (t === '' || !Number.isFinite(x)) throw new Error(`${nom} : « ${s} » n'est pas un nombre`);\n  return x;\n};\nconst liste = (s, nom) => String(s ?? '').split(';').map(t => t.trim()).filter(t => t !== '')\n  .map(t => nombre(t, nom));\n\nconst decision = f['Décision'];\nconst commentaire = f['Commentaire'] || '';\nif (decision !== 'Approuver') {\n  return [{ json: { case_id: prep.case_id, decision, commentaire } }];\n}\n\nconst taux = liste(f[\"Taux d'actualisation\"], \"Taux d'actualisation\");\nconst portfolio = {\n  group_id: String(f['Groupe de contrats']).trim(),\n  currency: String(f['Devise']).trim().toUpperCase(),\n  unit_multiplier: nombre(f['Unité (1, 1000 ou 1000000)'], 'Unité'),\n  premiums: liste(f['Primes par période'], 'Primes'),\n  outflows: liste(f['Sorties par période'], 'Sorties'),\n  coverage_units: liste(f['Unités de couverture par période'], 'Unités de couverture'),\n  discount_rates: taux.length === 1 ? taux[0] : (taux.length ? taux : 0),\n  risk_adjustment_pct: nombre(f['Ajustement pour risque (0 à 1)'], 'Ajustement pour risque'),\n};\n// ajustements de service futur : repris tels quels s'ils ont toujours le bon nombre de périodes\nconst fsa = (prep.portfolio_extrait || {}).future_service_adjustments;\nif (Array.isArray(fsa) && fsa.length === portfolio.premiums.length) {\n  portfolio.future_service_adjustments = fsa;\n}\nreturn [{ json: { case_id: prep.case_id, decision, commentaire, portfolio } }];\n"
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "e62cbbd7-8573-497e-8afe-50477eef5dd4",
+      "name": "Approuvé ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4b320ad2-86d0-4bcf-8aa5-e777e37d57a3",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "Approuver",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "19da5a0e-d5af-40da-9a7f-d58c8cb6a355",
+      "name": "Appel API /v1/case/validated",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/case/validated",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ portfolio: $json.portfolio, case_id: $json.case_id }) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "b0f38b4d-60e0-4fac-ba80-ecd3e67f117d",
+      "name": "E-mail : note validée",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1780,
+        -200
+      ],
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.destinataire }}",
+        "subject": "=IFRS 17 · note validée{{ $json.status === 'note_prete' ? '' : ' (contrôles de la norme à revoir)' }} · {{ $json.portfolio.group_id }} (dossier {{ $json.case_id }})",
+        "emailFormat": "html",
+        "html": "={{ $json.note_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "11639793-fdbe-48a9-99d6-e70ab4c4ccb2"
+    },
+    {
+      "id": "21987d69-0c85-44c1-866a-2c83e2e98367",
+      "name": "E-mail : dossier rejeté",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        120
+      ],
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.destinataire }}",
+        "subject": "=IFRS 17 · dossier {{ $json.case_id }} rejeté",
+        "emailFormat": "text",
+        "text": "=Le dossier {{ $json.case_id }} a été rejeté lors de la validation humaine.\n\nCommentaire : {{ $json.commentaire || '(aucun)' }}\n\nAucune note n'a été diffusée.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "814c3e1d-f7d0-4952-9a67-e3d8d3dd248d"
+    },
+    {
+      "id": "9253b078-6be0-4d60-b51f-c2c0c33cef91",
+      "name": "E-mail : erreur",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1780,
+        40
+      ],
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.destinataire }}",
+        "subject": "=IFRS 17 · échec du dossier {{ $('Préparer la validation').first().json.case_id }}",
+        "emailFormat": "text",
+        "text": "=Le dossier {{ $('Préparer la validation').first().json.case_id }} n'a pas pu être terminé.\n\nCause : {{ $json.error?.message ?? $json.error ?? JSON.stringify($json) }}\n\nVérifiez les données saisies (nombres, points-virgules entre les périodes) ou l'API, puis relancez le dossier.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "f290a08e-fbf7-489d-850e-3df3795798d5"
+    }
+  ],
+  "connections": {
+    "Webhook (depuis l'API)": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres": {
+      "main": [
+        [
+          {
+            "node": "Préparer la validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer la validation": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note provisoire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : note provisoire": {
+      "main": [
+        [
+          {
+            "node": "E-mail : validation humaine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : validation humaine": {
+      "main": [
+        [
+          {
+            "node": "Appliquer les corrections",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appliquer les corrections": {
+      "main": [
+        [
+          {
+            "node": "Approuvé ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approuvé ?": {
+      "main": [
+        [
+          {
+            "node": "Appel API /v1/case/validated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : dossier rejeté",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API /v1/case/validated": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note validée",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

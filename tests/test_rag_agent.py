@@ -148,3 +148,22 @@ def test_prompt_v2_montre_la_portee(tmp_path):
             assert absent not in prompt
         if version == 2:
             assert "portée" in calls[0][0]["content"]
+
+
+def test_reecriture_de_la_question_avant_la_recherche(tmp_path):
+    """D-045 : le LLM reformule d'abord la question ; la recherche fusionne les formulations (RRF)."""
+    respond, calls = scripted({"requetes": ["marge sur services contractuels unités de couverture"]}, GOOD)
+    res = answer_question("Quand est-ce que le profit futur passe en résultat ?", retriever(),
+                          client(tmp_path, respond), k=3, mode="bm25", rewrite=True)
+    assert "tu la reformules" in calls[0][0]["content"]
+    assert res.queries == ["Quand est-ce que le profit futur passe en résultat ?",
+                           "marge sur services contractuels unités de couverture"]
+    assert any("B119" in s["paragraph_ids"] for s in res.sources)
+    assert "Quand est-ce que le profit futur" in calls[1][1]["content"]   # la réponse porte sur la vraie question
+
+
+def test_reecriture_illisible_recherche_avec_la_question_seule(tmp_path):
+    respond, _ = scripted({"autre": "chose"}, GOOD)
+    res = answer_question("Comment la CSM est-elle libérée ?", retriever(), client(tmp_path, respond),
+                          k=3, mode="bm25", rewrite=True)
+    assert res.queries == ["Comment la CSM est-elle libérée ?"] and not res.answer.refused

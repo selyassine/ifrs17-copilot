@@ -191,7 +191,8 @@ def main() -> None:
     retriever = get_retriever(settings.rag_strategy, model)
     client = LLMClient(settings)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    print(f"Prompt rag_answer v{settings.rag_prompt_version} (RAG_PROMPT_VERSION dans .env)")
+    print(f"Prompt rag_answer v{settings.rag_prompt_version} (RAG_PROMPT_VERSION dans .env), "
+          f"réécriture de la question : {'oui' if settings.rag_rewrite else 'non'} (RAG_REWRITE)")
     for i, q in enumerate(questions, 1):
         case_id = f"eval-{stamp}-{q['id']}"
         try:
@@ -229,7 +230,9 @@ def main() -> None:
                    ensure_ascii=False, indent=1), encoding="utf-8")
     (out_dir / f"rag_answers_{stamp}.md").write_text(render_answers(rows), encoding="utf-8")
     v = settings.rag_prompt_version
-    report = HERE / ("rag_answer_report.md" if v == 1 else f"rag_answer_report_v{v}.md")
+    suffix = "" if args.questions.name == "rag_questions.jsonl" else f"_{args.questions.stem}"
+    suffix += "_reecriture" if settings.rag_rewrite else ""
+    report = HERE / ((f"rag_answer_report{suffix}.md") if v == 1 else f"rag_answer_report_v{v}{suffix}.md")
     report.write_text(render_report(stamp, settings, agg, rows), encoding="utf-8")
 
     print("\n== Résultats")

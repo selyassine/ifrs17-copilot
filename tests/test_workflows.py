@@ -41,3 +41,13 @@ def test_validation_par_email_formulaire_pre_rempli():
     for label in re.findall(r"f\[['\"]([^'\"]+)['\"]\]", lire):
         assert label in prep, label
     assert "votre.adresse@gmail.com" in by_name["Paramètres"]["parameters"]["jsCode"]
+
+
+def test_validation_depuis_le_site_workflow_06():
+    wf = json.loads((WORKFLOWS[0].parent / "06_validation_email.json").read_text(encoding="utf-8"))
+    by_name = {n["name"]: n for n in wf["nodes"]}
+    hook = by_name["Webhook (depuis l'API)"]["parameters"]
+    # l'API ne doit pas attendre la réponse du valideur : n8n répond dès réception
+    assert hook["path"] == "ifrs17/validation" and hook["responseMode"] == "onReceived"
+    assert by_name["E-mail : validation humaine"]["parameters"]["operation"] == "sendAndWait"
+    assert "json.body" in by_name["Paramètres"]["parameters"]["jsCode"]

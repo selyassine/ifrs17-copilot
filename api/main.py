@@ -16,6 +16,7 @@ import queue
 import re
 import threading
 import uuid
+from datetime import date
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
@@ -30,13 +31,15 @@ from agents.schemas import CsmResult, GroundedAnswer, Plan, PortfolioData, Verdi
 from core.config import ROOT, Settings, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import traced
+from engine.bba import BbaResult, BbaScenario, roll_forward_bba
 from engine.csm import compute_csm
+from engine.paa import PaaContract, PaaPosition, position
 from multimodal.extract import ExtractionResult
 from multimodal.speech import audio_type, transcribe
 from multimodal.vision import detect_mime, vision_client
 from rag.service import IndexMissing, get_retriever
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 class UTF8JSONResponse(JSONResponse):
@@ -103,6 +106,28 @@ def csm_compute(portfolio: PortfolioData,
     with traced(settings.trace_path, kind="tool", agent="calculateur",
                 tool="compute_csm", group_id=portfolio.group_id):
         return compute_csm(portfolio)
+
+
+@app.post("/v1/csm/rollforward", response_model=BbaResult, dependencies=[Depends(check_token)])
+def csm_rollforward(scenario: BbaScenario, settings: Settings = Depends(get_settings)) -> BbaResult:
+    """Modèle général sur plusieurs années (D-042) : BEL au taux courant, OCI, RA, écarts
+    d'expérience, révisions, composante de perte et compte de résultat IFRS 17."""
+    with traced(settings.trace_path, kind="tool", agent="calculateur",
+                tool="roll_forward_bba", group_id=scenario.group_id):
+        return roll_forward_bba(scenario)
+
+
+class PaaRequest(BaseModel):
+    contract: PaaContract
+    at: list[date] = Field(min_length=1, max_length=24, description="Dates de clôture à évaluer")
+
+
+@app.post("/v1/paa/position", response_model=list[PaaPosition], dependencies=[Depends(check_token)])
+def paa_position(body: PaaRequest, settings: Settings = Depends(get_settings)) -> list[PaaPosition]:
+    """Méthode d'affectation des primes (D-043) : LRC, LIC et résultat cumulé à chaque date."""
+    with traced(settings.trace_path, kind="tool", agent="calculateur",
+                tool="paa_position", group_id=body.contract.group_id):
+        return [position(body.contract, d) for d in body.at]
 
 
 class SearchRequest(BaseModel):
@@ -423,7 +448,11 @@ def case_stream(file: UploadFile = File(...), case_id: str | None = Form(default
             out = run_case(data, mime, settings, lambda: make_client(settings),
                            lambda: make_vision_client(settings), _retriever_loader(settings), cid,
                            on_step=lambda i, st: events.put({"type": "step", "index": i, **st.__dict__}))
-            events.put({"type": "result", "data": _case_response(out).model_dump(mode="json")})
+            result = _case_response(out).model_dump(mode="json")
+            if result["status"] == "validation_humaine":
+                events.put({"type": "notification", "status": "en cours"})
+                result["notification"] = notify_validation(result, settings)
+            events.put({"type": "result", "data": result})
         except UnreadableDocument as exc:
             events.put({"type": "error", "detail": str(exc)})
         except LLMError as exc:
@@ -442,6 +471,23 @@ def case_stream(file: UploadFile = File(...), case_id: str | None = Form(default
 
     return StreamingResponse(stream(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+def notify_validation(payload: dict, settings: Settings) -> dict:
+    """Validation humaine demandée sur le site : transmet le dossier au workflow n8n 06, qui envoie
+    la note provisoire et l'e-mail avec le formulaire pré-rempli (D-041). Point d'injection (tests)."""
+    import httpx
+
+    url = settings.n8n_validation_url
+    if not url:
+        return {"envoyee": False, "detail": "e-mail non configuré : N8N_VALIDATION_URL est vide dans .env"}
+    try:
+        r = httpx.post(url, json=payload, timeout=15, trust_env=False)
+        r.raise_for_status()
+    except httpx.HTTPError as exc:
+        return {"envoyee": False,
+                "detail": f"n8n injoignable ou workflow 06 inactif ({type(exc).__name__})"}
+    return {"envoyee": True, "detail": "e-mail de validation envoyé par n8n"}
 
 
 def _sample_cases() -> list[dict]:

@@ -93,7 +93,7 @@ def verified_answer(question: str, settings: Settings, client: LLMClient, retrie
     def run(feedback: str = "") -> RagResult:
         return answer_question(question, retriever, client=client, k=k, mode=settings.rag_mode,
                                expand=settings.rag_glossary, version=settings.rag_prompt_version,
-                               case_id=case_id, feedback=feedback)
+                               case_id=case_id, feedback=feedback, rewrite=settings.rag_rewrite)
 
     rag = run()
     if not settings.verifier_enabled:

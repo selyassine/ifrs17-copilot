@@ -32,7 +32,7 @@ async function api(path, { method = "GET", json, form } = {}) {
 }
 
 /* ------------------------------------------------------------------ navigation */
-const VIEWS = ["accueil", "analyser", "norme", "resultats", "fonctionnement"];
+const VIEWS = ["accueil", "analyser", "norme", "simuler", "resultats", "fonctionnement"];
 function route() {
   const name = (location.hash.replace("#/", "") || "accueil").split("?")[0];
   const view = VIEWS.includes(name) ? name : "accueil";
@@ -233,6 +233,8 @@ $("#intake").addEventListener("submit", async e => {
         const html = stepHTML(ev);
         const rows = $$("li", chain);
         if (rows[ev.index]) rows[ev.index].outerHTML = html; else chain.insertAdjacentHTML("beforeend", html);
+      } else if (ev.type === "notification") {
+        $("#outcome").innerHTML = `<p class="mail">Validation humaine demandée : envoi de l'e-mail au valideur…</p>`;
       } else if (ev.type === "result") {
         showResult(ev.data);
       } else if (ev.type === "error") {
@@ -281,6 +283,7 @@ function showResult(r) {
     box.innerHTML = `<div class="outcome warn"><span class="stamp warn">À valider par un humain</span>
       <h3 style="margin-top:10px">Un contrôle n'est pas passé : la note reste provisoire</h3>
       <ul>${r.controls.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+      ${mailLine(r.notification)}
       <p style="margin-top:10px">Vérifiez les données extraites dans l'onglet « Données extraites », corrigez-les si besoin, puis validez.</p>${figures}</div>`;
   } else {
     box.innerHTML = `<div class="outcome bad"><span class="stamp bad">Document inexploitable</span>
@@ -288,6 +291,14 @@ function showResult(r) {
       <ul>${r.controls.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div>`;
   }
   renderTabs(r);
+}
+
+/* Validation humaine : l'API a transmis le dossier à n8n, qui envoie l'e-mail au valideur (D-041). */
+function mailLine(n) {
+  if (!n) return "";
+  return n.envoyee
+    ? `<p class="mail sent"><b>E-mail envoyé au valideur.</b> Il a reçu la note provisoire et un formulaire pré-rempli : il peut valider depuis sa boîte mail, ou vous pouvez valider ici.</p>`
+    : `<p class="mail"><b>E-mail non envoyé.</b> ${esc(n.detail)}. Vous pouvez valider ici.</p>`;
 }
 
 function renderTabs(r) {
@@ -527,3 +538,107 @@ async function loadMetrics() {
 health();
 route();
 replay();
+
+
+/* ------------------------------------------------------------------ simuler un groupe (D-042, D-043) */
+const numList = (s, pct = false) => String(s || "").split(";").map(x => x.trim()).filter(Boolean)
+  .map(x => { const v = Number(x.replace(/\s/g, "").replace(",", ".")); if (!Number.isFinite(v)) throw new Error(`« ${x} » n'est pas un nombre`); return pct ? v / 100 : v; });
+const numOf = s => numList(s)[0] ?? 0;
+$$("#sim-tabs [data-sim]").forEach(b => b.addEventListener("click", () => {
+  $$("#sim-tabs [data-sim]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  $$("[data-simpanel]").forEach(p => { p.hidden = p.dataset.simpanel !== b.dataset.sim; });
+}));
+
+function bbaExample() {
+  $("#b-premium").value = "1000000"; $("#b-expected").value = "200000 ; 200000 ; 200000 ; 200000";
+  $("#b-actual").value = "200000 ; 220000 ; 220000 ; 220000"; $("#b-rates").value = "4,2 ; 4,3 ; 4,4 ; 3,5 ; 3,0";
+  $("#b-ra").value = "50000"; $("#b-rachg").value = "0 ; 5000 ; 0 ; 0";
+  $("#b-rev").value = "3 : 200000 ; 200000 ; 200000 ; 220000"; $("#b-cu").value = "100 ; 100 ; 100 ; 100"; $("#b-option").value = "OCI";
+}
+$("#b-example").addEventListener("click", bbaExample);
+bbaExample();
+
+const money = v => { const x = Math.abs(v) < 0.5 ? 0 : v; return `<td class="${x < 0 ? "neg" : ""}">${fr(x, 0)}</td>`; };
+$("#bba-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const out = $("#bba-out");
+  try {
+    const rev = $("#b-rev").value.trim();
+    let revisions = [];
+    if (rev) {
+      const [y, list] = rev.split(":");
+      revisions = [{ at_end_of_year: Number(y), expected_claims: numList(list) }];
+    }
+    const body = {
+      group_id: "SIMULATION", single_premium: numOf($("#b-premium").value), expected_claims: numList($("#b-expected").value),
+      actual_claims: $("#b-actual").value.trim() ? numList($("#b-actual").value) : null, rates: numList($("#b-rates").value, true),
+      ra_initial: numOf($("#b-ra").value), ra_changes: $("#b-rachg").value.trim() ? numList($("#b-rachg").value) : null,
+      claim_revisions: revisions, coverage_units: $("#b-cu").value.trim() ? numList($("#b-cu").value) : null, finance_option: $("#b-option").value,
+    };
+    out.innerHTML = `<p class="mail">Calcul en cours…</p>`;
+    const r = await (await api("/v1/csm/rollforward", { method: "POST", json: body })).json();
+    const ys = r.years, head = ys.map(y => `<th>Année ${y.year}</th>`).join("");
+    const line = (label, f) => `<tr><td>${label}</td>${ys.map(y => money(f(y))).join("")}</tr>`;
+    const group = t => `<tr class="group"><td colspan="${ys.length + 1}">${t}</td></tr>`;
+    out.innerHTML = `<div class="simsum">
+        <div><span>BEL à l'origine</span><b>${fr(r.bel_initial, 0)}</b></div>
+        <div><span>${r.loss_initial > 0 ? "Perte à l'origine" : "CSM à l'origine"}</span><b>${fr(r.loss_initial > 0 ? r.loss_initial : r.csm_initial, 0)}</b></div>
+        <div><span>Résultat total</span><b>${fr(r.total_profit, 0)}</b></div>
+        <div><span>OCI cumulé</span><b>${fr(r.total_oci, 0)}</b></div></div>
+      <div class="simtable-wrap"><table class="simtable"><thead><tr><th>Montants en unités monétaires</th>${head}</tr></thead><tbody>
+      ${group("Meilleure estimation (BEL)")}
+      <tr><td>Taux d'ouverture → clôture</td>${ys.map(y => `<td>${fr(y.rate_open * 100, 1)} % → ${fr(y.rate_close * 100, 1)} %</td>`).join("")}</tr>
+      ${line("BEL d'ouverture", y => y.bel_open)}${line("Intérêts (taux d'ouverture)", y => y.bel_interest)}${line("Sinistres attendus de l'année", y => y.bel_claims_expected)}
+      ${line("Révision des sinistres futurs", y => y.bel_estimate_change)}${line("Effet du changement de taux", y => y.bel_rate_effect)}
+      <tr class="total"><td>BEL de clôture</td>${ys.map(y => money(y.bel_close)).join("")}</tr>
+      ${group("Ajustement pour risque (RA)")}
+      ${line("RA d'ouverture", y => y.ra_open)}${line("Variation (services futurs)", y => y.ra_future_change)}${line("Libération (unités de couverture)", y => -y.ra_release)}
+      <tr class="total"><td>RA de clôture</td>${ys.map(y => money(y.ra_close)).join("")}</tr>
+      ${group("Marge sur services contractuels (CSM)")}
+      ${line("CSM d'ouverture", y => y.csm_open)}${line("Capitalisation (taux bloqué)", y => y.csm_accretion)}${line("Ajustement (services futurs)", y => y.csm_adjustment)}
+      <tr><td>Part libérée (unités de couverture)</td>${ys.map(y => `<td>${fr(y.coverage_ratio * 100, 0)} %</td>`).join("")}</tr>
+      ${line("Libération en résultat", y => -y.csm_release)}
+      <tr class="total"><td>CSM de clôture</td>${ys.map(y => money(y.csm_close)).join("")}</tr>
+      ${line("Composante de perte (clôture)", y => y.loss_component_close)}
+      ${group("Compte de résultat IFRS 17")}
+      ${line("Produits des activités d'assurance", y => y.insurance_revenue)}${line("Charges des activités d'assurance", y => -y.insurance_service_expenses)}
+      ${line("dont écart d'expérience", y => -y.experience_adjustment)}
+      <tr class="total"><td>Résultat des activités d'assurance</td>${ys.map(y => money(y.insurance_service_result)).join("")}</tr>
+      ${line("Charges financières d'assurance", y => y.insurance_finance_expense)}
+      <tr class="total"><td>Résultat</td>${ys.map(y => money(y.profit)).join("")}</tr>
+      ${line("Autres éléments du résultat global (OCI)", y => y.oci)}
+      </tbody></table></div>`;
+  } catch (err) {
+    out.innerHTML = `<div class="outcome bad"><h3>Calcul impossible</h3><p>${esc(err.message)}</p></div>`;
+  }
+});
+
+function paaExample() {
+  $("#p-premium").value = "1000"; $("#p-start").value = "2025-07-01"; $("#p-months").value = "12"; $("#p-acq").value = "30"; $("#p-option").value = "1";
+  $("#p-occ").value = "2026-05-15"; $("#p-est").value = "750"; $("#p-ra").value = "50"; $("#p-paidon").value = "2026-10-15"; $("#p-paid").value = "900";
+  $("#p-dates").value = "2025-12-31 ; 2026-06-30 ; 2026-12-31";
+}
+$("#p-example").addEventListener("click", paaExample);
+paaExample();
+$("#paa-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const out = $("#paa-out");
+  try {
+    const claims = $("#p-occ").value ? [{ occurred: $("#p-occ").value, estimate: numOf($("#p-est").value), risk_adjustment: numOf($("#p-ra").value),
+      paid_on: $("#p-paidon").value || null, paid_amount: $("#p-paidon").value ? numOf($("#p-paid").value) : null }] : [];
+    const body = { contract: { group_id: "PAA", premium: numOf($("#p-premium").value), coverage_start: $("#p-start").value, coverage_months: Number($("#p-months").value),
+      acquisition_costs: numOf($("#p-acq").value), expense_acquisition_costs: $("#p-option").value === "1", claims },
+      at: $("#p-dates").value.split(";").map(x => x.trim()).filter(Boolean) };
+    const rows = await (await api("/v1/paa/position", { method: "POST", json: body })).json();
+    const line = (label, f) => `<tr><td>${label}</td>${rows.map(p => money(f(p))).join("")}</tr>`;
+    out.innerHTML = `<div class="simtable-wrap"><table class="simtable"><thead><tr><th>Au</th>${rows.map(p => `<th>${esc(p.at)}</th>`).join("")}</tr></thead><tbody>
+      <tr><td>Mois de couverture écoulés</td>${rows.map(p => `<td>${p.months_elapsed}</td>`).join("")}</tr>
+      ${line("Passif pour couverture restante (LRC)", p => p.lrc)}${line("Passif pour sinistres survenus (LIC)", p => p.lic)}
+      <tr class="group"><td colspan="${rows.length + 1}">Résultat cumulé</td></tr>
+      ${line("Produits des activités d'assurance", p => p.revenue_to_date)}${line("Frais d'acquisition en charge", p => -p.acquisition_expense_to_date)}
+      ${line("Sinistres et ajustement pour risque", p => -p.claims_expense_to_date)}
+      <tr class="total"><td>Résultat cumulé</td>${rows.map(p => money(p.result_to_date)).join("")}</tr></tbody></table></div>`;
+  } catch (err) {
+    out.innerHTML = `<div class="outcome bad"><h3>Calcul impossible</h3><p>${esc(err.message)}</p></div>`;
+  }
+});

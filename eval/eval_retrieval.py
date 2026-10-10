@@ -232,8 +232,11 @@ def main() -> None:
                "resultats": results, "comparaisons": comparisons}
     (out_dir / f"retrieval_{stamp}.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1),
                                                      encoding="utf-8")
-    (HERE / "retrieval_report.md").write_text(render_report(payload, questions), encoding="utf-8")
-    print(f"\n→ eval/retrieval_report.md et eval/results/retrieval_{stamp}.json")
+    # un autre jeu de questions (quiz du cours…) n'écrase pas le rapport principal
+    suffix = "" if args.questions.name == "rag_questions.jsonl" else f"_{args.questions.stem}"
+    report = HERE / f"retrieval_report{suffix}.md"
+    report.write_text(render_report(payload, questions), encoding="utf-8")
+    print(f"\n→ eval/{report.name} et eval/results/retrieval_{stamp}.json")
 
 
 def render_report(p: dict, questions: list[dict]) -> str:

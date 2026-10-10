@@ -21,6 +21,7 @@
     <li><a href="#/accueil" data-nav="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Accueil</a></li>
     <li><a href="#/analyser" data-nav="analyser"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z M14 3v4h4 M9 13h6 M9 17h6"/></svg>Analyser un dossier</a></li>
     <li><a href="#/norme" data-nav="norme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-3 0-3 4 0 4h3c3 0 3 4 0 4H9c-3 0-3 4 0 4h3c3 0 3 4 0 4M12 3v18" transform="scale(.9) translate(1.5 1)"/></svg>Interroger la norme</a></li>
+    <li><a href="#/simuler" data-nav="simuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16 M4 15l4-4 4 3 7-8 M15 6h4v4"/></svg>Simuler un groupe</a></li>
     <li><a href="#/resultats" data-nav="resultats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16 M7 20v-6 M12 20V8 M17 20v-9"/></svg>Résultats mesurés</a></li>
     <li><a href="#/fonctionnement" data-nav="fonctionnement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h5v5H5z M14 13h5v5h-5z M10 8.5h3v7h1"/></svg>Fonctionnement</a></li>
   </ul>
@@ -191,6 +192,52 @@
       </button>
       <button class="btn primary" type="submit">Envoyer</button>
     </form>
+  </div>
+</section>
+
+<!-- ============================== SIMULER ============================== -->
+<section data-view="simuler" aria-labelledby="h-simuler" hidden>
+  <header class="page-head">
+    <h1 id="h-simuler">Simuler un groupe dans le temps</h1>
+    <p>Le moteur Python suit un groupe de contrats année après année : BEL au taux courant, ajustement pour risque, CSM, écarts d'expérience, compte de résultat et OCI. L'exemple chargé est celui d'un cours IFRS 17 ; le moteur le retrouve à l'euro près.</p>
+  </header>
+  <div class="tabs" role="tablist" id="sim-tabs">
+    <button role="tab" aria-selected="true" data-sim="bba">Modèle général (BBA)</button>
+    <button role="tab" aria-selected="false" data-sim="paa">Méthode simplifiée (PAA)</button>
+  </div>
+
+  <div data-simpanel="bba">
+    <form class="simform" id="bba-form">
+      <label>Prime unique à l'origine<input type="text" id="b-premium" inputmode="decimal"></label>
+      <label>Sinistres attendus par année<input type="text" id="b-expected"><small>une valeur par année, séparées par « ; »</small></label>
+      <label>Sinistres réels par année<input type="text" id="b-actual"><small>vide = comme attendus</small></label>
+      <label>Taux d'actualisation<input type="text" id="b-rates"><small>origine puis chaque clôture, en %</small></label>
+      <label>Ajustement pour risque à l'origine<input type="text" id="b-ra" inputmode="decimal"></label>
+      <label>Variation du RA (services futurs)<input type="text" id="b-rachg"><small>par année ; vide = aucune</small></label>
+      <label>Révision des sinistres futurs<input type="text" id="b-rev"><small>« 3 : 200000 ; 200000 ; 200000 ; 220000 » = connue à la clôture de l'année 3</small></label>
+      <label>Unités de couverture<input type="text" id="b-cu"><small>par année ; vide = 1 par an</small></label>
+      <label>Effet des taux<select id="b-option"><option value="OCI">en OCI (option §88(b))</option><option value="PL">en résultat</option></select></label>
+      <div class="simactions"><button class="btn" type="button" id="b-example">Charger l'exemple du cours</button><button class="btn primary" type="submit">Calculer</button></div>
+    </form>
+    <div id="bba-out" aria-live="polite"></div>
+  </div>
+
+  <div data-simpanel="paa" hidden>
+    <form class="simform" id="paa-form">
+      <label>Prime<input type="text" id="p-premium" inputmode="decimal"></label>
+      <label>Début de couverture<input type="date" id="p-start"></label>
+      <label>Durée (mois)<input type="text" id="p-months" inputmode="numeric"></label>
+      <label>Frais d'acquisition<input type="text" id="p-acq" inputmode="decimal"></label>
+      <label>Frais d'acquisition<select id="p-option"><option value="1">en charge à leur paiement (§59(a))</option><option value="0">dans la LRC, amortis</option></select></label>
+      <label>Sinistre : date de survenance<input type="date" id="p-occ"></label>
+      <label>Sinistre : provision<input type="text" id="p-est" inputmode="decimal"></label>
+      <label>Sinistre : ajustement pour risque<input type="text" id="p-ra" inputmode="decimal"></label>
+      <label>Règlement : date<input type="date" id="p-paidon"></label>
+      <label>Règlement : montant<input type="text" id="p-paid" inputmode="decimal"></label>
+      <label class="span2">Dates de clôture<input type="text" id="p-dates"><small>AAAA-MM-JJ séparées par « ; »</small></label>
+      <div class="simactions"><button class="btn" type="button" id="p-example">Charger le cas n°1 du cours</button><button class="btn primary" type="submit">Calculer</button></div>
+    </form>
+    <div id="paa-out" aria-live="polite"></div>
   </div>
 </section>
 

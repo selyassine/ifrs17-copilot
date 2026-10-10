@@ -44,6 +44,8 @@ class Settings:
     rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
     # version du prompt rag_answer : v2 mesurée et retenue (D-024) ; 1 pour reproduire la v1
     rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "2")))
+    # réécriture de la question par le LLM avant la recherche (D-045) ; 0 tant que le gain n'est pas mesuré
+    rag_rewrite: bool = field(default_factory=lambda: _env("RAG_REWRITE", "0") == "1")
     # Vérificateur (LLM-juge) après l'agent RAG, et nombre de corrections autorisées (D-033)
     verifier_enabled: bool = field(default_factory=lambda: _env("VERIFIER", "1") == "1")
     verifier_max_rounds: int = field(default_factory=lambda: int(_env("VERIFIER_MAX_ROUNDS", "1")))
@@ -64,6 +66,9 @@ class Settings:
     # lecture d'un PDF à couche texte : « texte » (Groq) ou « hybride » (texte + image, vision)
     extract_pdf_mode: str = field(default_factory=lambda: _env("EXTRACT_PDF_MODE", "texte"))
     api_token: str = field(default_factory=lambda: _env("API_TOKEN"))
+    # validation humaine demandée sur le site : l'API transmet le dossier au workflow n8n 06,
+    # qui envoie l'e-mail avec le formulaire pré-rempli (D-041) ; vide = pas d'e-mail
+    n8n_validation_url: str = field(default_factory=lambda: _env("N8N_VALIDATION_URL"))
     trace_path: Path = field(
         default_factory=lambda: ROOT / _env("TRACE_PATH", "logs/traces.jsonl")
     )

@@ -195,6 +195,8 @@ select, textarea, input[type="password"], input[type="text"] {
 .outcome.warn { background: var(--warn-bg); border-color: var(--warn-line); }
 .outcome.bad { background: var(--bad-bg); border-color: var(--bad); }
 .outcome h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.mail { margin-top: 10px; padding: 8px 12px; border-radius: var(--radius-s); background: var(--paper); border: 1px solid var(--line, #d6dbd3); font-size: 0.95rem; }
+.mail.sent { border-color: var(--ok); }
 .outcome ul { margin: 8px 0 0; padding-left: 18px; font-size: 0.92rem; }
 .figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; margin-top: 16px; border-top: 1px solid rgba(27,42,65,.15); }
 .figures div { padding: 12px 14px 4px 0; }
@@ -319,3 +321,25 @@ dialog::backdrop { background: rgba(27,42,65,.45); }
   * { animation: none !important; transition: none !important; }
   .paper { transform: none; }
 }
+
+/* Simuler un groupe */
+.simform { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px 18px; margin: 22px 0; }
+.simform label { display: grid; gap: 6px; font-size: 0.9rem; color: var(--ink-2); font-weight: 600; }
+.simform small { font-weight: 400; color: var(--ink-3); }
+.simform input[type="date"] { width: 100%; font: inherit; color: inherit; background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 9px 12px; }
+.simform .span2 { grid-column: span 2; }
+.simactions { grid-column: 1 / -1; display: flex; gap: 10px; flex-wrap: wrap; }
+.simtable-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--sheet); }
+.simtable { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 640px; }
+.simtable th, .simtable td { padding: 7px 12px; border-bottom: 1px solid var(--rule-2); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.simtable th:first-child, .simtable td:first-child { text-align: left; position: sticky; left: 0; background: var(--sheet); }
+.simtable thead th { color: var(--ink-3); font-size: var(--s-1); background: #F0F3EF; }
+.simtable tr.group td { font-family: var(--serif); font-weight: 600; background: #F6F8F5; text-align: left; }
+.simtable tr.total td { font-weight: 700; }
+.simtable td.neg { color: var(--bad, #A63D32); }
+.simsum { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 4px 0 16px; }
+.simsum div { display: grid; }
+.simsum span { font-size: var(--s-1); color: var(--ink-3); }
+.simsum b { font-family: var(--serif); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .simform .span2 { grid-column: auto; } }
+.simtable thead th:first-child { background: #F0F3EF; }

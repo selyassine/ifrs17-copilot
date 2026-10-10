@@ -22,7 +22,7 @@ _FILE_RE = re.compile(r"^(?P<id>[a-z0-9_]+)\.v(?P<version>\d+)\.yaml$")
 TECHNIQUES = {
     "zero_shot", "few_shot", "chain_of_thought", "role_prompting", "structured_output",
     "guardrails", "self_consistency", "prompt_chaining", "generated_knowledge",
-    "llm_as_judge", "tool_use", "delimiters",
+    "llm_as_judge", "tool_use", "delimiters", "query_rewriting",
 }
 
 

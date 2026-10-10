@@ -24,6 +24,7 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Question vocale : Whisper (Groq) avec vocabulaire IFRS 17 → même chaîne que `/v1/ask` ; `POST /v1/ask/audio` | 8 enregistrements : WER 0,9 % avec vocabulaire IFRS 17 (4,8 % sans), termes reconnus 8/8 (6/8 sans) |
 | **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; workflows n8n 03 et 04 | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) ; workflow 05 : note et validation humaine par e-mail, formulaire pré-rempli (`workflows/README.md`) |
 | **Interface web** (`/app/`) : dossier suivi en direct (flux SSE), données extraites corrigeables puis validées, questions écrites ou vocales à la norme, résultats mesurés | servie par l'API, sans dépendance externe ; 2 tests |
+| **Moteur complet du cours** : modèle général pluriannuel (`POST /v1/csm/rollforward` : BEL au taux courant, OCI, RA, écarts d'expérience, perte, compte de résultat) et PAA (`POST /v1/paa/position`) | exemples chiffrés d'un cours IFRS 17 retrouvés à l'euro près (tests/test_engine_cours.py) ; quiz du cours = jeu d'évaluation hors échantillon |
 
 ## Installation (sans Docker)
 
@@ -129,6 +130,8 @@ L'adresse racine redirige vers `/app/`. Cinq pages :
 - **Interroger la norme** : question écrite ou dictée au micro (`/v1/ask`, `/v1/ask/audio`) ; chaque citation ouvre le paragraphe cité ; verdict du vérificateur affiché.
 - **Résultats** : les mesures du projet (`api/web/data/metrics.json`).
 - **Fonctionnement** : schéma et rôle de chaque agent.
+
+Si un dossier part en validation humaine, le valideur reçoit automatiquement un e-mail avec la note provisoire et un formulaire pré-rempli (workflow n8n 06, ligne `N8N_VALIDATION_URL` dans `.env`, voir `workflows/README.md`).
 
 Le jeton d'API (`API_TOKEN`, `change-moi` par défaut) se règle dans le bouton **Réglages** ; il reste dans le navigateur. Documents fictifs uniquement : les niveaux gratuits de Groq et Gemini peuvent utiliser les données envoyées.
 
