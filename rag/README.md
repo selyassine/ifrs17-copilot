@@ -42,6 +42,30 @@ Sans GPU, encoder ~520 chunks avec BGE-M3 prend quelques minutes. Sur Colab, clo
 
 Avec BGE-M3, B bat nettement A à volume de texte égal (0,737 contre 0,423). Détail et intervalles de confiance : `eval/retrieval_report.md`.
 
+## Adapter le modèle d'embedding (D-046)
+
+Le quiz du cours montre un écart de vocabulaire que ni le glossaire ni la réécriture ne comblent
+(D-044, D-045). On adapte BGE-M3 par apprentissage contrastif sur des paires (question générée →
+passage), entraîné sur un T4 gratuit :
+
+```powershell
+python -m rag.finetune pairs --limit 20   # essai : 20 passages
+python -m rag.finetune pairs              # tout, reprise automatique (quota Groq : 1 à 2 jours)
+python -m rag.finetune pairs --model large   # l'autre modèle a son propre quota
+python -m rag.finetune export             # filtre de fuite + négatifs → data/finetune/colab_bundle.zip
+# Colab : notebooks/01_finetune_bge_m3.ipynb → models/bge-m3-ifrs17 sur Drive
+python -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17 --questions eval/course_quiz.jsonl
+python -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17
+```
+
+Garde-fous : les questions générées trop proches d'une question de test (Jaccard ≥ 0,5 sur les mots
+normalisés) sont retirées ; celles qui recopient 6 mots du passage aussi ; l'évaluation ne porte que
+sur les deux jeux écrits par des humains. `export --holdout-gold` retire en plus les passages qui
+contiennent une réponse de test : il mesure la généralisation à des paragraphes jamais vus.
+
+Si le modèle est retenu : `python -m rag.build_index --force --dense --model models/bge-m3-ifrs17`,
+puis `RAG_EMBED_MODEL=models/bge-m3-ifrs17` dans `.env`.
+
 ## Ajouter un document
 
 1. Le déclarer dans `data/corpus_manifest.csv` et placer le PDF dans `data/corpus/`.

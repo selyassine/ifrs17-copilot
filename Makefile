@@ -3,7 +3,7 @@ PY ?= python3
 VENV := .venv
 BIN := $(VENV)/bin
 
-.PHONY: help setup serve n8n test lint fmt eval index index-dense clean
+.PHONY: help setup serve n8n test lint fmt eval index index-dense ft-pairs ft-export ft-eval clean
 
 help:
 	@echo "setup  : crée .venv, installe les dépendances, copie .env"
@@ -48,6 +48,18 @@ index:
 index-dense:
 	$(BIN)/pip install -r requirements-rag.txt
 	$(BIN)/python -m rag.build_index --force --dense --model BAAI/bge-m3
+
+# fine-tuning de BGE-M3 (D-046) : paires générées ici, entraînement sur Colab
+ft-pairs:
+	$(BIN)/python -m rag.finetune pairs
+
+ft-export:
+	$(BIN)/python -m rag.finetune export
+	$(BIN)/python -m rag.finetune stats
+
+ft-eval:
+	$(BIN)/python -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17 --questions eval/course_quiz.jsonl
+	$(BIN)/python -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17
 
 clean:
 	rm -rf .pytest_cache .ruff_cache logs

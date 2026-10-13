@@ -133,6 +133,8 @@ class SentenceTransformerEncoder:
         self.name = model_name
         self.batch_size = batch_size
         self.model = SentenceTransformer(model_name, device=device)
+        if self.model.device.type == "cpu":
+            self.model.float()      # modèle adapté enregistré en FP16 (D-046) : FP32 sur CPU
         self.query_prefix = self.QUERY_PROMPTS.get(model_name, "")
 
     def encode(self, texts: list[str], is_query: bool = False) -> np.ndarray:

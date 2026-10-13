@@ -26,7 +26,14 @@ switch ($cmd) {
         & "$bin\pip.exe" install -r requirements-rag.txt
         & "$bin\python.exe" -m rag.build_index --force --dense --model BAAI/bge-m3
     }
+    # fine-tuning de BGE-M3 (D-046) : paires générées ici, entraînement sur Colab
+    "ft-pairs"  { & "$bin\python.exe" -m rag.finetune pairs }
+    "ft-export" { & "$bin\python.exe" -m rag.finetune export; & "$bin\python.exe" -m rag.finetune stats }
+    "ft-eval" {
+        & "$bin\python.exe" -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17 --questions eval/course_quiz.jsonl
+        & "$bin\python.exe" -m eval.eval_retrieval --model BAAI/bge-m3 --model models/bge-m3-ifrs17
+    }
     default {
-        Write-Host "Commandes : setup, serve, n8n, test, lint, fmt, eval, index, index-dense"
+        Write-Host "Commandes : setup, serve, n8n, test, lint, fmt, eval, index, index-dense, ft-pairs, ft-export, ft-eval"
     }
 }

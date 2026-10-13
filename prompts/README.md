@@ -9,7 +9,7 @@ On ne modifie jamais une version existante : on crée `vN+1` et on garde l'ancie
 | --- | --- |
 | `id`, `version`, `agent` | Doivent correspondre au nom du fichier et au dossier (vérifié par les tests) |
 | `role` | Ce que fait le prompt, en une phrase |
-| `techniques` | Parmi : `zero_shot`, `few_shot`, `chain_of_thought`, `role_prompting`, `structured_output`, `guardrails`, `self_consistency`, `prompt_chaining`, `generated_knowledge`, `llm_as_judge`, `tool_use`, `delimiters`, `query_rewriting` |
+| `techniques` | Parmi : `zero_shot`, `few_shot`, `chain_of_thought`, `role_prompting`, `structured_output`, `guardrails`, `self_consistency`, `prompt_chaining`, `generated_knowledge`, `llm_as_judge`, `tool_use`, `delimiters`, `query_rewriting`, `synthetic_data` |
 | `params` | `model` (`small`, `large` ou nom exact), `temperature`, `max_tokens` |
 | `system`, `template` | Le gabarit utilise `$variable` (pas `{variable}`), pour que les exemples JSON puissent contenir des accolades |
 | `output_schema` | Classe Pydantic de `agents/schemas.py` qui valide la sortie |

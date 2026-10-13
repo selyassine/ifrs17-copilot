@@ -22,6 +22,7 @@ eval/results/*.jsonl
 *.bin
 checkpoints/
 adapters/
+models/
 
 # n8n local
 .n8n/
