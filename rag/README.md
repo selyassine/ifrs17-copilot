@@ -42,7 +42,7 @@ Sans GPU, encoder ~520 chunks avec BGE-M3 prend quelques minutes. Sur Colab, clo
 
 Avec BGE-M3, B bat nettement A à volume de texte égal (0,737 contre 0,423). Détail et intervalles de confiance : `eval/retrieval_report.md`.
 
-## Adapter le modèle d'embedding (D-046)
+## Adapter le modèle d'embedding (D-046, mesuré et non retenu : F-013)
 
 Le quiz du cours montre un écart de vocabulaire que ni le glossaire ni la réécriture ne comblent
 (D-044, D-045). On adapte BGE-M3 par apprentissage contrastif sur des paires (question générée →
@@ -65,6 +65,23 @@ contiennent une réponse de test : il mesure la généralisation à des paragrap
 
 Si le modèle est retenu : `python -m rag.build_index --force --dense --model models/bge-m3-ifrs17`,
 puis `RAG_EMBED_MODEL=models/bge-m3-ifrs17` dans `.env`.
+
+## Recherche avancée (D-047 à D-050)
+
+Chaque option se mesure seule, d'abord sur le jeu de mise au point (`rag_questions`), puis une fois sur
+les deux jeux de test (quiz du cours, 30 cas pratiques gelés avant le développement).
+
+```powershell
+pip install -r requirements-agent.txt                      # LangGraph (agent, D-050)
+python -m rag.graph                                        # statistiques du graphe des renvois
+python -m rag.qindex --model BAAI/bge-m3                   # index des questions (D-048)
+python -m eval.eval_retrieval --model BAAI/bge-m3 --graph --questions-index --rerank BAAI/bge-reranker-v2-m3
+python -m eval.eval_retrieval --model BAAI/bge-m3 --graph --questions-index --rerank BAAI/bge-reranker-v2-m3 --questions eval/cas_pratiques.jsonl
+python -m eval.eval_agentic --questions eval/cas_pratiques.jsonl    # agent LangGraph contre recherche en un coup
+```
+
+Options dans `.env` : `RAG_RERANK_MODEL`, `RAG_QUESTIONS`, `RAG_GRAPH`, `RAG_AGENTIC` (toutes désactivées
+par défaut : on n'active que ce qui a été mesuré).
 
 ## Ajouter un document
 

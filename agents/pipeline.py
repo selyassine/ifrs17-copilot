@@ -90,10 +90,16 @@ def verified_answer(question: str, settings: Settings, client: LLMClient, retrie
     plan = plan or Plan(intent=Intent.NORM_QUESTION, steps=[AgentName.RAG, AgentName.VERIFIER],
                         confidence=1.0, rationale="question posée par l'orchestrateur")
 
+    found = None
+    if settings.rag_agentic:                    # D-050 : l'agent LangGraph choisit les passages une fois
+        from agents.agentic_rag import agentic_search
+        found = agentic_search(question, retriever, client, mode=settings.rag_mode, k=k, case_id=case_id)
+
     def run(feedback: str = "") -> RagResult:
         return answer_question(question, retriever, client=client, k=k, mode=settings.rag_mode,
                                expand=settings.rag_glossary, version=settings.rag_prompt_version,
-                               case_id=case_id, feedback=feedback, rewrite=settings.rag_rewrite)
+                               case_id=case_id, feedback=feedback, rewrite=settings.rag_rewrite,
+                               hits=found.hits if found else None, queries=found.queries if found else None)
 
     rag = run()
     if not settings.verifier_enabled:

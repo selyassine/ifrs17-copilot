@@ -46,6 +46,12 @@ class Settings:
     rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "2")))
     # réécriture de la question par le LLM avant la recherche (D-045) ; 0 tant que le gain n'est pas mesuré
     rag_rewrite: bool = field(default_factory=lambda: _env("RAG_REWRITE", "0") == "1")
+    # options de recherche avancées (D-048, D-049), chacune mesurée avant d'être activée
+    rag_rerank_model: str = field(default_factory=lambda: _env("RAG_RERANK_MODEL"))
+    rag_questions: bool = field(default_factory=lambda: _env("RAG_QUESTIONS", "0") == "1")
+    rag_graph: bool = field(default_factory=lambda: _env("RAG_GRAPH", "0") == "1")
+    # agent de recherche LangGraph (planifier → chercher → évaluer → reboucler), D-050
+    rag_agentic: bool = field(default_factory=lambda: _env("RAG_AGENTIC", "0") == "1")
     # Vérificateur (LLM-juge) après l'agent RAG, et nombre de corrections autorisées (D-033)
     verifier_enabled: bool = field(default_factory=lambda: _env("VERIFIER", "1") == "1")
     verifier_max_rounds: int = field(default_factory=lambda: int(_env("VERIFIER_MAX_ROUNDS", "1")))

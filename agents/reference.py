@@ -52,10 +52,10 @@ def build(settings: Settings, force: bool = False, path: Path = REF_PATH) -> lis
     from agents.pipeline import verified_answer
     from agents.writer import verdict_label
     from core.llm import LLMClient
-    from rag.service import get_retriever
+    from rag.service import get_retriever, retrieval_options
 
     model = settings.rag_embed_model if settings.rag_mode in ("dense", "hybrid") else ""
-    retriever = get_retriever(settings.rag_strategy, model)
+    retriever = get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
     client = LLMClient(settings)
     current = load(path)
     out = []

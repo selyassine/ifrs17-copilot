@@ -42,7 +42,8 @@ from rag.retrieve import BM25, analyze
 
 PROCESSED = ROOT / "data" / "processed"
 OUT_DIR = ROOT / "data" / "finetune"
-TEST_SETS = (ROOT / "eval" / "rag_questions.jsonl", ROOT / "eval" / "course_quiz.jsonl")
+TEST_SETS = (ROOT / "eval" / "rag_questions.jsonl", ROOT / "eval" / "course_quiz.jsonl",
+             ROOT / "eval" / "cas_pratiques.jsonl")
 REGISTERS = ("etudiant", "praticien", "recherche", "reformulee")
 LEAK_THRESHOLD = 0.5          # Jaccard sur les mots normalisés (sans mots vides, racinisés)
 MIN_TOKENS = 25               # passages trop courts (titres, renvois) : rien à apprendre

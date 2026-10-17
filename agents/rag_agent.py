@@ -233,16 +233,22 @@ def search_fused(queries: list[str], retriever: Retriever, k: int, mode: str, ex
 def answer_question(question: str, retriever: Retriever, client: LLMClient | None = None,
                     k: int = 5, mode: str = "hybrid", expand: bool = True,
                     version: int | None = None, case_id: str = "",
-                    feedback: str = "", rewrite: bool = False) -> RagResult:
+                    feedback: str = "", rewrite: bool = False,
+                    hits: list[Hit] | None = None, queries: list[str] | None = None) -> RagResult:
     """``feedback`` : problèmes relevés par le vérificateur sur une première réponse (boucle de
     correction de l'orchestrateur) ; ils sont ajoutés à la question, rien d'autre ne change.
     ``rewrite`` : la question est d'abord reformulée par le LLM (D-045) ; la question d'origine
-    reste une des requêtes, et c'est elle que le LLM reçoit pour répondre."""
+    reste une des requêtes, et c'est elle que le LLM reçoit pour répondre.
+    ``hits`` : passages déjà choisis par l'agent de recherche LangGraph (D-050) ; la recherche est
+    alors sautée, la réponse et ses contrôles restent identiques."""
     t0 = time.perf_counter()
     client = client or LLMClient()
     spec = load_prompt("rag_answer", version)
-    queries = [question] + (rewrite_queries(question, client, case_id) if rewrite else [])
-    hits = search_fused(queries, retriever, k=k, mode=mode, expand=expand)
+    if hits is None:
+        queries = [question] + (rewrite_queries(question, client, case_id) if rewrite else [])
+        hits = search_fused(queries, retriever, k=k, mode=mode, expand=expand)
+    else:
+        queries = queries or [question]
     extracts, by_id, allowed = format_extracts(hits)
     extracts_path, _, _ = format_extracts(hits, with_path=True)
     sources = [{"extrait": eid, "chunk_id": h.chunk.chunk_id, "paragraph_ids": h.chunk.paragraph_ids,

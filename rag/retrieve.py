@@ -4,7 +4,10 @@ Configurations comparées dans l'évaluation (section 6.4 du planning) :
     bm25    : BM25 Okapi, analyseur français maison (minuscules, accents, mots vides, racinisation légère)
     dense   : embeddings (BGE-M3 ou Qwen3-Embedding) + similarité cosinus
     hybrid  : fusion des deux listes par Reciprocal Rank Fusion (k = 60)
-    (S3) hybrid + reranker, puis réécriture de requête
+    options (D-048, D-049), activables séparément pour être mesurées une à une :
+      questions : index des questions hypothétiques de chaque morceau (query indexing), 3ᵉ classement RRF
+      graphe    : voisins par les renvois de la norme (« voir paragraphe B96 »), classement RRF de poids 0,5
+      rerank    : cross-encoder (bge-reranker-v2-m3) qui réordonne les 20 premiers candidats
 
 Stockage des vecteurs :
     NumpyStore  : matrice en mémoire, sauvegardée en .npy ; suffit pour quelques milliers de chunks
@@ -215,12 +218,69 @@ class QdrantStore:
 # --------------------------------------------------------------------------- #
 # Fusion et recherche complète
 # --------------------------------------------------------------------------- #
-def rrf(rankings: list[list[tuple[int, float]]], k: int = 60) -> list[tuple[int, float]]:
+def rrf(rankings: list[list[tuple[int, float]]], k: int = 60,
+        weights: list[float] | None = None) -> list[tuple[int, float]]:
     scores: dict[int, float] = defaultdict(float)
-    for ranking in rankings:
+    for w, ranking in zip(weights or [1.0] * len(rankings), rankings, strict=True):
         for rank, (idx, _) in enumerate(ranking, start=1):
-            scores[idx] += 1.0 / (k + rank)
+            scores[idx] += w / (k + rank)
     return sorted(scores.items(), key=lambda x: -x[1])
+
+
+# --------------------------------------------------------------------------- #
+# Options avancées : reranker, index de questions, graphe des renvois
+# --------------------------------------------------------------------------- #
+class Reranker(Protocol):
+    def score(self, query: str, texts: list[str]) -> list[float]: ...
+
+
+class CrossEncoderReranker:
+    """Cross-encoder : lit la question et le passage ensemble (plus précis qu'une similarité de
+    vecteurs, mais trop lent pour tout le corpus : on ne l'applique qu'aux premiers candidats)."""
+
+    def __init__(self, model_name: str = "BAAI/bge-reranker-v2-m3", device: str | None = None,
+                 batch_size: int = 16, max_length: int = 512):
+        import os
+        os.environ.setdefault("OMP_NUM_THREADS", "4")
+        os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+        from sentence_transformers import CrossEncoder
+
+        self.name = model_name
+        self.batch_size = batch_size
+        self.model = CrossEncoder(model_name, device=device, max_length=max_length)
+
+    def score(self, query: str, texts: list[str]) -> list[float]:
+        scores = self.model.predict([(query, t) for t in texts], batch_size=self.batch_size,
+                                    show_progress_bar=False)
+        return [float(x) for x in scores]
+
+
+class QuestionIndex:
+    """Query indexing : on indexe les questions qu'un morceau peut résoudre (générées par le LLM,
+    rag/finetune.py) ; une question d'utilisateur proche d'une de ces questions remonte le morceau.
+    Dense si des vecteurs sont fournis, BM25 sur les questions sinon."""
+
+    def __init__(self, questions: list[str], chunk_pos: list[int], vectors: np.ndarray | None = None):
+        if len(questions) != len(chunk_pos):
+            raise ValueError("une position de morceau par question")
+        self.questions, self.chunk_pos = questions, chunk_pos
+        self.bm25 = BM25(questions)
+        self.vectors = _l2(vectors.astype(np.float32)) if vectors is not None else None
+
+    def search(self, query: str, qvec: np.ndarray | None, depth: int,
+               allowed: np.ndarray | None = None) -> list[tuple[int, float]]:
+        if self.vectors is not None and qvec is not None:
+            sims = self.vectors @ qvec
+            order = np.argsort(-sims)[: depth * 5]
+            pairs = [(int(i), float(sims[i])) for i in order]
+        else:
+            pairs = self.bm25.search(query, depth * 5)
+        best: dict[int, float] = {}
+        for qi, sc in pairs:                       # meilleure question de chaque morceau
+            ci = self.chunk_pos[qi]
+            if (allowed is None or allowed[ci]) and ci not in best:
+                best[ci] = sc
+        return list(best.items())[:depth]
 
 
 @dataclass
@@ -233,12 +293,21 @@ class Hit:
 class Retriever:
     """Recherche sur un jeu de chunks (une stratégie de découpage)."""
 
+    RERANK_DEPTH = 20     # candidats relus par le cross-encoder
+    GRAPH_SEEDS = 3       # premiers résultats dont on suit les renvois
+    GRAPH_ALPHA = 0.25    # poids d'un renvoi (choisi sur le jeu de mise au point, D-049)
+
     def __init__(self, chunks: list[Chunk], encoder: Encoder | None = None,
                  vectors: np.ndarray | None = None, store: str = "numpy",
-                 qdrant_path: Path | None = None, collection: str = "chunks"):
+                 qdrant_path: Path | None = None, collection: str = "chunks",
+                 reranker: Reranker | None = None, qindex: QuestionIndex | None = None,
+                 graph: dict[int, list[int]] | None = None, options: dict | None = None):
         self.chunks = chunks
         self.bm25 = BM25([c.embed_text for c in chunks])
         self.encoder = encoder
+        self.reranker, self.qindex, self.graph = reranker, qindex, graph
+        # options appliquées par défaut (réglées par .env dans l'API, une par une dans l'évaluation)
+        self.options = {"rerank": False, "questions": False, "graphe": False, **(options or {})}
         self.store: NumpyStore | QdrantStore | None = None
         if encoder is not None:
             if vectors is None:
@@ -255,26 +324,52 @@ class Retriever:
         return np.array([c.zone in zones for c in self.chunks])
 
     def search(self, query: str, k: int = 5, mode: str = "hybrid", depth: int = 30,
-               zones: list[str] | None = None, expand: bool = False) -> list[Hit]:
+               zones: list[str] | None = None, expand: bool = False, rerank: bool | None = None,
+               questions: bool | None = None, graphe: bool | None = None) -> list[Hit]:
+        rerank = self.options["rerank"] if rerank is None else rerank
+        questions = self.options["questions"] if questions is None else questions
+        graphe = self.options["graphe"] if graphe is None else graphe
+        original = query
         if expand:
             from rag.query import expand_glossary
             query = expand_glossary(query)
         allowed = self._allowed(zones)
-        ranked: list[tuple[int, float]]
         lex = [(i, s) for i, s in self.bm25.search(query, depth * 3)
                if allowed is None or allowed[i]][:depth]
+        qvec = None
         if mode == "bm25" or self.store is None:
             if mode in ("dense", "hybrid") and self.store is None:
                 raise RuntimeError(f"mode '{mode}' demandé mais aucun index dense n'est chargé")
-            ranked = lex
+            rankings = [lex]
         else:
             qvec = self.encoder.encode([query], is_query=True)[0]
             if isinstance(self.store, QdrantStore):
                 dense = self.store.search(qvec, depth, zones)   # filtre fait par Qdrant
             else:
                 dense = self.store.search(qvec, depth, allowed)
-            ranked = dense if mode == "dense" else rrf([lex, dense])
+            rankings = [dense] if mode == "dense" else [lex, dense]
+        if questions and self.qindex is not None:
+            rankings.append(self.qindex.search(query, qvec, depth, allowed))
+        ranked = rankings[0] if len(rankings) == 1 else rrf(rankings)
+        if graphe and self.graph:
+            ranked = self._with_neighbours(ranked, k, allowed)
+        if rerank and self.reranker is not None:
+            cand = ranked[: max(self.RERANK_DEPTH, k)]
+            scores = self.reranker.score(original, [self.chunks[i].embed_text for i, _ in cand])
+            ranked = sorted(((i, sc) for (i, _), sc in zip(cand, scores, strict=True)), key=lambda x: -x[1])
         return [Hit(rank=r + 1, score=s, chunk=self.chunks[i]) for r, (i, s) in enumerate(ranked[:k])]
+
+    def _with_neighbours(self, ranked: list[tuple[int, float]], k: int,
+                         allowed: np.ndarray | None) -> list[tuple[int, float]]:
+        """Graph RAG léger : chaque résultat reçoit le score 1 / rang ; un paragraphe auquel renvoie
+        l'un des GRAPH_SEEDS premiers résultats reçoit au moins GRAPH_ALPHA / rang de ce résultat.
+        Il complète la liste sans pouvoir passer devant le résultat qui le cite."""
+        score = {i: 1.0 / r for r, (i, _) in enumerate(ranked, start=1)}
+        for r, (i, _) in enumerate(ranked[: self.GRAPH_SEEDS], start=1):
+            for j in self.graph.get(i, []):
+                if allowed is None or allowed[j]:
+                    score[j] = max(score.get(j, 0.0), self.GRAPH_ALPHA / r)
+        return sorted(score.items(), key=lambda x: -x[1])
 
 
 def model_slug(model_name: str) -> str:

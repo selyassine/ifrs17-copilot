@@ -29,7 +29,7 @@ from core.config import ROOT, get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import read_traces
 from multimodal.vision import detect_mime, vision_client
-from rag.service import IndexMissing, get_retriever
+from rag.service import IndexMissing, get_retriever, retrieval_options
 
 HERE = Path(__file__).parent
 
@@ -50,8 +50,8 @@ def main() -> None:
     cases = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()][: args.limit]
     model = settings.rag_embed_model if settings.rag_mode in ("dense", "hybrid") else ""
     try:
-        get_retriever(settings.rag_strategy, model)
-        loader = lambda: get_retriever(settings.rag_strategy, model)   # noqa: E731
+        get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
+        loader = lambda: get_retriever(settings.rag_strategy, model, **retrieval_options(settings))   # noqa: E731
     except IndexMissing:
         raise SystemExit("index RAG absent : lancer .\\make.ps1 index-dense") from None
     client = LLMClient(settings)

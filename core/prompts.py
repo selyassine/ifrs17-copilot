@@ -23,7 +23,7 @@ TECHNIQUES = {
     "zero_shot", "few_shot", "chain_of_thought", "role_prompting", "structured_output",
     "guardrails", "self_consistency", "prompt_chaining", "generated_knowledge",
     "llm_as_judge", "tool_use", "delimiters", "query_rewriting",
-    "synthetic_data",
+    "synthetic_data", "step_back_prompting", "corrective_rag",
 }
 
 

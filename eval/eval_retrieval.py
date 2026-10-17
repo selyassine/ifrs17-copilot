@@ -111,12 +111,14 @@ def bootstrap_diff(a: list[float], b: list[float], n: int = 2000, seed: int = 0)
 # Exécution
 # --------------------------------------------------------------------------- #
 def run_config(retriever: Retriever, chunks: list[Chunk], questions: list[dict], mode: str,
-               expand: bool = False) -> dict:
+               expand: bool = False, **options) -> dict:
     per_q, lat = [], []
     for q in questions:
         gold = set(q["gold"])
         t0 = time.perf_counter()
-        hits = retriever.search(q["question"], k=10, mode=mode, expand=expand)
+        hits = retriever.search(q["question"], k=10, mode=mode, expand=expand,
+                                rerank=options.get("rerank", False), questions=options.get("use_questions", False),
+                                graphe=options.get("graphe", False))
         lat.append((time.perf_counter() - t0) * 1000)
         ranked = [h.chunk for h in hits]
         row = {"id": q["id"], "niveau": q["niveau"],
@@ -144,12 +146,20 @@ def run_config(retriever: Retriever, chunks: list[Chunk], questions: list[dict],
     return {"global": agg, "par_niveau": by_level, "questions": per_q}
 
 
-def build_configs(models: list[str], encoder_name: str | None) -> list[tuple[str, str, str | None]]:
+def build_configs(models: list[str], encoder_name: str | None, extras: tuple[str, ...] = ()) -> list[tuple[str, str, str | None]]:
+    """Configurations comparées. ``extras`` : options avancées disponibles (questions, graphe, rerank),
+    ajoutées une par une, puis toutes ensemble, à la meilleure configuration de chaque famille."""
     configs = [(s, "bm25", None) for s in ("A", "B", "B0")] + [("B", "bm25+glossaire", None)]
+    configs += [("B", f"bm25+glossaire+{e}", None) for e in extras]
+    if len(extras) > 1:
+        configs.append(("B", "bm25+glossaire+" + "+".join(extras), None))
     for m in models + ([encoder_name] if encoder_name else []):
         for s in ("A", "B", "B0"):
             configs += [(s, "dense", m), (s, "hybrid", m)]
         configs += [("B", "hybrid+glossaire", m)]
+        configs += [("B", f"hybrid+glossaire+{e}", m) for e in extras]
+        if len(extras) > 1:
+            configs.append(("B", "hybrid+glossaire+" + "+".join(extras), m))
     return configs
 
 
@@ -159,7 +169,16 @@ def main() -> None:
     ap.add_argument("--encoder", choices=["hashing"], default=None,
                     help="encodeur factice pour tester la chaîne sans modèle")
     ap.add_argument("--questions", type=Path, default=HERE / "rag_questions.jsonl")
+    ap.add_argument("--rerank", default=None, help="cross-encoder, ex. BAAI/bge-reranker-v2-m3 (D-048)")
+    ap.add_argument("--questions-index", action="store_true", help="query indexing (D-048, rag/qindex.py)")
+    ap.add_argument("--graph", action="store_true", help="renvois entre paragraphes (D-049, rag/graph.py)")
     args = ap.parse_args()
+    extras = tuple(e for e, on in (("questions", args.questions_index), ("graphe", args.graph),
+                                   ("rerank", bool(args.rerank))) if on)
+    reranker = cgraph = None
+    if args.rerank:
+        from rag.retrieve import CrossEncoderReranker
+        reranker = CrossEncoderReranker(args.rerank)
 
     questions = load_questions(args.questions)
     chunks = {s: load_chunks(PROCESSED / f"chunks_{s}.jsonl") for s in ("A", "B")}
@@ -169,13 +188,28 @@ def main() -> None:
     retrievers: dict[tuple[str, str | None], Retriever] = {}
     encoders: dict[str, object] = {}
 
-    for strategy, mode, model in build_configs(args.model, args.encoder):
+    if args.graph:
+        from rag.graph import load_chunk_graph
+        cgraph = load_chunk_graph(PROCESSED / "C002_units.jsonl", chunks["B"])
+
+    def extras_for(strategy: str, model: str | None) -> dict:
+        if strategy != "B":
+            return {}
+        qindex = None
+        if args.questions_index:
+            from rag.qindex import load as load_qindex
+            qindex = load_qindex(chunks["B"], "B", model if model not in (None, "hashing") else None)
+            if qindex is None:
+                raise SystemExit("index des questions absent : lancer `python -m rag.qindex` (avec --model pour le dense)")
+        return {"reranker": reranker, "qindex": qindex, "graph": cgraph}
+
+    for strategy, mode, model in build_configs(args.model, args.encoder, extras):
         key = (strategy, model)
         if key not in retrievers:
             if model is None:
-                retrievers[key] = Retriever(chunks[strategy])
+                retrievers[key] = Retriever(chunks[strategy], **extras_for(strategy, model))
             elif model == "hashing":
-                retrievers[key] = Retriever(chunks[strategy], encoder=HashingEncoder())
+                retrievers[key] = Retriever(chunks[strategy], encoder=HashingEncoder(), **extras_for(strategy, model))
             else:
                 from rag.retrieve import SentenceTransformerEncoder, save_dense
                 if model not in encoders:          # un seul exemplaire du modèle en mémoire
@@ -186,13 +220,14 @@ def main() -> None:
                     print(f"  encodage de {len(chunks[strategy])} chunks {strategy} ({model})…")
                     vecs = enc.encode([c.embed_text for c in chunks[strategy]])
                     save_dense(INDEX_DIR, strategy, model, vecs, chunks[strategy])
-                retrievers[key] = Retriever(chunks[strategy], encoder=enc, vectors=vecs)
+                retrievers[key] = Retriever(chunks[strategy], encoder=enc, vectors=vecs, **extras_for(strategy, model))
         name = f"{strategy} · {mode}" + (f" · {model.split('/')[-1]}" if model else "")
-        base_mode, _, extra = mode.partition("+")
+        base_mode, *flags = mode.split("+")
         results[name] = run_config(retrievers[key], chunks[strategy], questions, base_mode,
-                                   expand=extra == "glossaire")
+                                   expand="glossaire" in flags, rerank="rerank" in flags,
+                                   use_questions="questions" in flags, graphe="graphe" in flags)
         g = results[name]["global"]
-        print(f"{name:34} R@5 {g['recall@5']:.3f}  R@1000tok {g['recall@1000tok']:.3f}  "
+        print(f"{name:52} R@5 {g['recall@5']:.3f}  R@1000tok {g['recall@1000tok']:.3f}  "
               f"MRR {g['mrr@10']:.3f}  nDCG@5 {g['ndcg@5']:.3f}  tokens@5 {g['tokens@5']}")
 
     # comparaisons appariées A → B pour chaque mode
@@ -214,6 +249,19 @@ def main() -> None:
                 comparisons[f"{name} → {other}"] = {
                     m: [round(x, 3) for x in bootstrap_diff([r[m] for r in qa], [r[m] for r in qb])]
                     for m in ("recall@5", "recall@1000tok", "mrr@10")}
+
+    for name in list(results):
+        for prefix in ("B · bm25+glossaire+", "B · hybrid+glossaire+"):
+            if name.startswith(prefix):
+                tail = name[len(prefix):]
+                option, _, model_part = tail.partition(" · ")
+                base = prefix[:-1] + (f" · {model_part}" if model_part else "")
+                if base in results:
+                    qa = [r for r in results[base]["questions"] if "mrr@10" in r]
+                    qb = [r for r in results[name]["questions"] if "mrr@10" in r]
+                    comparisons[f"{base} → {name}"] = {
+                        m: [round(x, 3) for x in bootstrap_diff([r[m] for r in qa], [r[m] for r in qb])]
+                        for m in ("recall@5", "recall@1000tok", "mrr@10")}
 
     for base, variant in [("B · bm25", "B · bm25+glossaire")] + [
             (n, n.replace("hybrid", "hybrid+glossaire")) for n in results if n.startswith("B · hybrid ·")]:

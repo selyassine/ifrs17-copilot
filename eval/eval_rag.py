@@ -41,7 +41,7 @@ from core.config import get_settings
 from core.llm import LLMClient, LLMError
 from core.tracing import read_traces
 from eval.eval_retrieval import load_questions
-from rag.service import get_retriever
+from rag.service import get_retriever, retrieval_options
 
 HERE = Path(__file__).parent
 
@@ -188,7 +188,7 @@ def main() -> None:
         partial.unlink()
 
     model = settings.rag_embed_model if settings.rag_mode in ("dense", "hybrid") else ""
-    retriever = get_retriever(settings.rag_strategy, model)
+    retriever = get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
     client = LLMClient(settings)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     print(f"Prompt rag_answer v{settings.rag_prompt_version} (RAG_PROMPT_VERSION dans .env), "
@@ -232,6 +232,10 @@ def main() -> None:
     v = settings.rag_prompt_version
     suffix = "" if args.questions.name == "rag_questions.jsonl" else f"_{args.questions.stem}"
     suffix += "_reecriture" if settings.rag_rewrite else ""
+    suffix += "_agentique" if settings.rag_agentic else ""
+    suffix += "_graphe" if settings.rag_graph else ""
+    suffix += "_questions" if settings.rag_questions else ""
+    suffix += "_rerank" if settings.rag_rerank_model else ""
     report = HERE / ((f"rag_answer_report{suffix}.md") if v == 1 else f"rag_answer_report_v{v}{suffix}.md")
     report.write_text(render_report(stamp, settings, agg, rows), encoding="utf-8")
 

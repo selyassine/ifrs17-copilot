@@ -37,7 +37,7 @@ from engine.paa import PaaContract, PaaPosition, position
 from multimodal.extract import ExtractionResult
 from multimodal.speech import audio_type, transcribe
 from multimodal.vision import detect_mime, vision_client
-from rag.service import IndexMissing, get_retriever
+from rag.service import IndexMissing, get_retriever, retrieval_options
 
 VERSION = "0.6.0"
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
@@ -164,7 +164,7 @@ def search(body: SearchRequest, settings: Settings = Depends(get_settings)) -> S
     if mode in ("dense", "hybrid") and not model:
         raise HTTPException(status_code=400, detail=f"mode '{mode}' : définir RAG_EMBED_MODEL dans .env")
     try:
-        retriever = get_retriever(settings.rag_strategy, model)
+        retriever = get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
     except IndexMissing as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     expand = settings.rag_glossary if body.glossary is None else body.glossary
@@ -212,7 +212,7 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
     model = settings.rag_embed_model if mode in ("dense", "hybrid") else ""
     try:
         res = run_ask(body.question, settings, make_client(settings),
-                      lambda: get_retriever(settings.rag_strategy, model), k=body.k, case_id=case_id)
+                      lambda: get_retriever(settings.rag_strategy, model, **retrieval_options(settings)), k=body.k, case_id=case_id)
     except IndexMissing as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except LLMError as exc:
@@ -378,10 +378,10 @@ def _case_response(out) -> CaseResponse:
 def _retriever_loader(settings: Settings):
     model = settings.rag_embed_model if settings.rag_mode in ("dense", "hybrid") else ""
     try:
-        get_retriever(settings.rag_strategy, model)       # vérifie que l'index existe
+        get_retriever(settings.rag_strategy, model, **retrieval_options(settings))       # vérifie que l'index existe
     except IndexMissing:
         return None
-    return lambda: get_retriever(settings.rag_strategy, model)
+    return lambda: get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
 
 
 @app.post("/v1/case", response_model=CaseResponse, dependencies=[Depends(check_token)])
