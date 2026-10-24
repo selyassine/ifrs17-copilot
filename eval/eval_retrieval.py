@@ -28,6 +28,7 @@ from pathlib import Path
 
 import numpy as np
 
+from core.config import get_settings
 from rag.chunking import Chunk, load_chunks
 from rag.retrieve import HashingEncoder, Retriever, load_dense
 
@@ -172,6 +173,8 @@ def main() -> None:
     ap.add_argument("--rerank", default=None, help="cross-encoder, ex. BAAI/bge-reranker-v2-m3 (D-048)")
     ap.add_argument("--questions-index", action="store_true", help="query indexing (D-048, rag/qindex.py)")
     ap.add_argument("--graph", action="store_true", help="renvois entre paragraphes (D-049, rag/graph.py)")
+    ap.add_argument("--store", choices=["numpy", "qdrant"], default="numpy",
+                    help="stockage des vecteurs pour le mode dense/hybride (D-052)")
     args = ap.parse_args()
     extras = tuple(e for e, on in (("questions", args.questions_index), ("graphe", args.graph),
                                    ("rerank", bool(args.rerank))) if on)
@@ -220,8 +223,14 @@ def main() -> None:
                     print(f"  encodage de {len(chunks[strategy])} chunks {strategy} ({model})…")
                     vecs = enc.encode([c.embed_text for c in chunks[strategy]])
                     save_dense(INDEX_DIR, strategy, model, vecs, chunks[strategy])
-                retrievers[key] = Retriever(chunks[strategy], encoder=enc, vectors=vecs, **extras_for(strategy, model))
+                from rag.retrieve import model_slug
+                retrievers[key] = Retriever(chunks[strategy], encoder=enc, vectors=vecs, store=args.store,
+                                            qdrant_path=ROOT / "data" / "qdrant", qdrant_url=get_settings().qdrant_url,
+                                            collection=f"{strategy}__{model_slug(model)}",
+                                            **extras_for(strategy, model))
         name = f"{strategy} · {mode}" + (f" · {model.split('/')[-1]}" if model else "")
+        if model and model != "hashing" and args.store == "qdrant":
+            name += " · qdrant"
         base_mode, *flags = mode.split("+")
         results[name] = run_config(retrievers[key], chunks[strategy], questions, base_mode,
                                    expand="glossaire" in flags, rerank="rerank" in flags,
@@ -282,6 +291,7 @@ def main() -> None:
                                                      encoding="utf-8")
     # un autre jeu de questions (quiz du cours…) n'écrase pas le rapport principal
     suffix = "" if args.questions.name == "rag_questions.jsonl" else f"_{args.questions.stem}"
+    suffix += "_qdrant" if args.store == "qdrant" else ""
     report = HERE / f"retrieval_report{suffix}.md"
     report.write_text(render_report(payload, questions), encoding="utf-8")
     print(f"\n→ eval/{report.name} et eval/results/retrieval_{stamp}.json")

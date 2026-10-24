@@ -26,16 +26,35 @@ def discount_factors(rates: float | list[float], n: int) -> list[float]:
     """
     dfs = [1.0]
     for t in range(1, n + 1):
-        r = rates if isinstance(rates, (int, float)) else rates[t - 1]
+        r = rates if isinstance(rates, int | float) else rates[t - 1]
         dfs.append((1.0 + r) ** -t)
     return dfs
 
 
+def recoveries(p: PortfolioData) -> list[float]:
+    return list(p.recoveries) if p.recoveries is not None else [0.0] * p.n_periods
+
+
+def pv_recoveries(p: PortfolioData, dfs: list[float]) -> float:
+    """B65 k) : recouvrements (récupération, subrogation), encaissés en fin de période (D-071)."""
+    return sum(x * dfs[t + 1] for t, x in enumerate(recoveries(p)))
+
+
+def acquisition_costs(p: PortfolioData) -> list[float]:
+    return list(p.acquisition_costs) if p.acquisition_costs is not None else [0.0] * p.n_periods
+
+
+def pv_acquisition(p: PortfolioData, dfs: list[float]) -> float:
+    """B65 e), §28A : frais d'acquisition payés en début de période (comme les primes), D-075."""
+    return sum(x * dfs[t] for t, x in enumerate(acquisition_costs(p)))
+
+
 def present_values(p: PortfolioData) -> tuple[float, float, list[float]]:
-    """PV des entrées (début de période) et des sorties (fin de période)."""
+    """PV des entrées (primes en début de période, recouvrements en fin) et des sorties (fin de période)."""
     n = p.n_periods
     dfs = discount_factors(p.discount_rates, n)
     pv_in = sum(p.premiums[t] * dfs[t] for t in range(n))           # payé en t (début de t+1)
+    pv_in += pv_recoveries(p, dfs)                                  # reçu en t+1 (fin de t+1)
     pv_out = sum(p.outflows[t] * dfs[t + 1] for t in range(n))      # payé en t+1 (fin de t+1)
     return pv_in, pv_out, dfs
 
@@ -43,8 +62,9 @@ def present_values(p: PortfolioData) -> tuple[float, float, list[float]]:
 def compute_csm(p: PortfolioData) -> CsmResult:
     n = p.n_periods
     pv_in, pv_out, dfs = present_values(p)
-    ra = p.risk_adjustment_pct * pv_out
-    fcf = pv_out + ra - pv_in                     # > 0 : net sortant → onéreux
+    ra = p.risk_adjustment_pct * pv_out           # RA sur les sinistres et frais (risque non financier)
+    pv_acq = pv_acquisition(p, dfs)               # frais d'acquisition : connus, sans RA (D-075)
+    fcf = pv_out + ra + pv_acq - pv_in            # > 0 : net sortant → onéreux
 
     initial_csm = max(-fcf, 0.0)                  # §38
     initial_loss = max(fcf, 0.0)                  # §47
@@ -92,6 +112,8 @@ def compute_csm(p: PortfolioData) -> CsmResult:
         group_id=p.group_id,
         pv_inflows=pv_in,
         pv_outflows=pv_out,
+        pv_recoveries=pv_recoveries(p, dfs),
+        pv_acquisition=pv_acq,
         risk_adjustment=ra,
         fulfilment_cash_flows=fcf,
         initial_csm=initial_csm,

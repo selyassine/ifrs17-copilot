@@ -1,0 +1,121 @@
+{
+  "name": "01 — Routage d'une demande",
+  "nodes": [
+    {
+      "id": "5161ecbb-d3fd-5a8d-9daa-2677c1a237f3",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "a681bf1c-71da-5bde-b065-f06cdd6c6274",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/route",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "f7d3677c-289c-5d7a-965a-49aa0d11be7f",
+      "name": "Appel API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/v1/route",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "change-moi"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ request: $json.body.request, has_attachment: $json.body.has_attachment ?? false }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "1370279c-82d9-5f17-b4ec-ded1a335241d",
+      "name": "Réponse OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        -100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "996ad1f2-adef-55f9-9fa3-ca637570523b",
+      "name": "Réponse erreur",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"erreur\": \"Le service IA est indisponible ou a refusé la requête.\", \"detail\": $json.error ?? $json } }}",
+        "options": {
+          "responseCode": 502
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Appel API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API": {
+      "main": [
+        [
+          {
+            "node": "Réponse OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Réponse erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

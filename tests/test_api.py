@@ -206,11 +206,13 @@ def test_extract_refuse_un_fichier_qui_n_est_pas_un_pdf(client):
 
 
 def test_site_web_et_documents_exemple(client):
-    r = client.get("/", follow_redirects=False)
-    assert r.status_code in (302, 307) and r.headers["location"] == "/app/"
+    home = client.get("/", follow_redirects=False)
+    assert home.status_code == 200 and "IFRS 17 Copilot" in home.text and "/app/" in home.text
     page = client.get("/app/")
     assert page.status_code == 200 and "IFRS 17 Copilot" in page.text
-    assert client.get("/app/app.js").status_code == 200
+    for asset in ("assets/js/app.js", "assets/js/core.js", "assets/js/views/case.js", "assets/css/app.css",
+                  "assets/fonts/plex-sans.woff2", "assets/img/logo.svg"):
+        assert client.get(f"/app/{asset}").status_code == 200, asset
     samples = client.get("/v1/samples").json()
     assert isinstance(samples, list)
     assert client.get("/v1/samples/../../.env").status_code == 404
@@ -293,3 +295,178 @@ def test_paa_position(client):
     assert r.status_code == 200
     first, second = r.json()
     assert first["lrc"] == 485 and second["lrc"] == 0
+
+
+
+def test_copilot_api(client, monkeypatch):
+    import json
+
+    import api.main as main
+    from core.llm import LLMClient
+
+    def respond(messages, model):
+        if any("<resultat" in m["content"] for m in messages if m["role"] == "user"):
+            return json.dumps({"action": "repondre", "reponse": "Le groupe est bénéficiaire : flux d'exécution -20,00."})
+        return json.dumps({"action": "outil", "outil": "donnees_du_dossier", "arguments": {}})
+
+    monkeypatch.setattr(main, "make_client", lambda s: LLMClient(s, fake_responder=respond))
+    body = {"question": "Le groupe est-il bénéficiaire ?", "portfolio": {
+        "group_id": "G1", "premiums": [100, 0], "outflows": [40, 40], "coverage_units": [1, 1]}}
+    r = client.post("/v1/copilot", json=body, headers=AUTH)
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert d["source"] == "llm" and d["tools"][0]["outil"] == "donnees_du_dossier"
+    assert client.post("/v1/copilot", json=body).status_code == 401
+
+
+# --------------------------------------------------------------------------- #
+# Registre, comptes et rôles (D-058)
+# --------------------------------------------------------------------------- #
+def _users(client):
+    import api.main as main
+
+    reg = main.registry(get_settings() if not app.dependency_overrides else app.dependency_overrides[get_settings]())
+    for name, role in (("ana", "analyste"), ("val", "valideur"), ("adm", "admin")):
+        reg.add_user(name, f"{name}-motdepasse", role)
+
+    def bearer(name):
+        r = client.post("/v1/auth/login", json={"username": name, "password": f"{name}-motdepasse"})
+        assert r.status_code == 200, r.text
+        return {"Authorization": f"Bearer {r.json()['token']}"}
+    return reg, bearer
+
+
+def test_connexion_et_roles(client):
+    reg, bearer = _users(client)
+    assert client.post("/v1/auth/login", json={"username": "ana", "password": "faux"}).status_code == 401
+    ana, val, adm = bearer("ana"), bearer("val"), bearer("adm")
+    assert client.get("/v1/auth/me", headers=ana).json()["role"] == "analyste"
+    assert client.get("/v1/cases", headers=ana).status_code == 200
+    assert client.get("/v1/users", headers=ana).status_code == 403
+    assert client.get("/v1/users", headers=adm).status_code == 200
+    assert client.get("/v1/audit/verify", headers=val).status_code == 403
+    assert client.get("/v1/audit/verify", headers=adm).json()["intacte"]
+    body = {"portfolio": {"group_id": "G1", "premiums": [100, 0], "outflows": [40, 40], "coverage_units": [1, 1]}}
+    assert client.post("/v1/case/validated", headers=ana, json=body).status_code == 403
+    assert client.get("/v1/cases", headers={"Authorization": "Bearer faux"}).status_code == 401
+    r = client.post("/v1/users", headers=adm, json={"username": "eve", "password": "court", "role": "analyste"})
+    assert r.status_code == 422
+    assert client.post("/v1/users", headers=adm, json={"username": "eve", "password": "assez-long-1",
+                                                        "role": "analyste"}).status_code == 201
+    client.post("/v1/auth/logout", headers=ana)
+    assert client.get("/v1/cases", headers=ana).status_code == 401
+
+
+def test_dossier_enregistre_puis_rejete(client, monkeypatch, tmp_path):
+    _fake_llm(monkeypatch, tmp_path, {**GOOD_EXTRACTION, "premiums": [130.0, 0.0]})
+    import api.main as main
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    reg, bearer = _users(client)
+    ana, val = bearer("ana"), bearer("val")
+    r = client.post("/v1/case", headers=ana, data={"case_id": "dos-1"},
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    assert r.status_code == 200 and r.json()["status"] == "validation_humaine"
+    listing = client.get("/v1/cases?status=validation_humaine", headers=ana).json()
+    assert listing["total"] == 1 and listing["dossiers"][0]["source"] == "site"
+    assert listing["dossiers"][0]["submitter"] == "ana"
+    detail = client.get("/v1/cases/dos-1", headers=ana).json()
+    assert [e["action"] for e in detail["evenements"]][:2] == ["depot", "analyse"]
+    assert client.get("/v1/cases/dos-1/note", headers=ana).text.startswith("<!doctype html>")
+    assert client.post("/v1/cases/dos-1/reject", headers=ana, json={"comment": "taux faux"}).status_code == 403
+    r = client.post("/v1/cases/dos-1/reject", headers=val, json={"comment": "taux de la période 2 faux"})
+    assert r.status_code == 200 and r.json()["status"] == "rejetee" and r.json()["validated_by"] == "val"
+    assert client.post("/v1/cases/dos-1/events", headers=AUTH,
+                       json={"action": "email_rejet_envoye", "detail": {"a": "x@y.fr"}}).status_code == 200
+    d = client.get("/v1/dashboard", headers=ana).json()
+    assert d["par_statut"]["rejetee"] == 1 and d["taux_validation_humaine"] == 1.0
+    assert reg.verify_chain()["intacte"]
+
+
+def test_n8n_enregistre_la_source_et_le_valideur(client, monkeypatch, tmp_path):
+    _fake_llm(monkeypatch, tmp_path, GOOD_EXTRACTION)
+    import api.main as main
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    r = client.post("/v1/case", headers=AUTH, data={"case_id": "n8n-1", "source": "n8n-email",
+                                                     "submitter": "client@assureur.fr"},
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    assert r.status_code == 200
+    body = {"case_id": "n8n-1", "portfolio": r.json()["portfolio"], "validated_by": "valideur@assureur.fr"}
+    assert client.post("/v1/case/validated", headers=AUTH, json=body).status_code == 200
+    case = client.get("/v1/cases/n8n-1", headers=AUTH).json()
+    assert case["source"] == "n8n-email" and case["submitter"] == "client@assureur.fr"
+    assert case["validated_by"] == "valideur@assureur.fr" and case["status"] in ("validee", "validation_humaine")
+
+
+def test_copilot_memoire_et_historique(client, monkeypatch):
+    """Deuxième question : le premier échange (contrôlé) est dans le contexte ; historique consultable."""
+    import json
+
+    import api.main as main
+    from core.llm import LLMClient
+
+    seen = []
+
+    def respond(messages, model):
+        seen.append(messages[1]["content"])
+        if any("<resultat" in m["content"] for m in messages if m["role"] == "user"):
+            return json.dumps({"action": "repondre", "reponse": "Le groupe est bénéficiaire : flux d'exécution -20,00."})
+        return json.dumps({"action": "outil", "outil": "donnees_du_dossier", "arguments": {}})
+
+    monkeypatch.setattr(main, "make_client", lambda s: LLMClient(s, fake_responder=respond))
+    port = {"group_id": "G1", "premiums": [100, 0], "outflows": [40, 40], "coverage_units": [1, 1]}
+    r1 = client.post("/v1/copilot", json={"question": "Le groupe est-il bénéficiaire ?", "portfolio": port,
+                                          "case_id": "M-1"}, headers=AUTH)
+    assert r1.status_code == 200 and r1.json()["memory_used"] == 0
+    r2 = client.post("/v1/copilot", json={"question": "Et maintenant ?", "portfolio": port, "case_id": "M-1"}, headers=AUTH)
+    assert r2.json()["memory_used"] == 1 and "Le groupe est bénéficiaire" in seen[-1] and "<memoire>" in seen[-1]
+    assert "Résultats d'outils : donnees_du_dossier" in seen[-1]          # chiffres du moteur gardés en mémoire
+    h = client.get("/v1/copilot/M-1", headers=AUTH).json()
+    assert [e["question"] for e in h["echanges"]] == ["Le groupe est-il bénéficiaire ?", "Et maintenant ?"]
+    assert client.delete("/v1/copilot/M-1/memoire", headers=AUTH).json()["effaces"] == 2
+
+
+def test_note_en_pdf(client, monkeypatch, tmp_path):
+    """GET /v1/cases/{id}/note.pdf (D-065) : la note imprimée par le navigateur, pièce jointe des e-mails n8n."""
+    _fake_llm(monkeypatch, tmp_path, {**GOOD_EXTRACTION, "premiums": [130.0, 0.0]})
+    import api.main as main
+    import api.registry_routes as routes
+    from core.pdf import PdfUnavailable
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    reg, bearer = _users(client)
+    ana = bearer("ana")
+    assert client.get("/v1/cases/inconnu/note.pdf", headers=AUTH).status_code == 404
+    client.post("/v1/case", headers=ana, data={"case_id": "dos-pdf"},
+                files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    vu = {}
+
+    def imprimer(html, browser):
+        vu["html"] = html
+        return b"%PDF-1.4 note"
+    monkeypatch.setattr(routes, "html_to_pdf", imprimer)
+    r = client.get("/v1/cases/dos-pdf/note.pdf", headers=AUTH)       # jeton d'API : appel de n8n
+    assert r.status_code == 200 and r.headers["content-type"] == "application/pdf" and r.content.startswith(b"%PDF")
+    assert 'filename="note_IFRS17_' in r.headers["content-disposition"] and vu["html"].startswith("<!doctype html>")
+    assert "note_pdf_generee" in [e["action"] for e in client.get("/v1/cases/dos-pdf", headers=ana).json()["evenements"]]
+
+    def sans_navigateur(html, browser):
+        raise PdfUnavailable("aucun navigateur trouvé")
+    monkeypatch.setattr(routes, "html_to_pdf", sans_navigateur)
+    r = client.get("/v1/cases/dos-pdf/note.pdf", headers=AUTH)
+    assert r.status_code == 503 and "navigateur" in r.json()["detail"]
+
+
+def test_modifications_du_valideur_dans_la_note(client, monkeypatch, tmp_path):
+    """Un changement d'unité (ou de tout champ) par le valideur est écrit dans la note et la piste d'audit (D-067)."""
+    _fake_llm(monkeypatch, tmp_path, GOOD_EXTRACTION)
+    import api.main as main
+    monkeypatch.setattr(main, "_retriever_loader", lambda s: None)
+    r = client.post("/v1/case", headers=AUTH, data={"case_id": "u-1"},
+                    files={"file": ("etat.pdf", _pdf(tmp_path), "application/pdf")})
+    portfolio = r.json()["portfolio"]
+    assert main.validator_changes(portfolio, main.PortfolioData(**portfolio)) == []
+    body = {"case_id": "u-1", "portfolio": {**portfolio, "unit_multiplier": 1_000_000}, "validated_by": "v@x.fr"}
+    r = client.post("/v1/case/validated", headers=AUTH, json=body)
+    assert r.status_code == 200
+    assert "unité : 1000 → 1000000" in r.json()["note_html"] and "Modifications du valideur" in r.json()["note_html"]
+    ev = [e for e in client.get("/v1/cases/u-1", headers=AUTH).json()["evenements"] if e["action"] == "validation_approuvee"]
+    assert ev and ev[-1]["detail"]["modifications"] == ["unité : 1000 → 1000000"]

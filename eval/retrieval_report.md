@@ -1,6 +1,6 @@
 # Évaluation du retrieval
 
-Généré le 20261004-190934 par `python -m eval.eval_retrieval`. 50 questions notées sur 56 (6 questions pièges réservées au test de refus). Chunks : A = 138, B = 380.
+Généré le 20261017-222632 par `python -m eval.eval_retrieval`. 50 questions notées sur 56 (6 questions pièges réservées au test de refus). Chunks : A = 138, B = 380.
 
 ## Résultats globaux
 
@@ -8,10 +8,19 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 
 | Configuration | Recall@1 | Recall@5 | Recall@10 | Recall @1000 tokens | Recall @2000 tokens | MRR@10 | nDCG@5 | tokens@5 | p50 (ms) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A · bm25 | 0.323 | 0.650 | 0.770 | 0.470 | 0.620 | 0.492 | 0.510 | 2384 | 0.2 |
-| B · bm25 | 0.297 | 0.563 | 0.723 | 0.533 | 0.723 | 0.469 | 0.459 | 972 | 0.4 |
-| B0 · bm25 | 0.277 | 0.503 | 0.663 | 0.453 | 0.663 | 0.429 | 0.414 | 947 | 0.4 |
-| B · bm25+glossaire | 0.397 | 0.663 | 0.793 | 0.623 | 0.793 | 0.557 | 0.553 | 1024 | 0.6 |
+| A · bm25 | 0.323 | 0.650 | 0.770 | 0.470 | 0.620 | 0.492 | 0.510 | 2384 | 0.8 |
+| B · bm25 | 0.297 | 0.563 | 0.723 | 0.533 | 0.723 | 0.469 | 0.459 | 972 | 1.1 |
+| B0 · bm25 | 0.277 | 0.503 | 0.663 | 0.453 | 0.663 | 0.429 | 0.414 | 947 | 1.1 |
+| B · bm25+glossaire | 0.397 | 0.663 | 0.793 | 0.623 | 0.793 | 0.557 | 0.553 | 1024 | 1.5 |
+| B · bm25+glossaire+rerank | 0.597 | 0.843 | 0.883 | 0.773 | 0.883 | 0.741 | 0.740 | 1206 | 1069.4 |
+| A · dense · bge-m3 | 0.313 | 0.750 | 0.800 | 0.493 | 0.693 | 0.509 | 0.556 | 2401 | 118.4 |
+| A · hybrid · bge-m3 | 0.333 | 0.640 | 0.820 | 0.480 | 0.610 | 0.500 | 0.509 | 2395 | 60.5 |
+| B · dense · bge-m3 | 0.487 | 0.817 | 0.867 | 0.757 | 0.827 | 0.650 | 0.670 | 1071 | 60.5 |
+| B · hybrid · bge-m3 | 0.377 | 0.703 | 0.843 | 0.693 | 0.813 | 0.569 | 0.568 | 1040 | 63.3 |
+| B0 · dense · bge-m3 | 0.407 | 0.807 | 0.890 | 0.727 | 0.880 | 0.612 | 0.639 | 1145 | 28.2 |
+| B0 · hybrid · bge-m3 | 0.407 | 0.703 | 0.783 | 0.693 | 0.763 | 0.569 | 0.575 | 1082 | 26.1 |
+| B · hybrid+glossaire · bge-m3 | 0.467 | 0.833 | 0.913 | 0.733 | 0.913 | 0.664 | 0.676 | 1054 | 27.7 |
+| B · hybrid+glossaire+rerank · bge-m3 | 0.617 | 0.853 | 0.913 | 0.803 | 0.903 | 0.775 | 0.760 | 1233 | 1193.4 |
 
 ## Par niveau de question
 
@@ -25,6 +34,24 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 | B0 · bm25 | multi | 8 | 0.396 | 0.573 |
 | B · bm25+glossaire | factuelle | 42 | 0.690 | 0.547 |
 | B · bm25+glossaire | multi | 8 | 0.521 | 0.608 |
+| B · bm25+glossaire+rerank | factuelle | 42 | 0.881 | 0.725 |
+| B · bm25+glossaire+rerank | multi | 8 | 0.646 | 0.826 |
+| A · dense · bge-m3 | factuelle | 42 | 0.762 | 0.499 |
+| A · dense · bge-m3 | multi | 8 | 0.688 | 0.557 |
+| A · hybrid · bge-m3 | factuelle | 42 | 0.643 | 0.492 |
+| A · hybrid · bge-m3 | multi | 8 | 0.625 | 0.542 |
+| B · dense · bge-m3 | factuelle | 42 | 0.881 | 0.679 |
+| B · dense · bge-m3 | multi | 8 | 0.479 | 0.494 |
+| B · hybrid · bge-m3 | factuelle | 42 | 0.762 | 0.567 |
+| B · hybrid · bge-m3 | multi | 8 | 0.396 | 0.583 |
+| B0 · dense · bge-m3 | factuelle | 42 | 0.857 | 0.617 |
+| B0 · dense · bge-m3 | multi | 8 | 0.542 | 0.588 |
+| B0 · hybrid · bge-m3 | factuelle | 42 | 0.738 | 0.546 |
+| B0 · hybrid · bge-m3 | multi | 8 | 0.521 | 0.688 |
+| B · hybrid+glossaire · bge-m3 | factuelle | 42 | 0.881 | 0.655 |
+| B · hybrid+glossaire · bge-m3 | multi | 8 | 0.583 | 0.708 |
+| B · hybrid+glossaire+rerank · bge-m3 | factuelle | 42 | 0.905 | 0.763 |
+| B · hybrid+glossaire+rerank · bge-m3 | multi | 8 | 0.583 | 0.833 |
 
 ## Écarts appariés (moyenne et IC bootstrap 95 %)
 
@@ -32,22 +59,23 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 | --- | --- | --- | --- |
 | A · bm25 → B · bm25 | -0.087 [-0.210 ; +0.033] | +0.063 [-0.090 ; +0.220] | -0.023 [-0.126 ; +0.076] |
 | B · bm25 → B0 · bm25 | -0.060 [-0.140 ; +0.000] | -0.080 [-0.160 ; -0.020] | -0.040 [-0.089 ; +0.006] |
+| A · dense · bge-m3 → B · dense · bge-m3 | +0.067 [-0.067 ; +0.210] | +0.263 [+0.127 ; +0.410] | +0.141 [+0.033 ; +0.254] |
+| A · hybrid · bge-m3 → B · hybrid · bge-m3 | +0.063 [-0.077 ; +0.210] | +0.213 [+0.077 ; +0.360] | +0.069 [-0.034 ; +0.171] |
+| B · dense · bge-m3 → B0 · dense · bge-m3 | -0.010 [-0.100 ; +0.090] | -0.030 [-0.130 ; +0.060] | -0.037 [-0.126 ; +0.045] |
+| B · hybrid · bge-m3 → B0 · hybrid · bge-m3 | +0.000 [-0.070 ; +0.080] | +0.000 [-0.080 ; +0.080] | -0.000 [-0.057 ; +0.057] |
+| B · bm25+glossaire → B · bm25+glossaire+rerank | +0.180 [+0.080 ; +0.290] | +0.150 [+0.050 ; +0.260] | +0.184 [+0.065 ; +0.305] |
+| B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+rerank · bge-m3 | +0.020 [-0.060 ; +0.090] | +0.070 [-0.010 ; +0.160] | +0.111 [+0.002 ; +0.217] |
 | B · bm25 → B · bm25+glossaire | +0.100 [+0.030 ; +0.180] | +0.090 [+0.020 ; +0.170] | +0.088 [+0.031 ; +0.156] |
+| B · hybrid · bge-m3 → B · hybrid+glossaire · bge-m3 | +0.130 [+0.050 ; +0.230] | +0.040 [-0.040 ; +0.130] | +0.094 [+0.029 ; +0.162] |
 
 Un intervalle qui ne contient pas 0 indique une différence robuste sur ce jeu de questions.
 
-## Échecs de la meilleure configuration (B · bm25+glossaire)
+## Échecs de la meilleure configuration (B · hybrid+glossaire+rerank · bge-m3)
 
 Questions dont aucun paragraphe attendu n'est dans les 10 premiers résultats :
 
-- **q01** « À partir de quelle date un assureur doit-il reconnaître un groupe de contrats qu'il a émis ? » — attendu 25 ; obtenu C23, cons-4, B73
-- **q02** « De quoi se compose l'évaluation d'un groupe de contrats au moment de sa première comptabilisation ? » — attendu 32 ; obtenu 60/61, 62, 25
-- **q07** « À l'origine, comment détermine-t-on le montant de la CSM d'un groupe de contrats ? » — attendu 38 ; obtenu C7, B119, C15
-- **q11** « Que se passe-t-il lorsque, après l'origine, des variations défavorables des flux dépassent la CSM restante ? » — attendu 48 ; obtenu 46, 50, 44
-- **q15** « Peut-on regrouper des contrats émis à deux ans d'écart dans un même groupe ? » — attendu 22 ; obtenu B93, 5, 92
-- **q19** « Dans quels cas un contrat d'assurance doit-il être retiré du bilan ? » — attendu 74 ; obtenu 78, B119B, 93
-- **q42** « Qu'est-ce que le passif au titre de la couverture restante ? » — attendu def:passif au titre de la couverture restante ; obtenu 46, 51, 50
-- **q45** « Quelle différence dans l'ajustement de la CSM entre contrats avec et sans participation directe ? » — attendu 44, 45 ; obtenu B99, B97, B113
+- **q06** « Que représente l'ajustement pour risque non financier ? » — attendu 37 ; obtenu B86, B89, B88
+- **q22** « Peut-on ventiler les produits ou charges financières d'assurance entre résultat net et autres éléments du résultat global ? » — attendu 88 ; obtenu 116, B129, C24
 
 ## Limites
 

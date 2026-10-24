@@ -1,0 +1,14 @@
+# Qdrant en mode serveur (D-052) : base vectorielle partagée entre l'API, les évaluations et n8n.
+#   docker compose up -d qdrant
+#   puis dans .env : RAG_STORE=qdrant et QDRANT_URL=http://localhost:6333
+#   et une fois : python -m rag.qdrant_sync
+# Interface web de Qdrant : http://localhost:6333/dashboard
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.15.4
+    container_name: ifrs17-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./data/qdrant_server:/qdrant/storage
+    restart: unless-stopped

@@ -118,3 +118,25 @@ def test_jeu_cas_pratiques_gele():
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     assert len(rows) == 30 and all(r["gold"] for r in rows)
     assert len({r["id"] for r in rows}) == 30
+
+
+def test_statut_rag_signale_les_incoherences():
+    from types import SimpleNamespace
+
+    from rag.service import rag_status
+    base = dict(rag_strategy="B", rag_glossary=True, rag_questions=False, rag_graph=False,
+                rag_rerank_model="", verifier_enabled=True)
+    bad = rag_status(SimpleNamespace(**base, rag_mode="bm25", rag_embed_model="", rag_store="qdrant", rag_agentic=True))
+    assert len(bad["avertissements"]) == 2 and bad["store"] == "aucun (bm25)"
+    ok = rag_status(SimpleNamespace(**base, rag_mode="hybrid", rag_embed_model="BAAI/bge-m3",
+                                    rag_store="qdrant", rag_agentic=True))
+    assert ok["avertissements"] == [] and ok["store"] == "qdrant" and ok["agent_langgraph"]
+
+
+def test_relecture_des_cas_pratiques():
+    import csv
+    root = Path(__file__).resolve().parent.parent / "eval"
+    ids = {json.loads(line)["id"] for line in (root / "cas_pratiques.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()}
+    with open(root / "cas_pratiques_relecture.csv", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    assert {r["id"] for r in rows} == ids and all(r["relecteur"] and r["verdict"] for r in rows)

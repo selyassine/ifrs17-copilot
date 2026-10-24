@@ -21,6 +21,7 @@ import json
 import random
 from pathlib import Path
 
+from agents.schemas import truth_dict
 from core.config import ROOT
 from engine.csm import compute_csm
 from multimodal.synth import CURRENCIES, SynthDoc, draw, fr, pct
@@ -185,44 +186,50 @@ def render_images(pdf: Path, out_dir: Path, doc_id: str, heavy: bool, seed: int)
     return names
 
 
+def trap_case(i: int, doc_id: str, trap: str, expect: str, description: str, rng: random.Random,
+              out_dir: Path, seed: int, images: bool = True) -> dict:
+    """Un document piégé et sa vérité. Utilisé par ``generate`` (les 10 pièges de référence) et par
+    ``multimodal.volume`` (plusieurs séries de pièges, identifiants différents)."""
+    d = draw(i, rng)
+    other = draw(i + 20, rng)
+    truth = d.truth
+    if trap == "ajustement_absent":
+        truth = truth.model_copy(update={"risk_adjustment_pct": 0.0})
+    if trap == "unites_en_tete":
+        truth = truth.model_copy(update={"unit_multiplier": 1_000, "currency": "EUR"})
+    if trap == "millions":
+        scale = 1e-6 if truth.unit_multiplier == 1 else 1e-3
+        truth = truth.model_copy(update={
+            "unit_multiplier": 1_000_000,
+            "premiums": [round(x * scale, 3) for x in truth.premiums],
+            "outflows": [round(c * scale, 3) + round(e * scale, 3)
+                         for c, e in zip(d.claims, d.expenses, strict=True)]})
+        d.claims = [round(c * scale, 3) for c in d.claims]
+        d.expenses = [round(e * scale, 3) for e in d.expenses]
+        d.investment_income = [round(x * scale, 3) for x in d.investment_income]
+        truth = truth.model_copy(update={"outflows": [round(c + e, 3) for c, e in
+                                                      zip(d.claims, d.expenses, strict=True)]})
+    d.truth = truth
+    pdf = out_dir / f"{doc_id}.pdf"
+    build(trap, d, other, pdf)
+    imgs = render_images(pdf, out_dir, doc_id, trap == "photo_degradee", seed + i) if images else []
+    exact = expect == "exact"
+    csm = compute_csm(truth) if exact else None
+    return {
+        "id": doc_id, "layout": trap, "scan": True, "piege": description, "attendu": expect,
+        "pdf": f"data/{out_dir.name}/{doc_id}.pdf", "images": imgs,
+        "truth": truth_dict(truth) if exact else None,
+        "csm_attendu": round(csm.initial_csm, 4) if csm else None,
+        "perte_attendue": round(csm.initial_loss_component, 4) if csm else None,
+    }
+
+
 def generate(seed: int = 31, out_dir: Path = OUT_DIR, cases_path: Path = CASES,
              images: bool = True) -> list[dict]:
     rng = random.Random(seed)
     out_dir.mkdir(parents=True, exist_ok=True)
-    cases = []
-    for i, (doc_id, trap, expect, description) in enumerate(TRAPS):
-        d = draw(i, rng)
-        other = draw(i + 20, rng)
-        truth = d.truth
-        if trap == "ajustement_absent":
-            truth = truth.model_copy(update={"risk_adjustment_pct": 0.0})
-        if trap == "unites_en_tete":
-            truth = truth.model_copy(update={"unit_multiplier": 1_000, "currency": "EUR"})
-        if trap == "millions":
-            scale = 1e-6 if truth.unit_multiplier == 1 else 1e-3
-            truth = truth.model_copy(update={
-                "unit_multiplier": 1_000_000,
-                "premiums": [round(x * scale, 3) for x in truth.premiums],
-                "outflows": [round(c * scale, 3) + round(e * scale, 3)
-                             for c, e in zip(d.claims, d.expenses, strict=True)]})
-            d.claims = [round(c * scale, 3) for c in d.claims]
-            d.expenses = [round(e * scale, 3) for e in d.expenses]
-            d.investment_income = [round(x * scale, 3) for x in d.investment_income]
-            truth = truth.model_copy(update={"outflows": [round(c + e, 3) for c, e in
-                                                          zip(d.claims, d.expenses, strict=True)]})
-        d.truth = truth
-        pdf = out_dir / f"{doc_id}.pdf"
-        build(trap, d, other, pdf)
-        imgs = render_images(pdf, out_dir, doc_id, trap == "photo_degradee", seed + i) if images else []
-        exact = expect == "exact"
-        csm = compute_csm(truth) if exact else None
-        cases.append({
-            "id": doc_id, "layout": trap, "scan": True, "piege": description, "attendu": expect,
-            "pdf": f"data/{out_dir.name}/{doc_id}.pdf", "images": imgs,
-            "truth": truth.model_dump(exclude={"field_confidence", "future_service_adjustments"}) if exact else None,
-            "csm_attendu": round(csm.initial_csm, 4) if csm else None,
-            "perte_attendue": round(csm.initial_loss_component, 4) if csm else None,
-        })
+    cases = [trap_case(i, doc_id, trap, expect, description, rng, out_dir, seed, images)
+             for i, (doc_id, trap, expect, description) in enumerate(TRAPS)]
     cases_path.write_text("\n".join(json.dumps(c, ensure_ascii=False) for c in cases) + "\n", encoding="utf-8")
     return cases
 

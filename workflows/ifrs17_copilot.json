@@ -1,0 +1,1866 @@
+{
+  "name": "IFRS 17 Copilot — processus complet",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "format": "simple",
+        "downloadAttachments": true,
+        "dataPropertyAttachmentsPrefixName": "attachment_",
+        "options": {
+          "customEmailConfig": "[\"UNSEEN\", [\"SUBJECT\", \"IFRS17\"]]"
+        }
+      },
+      "id": "2d34d3ff-c6c8-55f2-9d24-bc77ff84f68b",
+      "name": "E-mail reçu (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        -900
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Un élément par pièce jointe exploitable (PDF, PNG, JPEG, Excel, CSV) ; un e-mail sans document est signalé.\nconst ACCEPTE = ['application/pdf', 'image/png', 'image/jpeg',\n  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];\nconst EXTENSIONS = /\\.(pdf|png|jpe?g|xlsx|csv)$/i;   // un CSV arrive souvent avec un type générique\nconst adresse = de => (String(de || '').match(/[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+/) || [''])[0].toLowerCase();\nconst sortie = [];\nfor (const mail of $input.all()) {\n  const deposant = adresse(mail.json.from);\n  const sujet = mail.json.subject || '';\n  const pieces = Object.values(mail.binary || {}).filter(b => ACCEPTE.includes(b.mimeType) || EXTENSIONS.test(b.fileName || ''));\n  if (!pieces.length) { sortie.push({ json: { flux: 'sans_document', deposant, sujet } }); continue; }\n  for (const b of pieces) {\n    sortie.push({ json: { flux: 'dossier', source: 'n8n-email', deposant, sujet, nom_fichier: b.fileName || 'document' },\n                  binary: { document: b } });\n  }\n}\nreturn sortie;\n"
+      },
+      "id": "6bff9e97-1932-5f3d-b0b3-1be038240983",
+      "name": "Extraire les documents",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        -900
+      ]
+    },
+    {
+      "parameters": {
+        "path": "ifrs17-depot",
+        "formTitle": "Déposer un dossier IFRS 17",
+        "formDescription": "Déposez l'état du portefeuille (PDF, scan ou photo). Vous recevrez la note par e-mail, ou un accusé de réception si un valideur doit d'abord l'approuver. Données fictives uniquement.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Adresse e-mail",
+              "fieldType": "email",
+              "requiredField": true,
+              "placeholder": "nom@assureur.fr"
+            },
+            {
+              "fieldLabel": "Nom",
+              "fieldType": "text",
+              "requiredField": false
+            },
+            {
+              "fieldLabel": "Document",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf, .png, .jpg, .jpeg, .xlsx, .csv",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Commentaire",
+              "fieldType": "textarea",
+              "requiredField": false
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Envoyer le dossier",
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Dossier reçu. L'analyse prend 1 à 3 minutes : la note, ou un accusé de réception, arrive par e-mail."
+            }
+          }
+        }
+      },
+      "id": "14a659b9-9512-58f3-941f-53a3cb2d37e2",
+      "name": "Formulaire de dépôt",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        -700
+      ],
+      "webhookId": "f709dba6-b9c6-589f-8244-2a0c44014af1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Le fichier du champ « Document » devient la pièce « document » attendue par l'appel à l'API.\nreturn $input.all().map(i => ({\n  json: { flux: 'dossier', source: 'n8n-formulaire', deposant: String(i.json['Adresse e-mail'] || '').trim().toLowerCase(),\n          nom: i.json['Nom'] || '', commentaire: i.json['Commentaire'] || '',\n          nom_fichier: i.binary?.Document?.fileName || 'document' },\n  binary: { document: i.binary.Document },\n}));\n"
+      },
+      "id": "b74c9733-236b-5e79-81a4-97d29ff26156",
+      "name": "Préparer : formulaire",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        -700
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/depot",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "a15b8231-7d84-52c7-8cd8-5c5805375bb6",
+      "name": "Webhook de dépôt",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -500
+      ],
+      "webhookId": "aa20907a-96ff-5132-a9a7-5b2b3ee161bb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Dépôt par requête HTTP (démo, scripts) : curl.exe -F \"file=@doc.pdf\" -F \"email=nom@exemple.fr\" ...\n// Sans champ email, la note part au valideur (Paramètres).\nreturn $input.all().map(i => {\n  const fichiers = Object.values(i.binary || {});\n  const deposant = String(i.json.body?.email || '').trim().toLowerCase();\n  if (!fichiers.length) return { json: { flux: 'sans_document', deposant, sujet: 'dépôt par webhook' } };\n  return { json: { flux: 'dossier', source: 'n8n-webhook', deposant, nom_fichier: fichiers[0].fileName || 'document' },\n           binary: { document: fichiers[0] } };\n});\n"
+      },
+      "id": "9f8b8dee-6149-5800-907b-3f9561e9c700",
+      "name": "Préparer : webhook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        -500
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/validation",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "bd9eada4-38d7-5b73-93c8-5257bc3afdb8",
+      "name": "Webhook de validation",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        40
+      ],
+      "webhookId": "a919af9d-dbc8-56df-a5f4-eb05439df132"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Dossier déjà analysé (réponse de /v1/case), envoyé par l'API (site web, N8N_VALIDATION_URL)\n// ou par la branche « dossier » de ce workflow (dépôt par e-mail, formulaire, webhook).\nconst corps = $input.first().json.body || {};\nreturn [{ json: { ...corps, flux: 'validation' } }];\n"
+      },
+      "id": "ed9aa3c1-fd4b-5375-98c7-7b1b19043a9c",
+      "name": "Préparer : validation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "7bee829d-573f-5000-8cb5-9530b607c8cb",
+      "name": "Toutes les 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { flux: 'sante' } }];\n"
+      },
+      "id": "2c46819b-be83-534f-a842-e168eb6603ab",
+      "name": "Préparer : santé",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "870e5532-d373-5ccd-bf16-a826db02c733",
+      "name": "Chaque lundi à 8 h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { flux: 'rapport' } }];\n"
+      },
+      "id": "10bbf72e-ff24-535d-ae60-2d34809e0567",
+      "name": "Préparer : rapport",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        900
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c438b1c2-d650-54ae-b2cb-663085a284d7",
+      "name": "Erreur du workflow",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n lance ce déclencheur quand une exécution de CE workflow échoue (hors exécution manuelle).\nconst e = $input.first().json;\nreturn [{ json: { flux: 'erreur', workflow: e.workflow?.name ?? '?', noeud: e.execution?.lastNodeExecuted ?? '?',\n  message: e.execution?.error?.message ?? e.trigger?.error?.message ?? '?',\n  url: e.execution?.url ?? '(pas d\\'URL)', mode: e.execution?.mode ?? '?' } }];\n"
+      },
+      "id": "77b90427-a391-55c5-830a-a2b5dd8d1889",
+      "name": "Préparer : erreur",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1180
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// À ADAPTER : les SEULS réglages de tout le processus. Le jeton reste « change-moi » et l'adresse\n// « votre.adresse@gmail.com » dans le fichier commité ; mettez vos valeurs dans n8n, jamais dans Git.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les dossiers à valider et les alertes\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',                   // 127.0.0.1 et non localhost (F-002)\n  jeton: 'change-moi',                            // valeur d'API_TOKEN du .env\n  validation: 'http://127.0.0.1:5678/webhook/ifrs17/validation',  // webhook de validation de CE workflow\n};\nconst j = $input.item.json;\n// sans adresse de déposant (site web, webhook sans champ email), la note part au valideur\nreturn { json: { ...j, deposant: j.deposant || parametres.valideur, parametres }, binary: $input.item.binary };\n"
+      },
+      "id": "a80cda8e-c4f5-5d30-a583-dd1bfbdf6e91",
+      "name": "Paramètres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e0a73890-2512-5ccc-95d5-191277169369",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "dossier",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dossier"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8145db2e-15c7-5c92-a5d9-5eb164e8e306",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "validation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "validation"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9490479f-4562-5f27-a0a0-c3465240abf3",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "sans_document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sans_document"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "23c80616-fa42-532c-8597-21606b4cdc93",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "sante",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sante"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2524417b-400a-53e3-b934-15ceda6e555d",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "rapport",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rapport"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "97e2d0ae-b7bc-5b43-ad4a-38b5019f5e20",
+                    "leftValue": "={{ $json.flux }}",
+                    "rightValue": "erreur",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "erreur"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a8e94d8c-5f9b-5e11-8a5b-aeeaba1a89c1",
+      "name": "Aiguillage",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        800,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/case",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "document"
+            },
+            {
+              "parameterType": "formData",
+              "name": "source",
+              "value": "={{ $json.source }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "submitter",
+              "value": "={{ $json.deposant }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "6c092228-77dc-5a91-b65a-14351a7bc084",
+      "name": "Appel API /v1/case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        -780
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "35f2d751-b08b-5eae-8eb9-003006a59deb",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "note_prete",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2f9ccc15-df6c-5b4a-9096-198d7756d25c",
+      "name": "Note prête ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        -880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/cases/{{ $('Appel API /v1/case').item.json.case_id }}/note.pdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "note_pdf"
+            }
+          }
+        }
+      },
+      "id": "09f2d2bc-fc0b-5d79-8bea-321a38df206d",
+      "name": "Note en PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        -1000
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · note prête · {{ $('Appel API /v1/case').item.json.portfolio?.group_id ?? $('Appel API /v1/case').item.json.triangle?.portfolio_id ?? '' }} (dossier {{ $('Appel API /v1/case').item.json.case_id }})",
+        "emailFormat": "html",
+        "html": "={{ $('Appel API /v1/case').item.json.note_html }}",
+        "options": {
+          "appendAttribution": false,
+          "fileAttachments": "note_pdf"
+        }
+      },
+      "id": "e0781d01-db7c-5ec7-8c82-1e0850bd8ccb",
+      "name": "E-mail : note au déposant",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1820,
+        -1000
+      ],
+      "webhookId": "1816b637-2c74-5dcf-b6ba-94d75eb916dc"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/cases/{{ $json.case_id ?? $('Appel API /v1/case').item.json.case_id }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'email_note_envoyee', detail: { a: $('Paramètres').item.json.deposant, canal: $('Paramètres').item.json.source, pdf: Boolean($('Note en PDF').item.binary?.note_pdf) } }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "58d94734-afb4-5e40-877a-ef44479bcb9e",
+      "name": "Registre : note envoyée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2060,
+        -1000
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "efe887df-9369-5770-a185-648211e51a42",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "validation_humaine",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "952a64ae-4ff9-59d0-976c-029cf3d14f0c",
+      "name": "À valider ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        -780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.validation }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$json, deposant: $('Paramètres').item.json.deposant }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "be81cf0b-5aaa-5413-811f-3861fab09cb0",
+      "name": "Transmettre à la validation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1820,
+        -820
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · dossier {{ $('Appel API /v1/case').item.json.case_id }} reçu, en cours de validation",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nVotre dossier {{ $('Appel API /v1/case').item.json.case_id }} ({{ $('Paramètres').item.json.nom_fichier }}) a bien été analysé. Un contrôle automatique demande l'avis d'un valideur avant diffusion de la note : vous la recevrez dès sa décision.\n\nContrôles en cours de revue :\n{{ ($('Appel API /v1/case').item.json.controls || []).map(c => '- ' + c).join('\\n') }}\n\nRéférence à rappeler : {{ $('Appel API /v1/case').item.json.case_id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "98d43139-499f-54c9-97fc-8758190a272e",
+      "name": "E-mail : accusé de réception",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2060,
+        -820
+      ],
+      "webhookId": "3ee252a2-261d-59fe-93f9-1fab4301e0db"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/cases/{{ $('Appel API /v1/case').item.json.case_id }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'transmis_validation', detail: { valideur: $('Paramètres').item.json.parametres.valideur } }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "03e4c032-5a69-5eeb-903e-60f19bf8ccca",
+      "name": "Registre : transmis au valideur",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        -820
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · dossier {{ $json.case_id }} : document inexploitable",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nLe document {{ $('Paramètres').item.json.nom_fichier }} n'a pas pu être exploité :\n{{ ($json.controls || []).map(c => '- ' + c).join('\\n') }}\n\nMerci d'envoyer un PDF ou une image lisible de l'état du portefeuille (primes, sinistres et frais, unités de couverture, taux).",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "783b2d68-39b4-5b92-a8ce-82dfc16fc515",
+      "name": "E-mail : document inexploitable",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1820,
+        -640
+      ],
+      "webhookId": "3d7cef19-6dcf-5072-a899-6611880c31da"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · votre dossier n'a pas pu être traité",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nLe document {{ $('Paramètres').item.json.nom_fichier }} n'a pas pu être traité ({{ String($json.error?.message ?? $json.error ?? 'erreur inconnue').slice(0, 300) }}).\n\nS'il s'agit d'un scan, vérifiez qu'il est lisible ; sinon l'équipe a été prévenue et reviendra vers vous.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "ea8a5b5d-b766-5855-808f-f537660a0690",
+      "name": "E-mail : incident (déposant)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1340,
+        -520
+      ],
+      "webhookId": "258b44fa-4e02-55cd-901f-29eb42786f13"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.parametres.valideur }}",
+        "subject": "=IFRS 17 · échec d'un dossier reçu par {{ $('Paramètres').item.json.source }}",
+        "emailFormat": "text",
+        "text": "=Déposant : {{ $('Paramètres').item.json.deposant }}\nDocument : {{ $('Paramètres').item.json.nom_fichier }}\nErreur : {{ String($('Appel API /v1/case').item.json.error?.message ?? JSON.stringify($('Appel API /v1/case').item.json.error ?? '')).slice(0, 1500) }}\nDétail : {{ JSON.stringify($('Appel API /v1/case').item.json.error?.description ?? '').slice(0, 1500) }}\n\nLe dossier est visible dans le registre (site, page Dossiers) avec son statut d'échec.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "d4320da4-c295-55fe-9dfb-0257246565b1",
+      "name": "E-mail : alerte équipe",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        -520
+      ],
+      "webhookId": "d0d14727-031e-5907-9748-654e61d1a8c3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prépare l'e-mail de validation et le formulaire pré-rempli avec les données extraites.\nconst r = $input.first().json;\nconst p = r.portfolio || {};\nconst lic = r.kind === 'lic';   // triangle de sinistres survenus (D-083) : approbation de la note, sans formulaire de cellules\nconst liste = v => Array.isArray(v) ? v.join(' ; ') : (v ?? '');\nconst unite = { 1: 'unités', 1000: 'milliers', 1000000: 'millions' }[p.unit_multiplier] || '';\nconst controles = (r.controls || []).map(c => '- ' + c).join('\\n') || '- aucun contrôle détaillé';\nconst autres = (r.groups || []).slice(1).map(g => g.portfolio);   // autres groupes du document (D-078)\nconst csm = lic && r.lic\n  ? `passif pour sinistres survenus (LIC) provisoire : ${r.lic.lic.toFixed(2)} ${r.triangle?.currency || ''}`\n  : r.csm\n  ? `${r.csm.onerous ? 'composante de perte' : 'CSM initiale'} provisoire : ${(r.csm.onerous ? r.csm.initial_loss_component : r.csm.initial_csm).toFixed(2)} ${p.currency || ''} (${unite})`\n  : 'CSM non calculée : aucune donnée exploitable';\nconst message = [\n  `Dossier ${r.case_id} : un contrôle n'est pas passé, la note ne peut pas partir sans vous.`,\n  r.deposant ? `Déposé par : ${r.deposant}` : 'Déposé depuis le site web.',\n  '', 'Contrôles non passés :', controles, '', csm, '',\n  'La note provisoire vous a été envoyée dans un e-mail séparé.',\n  'Cliquez sur « Vérifier les données » : le formulaire est pré-rempli avec les données extraites.',\n  'Corrigez ce qui est faux, puis choisissez Approuver (la note définitive est recalculée et envoyée) ou Rejeter.',\n  'Listes : une valeur par période, séparées par des points-virgules ; la virgule sert de séparateur décimal.',\n  ...(autres.length ? ['', `Le document contient ${autres.length + 1} groupes : le formulaire corrige le groupe `\n    + `${p.group_id} ; les autres (${autres.map(g => g.group_id).join(', ')}) sont repris tels quels dans la note.`] : []),\n].join('\\n');\nconst champ = (fieldLabel, defaultValue, extra = {}) =>\n  ({ fieldLabel, fieldType: 'text', defaultValue: String(defaultValue ?? ''), requiredField: true, ...extra });\nconst formulaireLic = [\n  { fieldLabel: 'Décision', fieldType: 'dropdown', defaultValue: 'Approuver',\n    fieldOptions: { values: [{ option: 'Approuver' }, { option: 'Rejeter' }] }, requiredField: true },\n  { fieldLabel: 'Commentaire', fieldType: 'textarea', requiredField: false },\n];\nconst formulaire = [\n  { fieldLabel: 'Décision', fieldType: 'dropdown', defaultValue: 'Approuver',\n    fieldOptions: { values: [{ option: 'Approuver' }, { option: 'Rejeter' }] }, requiredField: true },\n  champ('Groupe de contrats', p.group_id),\n  champ('Devise', p.currency || 'EUR'),\n  champ('Unité (1, 1000 ou 1000000)', p.unit_multiplier ?? 1),\n  champ('Primes par période', liste(p.premiums), { fieldType: 'textarea' }),\n  champ('Sorties par période', liste(p.outflows), { fieldType: 'textarea' }),\n  champ('Recouvrements par période (facultatif)', p.recoveries ? liste(p.recoveries) : '',\n        { fieldType: 'textarea', requiredField: false }),\n  champ(\"Frais d'acquisition par période (facultatif)\", p.acquisition_costs ? liste(p.acquisition_costs) : '',\n        { fieldType: 'textarea', requiredField: false }),\n  champ('Durée de couverture en mois (facultatif)', p.coverage_months ?? '', { requiredField: false }),\n  champ('Branche (facultatif)', p.line_of_business ?? '', { requiredField: false }),\n  champ('Unités de couverture par période', liste(p.coverage_units), { fieldType: 'textarea' }),\n  champ(\"Taux d'actualisation\", liste(p.discount_rates ?? 0)),\n  champ('Ajustement pour risque (0 à 1)', p.risk_adjustment_pct ?? 0),\n  { fieldLabel: 'Commentaire', fieldType: 'textarea', requiredField: false },\n];\nreturn [{ json: {\n  case_id: r.case_id, statut: r.status,\n  sujet: `IFRS 17 · dossier ${r.case_id} à valider (${(r.controls || []).length} contrôle(s) non passé(s))`,\n  message: lic ? message.replace('le formulaire est pré-rempli avec les données extraites', 'dossier de sinistres survenus : '\n    + 'comparez le triangle de la note au document ; une cellule fausse se corrige sur le site (ou rejetez)') : message,\n  formulaire: lic ? formulaireLic : formulaire, portfolio_extrait: p, autres_groupes: autres,\n  kind: r.kind || 'lrc', triangle_extrait: r.triangle || null,\n  note_provisoire_html: r.note_html || '<p>Aucune note provisoire : le document est illisible.</p>',\n} }];\n"
+      },
+      "id": "9216481f-bd6f-5850-a76d-e24104fd1355",
+      "name": "Préparer la validation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · note provisoire · dossier {{ $json.case_id }} (à valider)",
+        "emailFormat": "html",
+        "html": "={{ $json.note_provisoire_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "e97541c7-d776-5915-825c-600bcd432802",
+      "name": "E-mail : note provisoire",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1340,
+        40
+      ],
+      "webhookId": "666ca227-9985-5476-bf67-05d064ac92d1"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "={{ $('Préparer la validation').first().json.sujet }}",
+        "message": "={{ $('Préparer la validation').first().json.message }}",
+        "responseType": "customForm",
+        "defineForm": "json",
+        "jsonOutput": "={{ $('Préparer la validation').first().json.formulaire }}",
+        "options": {
+          "messageButtonLabel": "Vérifier les données",
+          "responseFormTitle": "Validation du dossier IFRS 17",
+          "responseFormDescription": "Le formulaire est pré-rempli avec les données extraites du document. Corrigez ce qui est faux, puis choisissez une décision.",
+          "responseFormButtonLabel": "Envoyer ma décision",
+          "appendAttribution": false
+        }
+      },
+      "id": "0d763ac6-86ca-5595-bd4a-08f3e8607f90",
+      "name": "E-mail : validation humaine",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        40
+      ],
+      "webhookId": "8598358b-6cdf-5df9-a74d-215943062e1d"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lit la réponse du formulaire et reconstruit les données du portefeuille (PortfolioData).\nconst f = $input.first().json.data;\nconst prep = $('Préparer la validation').first().json;\nconst nombre = (s, nom) => {\n  const t = String(s ?? '').replace(/\\s/g, '').replace(',', '.');\n  const x = Number(t);\n  if (t === '' || !Number.isFinite(x)) throw new Error(`${nom} : « ${s} » n'est pas un nombre`);\n  return x;\n};\nconst liste = (s, nom) => String(s ?? '').split(';').map(t => t.trim()).filter(t => t !== '')\n  .map(t => nombre(t, nom));\nconst decision = f['Décision'];\nconst commentaire = f['Commentaire'] || '';\nif (decision !== 'Approuver') {\n  return [{ json: { case_id: prep.case_id, decision, commentaire } }];\n}\nif (prep.kind === 'lic') {   // dossier LIC (D-083) : le triangle lu est approuvé tel quel\n  return [{ json: { case_id: prep.case_id, decision, commentaire, triangle: prep.triangle_extrait } }];\n}\nconst taux = liste(f[\"Taux d'actualisation\"], \"Taux d'actualisation\");\nconst portfolio = {\n  group_id: String(f['Groupe de contrats']).trim(),\n  currency: String(f['Devise']).trim().toUpperCase(),\n  unit_multiplier: nombre(f['Unité (1, 1000 ou 1000000)'], 'Unité'),\n  premiums: liste(f['Primes par période'], 'Primes'),\n  outflows: liste(f['Sorties par période'], 'Sorties'),\n  coverage_units: liste(f['Unités de couverture par période'], 'Unités de couverture'),\n  discount_rates: taux.length === 1 ? taux[0] : (taux.length ? taux : 0),\n  risk_adjustment_pct: nombre(f['Ajustement pour risque (0 à 1)'], 'Ajustement pour risque'),\n};\n// recouvrements (B65 k, D-071) : facultatifs ; vide ou que des zéros = aucun\nconst rec = liste(f['Recouvrements par période (facultatif)'], 'Recouvrements');\nif (rec.some(x => x !== 0)) portfolio.recoveries = rec;\n// frais d'acquisition (B65 e, D-075), durée de couverture (PAA, D-073) et branche (RA, D-074) : facultatifs\nconst acq = liste(f[\"Frais d'acquisition par période (facultatif)\"], \"Frais d'acquisition\");\nif (acq.some(x => x !== 0)) portfolio.acquisition_costs = acq;\nconst duree = String(f['Durée de couverture en mois (facultatif)'] ?? '').trim();\nif (duree) portfolio.coverage_months = Math.round(nombre(duree, 'Durée de couverture'));\nconst branche = String(f['Branche (facultatif)'] ?? '').trim();\nif (branche) portfolio.line_of_business = branche;\n// ajustements de service futur : repris tels quels s'ils ont toujours le bon nombre de périodes\nfor (const k of ['declared_cv', 'declared_confidence']) {   // D-082 : repris tels quels\n  const v = (prep.portfolio_extrait || {})[k];\n  if (typeof v === 'number') portfolio[k] = v;\n}\nconst fsa = (prep.portfolio_extrait || {}).future_service_adjustments;\nif (Array.isArray(fsa) && fsa.length === portfolio.premiums.length) {\n  portfolio.future_service_adjustments = fsa;\n}\nreturn [{ json: { case_id: prep.case_id, decision, commentaire, portfolio, other_groups: prep.autres_groupes || [] } }];\n"
+      },
+      "id": "e0b711b4-0497-5134-9321-6950fbd485cc",
+      "name": "Appliquer les corrections",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        40
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ebcade0a-f72c-58c4-95df-a9edfb873674",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "Approuver",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4be89853-4df2-5ff5-a49f-1fbc06a4d05f",
+      "name": "Approuvé ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/case/validated",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ portfolio: $json.portfolio || null, triangle: $json.triangle || null, other_groups: $json.other_groups || [], case_id: $json.case_id, validated_by: $('Paramètres').first().json.parametres.valideur, comment: $json.commentaire || null }) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "93e79cd1-3e0d-5696-9368-914cc5cfbd30",
+      "name": "Appel API /v1/case/validated",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        -80
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/cases/{{ $('Appel API /v1/case/validated').first().json.case_id }}/note.pdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "note_pdf"
+            }
+          }
+        }
+      },
+      "id": "2c51e331-7439-5ee8-8286-bd6f7c5fe348",
+      "name": "Note validée en PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2540,
+        -80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · note validée{{ $('Appel API /v1/case/validated').first().json.status === 'note_prete' ? '' : ' (contrôles de la norme à revoir)' }} · {{ $('Appel API /v1/case/validated').first().json.portfolio?.group_id ?? $('Appel API /v1/case/validated').first().json.triangle?.portfolio_id ?? '' }} (dossier {{ $('Appel API /v1/case/validated').first().json.case_id }})",
+        "emailFormat": "html",
+        "html": "={{ $('Appel API /v1/case/validated').first().json.note_html }}",
+        "options": {
+          "appendAttribution": false,
+          "fileAttachments": "note_pdf",
+          "ccEmail": "={{ $('Paramètres').first().json.deposant && $('Paramètres').first().json.deposant !== $('Paramètres').first().json.parametres.valideur ? $('Paramètres').first().json.deposant : '' }}"
+        }
+      },
+      "id": "b5a35d61-f525-5ea5-a010-47bf4a6afefc",
+      "name": "E-mail : note validée",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2780,
+        -80
+      ],
+      "webhookId": "88944091-67a2-55c6-94e6-7c5141ddbf22"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/cases/{{ $('Appel API /v1/case/validated').first().json.case_id }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'email_note_envoyee', detail: { a: $('Paramètres').first().json.parametres.valideur, copie: $('Paramètres').first().json.deposant, apres: 'validation' } }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "e18ad414-8746-5305-893a-3929b0132535",
+      "name": "Registre : note validée envoyée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3020,
+        -80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/cases/{{ $json.case_id }}/reject",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ comment: $json.commentaire || 'rejeté sans commentaire', rejected_by: $('Paramètres').first().json.parametres.valideur }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "595661f2-1e9f-5014-8cca-c3d47e4ce458",
+      "name": "Registre : rejet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        100
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · dossier {{ $('Appliquer les corrections').first().json.case_id }} rejeté",
+        "emailFormat": "text",
+        "text": "=Le dossier {{ $('Appliquer les corrections').first().json.case_id }} a été rejeté lors de la validation humaine.\n\nCommentaire : {{ $('Appliquer les corrections').first().json.commentaire || '(aucun)' }}\n\nAucune note n'a été diffusée. Le rejet est inscrit dans la piste d'audit du registre.",
+        "options": {
+          "appendAttribution": false,
+          "ccEmail": "={{ $('Paramètres').first().json.deposant && $('Paramètres').first().json.deposant !== $('Paramètres').first().json.parametres.valideur ? $('Paramètres').first().json.deposant : '' }}"
+        }
+      },
+      "id": "4f7a54fa-cc85-5ce5-ace6-77660c211118",
+      "name": "E-mail : dossier rejeté",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2540,
+        100
+      ],
+      "webhookId": "ae672099-428c-5b6c-87ff-7f2c157bdc67"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · échec du dossier {{ $('Préparer la validation').first().json.case_id }}",
+        "emailFormat": "text",
+        "text": "=Le dossier {{ $('Préparer la validation').first().json.case_id }} n'a pas pu être terminé.\n\nCause : {{ $json.error?.message ?? $json.error ?? JSON.stringify($json) }}\n\nVérifiez les données saisies (nombres, points-virgules entre les périodes) ou l'API, puis relancez le dossier.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "79fb7bb1-629f-5754-9afd-b910a7057d5c",
+      "name": "E-mail : erreur de validation",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2300,
+        260
+      ],
+      "webhookId": "8ad1ba60-ef10-587d-881d-7feaa1644941"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=Re: {{ $json.sujet }} · aucun document joint",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nVotre envoi ne contient pas de document exploitable. Joignez l'état du portefeuille en PDF, PNG ou JPEG (et gardez « IFRS17 » dans l'objet d'un e-mail).",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "b8e5a4ef-44e9-597d-8468-0becfa8c280d",
+      "name": "E-mail : aucun document",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1100,
+        400
+      ],
+      "webhookId": "d16f85a4-0dfb-594c-96ca-36260c5fe108"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/health",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "c04099db-a2a2-5c73-879a-391006abda3b",
+      "name": "Santé de l'API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        620
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare à l'état précédent (gardé dans le workflow) : une alerte à la panne, une au retour,\n// jamais une toutes les 15 minutes. Les données statiques ne persistent qu'en production (workflow activé).\nconst memo = $getWorkflowStaticData('global');\nconst r = $input.first().json;\nconst ok = r.status === 'ok';\nconst avant = memo.etat ?? 'ok';\nmemo.etat = ok ? 'ok' : 'panne';\nconst detail = ok ? '' : String(r.error?.message ?? JSON.stringify(r)).slice(0, 500);\nreturn [{ json: { changement: memo.etat !== avant, etat: memo.etat, detail, version: r.version ?? '' } }];\n"
+      },
+      "id": "bd241779-2305-5245-8bc5-9779c76c85a2",
+      "name": "État changé ?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "7a60c1b4-ab2a-5a0e-a5c2-7fd269060630",
+              "leftValue": "={{ $json.changement }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2c6e5f95-9b05-5d7e-b249-04c2e1a5fae6",
+      "name": "Alerter ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · API {{ $json.etat === 'ok' ? 'rétablie' : 'injoignable' }}",
+        "emailFormat": "text",
+        "text": "={{ $json.etat === 'ok' ? 'L\\'API répond de nouveau (version ' + $json.version + ').' : 'L\\'API ne répond pas au contrôle de santé : ' + $json.detail + '\\nLes dossiers reçus par e-mail ou formulaire échoueront tant qu\\'elle est arrêtée. Relancer : .\\\\make.ps1 serve' }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "77a824c3-76de-57c1-a6ee-d6e83d381576",
+      "name": "E-mail : état de l'API",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1840,
+        600
+      ],
+      "webhookId": "4f29cdd9-a99c-5dde-bdbf-d04ad9d0f6fe"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Paramètres').first().json.parametres.api }}/v1/dashboard?days=7",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').first().json.parametres.jeton }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "4c6455d3-c3c5-5c68-bc10-f1417621b8a3",
+      "name": "Tableau de bord (7 jours)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        900
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst pct = x => `${Math.round((x || 0) * 100)} %`;\nconst s = d.par_statut || {};\nconst semaine = (d.par_jour || []).reduce((a, j) => a + j.dossiers, 0);\nconst ligne = (k, v) => `<tr><td style=\"padding:6px 12px;border-bottom:1px solid #ddd\">${k}</td><td style=\"padding:6px 12px;border-bottom:1px solid #ddd;text-align:right\"><b>${v}</b></td></tr>`;\nconst attente = (d.en_attente || []).map(w => `<li>${w.case_id} (depuis ${w.depuis.slice(0, 10)})</li>`).join('') || '<li>aucun</li>';\nconst html = `<div style=\"font-family:Segoe UI,Arial,sans-serif;color:#1B2A41;max-width:620px\">\n<h2 style=\"font-family:Georgia,serif\">IFRS 17 Copilot · rapport de la semaine</h2>\n<table style=\"border-collapse:collapse;width:100%\">${[\n  ligne('Dossiers déposés sur 7 jours', semaine), ligne('Dossiers au registre (total)', d.dossiers),\n  ligne('Note produite sans intervention', pct(d.taux_note_directe)), ligne('Validation humaine demandée', pct(d.taux_validation_humaine)),\n  ligne('Validés / rejetés', `${s.validee || 0} / ${s.rejetee || 0}`), ligne('En attente d\\'un valideur', s.validation_humaine || 0),\n  ligne('Durée médiane d\\'analyse', d.duree_mediane_s == null ? '—' : `${Math.round(d.duree_mediane_s)} s`),\n  ligne('Appels LLM par dossier', d.appels_llm_moyens), ligne('Coût des modèles', `${d.cout_total_usd} $`),\n].join('')}</table>\n<h3 style=\"font-family:Georgia,serif\">En attente de validation</h3><ul>${attente}</ul>\n<p style=\"color:#6B7A8F;font-size:13px\">Détail et piste d'audit : site, pages Tableau de bord et Dossiers.</p></div>`;\nreturn [{ json: { html } }];\n"
+      },
+      "id": "41bbc9ec-b151-5327-a753-2b9070db5bb5",
+      "name": "Mettre en forme le rapport",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · rapport de la semaine du {{ $now.minus({ days: 7 }).toFormat('dd/MM') }} au {{ $now.toFormat('dd/MM/yyyy') }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5e321eca-60fe-578b-8bf5-514a7658999c",
+      "name": "E-mail : rapport hebdomadaire",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1600,
+        840
+      ],
+      "webhookId": "fb7cb071-18f0-558e-8b9d-2808f63bae0e"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · rapport hebdomadaire impossible",
+        "emailFormat": "text",
+        "text": "=Le tableau de bord n'a pas pu être lu : {{ String($json.error?.message ?? $json.error ?? '').slice(0, 500) }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "533141ab-04a2-5eca-88c1-5e64337f0afa",
+      "name": "E-mail : rapport impossible",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        1000
+      ],
+      "webhookId": "c4631a13-92ca-516a-bc2a-791d142e5b8d"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · alerte n8n · nœud « {{ $json.noeud }} » en échec",
+        "emailFormat": "text",
+        "text": "=Workflow : {{ $json.workflow }}\nNœud en échec : {{ $json.noeud }}\nErreur : {{ $json.message }}\nExécution : {{ $json.url }}\nMode : {{ $json.mode }}\n\nVérifier l'API (page /health) et les identifiants SMTP/IMAP, puis relancer l'exécution depuis n8n.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "22fc3c0a-24cd-5d36-8fae-df4ec550823f",
+      "name": "E-mail : alerte d'erreur",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1100,
+        1180
+      ],
+      "webhookId": "aab75881-6984-5fa3-a8d3-19911c31e79c"
+    },
+    {
+      "parameters": {
+        "content": "## Entrées\nSept déclencheurs. Chacun prépare ses données et indique son **flux** (dossier, validation, sans_document, sante, rapport, erreur).\n\nIMAP : objet contenant **IFRS17**, pièce jointe PDF/PNG/JPEG.\nFormulaire : `/form/ifrs17-depot`.\nWebhook : `POST /webhook/ifrs17/depot`.",
+        "height": 200,
+        "width": 520,
+        "color": 7
+      },
+      "id": "b6193c70-c615-55fa-a00b-22060b2361c2",
+      "name": "Note : entrées",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -1160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Réglages\nTout se règle dans **Paramètres** : adresse du valideur, expéditeur, URL de l'API, jeton.\n\nNe jamais exporter avec vos vraies valeurs.",
+        "height": 220,
+        "width": 440,
+        "color": 3
+      },
+      "id": "5ff6bb8e-0aaa-5f1a-a9a5-e62090ad741f",
+      "name": "Note : paramètres",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        520,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 1. Dossier\n`/v1/case` : extracteur → calculateur → RAG + vérificateur → rédacteur.\nNote prête → déposant. Contrôle non passé → validation humaine (webhook ci-dessous) + accusé de réception. Document illisible ou API en panne → e-mails.",
+        "height": 220,
+        "width": 700,
+        "color": 4
+      },
+      "id": "f8214b28-f1d0-5b02-a06d-d33ec591cc8e",
+      "name": "Note : dossier",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        -1260
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Validation humaine (human-in-the-loop)\nn8n envoie la note provisoire puis un e-mail **Vérifier les données** et attend. Le formulaire est pré-rempli ; Approuver → `/v1/case/validated` recalcule et la note part (déposant en copie) ; Rejeter → registre + e-mail.",
+        "height": 200,
+        "width": 700,
+        "color": 6
+      },
+      "id": "96a1be15-a30c-5ed2-be30-b479998b0a69",
+      "name": "Note : validation",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        -290
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4-6. Supervision\nSanté de l'API toutes les 15 min (alerte au changement d'état), rapport le lundi à 8 h, alerte pour toute erreur de ce workflow (Error Trigger interne).",
+        "height": 160,
+        "width": 700,
+        "color": 5
+      },
+      "id": "1c09fe42-fa29-5681-9985-224f4d665eb9",
+      "name": "Note : supervision",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "E-mail reçu (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Extraire les documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire les documents": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formulaire de dépôt": {
+      "main": [
+        [
+          {
+            "node": "Préparer : formulaire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : formulaire": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook de dépôt": {
+      "main": [
+        [
+          {
+            "node": "Préparer : webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : webhook": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook de validation": {
+      "main": [
+        [
+          {
+            "node": "Préparer : validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : validation": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Toutes les 15 minutes": {
+      "main": [
+        [
+          {
+            "node": "Préparer : santé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : santé": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chaque lundi à 8 h": {
+      "main": [
+        [
+          {
+            "node": "Préparer : rapport",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : rapport": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erreur du workflow": {
+      "main": [
+        [
+          {
+            "node": "Préparer : erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer : erreur": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres": {
+      "main": [
+        [
+          {
+            "node": "Aiguillage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aiguillage": {
+      "main": [
+        [
+          {
+            "node": "Appel API /v1/case",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Préparer la validation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : aucun document",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Santé de l'API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tableau de bord (7 jours)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : alerte d'erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API /v1/case": {
+      "main": [
+        [
+          {
+            "node": "Note prête ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : incident (déposant)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : incident (déposant)": {
+      "main": [
+        [
+          {
+            "node": "E-mail : alerte équipe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Note prête ?": {
+      "main": [
+        [
+          {
+            "node": "Note en PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "À valider ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Note en PDF": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note au déposant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : note au déposant": {
+      "main": [
+        [
+          {
+            "node": "Registre : note envoyée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "À valider ?": {
+      "main": [
+        [
+          {
+            "node": "Transmettre à la validation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : document inexploitable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transmettre à la validation": {
+      "main": [
+        [
+          {
+            "node": "E-mail : accusé de réception",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : accusé de réception": {
+      "main": [
+        [
+          {
+            "node": "Registre : transmis au valideur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer la validation": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note provisoire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : note provisoire": {
+      "main": [
+        [
+          {
+            "node": "E-mail : validation humaine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : validation humaine": {
+      "main": [
+        [
+          {
+            "node": "Appliquer les corrections",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appliquer les corrections": {
+      "main": [
+        [
+          {
+            "node": "Approuvé ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : erreur de validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approuvé ?": {
+      "main": [
+        [
+          {
+            "node": "Appel API /v1/case/validated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registre : rejet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API /v1/case/validated": {
+      "main": [
+        [
+          {
+            "node": "Note validée en PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : erreur de validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Note validée en PDF": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note validée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : note validée": {
+      "main": [
+        [
+          {
+            "node": "Registre : note validée envoyée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registre : rejet": {
+      "main": [
+        [
+          {
+            "node": "E-mail : dossier rejeté",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Santé de l'API": {
+      "main": [
+        [
+          {
+            "node": "État changé ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "État changé ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "État changé ?": {
+      "main": [
+        [
+          {
+            "node": "Alerter ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alerter ?": {
+      "main": [
+        [
+          {
+            "node": "E-mail : état de l'API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tableau de bord (7 jours)": {
+      "main": [
+        [
+          {
+            "node": "Mettre en forme le rapport",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : rapport impossible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mettre en forme le rapport": {
+      "main": [
+        [
+          {
+            "node": "E-mail : rapport hebdomadaire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

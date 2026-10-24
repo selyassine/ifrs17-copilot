@@ -83,6 +83,32 @@ python -m eval.eval_agentic --questions eval/cas_pratiques.jsonl    # agent Lang
 Options dans `.env` : `RAG_RERANK_MODEL`, `RAG_QUESTIONS`, `RAG_GRAPH`, `RAG_AGENTIC` (toutes désactivées
 par défaut : on n'active que ce qui a été mesuré).
 
+## Base vectorielle Qdrant (D-052)
+
+```powershell
+pip install -r requirements-rag.txt          # contient qdrant-client
+python -m rag.qdrant_sync                    # recopie l'index BGE-M3 dans Qdrant et le compare à NumPy
+python -m eval.eval_retrieval --model BAAI/bge-m3 --store qdrant
+```
+
+Dans `.env` : `RAG_STORE=qdrant`. Sans `QDRANT_URL`, Qdrant est **embarqué** (dossier `data/qdrant`) : un seul
+processus peut l'ouvrir à la fois (arrêter l'API avant une évaluation). En **mode serveur** (Docker) :
+`docker compose up -d qdrant`, puis `QDRANT_URL=http://localhost:6333` ; interface sur http://localhost:6333/dashboard.
+
+## Carte graphique (CUDA)
+
+BGE-M3 et le reranker utilisent la carte graphique automatiquement si PyTorch la voit. Sous Windows,
+`pip install torch` installe la version **CPU** par défaut (`2.x+cpu`), même avec une carte NVIDIA.
+
+```powershell
+python -m rag.device_check                     # cuda_disponible: true attendu
+pip uninstall -y torch
+pip install torch --index-url https://download.pytorch.org/whl/cu128
+```
+
+Sur carte graphique, le reranker passe en demi-précision (≈ 1,1 Go) avec des lots de 16 ; BGE-M3 reste en
+FP32 pour garder les mêmes vecteurs que l'index. Les deux tiennent dans 6 Go (RTX 3050).
+
 ## Ajouter un document
 
 1. Le déclarer dans `data/corpus_manifest.csv` et placer le PDF dans `data/corpus/`.

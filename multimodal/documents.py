@@ -29,6 +29,13 @@ class DocumentText:
     text_numbers: list[float] = field(default_factory=list)
     pages: int = 0
     truncated: bool = False
+    # où chaque nombre a été lu : valeur arrondie → {"page 1, tableau 1", "page 2, texte"} (D-067)
+    locations: dict[float, set[str]] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)       # remarques du lecteur (feuilles cachées…), D-079
+    problems: list[str] = field(default_factory=list)    # problèmes bloquants (formule sans valeur…), D-079
+
+    def where(self, v: float) -> set[str]:
+        return self.locations.get(round(v, 4), set()) | self.locations.get(round(v, 2), set())
 
 
 def parse_number(s: str) -> float | None:
@@ -66,6 +73,27 @@ def numbers_in_text(text: str) -> list[float]:
     return out
 
 
+def _with_column_gaps(line: dict) -> str:
+    """Tableau sans grille (texte placé en colonnes) : un grand blanc entre deux mots devient « | ».
+    Sans cela, « Année 1   110,00 » se lit « Année 1 110,00 » et le code voit 1 110 au lieu de 110
+    (le blanc des milliers et le blanc entre deux colonnes se confondent). Découvert sur les documents à
+    montants réels (D-070) ; un blanc normal (mots, séparateur des milliers) reste un espace."""
+    chars = [c for c in line.get("chars", []) if c.get("text", "").strip()]
+    if len(chars) < 2:
+        return line["text"]
+    widths = sorted(c["x1"] - c["x0"] for c in chars)
+    unit = widths[len(widths) // 2] or 4.0            # largeur médiane d'un caractère
+    out = [chars[0]["text"]]
+    for prev, cur in zip(chars, chars[1:], strict=False):
+        gap = cur["x0"] - prev["x1"]
+        if gap > 2.2 * unit:
+            out.append(" | ")
+        elif gap > 0.15 * unit:
+            out.append(" ")
+        out.append(cur["text"])
+    return "".join(out)
+
+
 def pdf_text(source: str | Path | bytes, max_pages: int = MAX_PAGES,
              max_chars: int = MAX_CHARS) -> DocumentText:
     import pdfplumber
@@ -74,6 +102,12 @@ def pdf_text(source: str | Path | bytes, max_pages: int = MAX_PAGES,
     parts: list[str] = []
     table_nums: list[float] = []
     text_nums: list[float] = []
+    locations: dict[float, set[str]] = {}
+
+    def locate(values: list[float], place: str) -> None:
+        for v in values:
+            for key in {round(v, 4), round(v, 2)}:
+                locations.setdefault(key, set()).add(place)
     with pdfplumber.open(stream) as pdf:
         n_pages = len(pdf.pages)
         for p_no, page in enumerate(pdf.pages[:max_pages], start=1):
@@ -86,23 +120,28 @@ def pdf_text(source: str | Path | bytes, max_pages: int = MAX_PAGES,
             items: list[tuple[float, str]] = []
             text_lines = rest.extract_text_lines()
             for line in text_lines:
+                line["text"] = _with_column_gaps(line)
                 items.append((line["top"], line["text"]))
             # « 7,50 » en fin de ligne et « % » au début de la suivante : lecture d'un seul bloc
-            text_nums += numbers_in_text("\n".join(line["text"] for line in text_lines))
+            found = numbers_in_text("\n".join(line["text"] for line in text_lines))
+            text_nums += found
+            locate(found, f"page {p_no}, texte")
             for k, t in enumerate(tables, start=1):
                 lines = []
                 for row in t.extract():
                     cells = [(c or "").replace("\n", " ").strip() for c in row]
                     lines.append(" | ".join(cells))
                     for c in cells:
-                        table_nums += _cell_number(c)
+                        found = _cell_number(c)
+                        table_nums += found
+                        locate(found, f"page {p_no}, tableau {k}")
                 items.append((t.bbox[1], f"[Tableau {k}, page {p_no}]\n" + "\n".join(lines)))
             items.sort(key=lambda it: it[0])
             parts.append(f"[Page {p_no}]\n" + "\n".join(text for _, text in items))
     text = "\n\n".join(parts)
     truncated = len(text) > max_chars or n_pages > max_pages
     return DocumentText(text=text[:max_chars], table_numbers=table_nums, text_numbers=text_nums,
-                        pages=n_pages, truncated=truncated)
+                        pages=n_pages, truncated=truncated, locations=locations)
 
 
 def document_numbers(doc: DocumentText) -> list[float]:

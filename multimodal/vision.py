@@ -16,13 +16,20 @@ from core.llm import LLMClient
 MAX_IMAGE_SIDE = 1600      # px : assez pour lire un tableau, sans gaspiller de tokens
 
 
-def detect_mime(data: bytes) -> str | None:
+def detect_mime(data: bytes, filename: str = "") -> str | None:
+    """Type reconnu par le contenu (jamais par l'extension seule, sauf pour départager un CSV)."""
+    from multimodal.spreadsheet import CSV_MIME, XLSX_MIME, is_xlsx, looks_like_csv
+
     if data.startswith(b"%PDF"):
         return "application/pdf"
     if data.startswith(b"\x89PNG"):
         return "image/png"
     if data[:3] == b"\xff\xd8\xff":
         return "image/jpeg"
+    if is_xlsx(data):
+        return XLSX_MIME
+    if looks_like_csv(data, filename):
+        return CSV_MIME
     return None
 
 

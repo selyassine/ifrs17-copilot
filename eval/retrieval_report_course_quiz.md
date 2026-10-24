@@ -1,6 +1,6 @@
 # Évaluation du retrieval
 
-Généré le 20261010-043226 par `python -m eval.eval_retrieval`. 15 questions notées sur 15 (0 questions pièges réservées au test de refus). Chunks : A = 138, B = 380.
+Généré le 20261017-041019 par `python -m eval.eval_retrieval`. 15 questions notées sur 15 (0 questions pièges réservées au test de refus). Chunks : A = 138, B = 380.
 
 ## Résultats globaux
 
@@ -8,17 +8,23 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 
 | Configuration | Recall@1 | Recall@5 | Recall@10 | Recall @1000 tokens | Recall @2000 tokens | MRR@10 | nDCG@5 | tokens@5 | p50 (ms) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A · bm25 | 0.067 | 0.133 | 0.267 | 0.133 | 0.133 | 0.119 | 0.109 | 2389 | 0.3 |
+| A · bm25 | 0.067 | 0.133 | 0.267 | 0.133 | 0.133 | 0.119 | 0.109 | 2389 | 0.2 |
 | B · bm25 | 0.067 | 0.133 | 0.133 | 0.133 | 0.133 | 0.083 | 0.095 | 1140 | 0.5 |
 | B0 · bm25 | 0.067 | 0.067 | 0.200 | 0.067 | 0.133 | 0.084 | 0.067 | 998 | 0.4 |
 | B · bm25+glossaire | 0.133 | 0.200 | 0.200 | 0.200 | 0.200 | 0.150 | 0.162 | 1075 | 0.7 |
-| A · dense · bge-m3 | 0.000 | 0.200 | 0.400 | 0.067 | 0.200 | 0.095 | 0.104 | 2411 | 137.1 |
-| A · hybrid · bge-m3 | 0.000 | 0.267 | 0.400 | 0.200 | 0.267 | 0.135 | 0.155 | 2401 | 110.7 |
-| B · dense · bge-m3 | 0.067 | 0.200 | 0.200 | 0.200 | 0.200 | 0.133 | 0.151 | 1031 | 109.0 |
-| B · hybrid · bge-m3 | 0.133 | 0.200 | 0.333 | 0.200 | 0.267 | 0.168 | 0.162 | 1087 | 107.5 |
-| B0 · dense · bge-m3 | 0.067 | 0.133 | 0.200 | 0.133 | 0.200 | 0.100 | 0.100 | 1133 | 100.9 |
-| B0 · hybrid · bge-m3 | 0.000 | 0.133 | 0.267 | 0.133 | 0.200 | 0.072 | 0.075 | 1076 | 102.4 |
-| B · hybrid+glossaire · bge-m3 | 0.200 | 0.267 | 0.333 | 0.267 | 0.267 | 0.223 | 0.229 | 1119 | 110.6 |
+| B · bm25+glossaire+questions | 0.067 | 0.133 | 0.267 | 0.133 | 0.267 | 0.119 | 0.109 | 1016 | 1.5 |
+| B · bm25+glossaire+graphe | 0.133 | 0.200 | 0.200 | 0.200 | 0.200 | 0.150 | 0.162 | 1004 | 0.6 |
+| B · bm25+glossaire+questions+graphe | 0.067 | 0.133 | 0.267 | 0.133 | 0.267 | 0.114 | 0.109 | 932 | 1.5 |
+| A · dense · bge-m3 | 0.000 | 0.200 | 0.400 | 0.067 | 0.200 | 0.095 | 0.104 | 2411 | 339.3 |
+| A · hybrid · bge-m3 | 0.000 | 0.267 | 0.400 | 0.200 | 0.267 | 0.135 | 0.155 | 2401 | 112.8 |
+| B · dense · bge-m3 | 0.067 | 0.200 | 0.200 | 0.200 | 0.200 | 0.133 | 0.151 | 1031 | 112.7 |
+| B · hybrid · bge-m3 | 0.133 | 0.200 | 0.333 | 0.200 | 0.267 | 0.168 | 0.162 | 1087 | 111.6 |
+| B0 · dense · bge-m3 | 0.067 | 0.133 | 0.200 | 0.133 | 0.200 | 0.100 | 0.100 | 1133 | 115.4 |
+| B0 · hybrid · bge-m3 | 0.000 | 0.133 | 0.267 | 0.133 | 0.200 | 0.072 | 0.075 | 1076 | 108.8 |
+| B · hybrid+glossaire · bge-m3 | 0.200 | 0.267 | 0.333 | 0.267 | 0.267 | 0.223 | 0.229 | 1119 | 114.6 |
+| B · hybrid+glossaire+questions · bge-m3 | 0.133 | 0.200 | 0.333 | 0.200 | 0.333 | 0.187 | 0.175 | 1095 | 115.2 |
+| B · hybrid+glossaire+graphe · bge-m3 | 0.200 | 0.267 | 0.333 | 0.267 | 0.267 | 0.223 | 0.229 | 1110 | 120.0 |
+| B · hybrid+glossaire+questions+graphe · bge-m3 | 0.133 | 0.267 | 0.467 | 0.200 | 0.400 | 0.204 | 0.201 | 1088 | 121.3 |
 
 ## Par niveau de question
 
@@ -28,6 +34,9 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 | B · bm25 | cours | 15 | 0.133 | 0.083 |
 | B0 · bm25 | cours | 15 | 0.067 | 0.084 |
 | B · bm25+glossaire | cours | 15 | 0.200 | 0.150 |
+| B · bm25+glossaire+questions | cours | 15 | 0.133 | 0.119 |
+| B · bm25+glossaire+graphe | cours | 15 | 0.200 | 0.150 |
+| B · bm25+glossaire+questions+graphe | cours | 15 | 0.133 | 0.114 |
 | A · dense · bge-m3 | cours | 15 | 0.200 | 0.095 |
 | A · hybrid · bge-m3 | cours | 15 | 0.267 | 0.135 |
 | B · dense · bge-m3 | cours | 15 | 0.200 | 0.133 |
@@ -35,6 +44,9 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 | B0 · dense · bge-m3 | cours | 15 | 0.133 | 0.100 |
 | B0 · hybrid · bge-m3 | cours | 15 | 0.133 | 0.072 |
 | B · hybrid+glossaire · bge-m3 | cours | 15 | 0.267 | 0.223 |
+| B · hybrid+glossaire+questions · bge-m3 | cours | 15 | 0.200 | 0.187 |
+| B · hybrid+glossaire+graphe · bge-m3 | cours | 15 | 0.267 | 0.223 |
+| B · hybrid+glossaire+questions+graphe · bge-m3 | cours | 15 | 0.267 | 0.204 |
 
 ## Écarts appariés (moyenne et IC bootstrap 95 %)
 
@@ -46,6 +58,12 @@ A = taille fixe (512 tokens, chevauchement 64) ; B = un chunk par paragraphe ave
 | A · hybrid · bge-m3 → B · hybrid · bge-m3 | -0.067 [-0.267 ; +0.133] | +0.000 [-0.200 ; +0.200] | +0.033 [-0.086 ; +0.153] |
 | B · dense · bge-m3 → B0 · dense · bge-m3 | -0.067 [-0.200 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.033 [-0.089 ; +0.000] |
 | B · hybrid · bge-m3 → B0 · hybrid · bge-m3 | -0.067 [-0.200 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.095 [-0.207 ; -0.010] |
+| B · bm25+glossaire → B · bm25+glossaire+questions | -0.067 [-0.200 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.031 [-0.108 ; +0.022] |
+| B · bm25+glossaire → B · bm25+glossaire+graphe | +0.000 [+0.000 ; +0.000] | +0.000 [+0.000 ; +0.000] | +0.000 [+0.000 ; +0.000] |
+| B · bm25+glossaire → B · bm25+glossaire+questions+graphe | -0.067 [-0.200 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.036 [-0.113 ; +0.013] |
+| B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+questions · bge-m3 | -0.067 [-0.200 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.036 [-0.167 ; +0.051] |
+| B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+graphe · bge-m3 | +0.000 [+0.000 ; +0.000] | +0.000 [+0.000 ; +0.000] | +0.000 [+0.000 ; +0.000] |
+| B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+questions+graphe · bge-m3 | +0.000 [+0.000 ; +0.000] | -0.067 [-0.200 ; +0.000] | -0.019 [-0.144 ; +0.064] |
 | B · bm25 → B · bm25+glossaire | +0.067 [+0.000 ; +0.200] | +0.067 [+0.000 ; +0.200] | +0.067 [+0.000 ; +0.200] |
 | B · hybrid · bge-m3 → B · hybrid+glossaire · bge-m3 | +0.067 [+0.000 ; +0.200] | +0.067 [+0.000 ; +0.200] | +0.056 [-0.022 ; +0.200] |
 

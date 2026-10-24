@@ -9,7 +9,13 @@ from core.config import Settings
 from core.llm import LLMClient
 from eval.eval_extraction import load_cases, same, score
 from multimodal.documents import DocumentText, numbers_in_text, parse_number
-from multimodal.extract import NumberIndex, extract_from_text, grounding_issues
+from multimodal.extract import (
+    NumberIndex,
+    extract_from_text,
+    grounding_issues,
+    unit_evidence,
+    unit_issues,
+)
 
 
 def test_parse_number_formats_francais():
@@ -97,7 +103,9 @@ def test_comparaison_des_champs():
     assert same("group_id", " ab-1", "AB-1")
     assert same("outflows", [45.0, 50.004], [45.0, 50.0])
     assert not same("outflows", [45.0], [45.0, 50.0])
-    assert not same("discount_rates", 0.03, [0.03, 0.03])
+    # D-070 : un taux unique et une courbe plate au même taux donnent la même CSM : même donnée
+    assert same("discount_rates", 0.03, [0.03, 0.03])
+    assert not same("discount_rates", 0.03, [0.03, 0.035])
 
 
 def test_documents_synthetiques_reproductibles(tmp_path):
@@ -271,3 +279,77 @@ def test_double_lecture_divergente_validation_humaine(tmp_path):
     res = extract_from_images([(buf.getvalue(), "image/jpeg")], vision_client(s, respond))
     assert res.status == "a_verifier"
     assert any("divergent" in i and "outflows[1]" in i for i in res.issues)
+
+
+# --------------------------------------------------------------------------- #
+# D-081 : l'unité des montants doit être écrite dans le document
+# --------------------------------------------------------------------------- #
+def _doc(text: str) -> DocumentText:
+    return DocumentText(text=text, table_numbers=DOC.table_numbers, text_numbers=DOC.text_numbers)
+
+
+def _p(**upd) -> PortfolioData:
+    base = {k: v for k, v in GOOD.items() if k not in ("manquants", "remarques")}
+    return PortfolioData(**{**base, **upd})
+
+
+@pytest.mark.parametrize("text, found", [
+    ("Montants en milliers d'euros", {1000}),
+    ("Primes (k€) | Sinistres (k€)", {1000}),
+    ("Montants en | milliers", {1000}),
+    ("Amounts in thousands of USD", {1000}),
+    ("Chiffres en KTND", {1000}),
+    ("Montants en millions (euros)", {1_000_000}),
+    ("Montants en M€", {1_000_000}),
+    ("Montants en unités (dollars américains)", {1}),
+    ("Montants en dinars tunisiens", {1}),
+    ("Nombre d'unités de couverture", set()),         # « unités de couverture » n'est pas une unité de montant
+    ("Des milliers d'assurés nous font confiance", set()),
+])
+def test_unite_reconnue_dans_le_texte(text, found):
+    assert unit_evidence(text) == found
+
+
+def test_unite_absente_du_document_signalee():
+    assert unit_issues(_p(unit_multiplier=1000), _doc("Groupe AB-1. Montants en milliers d'euros.")) == []
+    assert unit_issues(_p(unit_multiplier=1), _doc("Groupe AB-1. Aucune unité indiquée.")) == []
+    inventee = unit_issues(_p(unit_multiplier=1000), _doc("Groupe AB-1. Aucune unité indiquée."))
+    assert inventee and "aucune mention" in inventee[0]
+    contraire = unit_issues(_p(unit_multiplier=1), _doc("Groupe AB-1. Montants en milliers d'euros."))
+    assert contraire and "milliers" in contraire[0]
+
+
+def test_unite_lue_dans_la_partie_du_groupe():
+    """Deux groupes, deux unités (comme dur10) : chaque groupe est jugé sur sa propre partie."""
+    text = ("Groupe de contrats : AB-1 · Montants en milliers (dollars)\nAnnée 1 | 100,00\n"
+            "Groupe de contrats : CD-2 · Montants en unités (dollars)\nAnnée 1 | 604 261,58")
+    assert unit_issues(_p(unit_multiplier=1000), _doc(text)) == []
+    assert unit_issues(_p(unit_multiplier=1), _doc(text))
+    assert unit_issues(_p(group_id="CD-2", unit_multiplier=1), _doc(text)) == []
+    assert unit_issues(_p(group_id="CD-2", unit_multiplier=1000), _doc(text))
+
+
+def test_unite_inventee_relance_puis_validation_humaine(tmp_path):
+    doc = _doc(DOC.text.replace("en milliers d'euros", "montants en euros"))
+    c, calls = client(tmp_path, GOOD, GOOD)                     # le LLM maintient « milliers »
+    res = extract_from_text(doc, c)
+    assert res.status == "a_verifier" and res.corrections == 1
+    assert any("unit_multiplier" in i for i in res.issues)
+    c2, _ = client(tmp_path, GOOD, {**GOOD, "unit_multiplier": 1})   # il corrige après la relance
+    assert extract_from_text(doc, c2).status == "ok"
+
+
+def test_volatilite_declaree_ancree_dans_le_document(tmp_path):
+    """D-082 : declared_cv et declared_confidence sont facultatifs, convertis en décimal et ancrés."""
+    text = DOC.text + "\nVolatilité des sinistres (CV) : 12,00 %. Niveau de confiance : 75,00 %."
+    doc = DocumentText(text=text, table_numbers=DOC.table_numbers,
+                       text_numbers=DOC.text_numbers + [12.0, 0.12, 75.0, 0.75])
+    c, _ = client(tmp_path, {**GOOD, "declared_cv": "12 %", "declared_confidence": 0.75})
+    res = extract_from_text(doc, c)
+    assert res.status == "ok" and res.portfolio.declared_cv == pytest.approx(0.12)
+    assert res.portfolio.declared_confidence == 0.75
+    c2, _ = client(tmp_path, {**GOOD, "declared_cv": 0.2}, {**GOOD, "declared_cv": 0.2})   # 20 % n'est pas écrit
+    res2 = extract_from_text(doc, c2)
+    assert res2.status == "a_verifier" and any("declared_cv" in i for i in res2.issues)
+    c3, _ = client(tmp_path, {**GOOD, "declared_cv": None})
+    assert extract_from_text(doc, c3).portfolio.declared_cv is None

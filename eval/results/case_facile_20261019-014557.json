@@ -1,0 +1,77 @@
+{
+ "date": "20261019-014557",
+ "agregats": {
+  "dossiers": 3,
+  "statuts": {
+   "note_prete": 3,
+   "validation_humaine": 0,
+   "document_illisible": 0
+  },
+  "csm_de_la_note_juste": "3/3",
+  "syntheses_verifiees_du_llm": "3/3",
+  "reponses_norme_validees": "7/7",
+  "duree_mediane_s": 3.3,
+  "appels_llm_par_dossier": 2.0,
+  "tokens_entree_par_dossier": 3139
+ },
+ "dossiers": [
+  {
+   "id": "ext01",
+   "case_id": "case-20261019-014557-ext01",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag:reference",
+    "chercheur_rag:reference",
+    "redacteur:ok"
+   ],
+   "secondes": 3.3
+  },
+  {
+   "id": "ext02",
+   "case_id": "case-20261019-014557-ext02",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "3/3",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag:reference",
+    "chercheur_rag:reference",
+    "chercheur_rag:reference",
+    "redacteur:ok"
+   ],
+   "secondes": 3.2
+  },
+  {
+   "id": "ext03",
+   "case_id": "case-20261019-014557-ext03",
+   "attendu": "exact",
+   "statut": "note_prete",
+   "csm_juste": true,
+   "statut_attendu_respecte": null,
+   "synthese": "llm",
+   "reponses_validees": "2/2",
+   "controles": [],
+   "etapes": [
+    "extracteur:ok",
+    "calculateur:ok",
+    "chercheur_rag:reference",
+    "chercheur_rag:reference",
+    "redacteur:ok"
+   ],
+   "secondes": 11.0
+  }
+ ]
+}

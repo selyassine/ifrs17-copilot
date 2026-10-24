@@ -1,3 +1,5 @@
 # Agent de recherche LangGraph (D-050) : à installer pour RAG_AGENTIC=1 et eval_agentic
 -r requirements.txt
 langgraph>=1.0,<2
+# état du Copilot sauvegardé après chaque nœud (D-061) ; sans ce paquet : sauvegarde en mémoire
+langgraph-checkpoint-sqlite>=3.0,<4

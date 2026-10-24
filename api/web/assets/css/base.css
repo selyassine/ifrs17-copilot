@@ -1,0 +1,183 @@
+/* IFRS 17 Copilot — socle commun (application et site public).
+   Identité : l'encre et le papier des certificats d'assurance. Fond de papier froid, encre pétrole,
+   guilloché pour la sécurité, laiton pour le sceau des notes validées. Polices auto-hébergées (OFL). */
+
+@font-face { font-family: "Source Serif 4"; src: url("../fonts/source-serif-4.woff2") format("woff2");
+  font-weight: 200 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Source Serif 4"; src: url("../fonts/source-serif-4-italic.woff2") format("woff2");
+  font-weight: 200 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "IBM Plex Sans"; src: url("../fonts/plex-sans.woff2") format("woff2");
+  font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../fonts/plex-mono.woff2") format("woff2");
+  font-weight: 100 700; font-style: normal; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --serif: "Source Serif 4", "Iowan Old Style", Charter, Georgia, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  /* papier et encre */
+  --paper: #F2F5F4;
+  --surface: #FFFFFF;
+  --surface-2: #F7F9F8;
+  --surface-3: #ECF1EF;
+  --line: #DCE4E1;
+  --line-strong: #C3CFCB;
+  --ink: #0F252A;
+  --ink-2: #3B5257;
+  --ink-3: #66797D;
+  --night: #0B2328;
+  --night-2: #113139;
+  --night-ink: #E4EEEC;
+  --night-ink-2: #9DB6B4;
+
+  /* action et marque */
+  --petrol: #12666C;
+  --petrol-strong: #0C5257;
+  --petrol-soft: #E2EFEE;
+  --petrol-line: #A9CFCC;
+  --brass: #9C7424;
+  --brass-soft: #F5EEDD;
+  --guilloche: #5FA7A1;
+
+  /* états (réservés : jamais pour une série de graphique) */
+  --ok: #26734C;      --ok-soft: #E3F1E9;
+  --warn: #9A5B06;    --warn-soft: #FBF0DB;
+  --bad: #AD3434;     --bad-soft: #F8E4E2;
+  --info: #2C5C98;    --info-soft: #E5ECF7;
+  --neutral: #59696D; --neutral-soft: #EBEFEE;
+
+  /* graphiques (palette validée : écarts daltonisme ΔE ≥ 13, contraste ≥ 3:1) */
+  --c1: #008F94; --c2: #B07A1E; --c3: #6A5BA8;
+  --grid: #E3E9E7;
+
+  --focus: 0 0 0 3px color-mix(in srgb, var(--petrol) 35%, transparent);
+  --shadow-pop: 0 18px 50px -18px rgba(11, 35, 40, .35), 0 2px 6px rgba(11, 35, 40, .08);
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0A1A1E;
+  --surface: #0F2328;
+  --surface-2: #132A30;
+  --surface-3: #18333A;
+  --line: #21414A;
+  --line-strong: #2D5560;
+  --ink: #E6EFEE;
+  --ink-2: #A9BEBF;
+  --ink-3: #7F9699;
+  --night: #071518;
+  --night-2: #0D2126;
+  --petrol: #3FB0AB;
+  --petrol-strong: #6CC9C4;
+  --petrol-soft: #123A3D;
+  --petrol-line: #24605F;
+  --brass: #D6AA5A;
+  --brass-soft: #33291A;
+  --ok: #5CC28C;      --ok-soft: #12321F;
+  --warn: #E2A445;    --warn-soft: #36280F;
+  --bad: #EE7D74;     --bad-soft: #3A1A18;
+  --info: #7FA9E6;    --info-soft: #172840;
+  --neutral: #9AAAAD; --neutral-soft: #1B3036;
+  --c1: #1E9C9E; --c2: #BD8A30; --c3: #8E7DD4;
+  --grid: #1D3A41;
+  --shadow-pop: 0 18px 50px -12px rgba(0, 0, 0, .6), 0 2px 6px rgba(0, 0, 0, .3);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--paper);
+  font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--petrol); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--petrol-strong); }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.2; color: var(--ink); }
+p { margin: 0; }
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+::selection { background: color-mix(in srgb, var(--petrol) 22%, transparent); }
+.num, td.num, .tnum { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); font-size: .92em; letter-spacing: -.01em; }
+.serif { font-family: var(--serif); }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--surface); padding: 10px 14px;
+  border-radius: var(--r-sm); box-shadow: var(--shadow-pop); }
+.skip:focus { top: 12px; }
+
+/* ------------------------------------------------------------------ boutons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px;
+  padding: 0 16px; border-radius: var(--r-sm); border: 1px solid var(--line-strong); background: var(--surface);
+  color: var(--ink); font-weight: 500; font-size: 14px; text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background .15s, border-color .15s, color .15s, transform .15s; }
+.btn:hover { border-color: var(--ink-3); color: var(--ink); background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn.primary { background: var(--petrol); border-color: var(--petrol); color: #fff; }
+.btn.primary:hover { background: var(--petrol-strong); border-color: var(--petrol-strong); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #062124; }
+.btn.danger { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.btn.danger:hover { background: var(--bad-soft); color: var(--bad); }
+.btn.danger.solid { background: var(--bad); border-color: var(--bad); color: #fff; }
+.btn.ghost { border-color: transparent; background: transparent; }
+.btn.ghost:hover { background: var(--surface-3); }
+.btn.sm { min-height: 32px; padding: 0 12px; font-size: 13px; }
+.btn.lg { min-height: 48px; padding: 0 22px; font-size: 15.5px; border-radius: 8px; }
+.btn.wide { width: 100%; }
+.btn .spin { width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent;
+  border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.icon-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: var(--r-sm);
+  border: 1px solid transparent; background: transparent; cursor: pointer; color: var(--ink-2); }
+.icon-btn:hover { background: var(--surface-3); color: var(--ink); }
+.icon-btn svg { width: 19px; height: 19px; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--petrol); cursor: pointer; font-weight: 500;
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* icônes en trait */
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ------------------------------------------------------------------ formulaires */
+.field { display: grid; align-content: start; gap: 6px; font-size: 13.5px; font-weight: 500; color: var(--ink-2); }
+.field small { font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
+.input, .field input, .field select, .field textarea, select.input {
+  width: 100%; min-height: 40px; padding: 8px 12px; border-radius: var(--r-sm); border: 1px solid var(--line-strong);
+  background: var(--surface); color: var(--ink); font-size: 14.5px; font-weight: 400; transition: border-color .15s, box-shadow .15s; }
+.field textarea, textarea.input { min-height: 84px; resize: vertical; line-height: 1.5; }
+.input:hover, .field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink-3); }
+.input:focus, .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--petrol); box-shadow: var(--focus); }
+.field input[aria-invalid="true"] { border-color: var(--bad); }
+
+/* ------------------------------------------------------------------ états */
+.status { font-family: var(--sans); display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px 2px 7px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; line-height: 20px; white-space: nowrap; background: var(--neutral-soft); color: var(--neutral); }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status.ok { background: var(--ok-soft); color: var(--ok); }
+.status.warn { background: var(--warn-soft); color: var(--warn); }
+.status.bad { background: var(--bad-soft); color: var(--bad); }
+.status.info { background: var(--info-soft); color: var(--info); }
+.status.running::before { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+
+.callout { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 14px 16px; border-radius: var(--r-md);
+  background: var(--surface-2); border: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }
+.callout svg.i { margin-top: 2px; }
+.callout b { color: var(--ink); }
+.callout.warn { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+.callout.warn svg.i { color: var(--warn); }
+.callout.bad { background: var(--bad-soft); border-color: color-mix(in srgb, var(--bad) 30%, transparent); }
+.callout.bad svg.i { color: var(--bad); }
+.callout.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+.callout.ok svg.i { color: var(--ok); }
+.callout.info { background: var(--info-soft); border-color: color-mix(in srgb, var(--info) 25%, transparent); }
+.callout.info svg.i { color: var(--info); }
+.callout ul { margin: 6px 0 0; padding-left: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}

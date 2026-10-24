@@ -1,0 +1,2830 @@
+{
+ "date": "20261017-034929",
+ "moteur": {
+  "mode": "hybrid",
+  "modele": "BAAI/bge-m3",
+  "rerank_model": "",
+  "questions": false,
+  "graph": false
+ },
+ "global": {
+  "base_r5": 0.517,
+  "agent_r5": 0.75,
+  "base_mrr": 0.351,
+  "agent_mrr": 0.668,
+  "ecart_r5": [
+   0.233,
+   0.1,
+   0.367
+  ],
+  "ecart_mrr": [
+   0.317,
+   0.181,
+   0.459
+  ],
+  "appels_llm_moyens": 2.2,
+  "latence_p50_s": 10.1,
+  "relances": 6
+ },
+ "questions": [
+  {
+   "id": "p01",
+   "question": "Un fabricant d'électroménager offre deux ans de réparations gratuites sur ses lave-linge. Cette garantie relève-t-elle d'IFRS 17 ?",
+   "gold": [
+    "7"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.5,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B26"
+    ],
+    [
+     "6",
+     "7"
+    ],
+    [
+     "B28",
+     "B29"
+    ],
+    [
+     "B30"
+    ],
+    [
+     "130"
+    ]
+   ],
+   "agent_top": [
+    [
+     "6",
+     "7"
+    ]
+   ],
+   "requetes": [
+    "Un fabricant d'électroménager offre deux ans de réparations gratuites sur ses lave-linge. Cette garantie relève-t-elle d'IFRS 17 ?",
+    "définition contrat d'assurance IFRS 17 champ d'application",
+    "exclusion garanties de réparation gratuites IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "définition d'un contrat d'assurance selon IFRS 17",
+      "exclusion des garanties de service non assurantielles du champ d'application"
+     ],
+     "requetes": [
+      "définition contrat d'assurance IFRS 17 champ d'application",
+      "exclusion garanties de réparation gratuites IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un fabricant d'électroménager offre deux ans de réparations gratuites sur ses lave-linge. Cette garantie relève-t-elle d'IFRS 17 ?",
+      "définition contrat d'assurance IFRS 17 champ d'application",
+      "exclusion garanties de réparation gratuites IFRS 17"
+     ],
+     "passages": 10
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:6"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 5872.8
+  },
+  {
+   "id": "p02",
+   "question": "Une société de dépannage automobile facture un abonnement annuel fixe couvrant un nombre illimité d'interventions. Peut-elle appliquer IFRS 15 plutôt qu'IFRS 17 ?",
+   "gold": [
+    "8"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "8"
+    ],
+    [
+     "12"
+    ],
+    [
+     "6",
+     "7"
+    ],
+    [
+     "C18"
+    ],
+    [
+     "C23"
+    ]
+   ],
+   "agent_top": [
+    [
+     "8"
+    ],
+    [
+     "12"
+    ],
+    [
+     "def:période de couverture"
+    ],
+    [
+     "B35"
+    ],
+    [
+     "B63"
+    ]
+   ],
+   "requetes": [
+    "Une société de dépannage automobile facture un abonnement annuel fixe couvrant un nombre illimité d'interventions. Peut-elle appliquer IFRS 15 plutôt qu'IFRS 17 ?",
+    "définition périmètre contrat assurance IFRS 17",
+    "exclusion contrats services IFRS 15 IFRS 17",
+    "critères distinction assurance service IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination du périmètre du contrat d'assurance selon IFRS 17",
+      "exclusion des contrats de services non-assurance du champ d'application d'IFRS 17",
+      "critères de reconnaissance d'un contrat d'assurance vs contrat de service"
+     ],
+     "requetes": [
+      "définition périmètre contrat assurance IFRS 17",
+      "exclusion contrats services IFRS 15 IFRS 17",
+      "critères distinction assurance service IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Une société de dépannage automobile facture un abonnement annuel fixe couvrant un nombre illimité d'interventions. Peut-elle appliquer IFRS 15 plutôt qu'IFRS 17 ?",
+      "définition périmètre contrat assurance IFRS 17",
+      "exclusion contrats services IFRS 15 IFRS 17",
+      "critères distinction assurance service IFRS 17"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:8",
+      "B:C002:12",
+      "B:C002:def:période de couverture",
+      "B:C002:B35",
+      "B:C002:B63"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 2331.0
+  },
+  {
+   "id": "p03",
+   "question": "Nous avons vendu au même client deux polices dont la seconde annule exactement le risque de la première. Faut-il les analyser séparément ?",
+   "gold": [
+    "9"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B34"
+    ],
+    [
+     "B35"
+    ],
+    [
+     "B21"
+    ],
+    [
+     "B15"
+    ],
+    [
+     "B31"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B17"
+    ],
+    [
+     "C19"
+    ],
+    [
+     "18"
+    ],
+    [
+     "B9"
+    ],
+    [
+     "B31"
+    ]
+   ],
+   "requetes": [
+    "Nous avons vendu au même client deux polices dont la seconde annule exactement le risque de la première. Faut-il les analyser séparément ?",
+    "groupement de contrats risque net nul IFRS 17",
+    "analyse séparée ou agrégation contrats offsetting risque",
+    "contrat d’assurance qui annule le risque d’un autre contrat IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "groupement de contrats avec risque net nul",
+      "exigence d'analyse séparée ou agrégation selon le risque net du groupe"
+     ],
+     "requetes": [
+      "groupement de contrats risque net nul IFRS 17",
+      "analyse séparée ou agrégation contrats offsetting risque"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Nous avons vendu au même client deux polices dont la seconde annule exactement le risque de la première. Faut-il les analyser séparément ?",
+      "groupement de contrats risque net nul IFRS 17",
+      "analyse séparée ou agrégation contrats offsetting risque"
+     ],
+     "passages": 15
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "contrat d’assurance qui annule le risque d’un autre contrat IFRS 17"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "contrat d’assurance qui annule le risque d’un autre contrat IFRS 17"
+     ],
+     "passages": 19
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 contrat annulation risque d’un autre contrat analyse séparée"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B17",
+      "B:C002:C19",
+      "B:C002:18",
+      "B:C002:B9",
+      "B:C002:B31"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 4221.3
+  },
+  {
+   "id": "p04",
+   "question": "Un contrat de retraite contient une part d'épargne qu'une banque pourrait vendre seule. Doit-on la sortir du contrat d'assurance ?",
+   "gold": [
+    "11"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.3333333333333333,
+   "base_top": [
+    [
+     "B31"
+    ],
+    [
+     "6",
+     "7"
+    ],
+    [
+     "B119B"
+    ],
+    [
+     "B101"
+    ],
+    [
+     "75"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B31"
+    ],
+    [
+     "10"
+    ],
+    [
+     "11"
+    ],
+    [
+     "13"
+    ],
+    [
+     "12"
+    ]
+   ],
+   "requetes": [
+    "Un contrat de retraite contient une part d'épargne qu'une banque pourrait vendre seule. Doit-on la sortir du contrat d'assurance ?",
+    "périmètre du contrat d'assurance composantes séparables IFRS 17",
+    "séparer partie d'épargne d'un contrat de retraite IFRS 17",
+    "comptabilisation séparée services d'épargne et garanties d'assurance IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination du périmètre du contrat d'assurance",
+      "séparation des composantes d'épargne non-assurance",
+      "exigence de comptabiliser séparément les services d'épargne et les garanties d'assurance"
+     ],
+     "requetes": [
+      "périmètre du contrat d'assurance composantes séparables IFRS 17",
+      "séparer partie d'épargne d'un contrat de retraite IFRS 17",
+      "comptabilisation séparée services d'épargne et garanties d'assurance IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un contrat de retraite contient une part d'épargne qu'une banque pourrait vendre seule. Doit-on la sortir du contrat d'assurance ?",
+      "périmètre du contrat d'assurance composantes séparables IFRS 17",
+      "séparer partie d'épargne d'un contrat de retraite IFRS 17",
+      "comptabilisation séparée services d'épargne et garanties d'assurance IFRS 17"
+     ],
+     "passages": 14
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B31",
+      "B:C002:10",
+      "B:C002:11",
+      "B:C002:13",
+      "B:C002:12"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 3583.4
+  },
+  {
+   "id": "p05",
+   "question": "Notre police santé inclut un abonnement à une salle de sport sans lien avec le risque assuré. Comment traiter ce service ?",
+   "gold": [
+    "12"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "def:services prévus au contrat d'assurance"
+    ],
+    [
+     "B119B"
+    ],
+    [
+     "B11"
+    ],
+    [
+     "B14"
+    ],
+    [
+     "B21"
+    ]
+   ],
+   "agent_top": [
+    [
+     "12"
+    ],
+    [
+     "B33"
+    ],
+    [
+     "B34"
+    ],
+    [
+     "def:services prévus au contrat d'assurance"
+    ],
+    [
+     "6",
+     "7"
+    ]
+   ],
+   "requetes": [
+    "Notre police santé inclut un abonnement à une salle de sport sans lien avec le risque assuré. Comment traiter ce service ?",
+    "exclusion du service non-assuré du périmètre du contrat IFRS 17",
+    "séparation du service accessoire comptabilisation distincte IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "exclusion du service non-assuré du périmètre du contrat d'assurance",
+      "séparation du service accessoire et comptabilisation en tant que prestation distincte"
+     ],
+     "requetes": [
+      "exclusion du service non-assuré du périmètre du contrat IFRS 17",
+      "séparation du service accessoire comptabilisation distincte IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Notre police santé inclut un abonnement à une salle de sport sans lien avec le risque assuré. Comment traiter ce service ?",
+      "exclusion du service non-assuré du périmètre du contrat IFRS 17",
+      "séparation du service accessoire comptabilisation distincte IFRS 17"
+     ],
+     "passages": 15
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:12",
+      "B:C002:B33",
+      "B:C002:B34",
+      "B:C002:def:services prévus au contrat d'assurance",
+      "B:C002:6"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 2727.4
+  },
+  {
+   "id": "p06",
+   "question": "À la souscription, comment répartir un portefeuille de polices habitation entre contrats déjà perdants, contrats sans risque de le devenir et les autres ?",
+   "gold": [
+    "16"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "14"
+    ],
+    [
+     "B23"
+    ],
+    [
+     "B106"
+    ],
+    [
+     "B11"
+    ],
+    [
+     "def:flux de trésorerie liés aux frais d'acquisition"
+    ]
+   ],
+   "agent_top": [
+    [
+     "47"
+    ],
+    [
+     "21"
+    ],
+    [
+     "48"
+    ],
+    [
+     "14"
+    ],
+    [
+     "def:flux de trésorerie liés aux frais d'acquisition"
+    ]
+   ],
+   "requetes": [
+    "À la souscription, comment répartir un portefeuille de polices habitation entre contrats déjà perdants, contrats sans risque de le devenir et les autres ?",
+    "groupe de contrats déficitaire à la souscription IFRS 17",
+    "exigence de regroupement contrats non déficitaires sans risque de devenir déficitaires IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "groupe de contrats déficitaire à la souscription",
+      "exigence de regroupement selon le critère de rentabilité (contrats sans risque de devenir déficitaire)"
+     ],
+     "requetes": [
+      "groupe de contrats déficitaire à la souscription IFRS 17",
+      "exigence de regroupement contrats non déficitaires sans risque de devenir déficitaires IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "À la souscription, comment répartir un portefeuille de polices habitation entre contrats déjà perdants, contrats sans risque de le devenir et les autres ?",
+      "groupe de contrats déficitaire à la souscription IFRS 17",
+      "exigence de regroupement contrats non déficitaires sans risque de devenir déficitaires IFRS 17"
+     ],
+     "passages": 13
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:47",
+      "B:C002:21",
+      "B:C002:48",
+      "B:C002:14",
+      "B:C002:def:flux de trésorerie liés aux frais d'acquisition"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 11900.2
+  },
+  {
+   "id": "p07",
+   "question": "Une police est signée en novembre, la couverture démarre le 1er janvier mais la prime est exigible dès décembre. Quand enregistre-t-on le groupe ?",
+   "gold": [
+    "25"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "25"
+    ],
+    [
+     "art-2"
+    ],
+    [
+     "53"
+    ],
+    [
+     "26"
+    ],
+    [
+     "56"
+    ]
+   ],
+   "agent_top": [
+    [
+     "25"
+    ],
+    [
+     "26"
+    ],
+    [
+     "B123"
+    ],
+    [
+     "C9"
+    ],
+    [
+     "B95"
+    ]
+   ],
+   "requetes": [
+    "Une police est signée en novembre, la couverture démarre le 1er janvier mais la prime est exigible dès décembre. Quand enregistre-t-on le groupe ?",
+    "date de reconnaissance initiale groupe IFRS 17",
+    "prime exigible avant début de couverture reconnaissance du contrat",
+    "moment de reconnaissance du passif d'assurance IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "date de reconnaissance initiale du groupe de contrats",
+      "exigibilité de la prime avant le début de la couverture",
+      "détermination du moment de la reconnaissance du passif d'assurance"
+     ],
+     "requetes": [
+      "date de reconnaissance initiale groupe IFRS 17",
+      "prime exigible avant début de couverture reconnaissance du contrat",
+      "moment de reconnaissance du passif d'assurance IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Une police est signée en novembre, la couverture démarre le 1er janvier mais la prime est exigible dès décembre. Quand enregistre-t-on le groupe ?",
+      "date de reconnaissance initiale groupe IFRS 17",
+      "prime exigible avant début de couverture reconnaissance du contrat",
+      "moment de reconnaissance du passif d'assurance IFRS 17"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:25",
+      "B:C002:26",
+      "B:C002:B123",
+      "B:C002:C9",
+      "B:C002:B95"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 11031.3
+  },
+  {
+   "id": "p08",
+   "question": "Les commissions versées aux courtiers pour vendre une gamme de contrats : comment les rattacher aux groupes ?",
+   "gold": [
+    "28A"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.2,
+   "base_top": [
+    [
+     "23",
+     "24"
+    ],
+    [
+     "B95D"
+    ],
+    [
+     "B65"
+    ],
+    [
+     "B35C"
+    ],
+    [
+     "B68"
+    ]
+   ],
+   "agent_top": [
+    [
+     "23",
+     "24"
+    ],
+    [
+     "B35A"
+    ],
+    [
+     "B95D"
+    ],
+    [
+     "B35C"
+    ],
+    [
+     "28A"
+    ]
+   ],
+   "requetes": [
+    "Les commissions versées aux courtiers pour vendre une gamme de contrats : comment les rattacher aux groupes ?",
+    "allocation des commissions d'acquisition aux groupes de contrats IFRS 17",
+    "méthode d'affectation des coûts d'acquisition aux groupes de contrats",
+    "traitement des commissions de courtage dans le périmètre du contrat"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "allocation des coûts d'acquisition aux groupes de contrats",
+      "méthode d'affectation des primes et des coûts d'acquisition selon IFRS 17"
+     ],
+     "requetes": [
+      "allocation des commissions d'acquisition aux groupes de contrats IFRS 17",
+      "méthode d'affectation des coûts d'acquisition aux groupes de contrats",
+      "traitement des commissions de courtage dans le périmètre du contrat"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Les commissions versées aux courtiers pour vendre une gamme de contrats : comment les rattacher aux groupes ?",
+      "allocation des commissions d'acquisition aux groupes de contrats IFRS 17",
+      "méthode d'affectation des coûts d'acquisition aux groupes de contrats",
+      "traitement des commissions de courtage dans le périmètre du contrat"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 5,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:23",
+      "B:C002:B35A",
+      "B:C002:B95D",
+      "B:C002:B35C",
+      "B:C002:28A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 9706.5
+  },
+  {
+   "id": "p09",
+   "question": "Une filiale émet des polices en dollars alors que nos comptes sont en euros. La marge est-elle convertie au cours de clôture ?",
+   "gold": [
+    "30"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.25,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B119A"
+    ],
+    [
+     "B96"
+    ],
+    [
+     "B111"
+    ],
+    [
+     "30"
+    ],
+    [
+     "B103"
+    ]
+   ],
+   "agent_top": [
+    [
+     "30"
+    ],
+    [
+     "B103"
+    ],
+    [
+     "B113"
+    ],
+    [
+     "C17"
+    ]
+   ],
+   "requetes": [
+    "Une filiale émet des polices en dollars alors que nos comptes sont en euros. La marge est-elle convertie au cours de clôture ?",
+    "conversion marge services contractuels taux de clôture IFRS 17",
+    "détermination marge services contractuels devise fonctionnelle groupe"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "conversion des flux de trésorerie et de la marge sur services contractuels au taux de clôture selon IFRS 17",
+      "détermination de la marge sur services contractuels en devise fonctionnelle du groupe"
+     ],
+     "requetes": [
+      "conversion marge services contractuels taux de clôture IFRS 17",
+      "détermination marge services contractuels devise fonctionnelle groupe"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Une filiale émet des polices en dollars alors que nos comptes sont en euros. La marge est-elle convertie au cours de clôture ?",
+      "conversion marge services contractuels taux de clôture IFRS 17",
+      "détermination marge services contractuels devise fonctionnelle groupe"
+     ],
+     "passages": 13
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:30",
+      "B:C002:B103",
+      "B:C002:B113",
+      "B:C002:C17"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 9584.5
+  },
+  {
+   "id": "p10",
+   "question": "Notre réassureur est en difficulté et son risque de défaut augmente. Cela modifie-t-il la marge du traité que nous détenons ?",
+   "gold": [
+    "67"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.2,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "65"
+    ],
+    [
+     "45"
+    ],
+    [
+     "B14"
+    ],
+    [
+     "B115"
+    ],
+    [
+     "67"
+    ]
+   ],
+   "agent_top": [
+    [
+     "67"
+    ],
+    [
+     "64"
+    ],
+    [
+     "66"
+    ],
+    [
+     "B116"
+    ]
+   ],
+   "requetes": [
+    "Notre réassureur est en difficulté et son risque de défaut augmente. Cela modifie-t-il la marge du traité que nous détenons ?",
+    "impact du risque de défaut du réassureur sur la marge du traité IFRS 17",
+    "ajustement du risque de crédit du réassureur dans l’ajustement du risque IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "ajustement du risque de crédit du réassureur dans l’ajustement du risque",
+      "marge sur services contractuels au titre des services futurs"
+     ],
+     "requetes": [
+      "impact du risque de défaut du réassureur sur la marge du traité IFRS 17",
+      "ajustement du risque de crédit du réassureur dans l’ajustement du risque IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Notre réassureur est en difficulté et son risque de défaut augmente. Cela modifie-t-il la marge du traité que nous détenons ?",
+      "impact du risque de défaut du réassureur sur la marge du traité IFRS 17",
+      "ajustement du risque de crédit du réassureur dans l’ajustement du risque IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:67",
+      "B:C002:64",
+      "B:C002:66",
+      "B:C002:B116"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10174.5
+  },
+  {
+   "id": "p11",
+   "question": "Chaque année nous pouvons revoir entièrement le tarif de chaque assuré selon son risque. Jusqu'où projeter les primes de ces contrats renouvelables ?",
+   "gold": [
+    "34"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B63"
+    ],
+    [
+     "56"
+    ],
+    [
+     "B20"
+    ],
+    [
+     "B64"
+    ],
+    [
+     "B126"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B61"
+    ],
+    [
+     "27",
+     "28"
+    ],
+    [
+     "B64"
+    ],
+    [
+     "106"
+    ],
+    [
+     "def:flux de trésorerie d'exécution"
+    ]
+   ],
+   "requetes": [
+    "Chaque année nous pouvons revoir entièrement le tarif de chaque assuré selon son risque. Jusqu'où projeter les primes de ces contrats renouvelables ?",
+    "projection des primes futures selon IFRS 17 contrats renouvelables",
+    "méthode d'affectation des primes pour contrats à renouvellement",
+    "estimation des flux de trésorerie futurs incluant primes futures",
+    "projection period premiums renewable contracts IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "estimation des flux de trésorerie futurs incluant les primes futures attendues",
+      "méthode d'affectation des primes pour les contrats à renouvellement",
+      "détermination de la période de couverture et de la durée du contrat"
+     ],
+     "requetes": [
+      "projection des primes futures selon IFRS 17 contrats renouvelables",
+      "méthode d'affectation des primes pour contrats à renouvellement",
+      "estimation des flux de trésorerie futurs incluant primes futures"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Chaque année nous pouvons revoir entièrement le tarif de chaque assuré selon son risque. Jusqu'où projeter les primes de ces contrats renouvelables ?",
+      "projection des primes futures selon IFRS 17 contrats renouvelables",
+      "méthode d'affectation des primes pour contrats à renouvellement",
+      "estimation des flux de trésorerie futurs incluant primes futures"
+     ],
+     "passages": 18
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "projection period premiums renewable contracts IFRS 17"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "projection period premiums renewable contracts IFRS 17"
+     ],
+     "passages": 22
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 projection horizon premiums renewable contracts"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B61",
+      "B:C002:27",
+      "B:C002:B64",
+      "B:C002:106",
+      "B:C002:def:flux de trésorerie d'exécution"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 24951.0
+  },
+  {
+   "id": "p12",
+   "question": "Quelle courbe de taux retenir pour actualiser des engagements de rentes très peu liquides ?",
+   "gold": [
+    "36",
+    "B80"
+   ],
+   "base_r5": 0.5,
+   "agent_r5": 0.5,
+   "base_mrr": 0.5,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B81"
+    ],
+    [
+     "B80"
+    ],
+    [
+     "B79"
+    ],
+    [
+     "B84"
+    ],
+    [
+     "C13"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B80"
+    ],
+    [
+     "B79"
+    ],
+    [
+     "B84"
+    ],
+    [
+     "B81"
+    ],
+    [
+     "120"
+    ]
+   ],
+   "requetes": [
+    "Quelle courbe de taux retenir pour actualiser des engagements de rentes très peu liquides ?",
+    "courbe d'actualisation flux de trésorerie IFRS 17 illiquidité",
+    "choix du taux d'actualisation obligations d'assurance peu liquides",
+    "méthode d'évaluation des engagements de rentes taux d'actualisation"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "taux d'actualisation des flux de trésorerie futurs selon IFRS 17",
+      "prise en compte du caractère illiquide du contrat dans le choix du taux d'actualisation",
+      "méthode d'évaluation des obligations d'assurance (discount rate)"
+     ],
+     "requetes": [
+      "courbe d'actualisation flux de trésorerie IFRS 17 illiquidité",
+      "choix du taux d'actualisation obligations d'assurance peu liquides",
+      "méthode d'évaluation des engagements de rentes taux d'actualisation"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Quelle courbe de taux retenir pour actualiser des engagements de rentes très peu liquides ?",
+      "courbe d'actualisation flux de trésorerie IFRS 17 illiquidité",
+      "choix du taux d'actualisation obligations d'assurance peu liquides",
+      "méthode d'évaluation des engagements de rentes taux d'actualisation"
+     ],
+     "passages": 10
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B80",
+      "B:C002:B79",
+      "B:C002:B84",
+      "B:C002:B81",
+      "B:C002:120"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 12559.1
+  },
+  {
+   "id": "p13",
+   "question": "Pour des contrats en unités de compte avec participation directe, la hausse des fonds revenant à l'assureur change-t-elle la marge ?",
+   "gold": [
+    "45"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B97"
+    ],
+    [
+     "B99"
+    ],
+    [
+     "B112"
+    ],
+    [
+     "B104"
+    ],
+    [
+     "B109",
+     "B110"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B112"
+    ],
+    [
+     "B104"
+    ],
+    [
+     "B113"
+    ],
+    [
+     "111",
+     "112"
+    ],
+    [
+     "B114"
+    ]
+   ],
+   "requetes": [
+    "Pour des contrats en unités de compte avec participation directe, la hausse des fonds revenant à l'assureur change-t-elle la marge ?",
+    "ajustement de la marge sur services contractuels suite à hausse des fonds unit-linked participation directe",
+    "impact de la participation directe sur la CSM IFRS 17",
+    "méthode d'affectation des primes dans les contrats à participation directe"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "ajustement de la marge sur services contractuels au titre des services futurs",
+      "participation directe aux résultats financiers du contrat",
+      "méthode d'affectation des primes aux obligations de service"
+     ],
+     "requetes": [
+      "ajustement de la marge sur services contractuels suite à hausse des fonds unit-linked participation directe",
+      "impact de la participation directe sur la CSM IFRS 17",
+      "méthode d'affectation des primes dans les contrats à participation directe"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Pour des contrats en unités de compte avec participation directe, la hausse des fonds revenant à l'assureur change-t-elle la marge ?",
+      "ajustement de la marge sur services contractuels suite à hausse des fonds unit-linked participation directe",
+      "impact de la participation directe sur la CSM IFRS 17",
+      "méthode d'affectation des primes dans les contrats à participation directe"
+     ],
+     "passages": 14
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B112",
+      "B:C002:B104",
+      "B:C002:B113",
+      "B:C002:111",
+      "B:C002:B114"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 9539.1
+  },
+  {
+   "id": "p14",
+   "question": "En méthode simplifiée, la hausse des sinistres laisse penser que notre portefeuille auto annuel perd de l'argent. Quel calcul faire ?",
+   "gold": [
+    "57"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "130"
+    ],
+    [
+     "def:passif au titre des sinistres survenus"
+    ],
+    [
+     "42"
+    ],
+    [
+     "B133"
+    ],
+    [
+     "B119D"
+    ]
+   ],
+   "agent_top": [
+    [
+     "57"
+    ],
+    [
+     "53"
+    ],
+    [
+     "42"
+    ],
+    [
+     "49"
+    ],
+    [
+     "B113"
+    ]
+   ],
+   "requetes": [
+    "En méthode simplifiée, la hausse des sinistres laisse penser que notre portefeuille auto annuel perd de l'argent. Quel calcul faire ?",
+    "groupe de contrats déficitaire méthode simplifiée IFRS 17",
+    "calcul du résultat de l'année déficit groupe simplifié",
+    "ajustement marge services contractuels services futurs IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "groupe de contrats déficitaire en méthode simplifiée",
+      "calcul du résultat de l'année (déficit)",
+      "ajustement de la marge sur services contractuels au titre des services futurs"
+     ],
+     "requetes": [
+      "groupe de contrats déficitaire méthode simplifiée IFRS 17",
+      "calcul du résultat de l'année déficit groupe simplifié",
+      "ajustement marge services contractuels services futurs IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "En méthode simplifiée, la hausse des sinistres laisse penser que notre portefeuille auto annuel perd de l'argent. Quel calcul faire ?",
+      "groupe de contrats déficitaire méthode simplifiée IFRS 17",
+      "calcul du résultat de l'année déficit groupe simplifié",
+      "ajustement marge services contractuels services futurs IFRS 17"
+     ],
+     "passages": 20
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:57",
+      "B:C002:53",
+      "B:C002:42",
+      "B:C002:49",
+      "B:C002:B113"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 9055.4
+  },
+  {
+   "id": "p15",
+   "question": "Nos contrats voyage durent trois mois et suivent la méthode simplifiée. Peut-on passer tout de suite en charges les frais de commercialisation ?",
+   "gold": [
+    "59"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.5,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "53"
+    ],
+    [
+     "59"
+    ],
+    [
+     "28A"
+    ],
+    [
+     "106"
+    ],
+    [
+     "55"
+    ]
+   ],
+   "agent_top": [
+    [
+     "55"
+    ],
+    [
+     "59"
+    ],
+    [
+     "28A"
+    ],
+    [
+     "69"
+    ],
+    [
+     "B35C"
+    ]
+   ],
+   "requetes": [
+    "Nos contrats voyage durent trois mois et suivent la méthode simplifiée. Peut-on passer tout de suite en charges les frais de commercialisation ?",
+    "déduction des coûts d'acquisition méthode simplifiée IFRS 17",
+    "reconnaissance immédiate frais de commercialisation contrats courte durée"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "déduction des coûts d'acquisition sous la méthode simplifiée",
+      "exigence de durée courte du contrat pour la reconnaissance immédiate des frais"
+     ],
+     "requetes": [
+      "déduction des coûts d'acquisition méthode simplifiée IFRS 17",
+      "reconnaissance immédiate frais de commercialisation contrats courte durée"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Nos contrats voyage durent trois mois et suivent la méthode simplifiée. Peut-on passer tout de suite en charges les frais de commercialisation ?",
+      "déduction des coûts d'acquisition méthode simplifiée IFRS 17",
+      "reconnaissance immédiate frais de commercialisation contrats courte durée"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:55",
+      "B:C002:59",
+      "B:C002:28A",
+      "B:C002:69",
+      "B:C002:B35C"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10566.8
+  },
+  {
+   "id": "p16",
+   "question": "Un contrat d'épargne sans risque d'assurance significatif mais avec participation aux bénéfices discrétionnaire : relève-t-il d'IFRS 17, et avec quelles adaptations ?",
+   "gold": [
+    "71"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.25,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B98"
+    ],
+    [
+     "cons-5"
+    ],
+    [
+     "B99"
+    ],
+    [
+     "71"
+    ],
+    [
+     "B100"
+    ]
+   ],
+   "agent_top": [
+    [
+     "71"
+    ],
+    [
+     "cons-5"
+    ],
+    [
+     "C21"
+    ],
+    [
+     "def:composante investissement",
+     "def:contrat d'investissement avec éléments de participation discrétionnaire"
+    ],
+    [
+     "B112"
+    ]
+   ],
+   "requetes": [
+    "Un contrat d'épargne sans risque d'assurance significatif mais avec participation aux bénéfices discrétionnaire : relève-t-il d'IFRS 17, et avec quelles adaptations ?",
+    "détermination du champ d'application IFRS 17 contrat d'épargne sans risque d'assurance",
+    "exemption contrat d'épargne participation bénéfices discrétionnaire IFRS 17",
+    "marge sur services contractuels participation aux bénéfices discrétionnaire adaptation"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination du champ d'application d'IFRS 17 – contrat hors champ d'assurance",
+      "exemption ou adaptation pour contrats d'épargne à participation aux bénéfices discrétionnaire",
+      "traitement des flux de trésorerie liés à la participation aux bénéfices dans le cadre de la marge sur services contractuels"
+     ],
+     "requetes": [
+      "détermination du champ d'application IFRS 17 contrat d'épargne sans risque d'assurance",
+      "exemption contrat d'épargne participation bénéfices discrétionnaire IFRS 17",
+      "marge sur services contractuels participation aux bénéfices discrétionnaire adaptation"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un contrat d'épargne sans risque d'assurance significatif mais avec participation aux bénéfices discrétionnaire : relève-t-il d'IFRS 17, et avec quelles adaptations ?",
+      "détermination du champ d'application IFRS 17 contrat d'épargne sans risque d'assurance",
+      "exemption contrat d'épargne participation bénéfices discrétionnaire IFRS 17",
+      "marge sur services contractuels participation aux bénéfices discrétionnaire adaptation"
+     ],
+     "passages": 13
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:71",
+      "B:C002:cons-5",
+      "B:C002:C21",
+      "B:C002:def:composante investissement",
+      "B:C002:B112"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10610.6
+  },
+  {
+   "id": "p17",
+   "question": "Un prêt immobilier est couvert par une assurance emprunteur dont le capital assuré diminue chaque année. Comment répartir la marge entre les années de couverture ?",
+   "gold": [
+    "B119"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.5,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B96"
+    ],
+    [
+     "B119"
+    ],
+    [
+     "C13"
+    ],
+    [
+     "56"
+    ],
+    [
+     "50"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B119"
+    ],
+    [
+     "45"
+    ],
+    [
+     "B126"
+    ],
+    [
+     "50"
+    ],
+    [
+     "59"
+    ]
+   ],
+   "requetes": [
+    "Un prêt immobilier est couvert par une assurance emprunteur dont le capital assuré diminue chaque année. Comment répartir la marge entre les années de couverture ?",
+    "allocation de la marge sur services contractuels période de couverture IFRS 17",
+    "méthode d'affectation des primes capital assuré décroissant assurance emprunteur",
+    "IFRS 17 44(e) 45(e) répartition marge services contractuels couverture"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "allocation de la marge sur services contractuels (CSM) sur la période de couverture",
+      "méthode d'affectation des primes (premium allocation approach) ou modèle de mesure général (GMM)"
+     ],
+     "requetes": [
+      "allocation de la marge sur services contractuels période de couverture IFRS 17",
+      "méthode d'affectation des primes capital assuré décroissant assurance emprunteur"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un prêt immobilier est couvert par une assurance emprunteur dont le capital assuré diminue chaque année. Comment répartir la marge entre les années de couverture ?",
+      "allocation de la marge sur services contractuels période de couverture IFRS 17",
+      "méthode d'affectation des primes capital assuré décroissant assurance emprunteur"
+     ],
+     "passages": 14
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 44(e) 45(e) répartition marge services contractuels couverture"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 44(e) 45(e) répartition marge services contractuels couverture"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B119",
+      "B:C002:45",
+      "B:C002:B126",
+      "B:C002:50",
+      "B:C002:59"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 22655.4
+  },
+  {
+   "id": "p18",
+   "question": "Certains portefeuilles sont en position d'actif et d'autres de passif. Peut-on les compenser sur une seule ligne au bilan ?",
+   "gold": [
+    "78"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "78"
+    ],
+    [
+     "14"
+    ],
+    [
+     "79"
+    ],
+    [
+     "B46"
+    ],
+    [
+     "99"
+    ]
+   ],
+   "agent_top": [
+    [
+     "78"
+    ],
+    [
+     "14"
+    ],
+    [
+     "C19A"
+    ],
+    [
+     "C22A"
+    ]
+   ],
+   "requetes": [
+    "Certains portefeuilles sont en position d'actif et d'autres de passif. Peut-on les compenser sur une seule ligne au bilan ?",
+    "compensation actifs passifs IFRS 17 bilan",
+    "présentation séparée actifs passifs IFRS 17 règle"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "présentation séparée des actifs et passifs selon IFRS 17",
+      "interdiction de compensation des flux de trésorerie futurs sauf droit d'extinction ou compensation autorisée"
+     ],
+     "requetes": [
+      "compensation actifs passifs IFRS 17 bilan",
+      "présentation séparée actifs passifs IFRS 17 règle"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Certains portefeuilles sont en position d'actif et d'autres de passif. Peut-on les compenser sur une seule ligne au bilan ?",
+      "compensation actifs passifs IFRS 17 bilan",
+      "présentation séparée actifs passifs IFRS 17 règle"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:78",
+      "B:C002:14",
+      "B:C002:C19A",
+      "B:C002:C22A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 8739.4
+  },
+  {
+   "id": "p19",
+   "question": "En cas de rachat, la somme restituée à l'assuré peut-elle figurer dans le chiffre d'affaires et dans les charges de sinistres ?",
+   "gold": [
+    "85"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "86"
+    ],
+    [
+     "84"
+    ],
+    [
+     "42"
+    ],
+    [
+     "105"
+    ],
+    [
+     "102",
+     "103"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B137"
+    ],
+    [
+     "85"
+    ],
+    [
+     "51"
+    ],
+    [
+     "B95C"
+    ],
+    [
+     "102",
+     "103"
+    ]
+   ],
+   "requetes": [
+    "En cas de rachat, la somme restituée à l'assuré peut-elle figurer dans le chiffre d'affaires et dans les charges de sinistres ?",
+    "rachat valeur de rachat pas chiffre d'affaires IFRS 17",
+    "remboursement prime rachat flux trésorerie pas charge sinistre",
+    "restitution assuré rachat traitement comptable IFRS 17",
+    "IFRS 17 rachat flux de trésorerie règlement de sinistres reconnaissance chiffre d’affaires"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "reconnaissance du chiffre d'affaires liée aux primes uniquement",
+      "traitement des flux de trésorerie de rachat comme remboursement de primes, non pas comme prestation d'assurance",
+      "exclusion des remboursements de rachat des charges de sinistres"
+     ],
+     "requetes": [
+      "rachat valeur de rachat pas chiffre d'affaires IFRS 17",
+      "remboursement prime rachat flux trésorerie pas charge sinistre",
+      "restitution assuré rachat traitement comptable IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "En cas de rachat, la somme restituée à l'assuré peut-elle figurer dans le chiffre d'affaires et dans les charges de sinistres ?",
+      "rachat valeur de rachat pas chiffre d'affaires IFRS 17",
+      "remboursement prime rachat flux trésorerie pas charge sinistre",
+      "restitution assuré rachat traitement comptable IFRS 17"
+     ],
+     "passages": 18
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 rachat flux de trésorerie règlement de sinistres reconnaissance chiffre d’affaires"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 rachat flux de trésorerie règlement de sinistres reconnaissance chiffre d’affaires"
+     ],
+     "passages": 18
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "§B121 rachat"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B137",
+      "B:C002:85",
+      "B:C002:51",
+      "B:C002:B95C",
+      "B:C002:102"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 23180.4
+  },
+  {
+   "id": "p20",
+   "question": "La désactualisation de nos engagements et l'effet des variations de taux : sur quelle ligne du compte de résultat ?",
+   "gold": [
+    "87"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B99"
+    ],
+    [
+     "B74"
+    ],
+    [
+     "B113"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "B76"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B99"
+    ],
+    [
+     "B96"
+    ],
+    [
+     "B100"
+    ],
+    [
+     "C15"
+    ],
+    [
+     "B97"
+    ]
+   ],
+   "requetes": [
+    "La désactualisation de nos engagements et l'effet des variations de taux : sur quelle ligne du compte de résultat ?",
+    "effet du taux d'actualisation sur le résultat IFRS 17 ligne compte de résultat",
+    "variation du taux d'actualisation marge sur services contractuels présentation",
+    "ligne du compte de résultat pour la désactualisation des engagements",
+    "IFRS 17 paragraph presentation discounting effect income statement line"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "effet du taux d'actualisation sur le résultat",
+      "variation du taux d'actualisation dans la marge sur services contractuels au titre des services futurs",
+      "présentation du résultat de la désactualisation dans le compte de résultat"
+     ],
+     "requetes": [
+      "effet du taux d'actualisation sur le résultat IFRS 17 ligne compte de résultat",
+      "variation du taux d'actualisation marge sur services contractuels présentation",
+      "ligne du compte de résultat pour la désactualisation des engagements"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "La désactualisation de nos engagements et l'effet des variations de taux : sur quelle ligne du compte de résultat ?",
+      "effet du taux d'actualisation sur le résultat IFRS 17 ligne compte de résultat",
+      "variation du taux d'actualisation marge sur services contractuels présentation",
+      "ligne du compte de résultat pour la désactualisation des engagements"
+     ],
+     "passages": 17
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 paragraph presentation discounting effect income statement line"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 paragraph presentation discounting effect income statement line"
+     ],
+     "passages": 22
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B99",
+      "B:C002:B96",
+      "B:C002:B100",
+      "B:C002:C15",
+      "B:C002:B97"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 20726.1
+  },
+  {
+   "id": "p21",
+   "question": "Les frais de gestion des sinistres et une quote-part des frais généraux entrent-ils dans les flux projetés du contrat ?",
+   "gold": [
+    "B65"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B65"
+    ],
+    [
+     "B65"
+    ],
+    [
+     "105"
+    ],
+    [
+     "59"
+    ],
+    [
+     "51"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B65"
+    ],
+    [
+     "B65"
+    ],
+    [
+     "B41"
+    ],
+    [
+     "105"
+    ],
+    [
+     "B66"
+    ]
+   ],
+   "requetes": [
+    "Les frais de gestion des sinistres et une quote-part des frais généraux entrent-ils dans les flux projetés du contrat ?",
+    "frais de gestion des sinistres inclus flux de trésorerie futurs IFRS 17",
+    "quote-part frais généraux flux projetés contrat IFRS 17",
+    "IFRS 17 claim handling costs included in projected cash flows"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination des flux de trésorerie futurs du contrat",
+      "exclusion des frais généraux non directement attribuables aux services du contrat"
+     ],
+     "requetes": [
+      "frais de gestion des sinistres inclus flux de trésorerie futurs IFRS 17",
+      "quote-part frais généraux flux projetés contrat IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Les frais de gestion des sinistres et une quote-part des frais généraux entrent-ils dans les flux projetés du contrat ?",
+      "frais de gestion des sinistres inclus flux de trésorerie futurs IFRS 17",
+      "quote-part frais généraux flux projetés contrat IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 claim handling costs included in projected cash flows"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 claim handling costs included in projected cash flows"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 claim settlement costs claim handling costs inclusion in cash flows"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B65#1",
+      "B:C002:B65#2",
+      "B:C002:B41",
+      "B:C002:105",
+      "B:C002:B66"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 25551.7
+  },
+  {
+   "id": "p22",
+   "question": "Doit-on intégrer les revenus de nos placements financiers dans les flux projetés des contrats ?",
+   "gold": [
+    "B66"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.3333333333333333,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B71"
+    ],
+    [
+     "33"
+    ],
+    [
+     "B66"
+    ],
+    [
+     "B132"
+    ],
+    [
+     "B130"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B66"
+    ],
+    [
+     "B130"
+    ],
+    [
+     "C14C"
+    ]
+   ],
+   "requetes": [
+    "Doit-on intégrer les revenus de nos placements financiers dans les flux projetés des contrats ?",
+    "exclusion des revenus de placements financiers des flux de trésorerie projetés IFRS 17",
+    "détermination des flux de trésorerie contractuels pertinents IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "exclusion des revenus d'investissement des flux de trésorerie contractuels",
+      "détermination des flux de trésorerie pertinents selon IFRS 17"
+     ],
+     "requetes": [
+      "exclusion des revenus de placements financiers des flux de trésorerie projetés IFRS 17",
+      "détermination des flux de trésorerie contractuels pertinents IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Doit-on intégrer les revenus de nos placements financiers dans les flux projetés des contrats ?",
+      "exclusion des revenus de placements financiers des flux de trésorerie projetés IFRS 17",
+      "détermination des flux de trésorerie contractuels pertinents IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B66",
+      "B:C002:B130",
+      "B:C002:C14C"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 12472.9
+  },
+  {
+   "id": "p23",
+   "question": "Des primes encaissées cette année pour la couverture des années suivantes ont dépassé les prévisions. La marge change-t-elle ?",
+   "gold": [
+    "B96"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "56"
+    ],
+    [
+     "B126"
+    ],
+    [
+     "B95"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "46"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B96"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "104"
+    ],
+    [
+     "B60"
+    ],
+    [
+     "46"
+    ]
+   ],
+   "requetes": [
+    "Des primes encaissées cette année pour la couverture des années suivantes ont dépassé les prévisions. La marge change-t-elle ?",
+    "ajustement de la marge sur services contractuels au titre des services futurs primes supérieures aux prévisions",
+    "mise à jour des flux de trésorerie futurs attendus prime encaissée excédentaire"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "ajustement de la marge sur services contractuels au titre des services futurs",
+      "mise à jour des flux de trésorerie futurs attendus"
+     ],
+     "requetes": [
+      "ajustement de la marge sur services contractuels au titre des services futurs primes supérieures aux prévisions",
+      "mise à jour des flux de trésorerie futurs attendus prime encaissée excédentaire"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Des primes encaissées cette année pour la couverture des années suivantes ont dépassé les prévisions. La marge change-t-elle ?",
+      "ajustement de la marge sur services contractuels au titre des services futurs primes supérieures aux prévisions",
+      "mise à jour des flux de trésorerie futurs attendus prime encaissée excédentaire"
+     ],
+     "passages": 14
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B96",
+      "B:C002:B97",
+      "B:C002:104",
+      "B:C002:B60",
+      "B:C002:46"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 9185.5
+  },
+  {
+   "id": "p24",
+   "question": "Nous couvrons par des dérivés le risque financier des garanties de nos contrats avec participation. Pouvons-nous éviter de faire passer cet effet dans la marge ?",
+   "gold": [
+    "B115"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B115"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "B99"
+    ],
+    [
+     "B116"
+    ],
+    [
+     "B113"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B115"
+    ],
+    [
+     "B116"
+    ],
+    [
+     "C17"
+    ],
+    [
+     "C16A"
+    ]
+   ],
+   "requetes": [
+    "Nous couvrons par des dérivés le risque financier des garanties de nos contrats avec participation. Pouvons-nous éviter de faire passer cet effet dans la marge ?",
+    "exclusion effet de couverture du risque financier de la marge IFRS 17",
+    "traitement dérivés couverture garanties participation IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "exclusion de l'effet de couverture du risque financier de la marge sur services contractuels",
+      "traitement des dérivés de couverture dans le périmètre du contrat"
+     ],
+     "requetes": [
+      "exclusion effet de couverture du risque financier de la marge IFRS 17",
+      "traitement dérivés couverture garanties participation IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Nous couvrons par des dérivés le risque financier des garanties de nos contrats avec participation. Pouvons-nous éviter de faire passer cet effet dans la marge ?",
+      "exclusion effet de couverture du risque financier de la marge IFRS 17",
+      "traitement dérivés couverture garanties participation IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B115",
+      "B:C002:B116",
+      "B:C002:C17",
+      "B:C002:C16A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10195.9
+  },
+  {
+   "id": "p25",
+   "question": "En méthode simplifiée, comment étaler la prime d'un contrat annuel dont les sinistres se concentrent en hiver ?",
+   "gold": [
+    "B126"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "53"
+    ],
+    [
+     "69"
+    ],
+    [
+     "59"
+    ],
+    [
+     "130"
+    ],
+    [
+     "86"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B126"
+    ],
+    [
+     "53"
+    ],
+    [
+     "59"
+    ],
+    [
+     "57"
+    ]
+   ],
+   "requetes": [
+    "En méthode simplifiée, comment étaler la prime d'un contrat annuel dont les sinistres se concentrent en hiver ?",
+    "allocation de la prime méthode simplifiée IFRS 17",
+    "répartition de la prime sur la période de couverture sinistres saisonniers",
+    "étalement de la prime contrat annuel méthode simplifiée"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "méthode d'allocation de la prime en méthode simplifiée",
+      "répartition de la prime selon le pattern de sinistres",
+      "détermination du revenu de service contractuel saisonnier"
+     ],
+     "requetes": [
+      "allocation de la prime méthode simplifiée IFRS 17",
+      "répartition de la prime sur la période de couverture sinistres saisonniers",
+      "étalement de la prime contrat annuel méthode simplifiée"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "En méthode simplifiée, comment étaler la prime d'un contrat annuel dont les sinistres se concentrent en hiver ?",
+      "allocation de la prime méthode simplifiée IFRS 17",
+      "répartition de la prime sur la période de couverture sinistres saisonniers",
+      "étalement de la prime contrat annuel méthode simplifiée"
+     ],
+     "passages": 10
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B126",
+      "B:C002:53",
+      "B:C002:59",
+      "B:C002:57"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10052.2
+  },
+  {
+   "id": "p26",
+   "question": "Nous publions des comptes semestriels. Les estimations du premier semestre doivent-elles être revues dans les comptes annuels ?",
+   "gold": [
+    "B137"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B137"
+    ],
+    [
+     "cons-13"
+    ],
+    [
+     "B54"
+    ],
+    [
+     "B60"
+    ],
+    [
+     "cons-10"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B137"
+    ],
+    [
+     "B54"
+    ],
+    [
+     "B58"
+    ],
+    [
+     "C28"
+    ]
+   ],
+   "requetes": [
+    "Nous publions des comptes semestriels. Les estimations du premier semestre doivent-elles être revues dans les comptes annuels ?",
+    "mise à jour estimations flux de trésorerie IFRS 17 date de reporting",
+    "révision hypothèses semestrielles états annuels IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "mise à jour des estimations des flux de trésorerie futurs à chaque date de reporting",
+      "révision des hypothèses d'exécution lors de la préparation des états financiers annuels"
+     ],
+     "requetes": [
+      "mise à jour estimations flux de trésorerie IFRS 17 date de reporting",
+      "révision hypothèses semestrielles états annuels IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Nous publions des comptes semestriels. Les estimations du premier semestre doivent-elles être revues dans les comptes annuels ?",
+      "mise à jour estimations flux de trésorerie IFRS 17 date de reporting",
+      "révision hypothèses semestrielles états annuels IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B137",
+      "B:C002:B54",
+      "B:C002:B58",
+      "B:C002:C28"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 11483.2
+  },
+  {
+   "id": "p27",
+   "question": "À la transition, impossible de reconstituer l'historique de contrats souscrits il y a quinze ans. Comment fixer leur marge ?",
+   "gold": [
+    "C5",
+    "C20"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "C15"
+    ],
+    [
+     "C14D"
+    ],
+    [
+     "C14C"
+    ],
+    [
+     "C14A"
+    ],
+    [
+     "C14B"
+    ]
+   ],
+   "agent_top": [
+    [
+     "C14D"
+    ],
+    [
+     "C14A"
+    ],
+    [
+     "C6"
+    ],
+    [
+     "C14C"
+    ],
+    [
+     "C14B"
+    ]
+   ],
+   "requetes": [
+    "À la transition, impossible de reconstituer l'historique de contrats souscrits il y a quinze ans. Comment fixer leur marge ?",
+    "méthode de transition IFRS 17 historique manquant marge de service contractuel",
+    "détermination CSM à la date de transition sans données historiques",
+    "approche rétrospective simplifiée IFRS 17 marge initiale"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "méthode de transition selon IFRS 17 – approche rétrospective ou simplifiée",
+      "détermination de la marge de service contractuel (CSM) à la date de transition en l'absence d'historique",
+      "utilisation d'estimations de flux de trésorerie futurs pour établir la marge initiale"
+     ],
+     "requetes": [
+      "méthode de transition IFRS 17 historique manquant marge de service contractuel",
+      "détermination CSM à la date de transition sans données historiques",
+      "approche rétrospective simplifiée IFRS 17 marge initiale"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "À la transition, impossible de reconstituer l'historique de contrats souscrits il y a quinze ans. Comment fixer leur marge ?",
+      "méthode de transition IFRS 17 historique manquant marge de service contractuel",
+      "détermination CSM à la date de transition sans données historiques",
+      "approche rétrospective simplifiée IFRS 17 marge initiale"
+     ],
+     "passages": 10
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:C14D",
+      "B:C002:C14A",
+      "B:C002:C6",
+      "B:C002:C14C",
+      "B:C002:C14B"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 11046.8
+  },
+  {
+   "id": "p28",
+   "question": "Quels tableaux de passage entre soldes d'ouverture et de clôture doit-on publier en annexe ?",
+   "gold": [
+    "100"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.5,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "105A"
+    ],
+    [
+     "100"
+    ],
+    [
+     "101"
+    ],
+    [
+     "114"
+    ],
+    [
+     "116"
+    ]
+   ],
+   "agent_top": [
+    [
+     "105A"
+    ],
+    [
+     "100"
+    ],
+    [
+     "101"
+    ],
+    [
+     "99"
+    ],
+    [
+     "121"
+    ]
+   ],
+   "requetes": [
+    "Quels tableaux de passage entre soldes d'ouverture et de clôture doit-on publier en annexe ?",
+    "tableaux de réconciliation soldes ouverture clôture IFRS 17 annexe",
+    "exigences présentation mouvements de bilan IFRS 17",
+    "information à fournir tableau passage soldes IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "exigences de présentation et informations à fournir selon IFRS 17",
+      "tableaux de réconciliation des soldes d'ouverture et de clôture",
+      "déclarations d'information sur les mouvements de bilan"
+     ],
+     "requetes": [
+      "tableaux de réconciliation soldes ouverture clôture IFRS 17 annexe",
+      "exigences présentation mouvements de bilan IFRS 17",
+      "information à fournir tableau passage soldes IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Quels tableaux de passage entre soldes d'ouverture et de clôture doit-on publier en annexe ?",
+      "tableaux de réconciliation soldes ouverture clôture IFRS 17 annexe",
+      "exigences présentation mouvements de bilan IFRS 17",
+      "information à fournir tableau passage soldes IFRS 17"
+     ],
+     "passages": 11
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 4,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:105A",
+      "B:C002:100",
+      "B:C002:101",
+      "B:C002:99",
+      "B:C002:121"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 8256.6
+  },
+  {
+   "id": "p29",
+   "question": "Que publier sur l'effet d'une hausse de la mortalité ou d'une baisse des taux sur le résultat et les capitaux propres ?",
+   "gold": [
+    "128"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B57"
+    ],
+    [
+     "B58"
+    ],
+    [
+     "B56"
+    ],
+    [
+     "B50"
+    ],
+    [
+     "B75"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B57"
+    ],
+    [
+     "B99"
+    ],
+    [
+     "B85"
+    ],
+    [
+     "B58"
+    ],
+    [
+     "B72"
+    ]
+   ],
+   "requetes": [
+    "Que publier sur l'effet d'une hausse de la mortalité ou d'une baisse des taux sur le résultat et les capitaux propres ?",
+    "impact des variations de mortalité sur le CSM IFRS 17",
+    "effet d'une baisse du taux d'actualisation sur le résultat et les capitaux propres IFRS 17",
+    "reconnaissance du résultat suite à un ajustement de la marge sur services contractuels"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "variation du Contractual Service Margin (CSM) due aux changements de paramètres",
+      "reconnaissance du résultat via l'ajustement de la marge sur services contractuels",
+      "impact du taux d'actualisation sur la valeur actuelle des flux de trésorerie futurs"
+     ],
+     "requetes": [
+      "impact des variations de mortalité sur le CSM IFRS 17",
+      "effet d'une baisse du taux d'actualisation sur le résultat et les capitaux propres IFRS 17",
+      "reconnaissance du résultat suite à un ajustement de la marge sur services contractuels"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Que publier sur l'effet d'une hausse de la mortalité ou d'une baisse des taux sur le résultat et les capitaux propres ?",
+      "impact des variations de mortalité sur le CSM IFRS 17",
+      "effet d'une baisse du taux d'actualisation sur le résultat et les capitaux propres IFRS 17",
+      "reconnaissance du résultat suite à un ajustement de la marge sur services contractuels"
+     ],
+     "passages": 17
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 7,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B57",
+      "B:C002:B99",
+      "B:C002:B85",
+      "B:C002:B58",
+      "B:C002:B72"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 8860.6
+  },
+  {
+   "id": "p30",
+   "question": "Un assureur couvre l'aggravation de sinistres déjà survenus chez une autre société. Quel est l'événement assuré ?",
+   "gold": [
+    "B5"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B5"
+    ],
+    [
+     "def:passif au titre des sinistres survenus"
+    ],
+    [
+     "130"
+    ],
+    [
+     "def:passif au titre de la couverture restante"
+    ],
+    [
+     "B6"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B5"
+    ],
+    [
+     "B4"
+    ]
+   ],
+   "requetes": [
+    "Un assureur couvre l'aggravation de sinistres déjà survenus chez une autre société. Quel est l'événement assuré ?",
+    "définition de l'événement assuré IFRS 17 aggravation sinistre",
+    "réassurance non-proportionnelle aggravation sinistres déjà survenus"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "définition de l'événement assuré dans le périmètre du contrat",
+      "contrat de réassurance non-proportionnel – aggravation des sinistres déjà survenus"
+     ],
+     "requetes": [
+      "définition de l'événement assuré IFRS 17 aggravation sinistre",
+      "réassurance non-proportionnelle aggravation sinistres déjà survenus"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un assureur couvre l'aggravation de sinistres déjà survenus chez une autre société. Quel est l'événement assuré ?",
+      "définition de l'événement assuré IFRS 17 aggravation sinistre",
+      "réassurance non-proportionnelle aggravation sinistres déjà survenus"
+     ],
+     "passages": 8
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B5",
+      "B:C002:B4"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 6632.8
+  }
+ ]
+}

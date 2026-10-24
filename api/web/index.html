@@ -3,313 +3,109 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IFRS 17 Copilot</title>
-<meta name="description" content="Du bordereau à la note IFRS 17 : six agents lisent, calculent, citent la norme et rédigent ; le code vérifie chaque chiffre.">
-<link rel="icon" href="img/logo.svg">
-<link rel="stylesheet" href="app.css">
+<title>Espace de travail · IFRS 17 Copilot</title>
+<meta name="description" content="Espace de travail IFRS 17 Copilot : dossiers, notes actuarielles, validation et piste d'audit.">
+<meta name="theme-color" content="#0B2328">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<script>
+  /* thème choisi avant le premier affichage, pour éviter un flash */
+  try { const t = localStorage.getItem("ifrs17.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
 </head>
-<body>
-<a class="skip" href="#view">Aller au contenu</a>
-<div class="shell">
+<body class="booting">
+<a class="skip" href="#main">Aller au contenu</a>
 
-<nav class="rail" aria-label="Navigation principale">
-  <a class="brand" href="#/accueil">
-    <img src="img/logo.svg" alt="" width="36" height="36">
-    <span>IFRS 17 <b>Copilot</b></span>
-  </a>
-  <ul class="nav">
-    <li><a href="#/accueil" data-nav="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Accueil</a></li>
-    <li><a href="#/analyser" data-nav="analyser"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z M14 3v4h4 M9 13h6 M9 17h6"/></svg>Analyser un dossier</a></li>
-    <li><a href="#/norme" data-nav="norme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-3 0-3 4 0 4h3c3 0 3 4 0 4H9c-3 0-3 4 0 4h3c3 0 3 4 0 4M12 3v18" transform="scale(.9) translate(1.5 1)"/></svg>Interroger la norme</a></li>
-    <li><a href="#/simuler" data-nav="simuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16 M4 15l4-4 4 3 7-8 M15 6h4v4"/></svg>Simuler un groupe</a></li>
-    <li><a href="#/resultats" data-nav="resultats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16 M7 20v-6 M12 20V8 M17 20v-9"/></svg>Résultats mesurés</a></li>
-    <li><a href="#/fonctionnement" data-nav="fonctionnement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h5v5H5z M14 13h5v5h-5z M10 8.5h3v7h1"/></svg>Fonctionnement</a></li>
-  </ul>
-  <div class="rail-foot">
-    <button class="status" id="status" type="button" title="État du service">
-      <span class="dot" aria-hidden="true"></span><span id="status-text">Connexion…</span>
-    </button>
-    <button class="link-btn" id="open-settings" type="button">Réglages</button>
-  </div>
-</nav>
-
-<main id="view" tabindex="-1">
-
-<!-- ============================== ACCUEIL ============================== -->
-<section data-view="accueil" aria-labelledby="h-accueil">
-  <div class="hero">
-    <div class="hero-text">
-      <h1 id="h-accueil">Du bordereau à la note IFRS 17, sans chiffre inventé.</h1>
-      <p class="lead">Déposez l'état d'un portefeuille d'assurance. Six agents lisent le document, calculent la marge sur services contractuels, retrouvent les paragraphes de la norme et rédigent une note. Le code vérifie chaque chiffre et chaque citation ; un humain valide dès qu'un contrôle échoue.</p>
-      <div class="actions">
-        <a class="btn primary" href="#/analyser">Analyser un document</a>
-        <a class="btn" href="#/norme">Poser une question sur la norme</a>
-      </div>
-    </div>
-    <figure class="hero-chain" aria-label="Rejeu d'un dossier réel">
-      <figcaption>
-        <span>Dossier PREV-2023-A, rejoué tel qu'il a été traité</span>
-        <button class="link-btn" id="replay" type="button">Rejouer</button>
-      </figcaption>
-      <ol class="chain" id="hero-chain"></ol>
-      <div class="chain-result" id="hero-result" hidden>
-        <span class="stamp ok">Note prête</span>
-        <span>CSM initiale <b class="num">397,89</b> milliers de USD</span>
-        <span class="num">8 appels LLM, 74 s</span>
-      </div>
-    </figure>
-  </div>
-
-  <div class="block">
-    <h2>Trois façons de confier un dossier</h2>
-    <div class="ways">
-      <div class="way">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h18l8 8v28H12z M30 6v8h8 M17 24h14 M17 30h14 M17 36h9"/></svg>
-        <h3>Un PDF de l'assureur</h3>
-        <p>Le tableau est lu par sa couche texte, cellule par cellule. Chaque chiffre extrait doit exister dans le document.</p>
-      </div>
-      <div class="way">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14h8l3-4h10l3 4h8v24H8z"/><circle cx="24" cy="26" r="7"/></svg>
-        <h3>Un scan ou une photo</h3>
-        <p>Un modèle de vision lit l'image deux fois, sous deux éclairages. Si les deux lectures divergent, un humain tranche.</p>
-      </div>
-      <div class="way">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="18" y="6" width="12" height="22" rx="6"/><path d="M11 22a13 13 0 0026 0 M24 35v7 M17 42h14"/></svg>
-        <h3>Une question à l'oral</h3>
-        <p>Whisper transcrit la question avec le vocabulaire IFRS 17, puis elle suit le même chemin qu'une question écrite.</p>
-      </div>
+<!-- ============================================================ connexion -->
+<section class="login" id="login" hidden aria-labelledby="login-title">
+  <div class="login-art" aria-hidden="true">
+    <svg class="medallion" id="login-medallion"></svg>
+    <div class="login-art-text">
+      <img src="assets/img/logo.svg" alt="" width="44" height="44">
+      <p class="login-quote">Chaque chiffre de la note vient du moteur de calcul. Chaque paragraphe cité vient du règlement. Chaque décision laisse une trace.</p>
+      <p class="login-small">Règlement (UE) 2021/2036 · IFRS 17 Contrats d'assurance</p>
     </div>
   </div>
-
-  <div class="block">
-    <h2>Ce que le code vérifie</h2>
-    <p class="intro">Le modèle de langage lit, cherche et rédige. Il ne calcule jamais et n'a jamais le dernier mot : à chaque étape, le code contrôle ce qu'il a produit.</p>
-    <table class="ledger">
-      <thead><tr><th scope="col">Étape</th><th scope="col">Contrôle par le code</th><th scope="col">Mesuré</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Lecture du document</th><td>Chaque chiffre extrait est recherché dans le document ; une somme sinistres + frais doit retomber sur deux montants du tableau.</td><td class="num">0 dossier piégé passé sans contrôle, sur 10</td></tr>
-        <tr><th scope="row">Calcul</th><td>Moteur Python (§38, §44, §47, B119), testé contre des calculs faits à la main.</td><td class="num">15/15 CSM justes</td></tr>
-        <tr><th scope="row">Citations de la norme</th><td>Chaque paragraphe cité doit figurer dans les extraits fournis, et la phrase recopiée doit s'y trouver.</td><td class="num">0 citation inventée</td></tr>
-        <tr><th scope="row">Relecture</th><td>Un second modèle juge chaque phrase ; la preuve qu'il recopie doit venir du paragraphe cité.</td><td class="num">5 erreurs sur 7 repérées</td></tr>
-        <tr><th scope="row">Synthèse de la note</th><td>Chaque nombre écrit doit venir des résultats du moteur, chaque paragraphe des passages vérifiés.</td><td class="num">9/9 synthèses acceptées</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="block note-showcase">
-    <div>
-      <h2>La note remise à la direction financière</h2>
-      <p>Synthèse, résultats du modèle général, évolution de la marge période par période, paragraphes de la norme cités avec leur texte, et la liste des contrôles passés. Les montants viennent du moteur, jamais du modèle de langage.</p>
-      <a class="btn" href="#/analyser">Produire une note</a>
-    </div>
-    <figure class="paper">
-      <img src="img/note.png" alt="Note IFRS 17 du groupe PREV-2023-A : synthèse, tableau des résultats et graphique de l'évolution de la CSM" loading="lazy">
-    </figure>
+  <div class="login-panel">
+    <form class="login-form" id="login-form" novalidate>
+      <a class="login-brand" href="/"><img src="assets/img/logo.svg" alt="" width="34" height="34"><span>IFRS 17 <b>Copilot</b></span></a>
+      <h1 id="login-title">Connexion à l'espace de travail</h1>
+      <p class="login-lead">Utilisez le compte que votre administrateur vous a créé.</p>
+      <div class="callout bad" id="login-error" role="alert" hidden></div>
+      <label class="field">Identifiant<input id="login-user" autocomplete="username" required></label>
+      <label class="field">Mot de passe
+        <span class="pw"><input id="login-pass" type="password" autocomplete="current-password" required>
+          <button class="icon-btn" type="button" id="pw-toggle" aria-label="Afficher le mot de passe" aria-pressed="false"></button></span></label>
+      <button class="btn primary lg wide" type="submit" id="login-submit">Se connecter</button>
+      <p class="login-note">Après 5 essais infructueux, le compte est bloqué 5 minutes. Les connexions sont inscrites dans la piste d'audit.</p>
+      <p class="login-note" id="login-dev" hidden>Aucun compte n'existe encore : <button class="link-btn" type="button" id="dev-enter">ouvrir en mode développement</button>, ou créez le premier administrateur avec <code>python -m core.registry add-user admin --role admin</code>.</p>
+    </form>
+    <p class="login-foot"><a href="/">Présentation du produit</a><span>Données fictives uniquement</span></p>
   </div>
 </section>
 
-<!-- ============================== ANALYSER ============================== -->
-<section data-view="analyser" aria-labelledby="h-analyser" hidden>
-  <header class="page-head">
-    <h1 id="h-analyser">Analyser un dossier</h1>
-    <p>Déposez l'état d'un portefeuille. Les agents s'enchaînent sous vos yeux ; la note s'affiche à la fin, ou une demande de validation si un contrôle échoue.</p>
-  </header>
+<!-- ============================================================ application -->
+<div class="shell" id="shell" hidden>
+  <aside class="rail" id="rail" aria-label="Navigation principale">
+    <a class="brand" href="#/"><img src="assets/img/logo.svg" alt="" width="32" height="32"><span>IFRS 17 <b>Copilot</b></span></a>
+    <nav>
+      <p class="nav-group">Travail</p>
+      <a href="#/" data-nav="overview"><span class="ni" data-icon="overview"></span>Vue d'ensemble</a>
+      <a href="#/dossiers" data-nav="cases"><span class="ni" data-icon="folder"></span>Dossiers<span class="nav-count" id="nav-waiting" hidden></span></a>
+      <a href="#/nouveau" data-nav="intake"><span class="ni" data-icon="upload"></span>Nouveau dossier</a>
+      <p class="nav-group">Expertise</p>
+      <a href="#/norme" data-nav="norm"><span class="ni" data-icon="norm"></span>Assistant normatif</a>
+      <a href="#/simulateur" data-nav="simulate"><span class="ni" data-icon="chart"></span>Simulateur</a>
+      <p class="nav-group" data-role="admin">Gouvernance</p>
+      <a href="#/admin" data-nav="admin" data-role="admin"><span class="ni" data-icon="shield"></span>Administration</a>
+    </nav>
+    <div class="rail-foot">
+      <svg class="rail-band" id="rail-band" aria-hidden="true"></svg>
+      <button class="sys" id="sys" type="button"><span class="dot"></span><span id="sys-text">Connexion à l'API…</span></button>
+    </div>
+  </aside>
 
-  <div class="analyse">
-    <form class="intake" id="intake">
-      <label class="drop" id="drop">
-        <input type="file" id="file" accept="application/pdf,image/png,image/jpeg" hidden>
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 30V10 M16 18l8-8 8 8 M10 30v8h28v-8"/></svg>
-        <span class="drop-main">Déposez un PDF, un scan ou une photo</span>
-        <span class="drop-sub">PDF, PNG ou JPEG, 10 Mo au plus</span>
-        <span class="drop-file" id="drop-file" hidden></span>
-      </label>
-
-      <fieldset class="samples">
-        <legend>Ou prenez un document d'exemple</legend>
-        <select id="sample" aria-label="Document d'exemple">
-          <option value="">Choisir un document…</option>
-        </select>
-        <div class="segmented" role="radiogroup" aria-label="Format">
-          <label><input type="radio" name="fmt" value="pdf" checked> PDF</label>
-          <label><input type="radio" name="fmt" value="image"> Image scannée</label>
+  <div class="main-col">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Ouvrir le menu" aria-expanded="false"></button>
+      <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
+      <button class="search-btn" id="search-btn" type="button"><span data-icon="search"></span><span class="search-label">Rechercher un dossier, une page…</span><kbd>Ctrl K</kbd></button>
+      <div class="top-actions">
+        <a class="btn primary sm new-btn" href="#/nouveau" data-role="analyste"><span data-icon="plus"></span><span>Nouveau dossier</span></a>
+        <button class="icon-btn" id="theme-btn" type="button" aria-label="Changer de thème"></button>
+        <a class="icon-btn bell" id="bell" href="#/dossiers?statut=validation_humaine" aria-label="Dossiers à valider"><span data-icon="bell"></span><span class="badge" id="bell-count" hidden></span></a>
+        <div class="usermenu">
+          <button class="user-btn" id="user-btn" type="button" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar" id="user-initials"></span>
+            <span class="user-id"><b id="user-name"></b><small id="user-role"></small></span>
+          </button>
+          <div class="menu" id="user-menu" role="menu" hidden>
+            <div class="menu-head"><b id="menu-name"></b><small id="menu-login"></small></div>
+            <a role="menuitem" href="/" target="_blank" rel="noopener"><span data-icon="external"></span>Présentation du produit</a>
+            <a role="menuitem" href="/docs" target="_blank" rel="noopener"><span data-icon="api"></span>Documentation de l'API</a>
+            <button role="menuitem" type="button" id="shortcut-btn"><span data-icon="keyboard"></span>Raccourcis clavier</button>
+            <button role="menuitem" type="button" id="logout-btn"><span data-icon="logout"></span>Se déconnecter</button>
+          </div>
         </div>
-        <p class="hint" id="sample-hint"></p>
-      </fieldset>
-
-      <button class="btn primary wide" id="run" type="submit" disabled>Lancer l'analyse</button>
-      <p class="hint">Les documents d'exemple sont fictifs. N'envoyez pas de vrai contrat : les modèles gratuits peuvent conserver les données.</p>
-    </form>
-
-    <div class="run">
-      <div class="run-head">
-        <h2>Chaîne de contrôle</h2>
-        <span class="run-time num" id="run-time"></span>
       </div>
-      <ol class="chain" id="live-chain">
-        <li class="chain-empty">Les étapes apparaîtront ici dès le lancement.</li>
-      </ol>
-      <div id="outcome"></div>
-    </div>
+    </header>
+    <div class="devbar" id="devbar" hidden>Mode développement : aucun compte n'est configuré, l'API est appelée avec le jeton du fichier .env. <button class="link-btn" type="button" id="devbar-token">Changer le jeton</button></div>
+    <main id="main" tabindex="-1"></main>
   </div>
-
-  <div class="result" id="result" hidden>
-    <div class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-tab="note">Note</button>
-      <button role="tab" aria-selected="false" data-tab="data">Données extraites</button>
-      <button role="tab" aria-selected="false" data-tab="norm">Norme citée</button>
-    </div>
-    <div class="tabpanel" data-panel="note">
-      <div class="panel-actions"><button class="btn" id="download" type="button">Télécharger la note (HTML)</button></div>
-      <iframe id="note-frame" title="Note IFRS 17" sandbox=""></iframe>
-    </div>
-    <div class="tabpanel" data-panel="data" hidden></div>
-    <div class="tabpanel" data-panel="norm" hidden></div>
-  </div>
-</section>
-
-<!-- ============================== NORME ============================== -->
-<section data-view="norme" aria-labelledby="h-norme" hidden>
-  <header class="page-head">
-    <h1 id="h-norme">Interroger la norme</h1>
-    <p>Posez une question sur IFRS 17, par écrit ou à l'oral. La réponse ne s'appuie que sur le règlement (UE) 2021/2036 ; chaque paragraphe cité est vérifié, puis relu par un second modèle.</p>
-  </header>
-  <div class="ask">
-    <div class="thread" id="thread" aria-live="polite">
-      <div class="suggest">
-        <p>Questions pour commencer</p>
-        <button class="chip" type="button">Comment la CSM est-elle libérée en résultat ?</button>
-        <button class="chip" type="button">Quand un contrat est-il déficitaire dès l'origine ?</button>
-        <button class="chip" type="button">À quelles conditions peut-on utiliser la méthode d'affectation des primes ?</button>
-        <button class="chip" type="button">Donne-moi une recette de crêpes.</button>
-      </div>
-    </div>
-    <form class="composer" id="composer">
-      <label class="sr" for="question">Votre question</label>
-      <textarea id="question" rows="2" placeholder="Votre question sur IFRS 17…" required></textarea>
-      <button class="icon-btn" id="mic" type="button" aria-label="Poser la question à l'oral" title="Poser la question à l'oral">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0 M12 17.5V21"/></svg>
-      </button>
-      <button class="btn primary" type="submit">Envoyer</button>
-    </form>
-  </div>
-</section>
-
-<!-- ============================== SIMULER ============================== -->
-<section data-view="simuler" aria-labelledby="h-simuler" hidden>
-  <header class="page-head">
-    <h1 id="h-simuler">Simuler un groupe dans le temps</h1>
-    <p>Le moteur Python suit un groupe de contrats année après année : BEL au taux courant, ajustement pour risque, CSM, écarts d'expérience, compte de résultat et OCI. L'exemple chargé est celui d'un cours IFRS 17 ; le moteur le retrouve à l'euro près.</p>
-  </header>
-  <div class="tabs" role="tablist" id="sim-tabs">
-    <button role="tab" aria-selected="true" data-sim="bba">Modèle général (BBA)</button>
-    <button role="tab" aria-selected="false" data-sim="paa">Méthode simplifiée (PAA)</button>
-  </div>
-
-  <div data-simpanel="bba">
-    <form class="simform" id="bba-form">
-      <label>Prime unique à l'origine<input type="text" id="b-premium" inputmode="decimal"></label>
-      <label>Sinistres attendus par année<input type="text" id="b-expected"><small>une valeur par année, séparées par « ; »</small></label>
-      <label>Sinistres réels par année<input type="text" id="b-actual"><small>vide = comme attendus</small></label>
-      <label>Taux d'actualisation<input type="text" id="b-rates"><small>origine puis chaque clôture, en %</small></label>
-      <label>Ajustement pour risque à l'origine<input type="text" id="b-ra" inputmode="decimal"></label>
-      <label>Variation du RA (services futurs)<input type="text" id="b-rachg"><small>par année ; vide = aucune</small></label>
-      <label>Révision des sinistres futurs<input type="text" id="b-rev"><small>« 3 : 200000 ; 200000 ; 200000 ; 220000 » = connue à la clôture de l'année 3</small></label>
-      <label>Unités de couverture<input type="text" id="b-cu"><small>par année ; vide = 1 par an</small></label>
-      <label>Effet des taux<select id="b-option"><option value="OCI">en OCI (option §88(b))</option><option value="PL">en résultat</option></select></label>
-      <div class="simactions"><button class="btn" type="button" id="b-example">Charger l'exemple du cours</button><button class="btn primary" type="submit">Calculer</button></div>
-    </form>
-    <div id="bba-out" aria-live="polite"></div>
-  </div>
-
-  <div data-simpanel="paa" hidden>
-    <form class="simform" id="paa-form">
-      <label>Prime<input type="text" id="p-premium" inputmode="decimal"></label>
-      <label>Début de couverture<input type="date" id="p-start"></label>
-      <label>Durée (mois)<input type="text" id="p-months" inputmode="numeric"></label>
-      <label>Frais d'acquisition<input type="text" id="p-acq" inputmode="decimal"></label>
-      <label>Frais d'acquisition<select id="p-option"><option value="1">en charge à leur paiement (§59(a))</option><option value="0">dans la LRC, amortis</option></select></label>
-      <label>Sinistre : date de survenance<input type="date" id="p-occ"></label>
-      <label>Sinistre : provision<input type="text" id="p-est" inputmode="decimal"></label>
-      <label>Sinistre : ajustement pour risque<input type="text" id="p-ra" inputmode="decimal"></label>
-      <label>Règlement : date<input type="date" id="p-paidon"></label>
-      <label>Règlement : montant<input type="text" id="p-paid" inputmode="decimal"></label>
-      <label class="span2">Dates de clôture<input type="text" id="p-dates"><small>AAAA-MM-JJ séparées par « ; »</small></label>
-      <div class="simactions"><button class="btn" type="button" id="p-example">Charger le cas n°1 du cours</button><button class="btn primary" type="submit">Calculer</button></div>
-    </form>
-    <div id="paa-out" aria-live="polite"></div>
-  </div>
-</section>
-
-<!-- ============================== RÉSULTATS ============================== -->
-<section data-view="resultats" aria-labelledby="h-resultats" hidden>
-  <header class="page-head">
-    <h1 id="h-resultats">Résultats mesurés</h1>
-    <p>Chaque choix du projet a été mesuré sur des jeux de test : 56 questions sur la norme, 25 documents dont 10 piégés, 8 enregistrements vocaux. Les échecs sont gardés, ils ont motivé les versions suivantes.</p>
-  </header>
-  <div id="metrics"></div>
-</section>
-
-<!-- ============================== FONCTIONNEMENT ============================== -->
-<section data-view="fonctionnement" aria-labelledby="h-fonctionnement" hidden>
-  <header class="page-head">
-    <h1 id="h-fonctionnement">Fonctionnement</h1>
-    <p>Un orchestrateur fait travailler six agents spécialisés. n8n déclenche les dossiers, envoie les notes et demande la validation humaine.</p>
-  </header>
-
-  <figure class="diagram">
-    <svg viewBox="0 0 900 360" role="img" aria-labelledby="diag-t">
-      <title id="diag-t">Architecture : n8n appelle l'API, l'orchestrateur enchaîne extracteur, calculateur, chercheur et vérificateur, rédacteur</title>
-      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="d-arrow"/></marker></defs>
-      <g class="d-box"><rect x="20" y="140" width="130" height="80" rx="6"/><text x="85" y="175">n8n</text><text x="85" y="196" class="d-sub">e-mail, validation</text></g>
-      <g class="d-box"><rect x="200" y="140" width="130" height="80" rx="6"/><text x="265" y="175">API</text><text x="265" y="196" class="d-sub">FastAPI</text></g>
-      <g class="d-agent"><rect x="390" y="30" width="200" height="56" rx="6"/><text x="490" y="55">Extracteur</text><text x="490" y="74" class="d-sub">texte, vision ×2, voix</text></g>
-      <g class="d-agent"><rect x="390" y="110" width="200" height="56" rx="6"/><text x="490" y="135">Calculateur</text><text x="490" y="154" class="d-sub">moteur Python, pas de LLM</text></g>
-      <g class="d-agent"><rect x="390" y="190" width="200" height="56" rx="6"/><text x="490" y="215">Chercheur + vérificateur</text><text x="490" y="234" class="d-sub">BGE-M3 + BM25, juge ancré</text></g>
-      <g class="d-agent"><rect x="390" y="270" width="200" height="56" rx="6"/><text x="490" y="295">Rédacteur</text><text x="490" y="314" class="d-sub">synthèse vérifiée</text></g>
-      <g class="d-box"><rect x="660" y="190" width="200" height="56" rx="6"/><text x="760" y="215">Règlement 2021/2036</text><text x="760" y="234" class="d-sub">397 paragraphes indexés</text></g>
-      <g class="d-out"><rect x="660" y="270" width="200" height="56" rx="6"/><text x="760" y="295">Note IFRS 17</text><text x="760" y="314" class="d-sub">ou validation humaine</text></g>
-      <path class="d-line" d="M150 180H198" marker-end="url(#arr)"/>
-      <path class="d-line" d="M330 180H360 M360 58V298"/>
-      <path class="d-line" d="M360 58H388" marker-end="url(#arr)"/>
-      <path class="d-line" d="M360 138H388" marker-end="url(#arr)"/>
-      <path class="d-line" d="M360 218H388" marker-end="url(#arr)"/>
-      <path class="d-line" d="M360 298H388" marker-end="url(#arr)"/>
-      <path class="d-line" d="M590 218H658" marker-end="url(#arr)"/>
-      <path class="d-line" d="M590 298H658" marker-end="url(#arr)"/>
-      <path class="d-line dash" d="M760 326V346H85V222" marker-end="url(#arr)"/>
-    </svg>
-    <figcaption>L'orchestrateur appelle les agents dans l'ordre ; tout contrôle non passé renvoie le dossier vers n8n pour une validation humaine.</figcaption>
-  </figure>
-
-  <table class="ledger agents">
-    <thead><tr><th scope="col">Agent</th><th scope="col">Rôle</th><th scope="col">Modèle</th><th scope="col">Garde-fou</th></tr></thead>
-    <tbody>
-      <tr><th scope="row">Routeur</th><td>Classe la demande : question sur la norme, document, calcul, hors sujet.</td><td>gpt-oss-20b</td><td>Hors sujet : refus immédiat, sans recherche</td></tr>
-      <tr><th scope="row">Extracteur</th><td>Lit un PDF, un scan ou une photo et remplit les données du groupe.</td><td>gpt-oss-120b, Gemini Flash</td><td>Ancrage des chiffres, double lecture des images</td></tr>
-      <tr><th scope="row">Calculateur</th><td>Valeurs actuelles, ajustement pour risque, CSM, perte, libération par période.</td><td>Aucun : Python</td><td>Testé contre des calculs manuels</td></tr>
-      <tr><th scope="row">Chercheur RAG</th><td>Retrouve les paragraphes et répond en les citant.</td><td>BGE-M3, gpt-oss-120b</td><td>Citations vérifiées, refus si rien ne répond</td></tr>
-      <tr><th scope="row">Vérificateur</th><td>Juge chaque phrase : soutenue par son paragraphe, portée respectée.</td><td>gpt-oss-120b</td><td>Une correction au plus, puis un humain</td></tr>
-      <tr><th scope="row">Rédacteur</th><td>Écrit la note : le code les chiffres, le modèle la synthèse.</td><td>gpt-oss-120b</td><td>Nombres et paragraphes de la synthèse vérifiés</td></tr>
-    </tbody>
-  </table>
-
-  <p class="foot-links"><a href="/docs" target="_blank" rel="noopener">Documentation interactive de l'API</a></p>
-</section>
-
-</main>
 </div>
 
-<dialog id="settings" aria-labelledby="settings-title">
-  <form method="dialog" class="settings">
-    <h2 id="settings-title">Réglages</h2>
-    <label for="token">Jeton de l'API (API_TOKEN du fichier .env)</label>
-    <input id="token" type="password" autocomplete="off">
-    <p class="hint">Gardé dans ce navigateur uniquement.</p>
-    <div class="actions"><button class="btn" value="cancel">Annuler</button><button class="btn primary" id="save-settings" value="save">Enregistrer</button></div>
-  </form>
+<!-- ============================================================ palette de commandes -->
+<dialog class="palette" id="palette" aria-label="Recherche">
+  <div class="palette-box">
+    <label class="palette-input"><span data-icon="search"></span><input id="palette-q" placeholder="Référence de dossier, groupe, page…" autocomplete="off"><kbd>Échap</kbd></label>
+    <ul id="palette-list" role="listbox"></ul>
+  </div>
 </dialog>
 
-<script src="app.js"></script>
+<div class="boot" id="boot" aria-hidden="true"><img src="assets/img/logo.svg" alt="" width="48" height="48"></div>
+<noscript><p style="padding:24px">IFRS 17 Copilot a besoin de JavaScript.</p></noscript>
+<script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

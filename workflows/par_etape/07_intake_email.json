@@ -1,0 +1,187 @@
+{
+  "name": "07 — Réception des dossiers par e-mail (IMAP)",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "format": "simple",
+        "downloadAttachments": true,
+        "dataPropertyAttachmentsPrefixName": "attachment_",
+        "options": {
+          "customEmailConfig": "[\"UNSEEN\", [\"SUBJECT\", \"IFRS17\"]]"
+        }
+      },
+      "id": "c44fc9b1-4a8c-56fb-9f83-902166795e5b",
+      "name": "E-mail reçu (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Un élément par pièce jointe exploitable (PDF, PNG, JPEG) ; un e-mail sans document est signalé.\nconst ACCEPTE = ['application/pdf', 'image/png', 'image/jpeg'];\nconst adresse = de => (String(de || '').match(/[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+/) || [''])[0].toLowerCase();\nconst sortie = [];\nfor (const mail of $input.all()) {\n  const deposant = adresse(mail.json.from);\n  const pieces = Object.entries(mail.binary || {}).filter(([, b]) => ACCEPTE.includes(b.mimeType));\n  if (!pieces.length) {\n    sortie.push({ json: { sans_document: true, deposant, sujet: mail.json.subject || '' } });\n    continue;\n  }\n  for (const [, b] of pieces) {\n    sortie.push({ json: { source: 'n8n-email', deposant, sujet: mail.json.subject || '', nom_fichier: b.fileName || 'document' },\n                  binary: { document: b } });\n  }\n}\nreturn sortie;\n"
+      },
+      "id": "5abfd0cc-e6a3-5cac-8806-3e0f23f7b33f",
+      "name": "Extraire les documents",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "2a61cb66-8100-50ba-8d2a-fa37507ab530",
+              "leftValue": "={{ $json.sans_document === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "62283533-08d5-5520-9630-46876cb67836",
+      "name": "Document joint ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "09 — Traitement d'un dossier (sous-workflow commun)"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "90c39b33-e3bc-5b92-b5a2-fc1f6bc2b4ec",
+      "name": "Traiter le dossier (09)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow. Le jeton reste « change-moi » dans le fichier\n// commité ; mettez la valeur d'API_TOKEN dans n8n. Utilisé pour répondre aux e-mails sans document.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les alertes et les dossiers à valider\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n};\nreturn $input.all().map(i => ({ json: { ...i.json, parametres } }));\n"
+      },
+      "id": "28f17141-5007-57d4-acb6-4abfae2e1c6b",
+      "name": "Paramètres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $json.deposant }}",
+        "subject": "=Re: {{ $json.sujet }} · aucun document joint",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nVotre e-mail ne contient pas de document exploitable. Joignez l'état du portefeuille en PDF, PNG ou JPEG et gardez « IFRS17 » dans l'objet.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "af73b21c-aa99-525d-b936-3216702e7b33",
+      "name": "E-mail : aucun document",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        120
+      ],
+      "webhookId": "ac9080b9-5708-5014-bdcc-7c8692309510"
+    }
+  ],
+  "connections": {
+    "E-mail reçu (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Extraire les documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire les documents": {
+      "main": [
+        [
+          {
+            "node": "Document joint ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document joint ?": {
+      "main": [
+        [
+          {
+            "node": "Traiter le dossier (09)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres": {
+      "main": [
+        [
+          {
+            "node": "E-mail : aucun document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

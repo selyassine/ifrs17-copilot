@@ -1,0 +1,125 @@
+{
+  "name": "08 — Dépôt de dossier par formulaire n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "ifrs17-depot",
+        "formTitle": "Déposer un dossier IFRS 17",
+        "formDescription": "Déposez l'état du portefeuille (PDF, scan ou photo). Vous recevrez la note par e-mail, ou un accusé de réception si un valideur doit d'abord l'approuver. Données fictives uniquement.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Adresse e-mail",
+              "fieldType": "email",
+              "requiredField": true,
+              "placeholder": "nom@assureur.fr"
+            },
+            {
+              "fieldLabel": "Nom",
+              "fieldType": "text",
+              "requiredField": false
+            },
+            {
+              "fieldLabel": "Document",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf, .png, .jpg, .jpeg",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Commentaire",
+              "fieldType": "textarea",
+              "requiredField": false
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Envoyer le dossier",
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Dossier reçu. L'analyse prend 1 à 3 minutes : la note, ou un accusé de réception, arrive par e-mail."
+            }
+          }
+        }
+      },
+      "id": "e2e11abe-b233-503e-9247-747394654073",
+      "name": "Formulaire de dépôt",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "d1f239d3-b469-553d-b8cb-8907ef6c2f14"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Le fichier du champ « Document » devient la pièce « document » attendue par le sous-workflow 09.\nreturn $input.all().map(i => ({\n  json: { source: 'n8n-formulaire', deposant: String(i.json['Adresse e-mail'] || '').trim().toLowerCase(),\n          nom: i.json['Nom'] || '', commentaire: i.json['Commentaire'] || '',\n          nom_fichier: i.binary?.Document?.fileName || 'document' },\n  binary: { document: i.binary.Document },\n}));\n"
+      },
+      "id": "5058048b-32c0-5db2-b387-7964eeb63cd6",
+      "name": "Préparer le dossier",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "09 — Traitement d'un dossier (sous-workflow commun)"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "b70382b3-a3de-57de-8f03-4b96a8ef1258",
+      "name": "Traiter le dossier (09)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Formulaire de dépôt": {
+      "main": [
+        [
+          {
+            "node": "Préparer le dossier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer le dossier": {
+      "main": [
+        [
+          {
+            "node": "Traiter le dossier (09)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

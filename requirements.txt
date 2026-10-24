@@ -10,4 +10,5 @@ httpx>=0.27
 python-dotenv>=1.0
 python-multipart>=0.0.9   # envoi de fichiers PDF/audio à l'API (S3)
 pdfplumber>=0.11        # ingestion des PDF (S2) ; pypdf écarté, voir F-003
+openpyxl>=3.1           # classeurs Excel (.xlsx) en entrée (D-079)
 reportlab>=4.0          # documents de test synthétiques de l'extracteur (S3, D-027)

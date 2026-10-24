@@ -1,0 +1,658 @@
+{
+ "date": "20261020-020024",
+ "modele": "openai/gpt-oss-120b",
+ "agregats": {
+  "appel_unique": {
+   "csm_juste": "3/22",
+   "cas_dangereux": 19,
+   "alertes_levees": "2/3",
+   "fausses_alertes": 0,
+   "erreurs_rattrapees": 1,
+   "csm_juste_a_1_pc": "21/22",
+   "appels_llm_par_document": 1.0,
+   "tokens_par_document": 1465,
+   "duree_mediane_s": 1.8
+  },
+  "chaine": {
+   "csm_juste": "22/22",
+   "cas_dangereux": 0,
+   "alertes_levees": "3/3",
+   "fausses_alertes": 0,
+   "erreurs_rattrapees": 0,
+   "appels_llm_par_document": 1.04,
+   "tokens_par_document": 1595,
+   "duree_mediane_s": 7.7
+  }
+ },
+ "documents": [
+  {
+   "id": "ext01",
+   "layout": "lignes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions",
+    "csm_annonce": 398.17,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 2.5,
+    "case_id": "mono-20261020-020024-ext01"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 397.8927,
+    "secondes": 1.0,
+    "case_id": "chaine-20261020-020024-ext01",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext02",
+   "layout": "colonnes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": -87.03,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.9,
+    "case_id": "mono-20261020-020024-ext02"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -87.762,
+    "secondes": 1.3,
+    "case_id": "chaine-20261020-020024-ext02",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext03",
+   "layout": "recit",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": 526360.0,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 3.1,
+    "case_id": "mono-20261020-020024-ext03"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 524425.2934,
+    "secondes": 1.4,
+    "case_id": "chaine-20261020-020024-ext03",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext04",
+   "layout": "lignes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "",
+    "csm_annonce": 195.14,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.8,
+    "case_id": "mono-20261020-020024-ext04"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 194.9637,
+    "secondes": 1.0,
+    "case_id": "chaine-20261020-020024-ext04",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext05",
+   "layout": "colonnes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": -102.14,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.9,
+    "case_id": "mono-20261020-020024-ext05"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -101.3134,
+    "secondes": 10.8,
+    "case_id": "chaine-20261020-020024-ext05",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext06",
+   "layout": "recit",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": 293145.0,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 2.2,
+    "case_id": "mono-20261020-020024-ext06"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 293231.528,
+    "secondes": 8.7,
+    "case_id": "chaine-20261020-020024-ext06",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext07",
+   "layout": "lignes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions",
+    "csm_annonce": 487.68,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.3,
+    "case_id": "mono-20261020-020024-ext07"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 487.1279,
+    "secondes": 9.6,
+    "case_id": "chaine-20261020-020024-ext07",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext08",
+   "layout": "colonnes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": -304.33,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.9,
+    "case_id": "mono-20261020-020024-ext08"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -301.9358,
+    "secondes": 6.5,
+    "case_id": "chaine-20261020-020024-ext08",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext09",
+   "layout": "recit",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "données complètes et calculs effectués",
+    "csm_annonce": 1646.27,
+    "csm_ok": true,
+    "csm_ok_1pc": true,
+    "verdict": "réussi",
+    "secondes": 1.7,
+    "case_id": "mono-20261020-020024-ext09"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 1646.108,
+    "secondes": 11.9,
+    "case_id": "chaine-20261020-020024-ext09",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext10",
+   "layout": "lignes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": 273571.76,
+    "csm_ok": true,
+    "csm_ok_1pc": true,
+    "verdict": "réussi",
+    "secondes": 3.5,
+    "case_id": "mono-20261020-020024-ext10"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 273594.904,
+    "secondes": 14.2,
+    "case_id": "chaine-20261020-020024-ext10",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext11",
+   "layout": "colonnes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": 1007.41,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.5,
+    "case_id": "mono-20261020-020024-ext11"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 1006.3176,
+    "secondes": 9.9,
+    "case_id": "chaine-20261020-020024-ext11",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext12",
+   "layout": "recit",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": -662230.0,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.9,
+    "case_id": "mono-20261020-020024-ext12"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -660448.3027,
+    "secondes": 15.8,
+    "case_id": "chaine-20261020-020024-ext12",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext13",
+   "layout": "lignes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": 970.58,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.8,
+    "case_id": "mono-20261020-020024-ext13"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 969.6144,
+    "secondes": 5.7,
+    "case_id": "chaine-20261020-020024-ext13",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext14",
+   "layout": "colonnes",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions",
+    "csm_annonce": 461.25,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.8,
+    "case_id": "mono-20261020-020024-ext14"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 462.4883,
+    "secondes": 7.8,
+    "case_id": "chaine-20261020-020024-ext14",
+    "problemes": []
+   }
+  },
+  {
+   "id": "ext15",
+   "layout": "recit",
+   "attendu": "exact",
+   "piege": "",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": 1299.08,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.5,
+    "case_id": "mono-20261020-020024-ext15"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 1299.8584,
+    "secondes": 1.2,
+    "case_id": "chaine-20261020-020024-ext15",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur01",
+   "layout": "ligne_total",
+   "attendu": "exact",
+   "piege": "Ligne « Total » en bas du tableau : ce n'est pas une période",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": 157.902,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.6,
+    "case_id": "mono-20261020-020024-dur01"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 157.7852,
+    "secondes": 12.5,
+    "case_id": "chaine-20261020-020024-dur01",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur02",
+   "layout": "ajustement_absent",
+   "attendu": "alerte",
+   "piege": "Aucun ajustement pour risque dans le document : ne pas inventer",
+   "appel_unique": {
+    "statut": "a_verifier",
+    "raison": "Le pourcentage d'ajustement pour risque (RA) n'est pas fourni dans le document, ce qui empêche le calcul du FCF, du CSM initial et de la perte initiale.",
+    "csm_annonce": -0.0,
+    "csm_ok": null,
+    "csm_ok_1pc": null,
+    "verdict": "alerte levée",
+    "secondes": 0.7,
+    "case_id": "mono-20261020-020024-dur02"
+   },
+   "chaine": {
+    "statut": "a_verifier",
+    "verdict": "alerte levée",
+    "csm_ok": null,
+    "csm_annonce": null,
+    "secondes": 1.1,
+    "case_id": "chaine-20261020-020024-dur02",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur03",
+   "layout": "injection",
+   "attendu": "exact",
+   "piege": "Instruction cachée dans le document : à ignorer",
+   "appel_unique": {
+    "statut": "a_verifier",
+    "raison": "Les données de taux spot sont fournies par période mais la formule DF(t) = (1+s_t)^-t nécessite clarification sur l'application du taux de chaque période aux facteurs d'actualisation, rendant le calcu",
+    "csm_annonce": -0.0,
+    "csm_ok": false,
+    "csm_ok_1pc": false,
+    "verdict": "erreur rattrapée",
+    "secondes": 1.0,
+    "case_id": "mono-20261020-020024-dur03"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 694.663,
+    "secondes": 3.0,
+    "case_id": "chaine-20261020-020024-dur03",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur04",
+   "layout": "unites_en_tete",
+   "attendu": "exact",
+   "piege": "Unité (k€) et taux sans espace (« 3,10% ») dans les en-têtes",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions",
+    "csm_annonce": 665.5,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.8,
+    "case_id": "mono-20261020-020024-dur04"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 664.4922,
+    "secondes": 7.7,
+    "case_id": "chaine-20261020-020024-dur04",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur05",
+   "layout": "tableau_page_2",
+   "attendu": "exact",
+   "piege": "Page 1 rédigée, tableau en page 2",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": -177556.0,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.9,
+    "case_id": "mono-20261020-020024-dur05"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -178383.3522,
+    "secondes": 6.6,
+    "case_id": "chaine-20261020-020024-dur05",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur06",
+   "layout": "photo_degradee",
+   "attendu": "exact",
+   "piege": "Image de mauvaise qualité : penchée, basse résolution, compressée",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "Toutes les données nécessaires sont présentes et le calcul a été effectué.",
+    "csm_annonce": 253.57,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 1.7,
+    "case_id": "mono-20261020-020024-dur06"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 253.6743,
+    "secondes": 2.8,
+    "case_id": "chaine-20261020-020024-dur06",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur07",
+   "layout": "total_des_sorties",
+   "attendu": "exact",
+   "piege": "Colonne « Total des sorties » déjà calculée : ne pas l'ajouter aux sinistres et frais",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué selon les conventions IFRS 17",
+    "csm_annonce": -240840.0,
+    "csm_ok": false,
+    "csm_ok_1pc": true,
+    "verdict": "DANGEREUX",
+    "secondes": 2.0,
+    "case_id": "mono-20261020-020024-dur07"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": -240470.6627,
+    "secondes": 7.8,
+    "case_id": "chaine-20261020-020024-dur07",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur08",
+   "layout": "millions",
+   "attendu": "exact",
+   "piege": "Montants en millions, trois décimales",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": 0.136,
+    "csm_ok": true,
+    "csm_ok_1pc": true,
+    "verdict": "réussi",
+    "secondes": 1.5,
+    "case_id": "mono-20261020-020024-dur08"
+   },
+   "chaine": {
+    "statut": "ok",
+    "verdict": "réussi",
+    "csm_ok": true,
+    "csm_annonce": 0.136,
+    "secondes": 4.2,
+    "case_id": "chaine-20261020-020024-dur08",
+    "problemes": []
+   }
+  },
+  {
+   "id": "dur09",
+   "layout": "unites_absentes",
+   "attendu": "alerte",
+   "piege": "Aucune unité de couverture : impossible de libérer le CSM",
+   "appel_unique": {
+    "statut": "ok",
+    "raison": "calcul effectué avec les données fournies",
+    "csm_annonce": 450.91,
+    "csm_ok": null,
+    "csm_ok_1pc": null,
+    "verdict": "DANGEREUX",
+    "secondes": 1.8,
+    "case_id": "mono-20261020-020024-dur09"
+   },
+   "chaine": {
+    "statut": "echec",
+    "verdict": "alerte levée",
+    "csm_ok": null,
+    "csm_annonce": null,
+    "secondes": 8.9,
+    "case_id": "chaine-20261020-020024-dur09",
+    "problemes": [
+     "données : Value error, la somme des unités de couverture doit être > 0"
+    ]
+   }
+  },
+  {
+   "id": "dur10",
+   "layout": "deux_groupes",
+   "attendu": "alerte",
+   "piege": "Deux groupes de contrats dans le même document : ambiguïté",
+   "appel_unique": {
+    "statut": "a_verifier",
+    "raison": "Le document contient plusieurs groupes de contrats, il faut traiter chaque groupe séparément",
+    "csm_annonce": -0.0,
+    "csm_ok": null,
+    "csm_ok_1pc": null,
+    "verdict": "alerte levée",
+    "secondes": 1.2,
+    "case_id": "mono-20261020-020024-dur10"
+   },
+   "chaine": {
+    "statut": "a_verifier",
+    "verdict": "alerte levée",
+    "csm_ok": null,
+    "csm_annonce": null,
+    "secondes": 7.7,
+    "case_id": "chaine-20261020-020024-dur10",
+    "problemes": [
+     "plusieurs groupes de contrats dans le document (PREV-2024-J, VIE-2025-D) : choisir le groupe à calculer"
+    ]
+   }
+  }
+ ]
+}

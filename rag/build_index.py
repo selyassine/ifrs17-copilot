@@ -3,7 +3,7 @@
     python -m rag.build_index                                  # unités + chunks + BM25 (rapide, sans GPU)
     python -m rag.build_index --dense                          # + embeddings BGE-M3
     python -m rag.build_index --dense --model BAAI/bge-m3 --model Qwen/Qwen3-Embedding-0.6B
-    python -m rag.build_index --dense --store qdrant           # + collections Qdrant embarquées
+    python -m rag.build_index --dense --store qdrant           # + collections Qdrant (D-052)
 
 Lit data/corpus_manifest.csv : chaque document dont le fichier existe est ingéré,
 avec son parseur dédié s'il en a un (rag/ingest.py, STRUCTURED_PARSERS), sinon page par page.
@@ -76,7 +76,13 @@ def main() -> None:
         print(f"   {name} : {json.dumps(stats(chunks), ensure_ascii=False)}")
 
     if args.dense:
-        from rag.retrieve import QdrantStore, SentenceTransformerEncoder, model_slug, save_dense
+        from rag.retrieve import (
+            QdrantStore,
+            SentenceTransformerEncoder,
+            model_slug,
+            save_dense,
+            texts_fingerprint,
+        )
 
         for model in args.model or ["BAAI/bge-m3"]:
             print(f"3. Embeddings : {model}")
@@ -86,7 +92,9 @@ def main() -> None:
                 vecs = enc.encode([c.embed_text for c in chunks])
                 save_dense(INDEX_DIR, name, model, vecs, chunks)
                 if args.store == "qdrant":
-                    QdrantStore(ROOT / "data" / "qdrant", f"{name}__{model_slug(model)}").build(vecs, chunks)
+                    import os
+                    coll = f"{name}__{model_slug(model)}__{texts_fingerprint(chunks)[:10]}"
+                    QdrantStore(coll, path=ROOT / "data" / "qdrant", url=os.getenv("QDRANT_URL", "")).build(vecs, chunks)
                 print(f"   {name} : {len(chunks)} vecteurs de dim {vecs.shape[1]} "
                       f"en {time.perf_counter() - t0:.0f} s")
     print("Terminé.")

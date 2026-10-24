@@ -65,7 +65,7 @@ def main() -> None:
         t0 = time.perf_counter()
         try:
             out = run_case(pdf, detect_mime(pdf), settings, lambda: client, lambda: vision_client(settings),
-                           loader, cid)
+                           loader, cid, source_name=Path(case["pdf"]).name)
         except LLMError as exc:
             print(f"[{i}/{len(cases)}] {case['id']} ERREUR LLM : {str(exc)[:150]}")
             continue

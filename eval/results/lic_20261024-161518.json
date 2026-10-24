@@ -1,0 +1,122 @@
+{
+ "date": "20261024-161518",
+ "documents": [
+  {
+   "id": "lc01",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 197090.57,
+   "lic_attendu": 197090.57,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc02",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 17634.74,
+   "lic_attendu": 17634.74,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc03",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 126098.26,
+   "lic_attendu": 126098.26,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc04",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 1,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 25872.48,
+   "lic_attendu": 25872.48,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc05",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 199577.4,
+   "lic_attendu": 199577.4,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc06",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 16605.87,
+   "lic_attendu": 16605.87,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc07",
+   "piege": "cumul_en_recul",
+   "attendu": "alerte",
+   "statut": "a_verifier",
+   "double_lecture": "concordante",
+   "relances": 1,
+   "problemes": [
+    "1991, retard 3 : le cumul recule de plus de 10 % (9537 → 4768) : incréments lus comme cumuls, ou cellule décalée ?"
+   ],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 17544.07,
+   "lic_attendu": 17544.07,
+   "verdict": "alerte levee"
+  },
+  {
+   "id": "lc08",
+   "piege": "unite_absente",
+   "attendu": "exact",
+   "statut": "a_verifier",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [
+    "absent : unit_multiplier"
+   ],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 65955.25,
+   "lic_attendu": 65955.25,
+   "verdict": "juste mais a verifier"
+  }
+ ],
+ "autres": []
+}

@@ -10,9 +10,13 @@ DEFAULTS = {"RAG_REWRITE": "0", "N8N_VALIDATION_URL": "", "RAG_AGENTIC": "0", "R
 
 
 @pytest.fixture(autouse=True)
-def _environnement_neutre(monkeypatch):
+def _environnement_neutre(monkeypatch, tmp_path):
     for name, value in DEFAULTS.items():
         monkeypatch.setenv(name, value)
+    # registre et comptes : une base neuve par test, jamais data/registry.db (D-058)
+    monkeypatch.setenv("REGISTRY_PATH", str(tmp_path / "registry.db"))
+    monkeypatch.setenv("ADMIN_PASSWORD", "")
+    monkeypatch.setenv("COPILOT_CHECKPOINTS", str(tmp_path / "checkpoints.db"))
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

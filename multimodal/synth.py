@@ -24,7 +24,7 @@ import random
 from dataclasses import dataclass
 from pathlib import Path
 
-from agents.schemas import PortfolioData
+from agents.schemas import PortfolioData, truth_dict
 from core.config import ROOT
 from engine.csm import compute_csm
 
@@ -46,6 +46,7 @@ class SynthDoc:
     expenses: list[float]          # frais (colonne séparée dans le document)
     investment_income: list[float]  # colonne piège
     insurer: str
+    recovery_column: bool = True   # recouvrements dans une colonne à part (sinon : sinistres négatifs)
 
 
 # --------------------------------------------------------------------------- #
@@ -113,7 +114,9 @@ def draw(i: int, rng: random.Random) -> SynthDoc:
 # --------------------------------------------------------------------------- #
 # Rendu PDF (reportlab) puis image (pypdfium2 + Pillow)
 # --------------------------------------------------------------------------- #
-def render_pdf(doc: SynthDoc, path: Path) -> None:
+def render_pdf(doc: SynthDoc, path: Path,
+               footer: str = "Document fictif généré pour l'évaluation du projet IFRS 17 Copilot.",
+               intro: list[str] | None = None) -> None:
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet
@@ -131,6 +134,7 @@ def render_pdf(doc: SynthDoc, path: Path) -> None:
         Paragraph(f"{doc.insurer} — État de portefeuille", styles["Title"]),
         Paragraph(f"Groupe de contrats : <b>{t.group_id}</b> · Devise : {t.currency} · "
                   f"Montants {unit_label}", styles["Normal"]),
+        *[Paragraph(line, styles["Normal"]) for line in (intro or [])],
         Spacer(1, 10),
     ]
     rate_txt = (f"Le taux d'actualisation retenu est de {pct(t.discount_rates)} pour toutes les échéances."
@@ -151,6 +155,10 @@ def render_pdf(doc: SynthDoc, path: Path) -> None:
     headers = ["Primes", "Sinistres", "Frais", "Produits financiers", "Contrats en vigueur"]
     cols = [t.premiums, doc.claims, doc.expenses, doc.investment_income, t.coverage_units]
     fmts = [fr, fr, fr, fr, lambda v: fr(v, 0)]
+    if doc.recovery_column and t.recoveries and any(t.recoveries):     # D-071 : colonne à part
+        headers.insert(3, "Recouvrements")
+        cols.insert(3, t.recoveries)
+        fmts.insert(3, fr)
     if not flat:
         headers.append("Taux spot")
         cols.append(t.discount_rates)
@@ -169,7 +177,7 @@ def render_pdf(doc: SynthDoc, path: Path) -> None:
         ("ALIGN", (1, 1), (-1, -1), "RIGHT"),
     ]))
     story += [table, Spacer(1, 12),
-              Paragraph("Document fictif généré pour l'évaluation du projet IFRS 17 Copilot.", styles["Italic"])]
+              Paragraph(footer, styles["Italic"])]
     SimpleDocTemplate(str(path), pagesize=A4, title=f"Etat {t.group_id}").build(story)
 
 
@@ -210,7 +218,7 @@ def generate(n_docs: int = 15, seed: int = 17, out_dir: Path = OUT_DIR,
         lines.append(json.dumps({
             "id": d.doc_id, "layout": d.layout, "scan": d.scan,
             "pdf": f"data/synth/{d.doc_id}.pdf", "image": f"data/synth/{image_name(d)}",
-            "truth": d.truth.model_dump(exclude={"field_confidence", "future_service_adjustments"}),
+            "truth": truth_dict(d.truth),
             "csm_attendu": round(csm.initial_csm, 4), "perte_attendue": round(csm.initial_loss_component, 4),
         }, ensure_ascii=False))
     cases_path.write_text("\n".join(lines) + "\n", encoding="utf-8")

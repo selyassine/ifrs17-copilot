@@ -1,0 +1,1533 @@
+{
+ "date": "20261017-043531",
+ "moteur": {
+  "mode": "hybrid",
+  "modele": "BAAI/bge-m3",
+  "rerank_model": "",
+  "questions": true,
+  "graph": true
+ },
+ "global": {
+  "base_r5": 0.267,
+  "agent_r5": 0.4,
+  "base_mrr": 0.18,
+  "agent_mrr": 0.3,
+  "ecart_r5": [
+   0.133,
+   0.0,
+   0.333
+  ],
+  "ecart_mrr": [
+   0.12,
+   -0.033,
+   0.287
+  ],
+  "appels_llm_moyens": 2.53,
+  "latence_p50_s": 22.5,
+  "relances": 8
+ },
+ "questions": [
+  {
+   "id": "c01",
+   "question": "Combien de types de passifs a-t-on dans le modèle général, et quels sont-ils ?",
+   "gold": [
+    "40"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "78"
+    ],
+    [
+     "B123"
+    ],
+    [
+     "55"
+    ],
+    [
+     "C22A"
+    ],
+    [
+     "C9A"
+    ]
+   ],
+   "agent_top": [
+    [
+     "46"
+    ],
+    [
+     "84"
+    ],
+    [
+     "C9A"
+    ],
+    [
+     "C17A"
+    ],
+    [
+     "100"
+    ]
+   ],
+   "requetes": [
+    "Combien de types de passifs a-t-on dans le modèle général, et quels sont-ils ?",
+    "types de passifs modèle général IFRS 17",
+    "liabilité couverture résiduelle IFRS 17",
+    "liabilité sinistres encourus IFRS 17",
+    "IFRS 17 modèle général passifs types"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "liabilité pour la couverture résiduelle (LRRC)",
+      "liabilité pour les sinistres encourus (LIC)",
+      "liabilité pour l'ajustement de risque et la marge sur services contractuels (CSM)"
+     ],
+     "requetes": [
+      "types de passifs modèle général IFRS 17",
+      "liabilité couverture résiduelle IFRS 17",
+      "liabilité sinistres encourus IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Combien de types de passifs a-t-on dans le modèle général, et quels sont-ils ?",
+      "types de passifs modèle général IFRS 17",
+      "liabilité couverture résiduelle IFRS 17",
+      "liabilité sinistres encourus IFRS 17"
+     ],
+     "passages": 15
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 modèle général passifs types"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 modèle général passifs types"
+     ],
+     "passages": 16
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 modèle général passifs types"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:46",
+      "B:C002:84",
+      "B:C002:C9A",
+      "B:C002:C17A",
+      "B:C002:100"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 6201.8
+  },
+  {
+   "id": "c02",
+   "question": "À quelle maille doit-on comptabiliser et évaluer les passifs d'assurance ?",
+   "gold": [
+    "16"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "55"
+    ],
+    [
+     "B95B"
+    ],
+    [
+     "56"
+    ],
+    [
+     "42"
+    ],
+    [
+     "59"
+    ]
+   ],
+   "agent_top": [
+    [
+     "15",
+     "16"
+    ],
+    [
+     "20"
+    ],
+    [
+     "B64"
+    ],
+    [
+     "42"
+    ],
+    [
+     "23",
+     "24"
+    ]
+   ],
+   "requetes": [
+    "À quelle maille doit-on comptabiliser et évaluer les passifs d'assurance ?",
+    "niveau d'agrégation des obligations d'assurance IFRS 17",
+    "maille de comptabilisation des passifs d'assurance IFRS 17",
+    "détermination du périmètre du contrat IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "niveau d'agrégation des obligations d'assurance",
+      "détermination du périmètre du contrat"
+     ],
+     "requetes": [
+      "niveau d'agrégation des obligations d'assurance IFRS 17",
+      "maille de comptabilisation des passifs d'assurance IFRS 17",
+      "détermination du périmètre du contrat IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "À quelle maille doit-on comptabiliser et évaluer les passifs d'assurance ?",
+      "niveau d'agrégation des obligations d'assurance IFRS 17",
+      "maille de comptabilisation des passifs d'assurance IFRS 17",
+      "détermination du périmètre du contrat IFRS 17"
+     ],
+     "passages": 19
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:15",
+      "B:C002:20",
+      "B:C002:B64",
+      "B:C002:42",
+      "B:C002:23"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 5693.2
+  },
+  {
+   "id": "c03",
+   "question": "Qu'est-ce qu'un contrat onéreux selon IFRS 17 ?",
+   "gold": [
+    "47"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "47"
+    ],
+    [
+     "49"
+    ],
+    [
+     "108"
+    ],
+    [
+     "B95A"
+    ],
+    [
+     "17"
+    ]
+   ],
+   "agent_top": [
+    [
+     "17"
+    ],
+    [
+     "47"
+    ],
+    [
+     "49"
+    ],
+    [
+     "21"
+    ],
+    [
+     "68"
+    ]
+   ],
+   "requetes": [
+    "Qu'est-ce qu'un contrat onéreux selon IFRS 17 ?",
+    "définition contrat onéreux IFRS 17",
+    "critère marge négative contrat onéreux IFRS 17",
+    "groupe de contrats déficitaire IFRS 17",
+    "§47 definition contrat onéreux"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "contrat onéreux",
+      "marge contractuelle négative",
+      "groupe de contrats déficitaire"
+     ],
+     "requetes": [
+      "définition contrat onéreux IFRS 17",
+      "critère marge négative contrat onéreux IFRS 17",
+      "groupe de contrats déficitaire IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Qu'est-ce qu'un contrat onéreux selon IFRS 17 ?",
+      "définition contrat onéreux IFRS 17",
+      "critère marge négative contrat onéreux IFRS 17",
+      "groupe de contrats déficitaire IFRS 17"
+     ],
+     "passages": 11
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "§47 definition contrat onéreux"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "§47 definition contrat onéreux"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "définition contrat onéreux IFRS 17"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:17",
+      "B:C002:47",
+      "B:C002:49",
+      "B:C002:21",
+      "B:C002:68"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 22456.5
+  },
+  {
+   "id": "c04",
+   "question": "Un groupe de contrats initialement onéreux devient profitable : que faut-il faire ?",
+   "gold": [
+    "50"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "47"
+    ],
+    [
+     "B95A"
+    ],
+    [
+     "21"
+    ],
+    [
+     "49"
+    ],
+    [
+     "17"
+    ]
+   ],
+   "agent_top": [
+    [
+     "47"
+    ],
+    [
+     "C16B"
+    ],
+    [
+     "def:marge sur services contractuels"
+    ],
+    [
+     "C16C"
+    ],
+    [
+     "B95A"
+    ]
+   ],
+   "requetes": [
+    "Un groupe de contrats initialement onéreux devient profitable : que faut-il faire ?",
+    "reversal du composant de perte groupe de contrats IFRS 17",
+    "reconnaissance du composant de marge sur services contractuels groupe rentable",
+    "§C16A – Suppression de l’élément de perte lorsqu’un groupe de contrats devient rentable"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "reversal du composant de perte",
+      "reconnaissance du composant de marge sur services contractuels lorsque le groupe devient profitable"
+     ],
+     "requetes": [
+      "reversal du composant de perte groupe de contrats IFRS 17",
+      "reconnaissance du composant de marge sur services contractuels groupe rentable"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Un groupe de contrats initialement onéreux devient profitable : que faut-il faire ?",
+      "reversal du composant de perte groupe de contrats IFRS 17",
+      "reconnaissance du composant de marge sur services contractuels groupe rentable"
+     ],
+     "passages": 14
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "§C16A – Suppression de l’élément de perte lorsqu’un groupe de contrats devient rentable"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "§C16A – Suppression de l’élément de perte lorsqu’un groupe de contrats devient rentable"
+     ],
+     "passages": 17
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 retrait composante perte groupe de contrats devenu rentable"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:47",
+      "B:C002:C16B",
+      "B:C002:def:marge sur services contractuels",
+      "B:C002:C16C",
+      "B:C002:B95A"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 55736.6
+  },
+  {
+   "id": "c05",
+   "question": "Quelles méthodes peut-on utiliser pour calculer l'ajustement au titre du risque non financier ?",
+   "gold": [
+    "B92"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 1.0,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B92"
+    ],
+    [
+     "B91"
+    ],
+    [
+     "B89"
+    ],
+    [
+     "B86"
+    ],
+    [
+     "119"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B92"
+    ],
+    [
+     "B91"
+    ],
+    [
+     "B86"
+    ],
+    [
+     "B89"
+    ],
+    [
+     "def:ajustement au titre du risque non financier"
+    ]
+   ],
+   "requetes": [
+    "Quelles méthodes peut-on utiliser pour calculer l'ajustement au titre du risque non financier ?",
+    "méthodes d'ajustement du risque non financier IFRS 17",
+    "calcul du risque non financier ajustement IFRS 17",
+    "IFRS 17 ajustement risque non financier méthode estimation"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "ajustement du risque non financier",
+      "méthodes d'évaluation du risque non financier selon IFRS 17"
+     ],
+     "requetes": [
+      "méthodes d'ajustement du risque non financier IFRS 17",
+      "calcul du risque non financier ajustement IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Quelles méthodes peut-on utiliser pour calculer l'ajustement au titre du risque non financier ?",
+      "méthodes d'ajustement du risque non financier IFRS 17",
+      "calcul du risque non financier ajustement IFRS 17"
+     ],
+     "passages": 7
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 ajustement risque non financier méthode estimation"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 ajustement risque non financier méthode estimation"
+     ],
+     "passages": 8
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 ajustement risque non financier méthode estimation"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B92",
+      "B:C002:B91",
+      "B:C002:B86",
+      "B:C002:B89",
+      "B:C002:def:ajustement au titre du risque non financier"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 19964.5
+  },
+  {
+   "id": "c06",
+   "question": "Comment comptabiliser un écart d'expérience sur les sinistres de la période ?",
+   "gold": [
+    "B97"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "130"
+    ],
+    [
+     "104"
+    ],
+    [
+     "B41"
+    ],
+    [
+     "42"
+    ],
+    [
+     "100"
+    ]
+   ],
+   "agent_top": [
+    [
+     "104"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "42"
+    ],
+    [
+     "130"
+    ],
+    [
+     "B41"
+    ]
+   ],
+   "requetes": [
+    "Comment comptabiliser un écart d'expérience sur les sinistres de la période ?",
+    "ajustement marge services contractuels expérience sinistres",
+    "mise à jour estimations flux de trésorerie futurs écart d'expérience IFRS 17",
+    "comptabilisation variations flux de trésorerie d'exécution marge sur services contractuels contrats sans participation directe"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "ajustement de la marge sur services contractuels au titre des services futurs",
+      "mise à jour des estimations des flux de trésorerie futurs et réévaluation du CSM"
+     ],
+     "requetes": [
+      "ajustement marge services contractuels expérience sinistres",
+      "mise à jour estimations flux de trésorerie futurs écart d'expérience IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Comment comptabiliser un écart d'expérience sur les sinistres de la période ?",
+      "ajustement marge services contractuels expérience sinistres",
+      "mise à jour estimations flux de trésorerie futurs écart d'expérience IFRS 17"
+     ],
+     "passages": 13
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": false,
+     "nouvelle_requete": "comptabilisation variations flux de trésorerie d'exécution marge sur services contractuels contrats sans participation directe"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "comptabilisation variations flux de trésorerie d'exécution marge sur services contractuels contrats sans participation directe"
+     ],
+     "passages": 17
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": false,
+     "nouvelle_requete": "variations liées aux services passés reconnaissance en résultat écart d'expérience"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:104",
+      "B:C002:B97",
+      "B:C002:42",
+      "B:C002:130",
+      "B:C002:B41"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 141461.2
+  },
+  {
+   "id": "c07",
+   "question": "Où comptabiliser les primes sous IFRS 17 ?",
+   "gold": [
+    "83"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "55"
+    ],
+    [
+     "B126"
+    ],
+    [
+     "106"
+    ],
+    [
+     "35"
+    ],
+    [
+     "59"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B65"
+    ],
+    [
+     "55"
+    ],
+    [
+     "B126"
+    ],
+    [
+     "59"
+    ],
+    [
+     "C11"
+    ]
+   ],
+   "requetes": [
+    "Où comptabiliser les primes sous IFRS 17 ?",
+    "comptabilisation des primes IFRS 17 reconnaissance flux de trésorerie entrants",
+    "allocation des primes aux services contractuels IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "reconnaissance des flux de trésorerie entrants (primes)",
+      "méthode d'affectation des primes (allocation des primes aux services contractuels)"
+     ],
+     "requetes": [
+      "comptabilisation des primes IFRS 17 reconnaissance flux de trésorerie entrants",
+      "allocation des primes aux services contractuels IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Où comptabiliser les primes sous IFRS 17 ?",
+      "comptabilisation des primes IFRS 17 reconnaissance flux de trésorerie entrants",
+      "allocation des primes aux services contractuels IFRS 17"
+     ],
+     "passages": 13
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B65#1",
+      "B:C002:55",
+      "B:C002:B126",
+      "B:C002:59",
+      "B:C002:C11"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 36753.4
+  },
+  {
+   "id": "c08",
+   "question": "J'ai vendu un contrat annuel à tacite reconduction et j'anticipe son renouvellement pendant 3 ans. Que dois-je comptabiliser ?",
+   "gold": [
+    "34"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "62"
+    ],
+    [
+     "B95A"
+    ],
+    [
+     "65"
+    ],
+    [
+     "C24A"
+    ],
+    [
+     "25"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B63"
+    ],
+    [
+     "B65"
+    ],
+    [
+     "70A"
+    ],
+    [
+     "B95C"
+    ],
+    [
+     "C24A"
+    ]
+   ],
+   "requetes": [
+    "J'ai vendu un contrat annuel à tacite reconduction et j'anticipe son renouvellement pendant 3 ans. Que dois-je comptabiliser ?",
+    "périmètre du contrat durée de couverture tacite reconduction IFRS 17",
+    "affectation des primes sur plusieurs années contrat à reconduction",
+    "regroupement de contrats à reconduction tacite IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination du périmètre du contrat et de la durée de couverture",
+      "méthode d'affectation des primes sur la période de couverture",
+      "reconduction tacite et regroupement de contrats"
+     ],
+     "requetes": [
+      "périmètre du contrat durée de couverture tacite reconduction IFRS 17",
+      "affectation des primes sur plusieurs années contrat à reconduction",
+      "regroupement de contrats à reconduction tacite IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "J'ai vendu un contrat annuel à tacite reconduction et j'anticipe son renouvellement pendant 3 ans. Que dois-je comptabiliser ?",
+      "périmètre du contrat durée de couverture tacite reconduction IFRS 17",
+      "affectation des primes sur plusieurs années contrat à reconduction",
+      "regroupement de contrats à reconduction tacite IFRS 17"
+     ],
+     "passages": 20
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B63",
+      "B:C002:B65#1",
+      "B:C002:70A",
+      "B:C002:B95C",
+      "B:C002:C24A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 23770.3
+  },
+  {
+   "id": "c09",
+   "question": "Les sinistres augmentent depuis deux ans par rapport aux estimations initiales. Qu'impose IFRS 17 ?",
+   "gold": [
+    "44"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "130"
+    ],
+    [
+     "def:passif au titre des sinistres survenus"
+    ],
+    [
+     "C28"
+    ],
+    [
+     "B41"
+    ],
+    [
+     "100"
+    ]
+   ],
+   "agent_top": [
+    [
+     "130"
+    ],
+    [
+     "B38"
+    ],
+    [
+     "B119D"
+    ],
+    [
+     "B97"
+    ],
+    [
+     "C20B"
+    ]
+   ],
+   "requetes": [
+    "Les sinistres augmentent depuis deux ans par rapport aux estimations initiales. Qu'impose IFRS 17 ?",
+    "mise à jour estimations flux de trésorerie futurs IFRS 17",
+    "ajustement marge sur services contractuels suite à sinistres",
+    "détermination groupe de contrats déficitaire IFRS 17",
+    "IFRS 17 changement estimation sinistres impact marge sur services contractuels"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "mise à jour des estimations des flux de trésorerie futurs",
+      "ajustement de la marge sur services contractuels (CSM)",
+      "détermination d'un groupe de contrats déficitaire"
+     ],
+     "requetes": [
+      "mise à jour estimations flux de trésorerie futurs IFRS 17",
+      "ajustement marge sur services contractuels suite à sinistres",
+      "détermination groupe de contrats déficitaire IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Les sinistres augmentent depuis deux ans par rapport aux estimations initiales. Qu'impose IFRS 17 ?",
+      "mise à jour estimations flux de trésorerie futurs IFRS 17",
+      "ajustement marge sur services contractuels suite à sinistres",
+      "détermination groupe de contrats déficitaire IFRS 17"
+     ],
+     "passages": 20
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 changement estimation sinistres impact marge sur services contractuels"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 changement estimation sinistres impact marge sur services contractuels"
+     ],
+     "passages": 22
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:130",
+      "B:C002:B38",
+      "B:C002:B119D",
+      "B:C002:B97",
+      "B:C002:C20B"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 54861.7
+  },
+  {
+   "id": "c10",
+   "question": "Quels sont les trois modèles comptables d'IFRS 17 ?",
+   "gold": [
+    "32"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B137"
+    ],
+    [
+     "cons-3"
+    ],
+    [
+     "3"
+    ],
+    [
+     "C13"
+    ],
+    [
+     "C3"
+    ]
+   ],
+   "agent_top": [
+    [
+     "53"
+    ],
+    [
+     "C14B"
+    ],
+    [
+     "C31"
+    ],
+    [
+     "C13"
+    ],
+    [
+     "127"
+    ]
+   ],
+   "requetes": [
+    "Quels sont les trois modèles comptables d'IFRS 17 ?",
+    "modèle de mesure général IFRS 17",
+    "approche d'allocation des primes IFRS 17",
+    "approche des frais variables IFRS 17",
+    "§3.1 – Modèles comptables IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "modèle de mesure général (GMM)",
+      "approche d'allocation des primes (PAA)",
+      "approche des frais variables (VFA)"
+     ],
+     "requetes": [
+      "modèle de mesure général IFRS 17",
+      "approche d'allocation des primes IFRS 17",
+      "approche des frais variables IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Quels sont les trois modèles comptables d'IFRS 17 ?",
+      "modèle de mesure général IFRS 17",
+      "approche d'allocation des primes IFRS 17",
+      "approche des frais variables IFRS 17"
+     ],
+     "passages": 19
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "§3.1 – Modèles comptables IFRS 17"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "§3.1 – Modèles comptables IFRS 17"
+     ],
+     "passages": 21
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "§B — Modèles comptables IFRS 17"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:53",
+      "B:C002:C14B",
+      "B:C002:C31",
+      "B:C002:C13",
+      "B:C002:127"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 25060.9
+  },
+  {
+   "id": "c11",
+   "question": "Quelles sont les conditions d'éligibilité à la méthode d'affectation des primes ?",
+   "gold": [
+    "53"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.2,
+   "agent_mrr": 0.5,
+   "base_top": [
+    [
+     "97"
+    ],
+    [
+     "69"
+    ],
+    [
+     "59"
+    ],
+    [
+     "B126"
+    ],
+    [
+     "53"
+    ]
+   ],
+   "agent_top": [
+    [
+     "97"
+    ],
+    [
+     "53"
+    ],
+    [
+     "59"
+    ],
+    [
+     "55"
+    ],
+    [
+     "20"
+    ]
+   ],
+   "requetes": [
+    "Quelles sont les conditions d'éligibilité à la méthode d'affectation des primes ?",
+    "conditions d'éligibilité méthode d'affectation des primes IFRS 17",
+    "premium allocation approach critères d'éligibilité contrat court terme",
+    "exigences d'éligibilité PA IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "méthode d'affectation des primes (Premium Allocation Approach)",
+      "conditions d'éligibilité du PA : contrat à court terme, pas de participation aux bénéfices, pas de couverture de risques financiers, etc."
+     ],
+     "requetes": [
+      "conditions d'éligibilité méthode d'affectation des primes IFRS 17",
+      "premium allocation approach critères d'éligibilité contrat court terme",
+      "exigences d'éligibilité PA IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Quelles sont les conditions d'éligibilité à la méthode d'affectation des primes ?",
+      "conditions d'éligibilité méthode d'affectation des primes IFRS 17",
+      "premium allocation approach critères d'éligibilité contrat court terme",
+      "exigences d'éligibilité PA IFRS 17"
+     ],
+     "passages": 12
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 2,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:97",
+      "B:C002:53",
+      "B:C002:59",
+      "B:C002:55",
+      "B:C002:20"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 10470.0
+  },
+  {
+   "id": "c12",
+   "question": "Qu'est-ce qu'un contrat d'assurance avec éléments de participation directe ?",
+   "gold": [
+    "B101"
+   ],
+   "base_r5": 1.0,
+   "agent_r5": 1.0,
+   "base_mrr": 0.5,
+   "agent_mrr": 1.0,
+   "base_top": [
+    [
+     "B109",
+     "B110"
+    ],
+    [
+     "B101"
+    ],
+    [
+     "111",
+     "112"
+    ],
+    [
+     "B104"
+    ],
+    [
+     "B113"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B101"
+    ],
+    [
+     "B109",
+     "B110"
+    ],
+    [
+     "111",
+     "112"
+    ],
+    [
+     "C9"
+    ],
+    [
+     "C17A"
+    ]
+   ],
+   "requetes": [
+    "Qu'est-ce qu'un contrat d'assurance avec éléments de participation directe ?",
+    "contrat d'assurance avec participation directe définition IFRS 17",
+    "éléments de participation directe IFRS 17"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "participation directe aux bénéfices dans le cadre d'un contrat d'assurance",
+      "éléments de participation directe selon IFRS 17"
+     ],
+     "requetes": [
+      "contrat d'assurance avec participation directe définition IFRS 17",
+      "éléments de participation directe IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Qu'est-ce qu'un contrat d'assurance avec éléments de participation directe ?",
+      "contrat d'assurance avec participation directe définition IFRS 17",
+      "éléments de participation directe IFRS 17"
+     ],
+     "passages": 9
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B101",
+      "B:C002:B109",
+      "B:C002:111",
+      "B:C002:C9",
+      "B:C002:C17A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 51871.8
+  },
+  {
+   "id": "c13",
+   "question": "À quoi sert l'option OCI sous IFRS 17 ?",
+   "gold": [
+    "88"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "C24"
+    ],
+    [
+     "C18"
+    ],
+    [
+     "118"
+    ],
+    [
+     "C29"
+    ],
+    [
+     "B134"
+    ]
+   ],
+   "agent_top": [
+    [
+     "C24"
+    ],
+    [
+     "C18"
+    ],
+    [
+     "118"
+    ],
+    [
+     "92"
+    ],
+    [
+     "C29"
+    ]
+   ],
+   "requetes": [
+    "À quoi sert l'option OCI sous IFRS 17 ?",
+    "option OCI IFRS 17 présentation résultat global",
+    "comptabilisation option OCI IFRS 17 contrats d'assurance",
+    "choix OCI vs résultat net IFRS 17",
+    "IFRS 17 option OCI"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "option de comptabilisation en résultat global (OCI)",
+      "présentation du résultat global versus résultat net",
+      "choix de la méthode de reconnaissance du résultat pour les contrats d'assurance"
+     ],
+     "requetes": [
+      "option OCI IFRS 17 présentation résultat global",
+      "comptabilisation option OCI IFRS 17 contrats d'assurance",
+      "choix OCI vs résultat net IFRS 17"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "À quoi sert l'option OCI sous IFRS 17 ?",
+      "option OCI IFRS 17 présentation résultat global",
+      "comptabilisation option OCI IFRS 17 contrats d'assurance",
+      "choix OCI vs résultat net IFRS 17"
+     ],
+     "passages": 8
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 option OCI"
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "IFRS 17 option OCI"
+     ],
+     "passages": 8
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 0,
+     "suffisant": false,
+     "nouvelle_requete": "IFRS 17 option OCI"
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:C24",
+      "B:C002:C18",
+      "B:C002:118",
+      "B:C002:92",
+      "B:C002:C29"
+     ]
+    }
+   ],
+   "appels_llm": 3,
+   "latence_ms": 18272.0
+  },
+  {
+   "id": "c14",
+   "question": "J'anticipe une hausse du best estimate au titre des services futurs : le coût moyen des sinistres passe de 10 à 20. Quel est l'impact sur mon résultat ?",
+   "gold": [
+    "44"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "B5"
+    ],
+    [
+     "130"
+    ],
+    [
+     "B65"
+    ],
+    [
+     "B37"
+    ],
+    [
+     "B40"
+    ]
+   ],
+   "agent_top": [
+    [
+     "B99"
+    ],
+    [
+     "B112"
+    ],
+    [
+     "B59"
+    ],
+    [
+     "C15"
+    ],
+    [
+     "B40"
+    ]
+   ],
+   "requetes": [
+    "J'anticipe une hausse du best estimate au titre des services futurs : le coût moyen des sinistres passe de 10 à 20. Quel est l'impact sur mon résultat ?",
+    "mise à jour du best estimate des flux de trésorerie futurs IFRS 17",
+    "ajustement du CSM suite à variation du best estimate et impact résultat"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "mise à jour du best estimate des flux de trésorerie futurs",
+      "ajustement de la marge sur services contractuels (CSM) et impact sur le résultat"
+     ],
+     "requetes": [
+      "mise à jour du best estimate des flux de trésorerie futurs IFRS 17",
+      "ajustement du CSM suite à variation du best estimate et impact résultat"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "J'anticipe une hausse du best estimate au titre des services futurs : le coût moyen des sinistres passe de 10 à 20. Quel est l'impact sur mon résultat ?",
+      "mise à jour du best estimate des flux de trésorerie futurs IFRS 17",
+      "ajustement du CSM suite à variation du best estimate et impact résultat"
+     ],
+     "passages": 15
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 1,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:B99",
+      "B:C002:B112",
+      "B:C002:B59",
+      "B:C002:C15",
+      "B:C002:B40"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 21569.9
+  },
+  {
+   "id": "c15",
+   "question": "Des contrats auto à garantie annuelle, vendus par un partenaire, affichent un ratio sinistres sur primes de 120 %. Que dois-je faire ?",
+   "gold": [
+    "57"
+   ],
+   "base_r5": 0.0,
+   "agent_r5": 0.0,
+   "base_mrr": 0.0,
+   "agent_mrr": 0.0,
+   "base_top": [
+    [
+     "130"
+    ],
+    [
+     "B133"
+    ],
+    [
+     "86"
+    ],
+    [
+     "B119D"
+    ],
+    [
+     "100"
+    ]
+   ],
+   "agent_top": [
+    [
+     "47"
+    ],
+    [
+     "38"
+    ],
+    [
+     "50"
+    ],
+    [
+     "21"
+    ],
+    [
+     "C16A"
+    ]
+   ],
+   "requetes": [
+    "Des contrats auto à garantie annuelle, vendus par un partenaire, affichent un ratio sinistres sur primes de 120 %. Que dois-je faire ?",
+    "groupe de contrats déficitaire IFRS 17",
+    "reconnaissance de la perte initiale CSM ratio sinistres supérieurs à primes",
+    "ajustement du composant de marge sur services contractuels lorsqu'un groupe est déficitaire"
+   ],
+   "etapes": [
+    {
+     "noeud": "planifier",
+     "mecanismes": [
+      "détermination d'un groupe de contrats déficitaire",
+      "reconnaissance de la perte au titre du composant de marge sur services contractuels (CSM)",
+      "ajustement du CSM à la perte initiale"
+     ],
+     "requetes": [
+      "groupe de contrats déficitaire IFRS 17",
+      "reconnaissance de la perte initiale CSM ratio sinistres supérieurs à primes",
+      "ajustement du composant de marge sur services contractuels lorsqu'un groupe est déficitaire"
+     ]
+    },
+    {
+     "noeud": "chercher",
+     "requetes": [
+      "Des contrats auto à garantie annuelle, vendus par un partenaire, affichent un ratio sinistres sur primes de 120 %. Que dois-je faire ?",
+      "groupe de contrats déficitaire IFRS 17",
+      "reconnaissance de la perte initiale CSM ratio sinistres supérieurs à primes",
+      "ajustement du composant de marge sur services contractuels lorsqu'un groupe est déficitaire"
+     ],
+     "passages": 17
+    },
+    {
+     "noeud": "evaluer",
+     "pertinents": 3,
+     "suffisant": true,
+     "nouvelle_requete": null
+    },
+    {
+     "noeud": "conclure",
+     "retenus": [
+      "B:C002:47",
+      "B:C002:38",
+      "B:C002:50",
+      "B:C002:21",
+      "B:C002:C16A"
+     ]
+    }
+   ],
+   "appels_llm": 2,
+   "latence_ms": 11116.0
+  }
+ ]
+}

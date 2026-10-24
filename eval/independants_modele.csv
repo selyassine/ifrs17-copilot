@@ -1,0 +1,4 @@
+fichier;groupe;devise;unite;primes;sorties;unites_couverture;taux;ajustement_risque;attendu;commentaire
+etat_karim.pdf;AUTO-2024-K;EUR;1000;2 400,00 | 0 | 0 | 0;520,40 | 610,00 | 480,15 | 390,00;1200 | 1100 | 950 | 800;3,10 % | 3,30 % | 3,50 % | 3,70 %;5 %;exact;tableau en colonnes, Excel exporté en PDF
+etat_sana_photo.jpg;VIE-2023-S;TND;1;850 000 | 0 | 0;210 000 | 230 000 | 250 000;3000 | 2800 | 2600;4 %;6 %;exact;photo au téléphone
+etat_deux_groupes.pdf;;;;;;;;;alerte;deux groupes de contrats sur la même page : le système doit refuser de choisir

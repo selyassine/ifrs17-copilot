@@ -18,7 +18,7 @@ PORTFOLIO = PortfolioData(group_id="G1", premiums=[100, 0, 0], outflows=[30, 30,
                           coverage_units=[1, 1, 1], discount_rates=0.05, risk_adjustment_pct=0.05)
 
 
-def agents_llm(tmp_path, extraction=None, synthesis=None):
+def agents_llm(tmp_path, extraction=None, synthesis=None, comment=None):
     calls = {"extracteur": 0, "rag": 0, "juge": 0, "redacteur": 0}
 
     def respond(messages, model):
@@ -29,13 +29,14 @@ def agents_llm(tmp_path, extraction=None, synthesis=None):
         if "réviseur IFRS 17" in system:
             calls["juge"] += 1
             return json.dumps(JUDGE_OK)
-        if "rédige la synthèse" in system:
+        if "note actuarielle IFRS 17" in system:
             calls["redacteur"] += 1
             f = json.loads(re.search(r"<faits>\s*(\{.*\})\s*</faits>", messages[1]["content"], re.S).group(1))
             text = synthesis(f) if synthesis else (
                 f"Le groupe est bénéficiaire : la CSM initiale est de {f['csm_initiale']} et sera "
                 f"libérée selon les unités de couverture [B119].")
-            return json.dumps({"synthese": text}, ensure_ascii=False)
+            return json.dumps({"synthese": text, "commentaire_sensibilites": comment(f) if comment else ""},
+                              ensure_ascii=False)
         calls["rag"] += 1
         return json.dumps(GOOD)
 
@@ -60,12 +61,12 @@ def test_dossier_complet_note_prete(tmp_path):
 
 
 def test_synthese_avec_nombre_invente_remplacee_par_le_code(tmp_path):
-    s, client, calls = agents_llm(tmp_path, synthesis=lambda f: "La CSM vaut 15,00 [B119].")
+    s, client, calls = agents_llm(tmp_path, synthesis=lambda f: "La CSM vaut 16,66 [B119].")
     out = run_case(b"", "", s, client, client, retriever, "c2", portfolio=PORTFOLIO)
     assert calls["redacteur"] == 2                         # une relance
     assert out.note.synthesis_source == "code"
-    assert "14,22" in out.note.synthesis and "15,00" not in out.note.synthesis
-    assert any("rejetée" in w for w in out.warnings)
+    assert "14,22" in out.note.synthesis and "16,66" not in out.note.synthesis
+    assert any("rejet" in w for w in out.warnings)
 
 
 def test_groupe_deficitaire_question_supplementaire(tmp_path):
@@ -118,3 +119,37 @@ def test_reponses_de_reference_reutilisees(tmp_path):
     out = run_case(b"", "", s, client, client, retriever, "c5", portfolio=PORTFOLIO)
     assert calls["rag"] == 1                                  # seule la réponse douteuse est recalculée
     assert out.steps[2].agent == "chercheur_rag" and out.steps[2].status == "reference"
+
+
+def test_questions_a_la_norme_en_parallele(tmp_path, monkeypatch):
+    """D-063 : mêmes réponses, dans le même ordre, qu'en séquentiel ; durée ≈ la plus longue question."""
+    import dataclasses
+    import time as _t
+
+    import agents.orchestrator as orch
+
+    onerous = PortfolioData(group_id="G2", premiums=[100, 0, 0], outflows=[50, 50, 50],
+                            coverage_units=[1, 1, 1], discount_rates=0.05, risk_adjustment_pct=0.05)
+    real = orch.verified_answer
+
+    def slow(q, *a, **kw):
+        _t.sleep(0.3)
+        return real(q, *a, **kw)
+    monkeypatch.setattr(orch, "verified_answer", slow)
+    runs = {}
+    for n in (1, 3):
+        monkeypatch.setenv("NORM_PARALLEL", str(n))
+        s, client, _ = agents_llm(tmp_path, synthesis=lambda f: (
+            f"Le groupe est déficitaire : perte immédiate de {f['perte_initiale']} [B119]."))
+        s = dataclasses.replace(s, norm_parallel=n)
+        events = []
+        t0 = _t.perf_counter()
+        out = run_case(b"", "", s, client, client, retriever, f"p{n}", portfolio=onerous,
+                       on_step=lambda i, st, ev=events: ev.append((i, st.agent, st.status)))
+        runs[n] = (_t.perf_counter() - t0, out, events)
+    (t1, o1, _), (t3, o3, ev3) = runs[1], runs[3]
+    assert [p.question for p in o3.norm] == [p.question for p in o1.norm] and o3.norm[-1].question == ONEROUS_QUESTION
+    assert [p.verdict for p in o3.norm] == [p.verdict for p in o1.norm] and o3.status == o1.status
+    assert t3 < t1 - 0.4                                      # 3 questions de 0,3 s : ~0,9 s contre ~0,3 s
+    rag = [e for e in ev3 if e[1] == "chercheur_rag+verificateur"]
+    assert {s for _, _, s in rag[:3]} == {"en cours"} and all(st != "en cours" for _, _, st in rag[3:])

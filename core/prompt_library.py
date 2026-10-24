@@ -11,9 +11,10 @@ from core.config import ROOT
 from core.prompts import PromptSpec, all_prompt_files, load_prompt_file
 
 OUT = ROOT / "prompt_library.md"
-AGENT_ORDER = ["router", "extracteur", "chercheur_rag", "verificateur", "redacteur"]
+AGENT_ORDER = ["router", "extracteur", "chercheur_rag", "verificateur", "redacteur", "copilote"]
 AGENT_LABEL = {"router": "Routeur", "extracteur": "Extracteur multimodal", "chercheur_rag": "Chercheur RAG",
-               "verificateur": "Vérificateur (LLM-juge)", "redacteur": "Rédacteur"}
+               "verificateur": "Vérificateur (LLM-juge)", "redacteur": "Rédacteur",
+               "copilote": "Copilot (agent à outils)"}
 
 
 def _scores(spec: PromptSpec) -> str:

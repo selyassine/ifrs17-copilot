@@ -1,0 +1,80 @@
+{
+  "name": "10 — Alertes en cas d'erreur (workflow d'erreur)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "5d005331-4490-586d-a17e-16ef65d21f90",
+      "name": "Erreur d'un workflow",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow. Le jeton reste « change-moi » dans le fichier\n// commité ; mettez la valeur d'API_TOKEN dans n8n. Workflow d'erreur : à choisir dans Settings → Error workflow de chaque workflow 05 à 11.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les alertes et les dossiers à valider\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n};\nconst e = $input.first().json;\nreturn [{ json: { parametres,\n  sujet: `IFRS 17 · alerte n8n · ${e.workflow?.name ?? 'workflow inconnu'}`,\n  texte: [\n    `Workflow : ${e.workflow?.name ?? '?'} (id ${e.workflow?.id ?? '?'})`,\n    `Nœud en échec : ${e.execution?.lastNodeExecuted ?? '?'}`,\n    `Erreur : ${e.execution?.error?.message ?? e.trigger?.error?.message ?? '?'}`,\n    `Exécution : ${e.execution?.url ?? '(pas d\\'URL : exécution manuelle)'}`,\n    `Mode : ${e.execution?.mode ?? '?'}`,\n    '', 'Vérifier l\\'API (page /health) et les identifiants SMTP/IMAP, puis relancer l\\'exécution depuis n8n.',\n  ].join('\\n') } }];\n"
+      },
+      "id": "57e61a99-1a71-52da-a33a-2715e88fc940",
+      "name": "Paramètres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.parametres.expediteur }}",
+        "toEmail": "={{ $json.parametres.valideur }}",
+        "subject": "={{ $json.sujet }}",
+        "emailFormat": "text",
+        "text": "={{ $json.texte }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "9ffb4752-6f37-5f32-9572-1291cb1a5fec",
+      "name": "E-mail : alerte",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        0
+      ],
+      "webhookId": "7cc90116-b977-5eb9-8082-9696881f6823"
+    }
+  ],
+  "connections": {
+    "Erreur d'un workflow": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres": {
+      "main": [
+        [
+          {
+            "node": "E-mail : alerte",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

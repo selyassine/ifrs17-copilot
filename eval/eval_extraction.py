@@ -43,8 +43,8 @@ from multimodal.extract import ExtractionResult, extract_from_images, extract_fr
 from multimodal.vision import normalize_image, pdf_page_images, vision_client
 
 HERE = Path(__file__).parent
-FIELDS = ("group_id", "currency", "unit_multiplier", "premiums", "outflows", "coverage_units",
-          "discount_rates", "risk_adjustment_pct")
+FIELDS = ("group_id", "currency", "unit_multiplier", "premiums", "outflows", "recoveries", "acquisition_costs",
+          "coverage_units", "discount_rates", "risk_adjustment_pct")
 
 
 def load_cases(path: Path = HERE / "extraction_cases.jsonl") -> list[dict]:
@@ -57,6 +57,14 @@ def same(field: str, got, want) -> bool:
     if field in ("currency", "unit_multiplier"):
         return got == want
     tol = 1e-6 if field in ("discount_rates", "risk_adjustment_pct") else 0.011
+    if field in ("recoveries", "acquisition_costs"):
+        # pas de recouvrement (ou de frais d'acquisition) = champ absent = des zéros (D-071, D-075)
+        n = len(want or got or [])
+        got, want = got or [0.0] * n, want or [0.0] * n
+    if field == "discount_rates" and isinstance(want, list) != isinstance(got, list):
+        # un taux unique et une liste de taux tous égaux à ce taux sont la même donnée (même CSM) (D-070)
+        flat, curve = (got, want) if isinstance(want, list) else (want, got)
+        return bool(curve) and all(abs(x - flat) <= tol for x in curve)
     if isinstance(want, list) or isinstance(got, list):
         if not (isinstance(want, list) and isinstance(got, list)) or len(got) != len(want):
             return False
@@ -89,14 +97,14 @@ def score(case: dict, res: ExtractionResult) -> dict:
                     "csm": None, "extracted": None, "verdict": verdict(expect, res.status, False)})
         return row
     got = res.portfolio.model_dump()
-    fields = {f: same(f, got[f], case["truth"][f]) for f in FIELDS}
+    fields = {f: same(f, got.get(f), case["truth"].get(f)) for f in FIELDS}
     csm = compute_csm(res.portfolio)
     want = case["csm_attendu"] if case["csm_attendu"] > 0 else -case["perte_attendue"]
     have = csm.initial_csm if csm.initial_csm > 0 else -csm.initial_loss_component
     row.update({"fields": fields, "all_ok": all(fields.values()),
                 "csm_ok": abs(have - want) <= max(0.01, abs(want) * 1e-4),
                 "csm": round(have, 4), "csm_attendu": want,
-                "extracted": {f: got[f] for f in FIELDS},
+                "extracted": {f: got.get(f) for f in FIELDS},
                 "verdict": verdict(expect, res.status, all(fields.values()))})
     return row
 
@@ -157,6 +165,11 @@ def render_report(stamp: str, mode: str, model: str, agg: dict, rows: list[dict]
 
 
 def run_case(mode: str, case: dict, client: LLMClient, case_id: str) -> ExtractionResult:
+    if str(case["pdf"]).lower().endswith((".xlsx", ".csv")):       # classeur ou CSV (D-079)
+        from multimodal.spreadsheet import CSV_MIME, XLSX_MIME, spreadsheet_text
+        path = ROOT / case["pdf"]
+        mime = XLSX_MIME if path.suffix.lower() == ".xlsx" else CSV_MIME
+        return extract_from_text(spreadsheet_text(path.read_bytes(), mime), client, case_id=case_id, mode="tableur")
     if mode == "texte":
         return extract_from_text(pdf_text(ROOT / case["pdf"]), client, case_id=case_id)
     if mode == "vision":

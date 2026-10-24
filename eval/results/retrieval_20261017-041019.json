@@ -1,0 +1,9523 @@
+{
+ "date": "20261017-041019",
+ "n_questions": 15,
+ "chunks": {
+  "A": 138,
+  "B": 380
+ },
+ "resultats": {
+  "A · bm25": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.133,
+    "recall@5": 0.133,
+    "recall@10": 0.267,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.133,
+    "mrr@10": 0.119,
+    "ndcg@5": 0.109,
+    "tokens@5": 2389,
+    "latence_p50_ms": 0.2,
+    "latence_p95_ms": 0.4
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.119
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0087",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "A:C002:0050",
+       "paragraphes": [
+        "122",
+        "123",
+        "124",
+        "125",
+        "126",
+        "127"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 2443,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0019",
+       "paragraphes": [
+        "40",
+        "41",
+        "42",
+        "43"
+       ]
+      },
+      {
+       "chunk": "A:C002:0025",
+       "paragraphes": [
+        "53",
+        "54",
+        "55"
+       ]
+      },
+      {
+       "chunk": "A:C002:0018",
+       "paragraphes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+       ]
+      }
+     ],
+     "tokens@5": 2424,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0007",
+       "paragraphes": [
+        "7",
+        "8",
+        "8A"
+       ]
+      }
+     ],
+     "tokens@5": 2439,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0013",
+       "paragraphes": [
+        "25",
+        "26",
+        "27",
+        "28",
+        "28A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0048",
+       "paragraphes": [
+        "116",
+        "117"
+       ]
+      },
+      {
+       "chunk": "A:C002:0103",
+       "paragraphes": [
+        "B95F",
+        "B96"
+       ]
+      }
+     ],
+     "tokens@5": 2420,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0100",
+       "paragraphes": [
+        "B91",
+        "B92",
+        "B93",
+        "B94"
+       ]
+      },
+      {
+       "chunk": "A:C002:0098",
+       "paragraphes": [
+        "B86",
+        "B87",
+        "B88"
+       ]
+      },
+      {
+       "chunk": "A:C002:0048",
+       "paragraphes": [
+        "116",
+        "117"
+       ]
+      }
+     ],
+     "tokens@5": 2393,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0103",
+       "paragraphes": [
+        "B95F",
+        "B96"
+       ]
+      },
+      {
+       "chunk": "A:C002:0104",
+       "paragraphes": [
+        "B96",
+        "B97",
+        "B98"
+       ]
+      },
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      }
+     ],
+     "tokens@5": 2357,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0040",
+       "paragraphes": [
+        "93",
+        "94",
+        "95",
+        "96",
+        "97"
+       ]
+      },
+      {
+       "chunk": "A:C002:0114",
+       "paragraphes": [
+        "B122",
+        "B123"
+       ]
+      },
+      {
+       "chunk": "A:C002:0033",
+       "paragraphes": [
+        "71",
+        "72"
+       ]
+      }
+     ],
+     "tokens@5": 2344,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0135",
+       "paragraphes": [
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29"
+       ]
+      },
+      {
+       "chunk": "A:C002:0072",
+       "paragraphes": [
+        "B33",
+        "B34",
+        "B35",
+        "B35A"
+       ]
+      }
+     ],
+     "tokens@5": 2461,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "129",
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0076",
+       "paragraphes": [
+        "B41",
+        "B42"
+       ]
+      },
+      {
+       "chunk": "A:C002:0097",
+       "paragraphes": [
+        "B83",
+        "B84",
+        "B85",
+        "B86"
+       ]
+      }
+     ],
+     "tokens@5": 2360,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0125",
+       "paragraphes": [
+        "C13",
+        "C14",
+        "C14A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 2323,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0031",
+       "paragraphes": [
+        "66B",
+        "67",
+        "68",
+        "69"
+       ]
+      },
+      {
+       "chunk": "A:C002:0033",
+       "paragraphes": [
+        "71",
+        "72"
+       ]
+      },
+      {
+       "chunk": "A:C002:0034",
+       "paragraphes": [
+        "72",
+        "73",
+        "74",
+        "75",
+        "76"
+       ]
+      }
+     ],
+     "tokens@5": 2376,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0123",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      },
+      {
+       "chunk": "A:C002:0055",
+       "paragraphes": [
+        "def:groupe de contrats d'assurance",
+        "def:flux de trésorerie liés aux frais d'acquisition",
+        "def:contrat d'assurance",
+        "def:services prévus au contrat d'assurance",
+        "def:contrat d'assurance avec éléments de participation directe"
+       ]
+      },
+      {
+       "chunk": "A:C002:0046",
+       "paragraphes": [
+        "110",
+        "111",
+        "112",
+        "113",
+        "114"
+       ]
+      }
+     ],
+     "tokens@5": 2358,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0066",
+       "paragraphes": [
+        "B23",
+        "B24",
+        "B25",
+        "B26"
+       ]
+      },
+      {
+       "chunk": "A:C002:0078",
+       "paragraphes": [
+        "B46",
+        "B47",
+        "B48",
+        "B49"
+       ]
+      },
+      {
+       "chunk": "A:C002:0084",
+       "paragraphes": [
+        "B61",
+        "B62",
+        "B63"
+       ]
+      }
+     ],
+     "tokens@5": 2331,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0075",
+       "paragraphes": [
+        "B38",
+        "B39",
+        "B40",
+        "B41"
+       ]
+      },
+      {
+       "chunk": "A:C002:0082",
+       "paragraphes": [
+        "B55",
+        "B56",
+        "B57",
+        "B58"
+       ]
+      },
+      {
+       "chunk": "A:C002:0074",
+       "paragraphes": [
+        "B35D",
+        "B36",
+        "B37",
+        "B38"
+       ]
+      }
+     ],
+     "tokens@5": 2424,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0086",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "A:C002:0067",
+       "paragraphes": [
+        "B26"
+       ]
+      },
+      {
+       "chunk": "A:C002:0001",
+       "paragraphes": [
+        "cons-5",
+        "cons-6",
+        "cons-7",
+        "cons-8",
+        "cons-9"
+       ]
+      }
+     ],
+     "tokens@5": 2376,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · bm25": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.067,
+    "recall@5": 0.133,
+    "recall@10": 0.133,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.133,
+    "mrr@10": 0.083,
+    "ndcg@5": 0.095,
+    "tokens@5": 1140,
+    "latence_p50_ms": 0.5,
+    "latence_p95_ms": 0.6
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.083
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:125",
+       "paragraphes": [
+        "125"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1040,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:38",
+       "paragraphes": [
+        "38"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 1138,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:72",
+       "paragraphes": [
+        "72"
+       ]
+      },
+      {
+       "chunk": "B:C002:3",
+       "paragraphes": [
+        "3"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:groupe de contrats d'assurance",
+       "paragraphes": [
+        "def:groupe de contrats d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 802,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 826,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      }
+     ],
+     "tokens@5": 956,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B96",
+       "paragraphes": [
+        "B96"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 1412,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:77",
+       "paragraphes": [
+        "77"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1496,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      }
+     ],
+     "tokens@5": 674,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      },
+      {
+       "chunk": "B:C002:B58",
+       "paragraphes": [
+        "B58"
+       ]
+      }
+     ],
+     "tokens@5": 775,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 902,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      }
+     ],
+     "tokens@5": 1090,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 689,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B24",
+       "paragraphes": [
+        "B24"
+       ]
+      },
+      {
+       "chunk": "B:C002:B62",
+       "paragraphes": [
+        "B62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B48",
+       "paragraphes": [
+        "B48"
+       ]
+      }
+     ],
+     "tokens@5": 2155,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B38",
+       "paragraphes": [
+        "B38"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      }
+     ],
+     "tokens@5": 1620,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 1520,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B0 · bm25": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.067,
+    "recall@5": 0.067,
+    "recall@10": 0.2,
+    "recall@1000tok": 0.067,
+    "recall@2000tok": 0.133,
+    "mrr@10": 0.084,
+    "ndcg@5": 0.067,
+    "tokens@5": 998,
+    "latence_p50_ms": 0.4,
+    "latence_p95_ms": 0.5
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.067,
+     "mrr@10": 0.084
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:125",
+       "paragraphes": [
+        "125"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 948,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:38",
+       "paragraphes": [
+        "38"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1255,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:C34",
+       "paragraphes": [
+        "C34"
+       ]
+      },
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 627,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 826,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      }
+     ],
+     "tokens@5": 882,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B96",
+       "paragraphes": [
+        "B96"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 1490,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      },
+      {
+       "chunk": "B:C002:B32",
+       "paragraphes": [
+        "B32"
+       ]
+      }
+     ],
+     "tokens@5": 835,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      }
+     ],
+     "tokens@5": 620,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      },
+      {
+       "chunk": "B:C002:B77",
+       "paragraphes": [
+        "B77"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      }
+     ],
+     "tokens@5": 731,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      }
+     ],
+     "tokens@5": 669,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      }
+     ],
+     "tokens@5": 1114,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      },
+      {
+       "chunk": "B:C002:C7",
+       "paragraphes": [
+        "C7"
+       ]
+      }
+     ],
+     "tokens@5": 705,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B24",
+       "paragraphes": [
+        "B24"
+       ]
+      },
+      {
+       "chunk": "B:C002:B62",
+       "paragraphes": [
+        "B62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B48",
+       "paragraphes": [
+        "B48"
+       ]
+      }
+     ],
+     "tokens@5": 1201,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B38",
+       "paragraphes": [
+        "B38"
+       ]
+      },
+      {
+       "chunk": "B:C002:40",
+       "paragraphes": [
+        "40"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1664,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:B31",
+       "paragraphes": [
+        "B31"
+       ]
+      }
+     ],
+     "tokens@5": 1409,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · bm25+glossaire": {
+   "global": {
+    "recall@1": 0.133,
+    "recall@3": 0.133,
+    "recall@5": 0.2,
+    "recall@10": 0.2,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.15,
+    "ndcg@5": 0.162,
+    "tokens@5": 1075,
+    "latence_p50_ms": 0.7,
+    "latence_p95_ms": 1.3
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.15
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:125",
+       "paragraphes": [
+        "125"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1040,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:38",
+       "paragraphes": [
+        "38"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 1138,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      }
+     ],
+     "tokens@5": 932,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:52",
+       "paragraphes": [
+        "52"
+       ]
+      }
+     ],
+     "tokens@5": 818,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      }
+     ],
+     "tokens@5": 956,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 1283,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:77",
+       "paragraphes": [
+        "77"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1496,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      }
+     ],
+     "tokens@5": 674,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 794,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 902,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      }
+     ],
+     "tokens@5": 1090,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 689,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 1338,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre de la couverture restante",
+       "paragraphes": [
+        "def:passif au titre de la couverture restante"
+       ]
+      }
+     ],
+     "tokens@5": 952,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 2023,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · bm25+glossaire+questions": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.133,
+    "recall@5": 0.133,
+    "recall@10": 0.267,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.119,
+    "ndcg@5": 0.109,
+    "tokens@5": 1016,
+    "latence_p50_ms": 1.5,
+    "latence_p95_ms": 1.8
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.119
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 927,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66A",
+       "paragraphes": [
+        "B66A"
+       ]
+      }
+     ],
+     "tokens@5": 1110,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 771,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:marge sur services contractuels",
+       "paragraphes": [
+        "def:marge sur services contractuels"
+       ]
+      },
+      {
+       "chunk": "B:C002:43",
+       "paragraphes": [
+        "43"
+       ]
+      }
+     ],
+     "tokens@5": 599,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B90",
+       "paragraphes": [
+        "B90"
+       ]
+      },
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 689,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 1396,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 1454,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B26",
+       "paragraphes": [
+        "B26"
+       ]
+      }
+     ],
+     "tokens@5": 1148,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 851,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 821,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      },
+      {
+       "chunk": "B:C002:70",
+       "paragraphes": [
+        "70"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      }
+     ],
+     "tokens@5": 926,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.125,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      }
+     ],
+     "tokens@5": 809,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 1113,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre de la couverture restante",
+       "paragraphes": [
+        "def:passif au titre de la couverture restante"
+       ]
+      }
+     ],
+     "tokens@5": 1148,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:77",
+       "paragraphes": [
+        "77"
+       ]
+      }
+     ],
+     "tokens@5": 1483,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · bm25+glossaire+graphe": {
+   "global": {
+    "recall@1": 0.133,
+    "recall@3": 0.133,
+    "recall@5": 0.2,
+    "recall@10": 0.2,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.15,
+    "ndcg@5": 0.162,
+    "tokens@5": 1004,
+    "latence_p50_ms": 0.6,
+    "latence_p95_ms": 0.8
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.15
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:125",
+       "paragraphes": [
+        "125"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1040,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:38",
+       "paragraphes": [
+        "38"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 1138,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      }
+     ],
+     "tokens@5": 902,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:52",
+       "paragraphes": [
+        "52"
+       ]
+      }
+     ],
+     "tokens@5": 818,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      }
+     ],
+     "tokens@5": 889,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 829,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:77",
+       "paragraphes": [
+        "77"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1393,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      }
+     ],
+     "tokens@5": 674,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 829,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 902,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      }
+     ],
+     "tokens@5": 937,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:services prévus au contrat d'assurance",
+       "paragraphes": [
+        "def:services prévus au contrat d'assurance"
+       ]
+      }
+     ],
+     "tokens@5": 689,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 1544,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre de la couverture restante",
+       "paragraphes": [
+        "def:passif au titre de la couverture restante"
+       ]
+      }
+     ],
+     "tokens@5": 952,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1531,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · bm25+glossaire+questions+graphe": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.133,
+    "recall@5": 0.133,
+    "recall@10": 0.267,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.114,
+    "ndcg@5": 0.109,
+    "tokens@5": 932,
+    "latence_p50_ms": 1.5,
+    "latence_p95_ms": 1.9
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.114
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 816,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B66A",
+       "paragraphes": [
+        "B66A"
+       ]
+      }
+     ],
+     "tokens@5": 1110,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 840,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:25",
+       "paragraphes": [
+        "25"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:marge sur services contractuels",
+       "paragraphes": [
+        "def:marge sur services contractuels"
+       ]
+      },
+      {
+       "chunk": "B:C002:43",
+       "paragraphes": [
+        "43"
+       ]
+      }
+     ],
+     "tokens@5": 599,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B90",
+       "paragraphes": [
+        "B90"
+       ]
+      },
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 728,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      }
+     ],
+     "tokens@5": 942,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 1508,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B4",
+       "paragraphes": [
+        "B4"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-13",
+       "paragraphes": [
+        "cons-13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B26",
+       "paragraphes": [
+        "B26"
+       ]
+      }
+     ],
+     "tokens@5": 1148,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 845,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-10",
+       "paragraphes": [
+        "cons-10"
+       ]
+      },
+      {
+       "chunk": "B:C002:C13",
+       "paragraphes": [
+        "C13"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 821,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:70A",
+       "paragraphes": [
+        "70A"
+       ]
+      },
+      {
+       "chunk": "B:C002:70",
+       "paragraphes": [
+        "70"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      }
+     ],
+     "tokens@5": 803,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      }
+     ],
+     "tokens@5": 765,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      },
+      {
+       "chunk": "B:C002:92",
+       "paragraphes": [
+        "92"
+       ]
+      }
+     ],
+     "tokens@5": 951,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre de la couverture restante",
+       "paragraphes": [
+        "def:passif au titre de la couverture restante"
+       ]
+      }
+     ],
+     "tokens@5": 1120,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:77",
+       "paragraphes": [
+        "77"
+       ]
+      }
+     ],
+     "tokens@5": 991,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "A · dense · bge-m3": {
+   "global": {
+    "recall@1": 0.0,
+    "recall@3": 0.133,
+    "recall@5": 0.2,
+    "recall@10": 0.4,
+    "recall@1000tok": 0.067,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.095,
+    "ndcg@5": 0.104,
+    "tokens@5": 2411,
+    "latence_p50_ms": 339.3,
+    "latence_p95_ms": 495.1
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.095
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0124",
+       "paragraphes": [
+        "C9",
+        "C9A",
+        "C10",
+        "C11",
+        "C12",
+        "C13"
+       ]
+      },
+      {
+       "chunk": "A:C002:0114",
+       "paragraphes": [
+        "B122",
+        "B123"
+       ]
+      },
+      {
+       "chunk": "A:C002:0133",
+       "paragraphes": [
+        "C21",
+        "C22",
+        "C22A",
+        "C23",
+        "C24"
+       ]
+      }
+     ],
+     "tokens@5": 2415,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0019",
+       "paragraphes": [
+        "40",
+        "41",
+        "42",
+        "43"
+       ]
+      },
+      {
+       "chunk": "A:C002:0101",
+       "paragraphes": [
+        "B94",
+        "B95",
+        "B95A",
+        "B95B"
+       ]
+      },
+      {
+       "chunk": "A:C002:0026",
+       "paragraphes": [
+        "55",
+        "56",
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 2391,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.125,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0005",
+       "paragraphes": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+       ]
+      },
+      {
+       "chunk": "A:C002:0007",
+       "paragraphes": [
+        "7",
+        "8",
+        "8A"
+       ]
+      }
+     ],
+     "tokens@5": 2438,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0029",
+       "paragraphes": [
+        "64",
+        "65",
+        "65A",
+        "66"
+       ]
+      },
+      {
+       "chunk": "A:C002:0129",
+       "paragraphes": [
+        "C17",
+        "C17A",
+        "C18"
+       ]
+      },
+      {
+       "chunk": "A:C002:0023",
+       "paragraphes": [
+        "48",
+        "49",
+        "50"
+       ]
+      }
+     ],
+     "tokens@5": 2471,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0099",
+       "paragraphes": [
+        "B88",
+        "B89",
+        "B90",
+        "B91"
+       ]
+      },
+      {
+       "chunk": "A:C002:0098",
+       "paragraphes": [
+        "B86",
+        "B87",
+        "B88"
+       ]
+      },
+      {
+       "chunk": "A:C002:0097",
+       "paragraphes": [
+        "B83",
+        "B84",
+        "B85",
+        "B86"
+       ]
+      }
+     ],
+     "tokens@5": 2362,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      },
+      {
+       "chunk": "A:C002:0076",
+       "paragraphes": [
+        "B41",
+        "B42"
+       ]
+      },
+      {
+       "chunk": "A:C002:0128",
+       "paragraphes": [
+        "C16A",
+        "C16B",
+        "C16C",
+        "C17"
+       ]
+      }
+     ],
+     "tokens@5": 2409,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0040",
+       "paragraphes": [
+        "93",
+        "94",
+        "95",
+        "96",
+        "97"
+       ]
+      },
+      {
+       "chunk": "A:C002:0009",
+       "paragraphes": [
+        "11",
+        "12",
+        "13",
+        "14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 2416,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0045",
+       "paragraphes": [
+        "106",
+        "107",
+        "108",
+        "109",
+        "109A",
+        "110"
+       ]
+      },
+      {
+       "chunk": "A:C002:0028",
+       "paragraphes": [
+        "61",
+        "62",
+        "62A",
+        "63",
+        "64"
+       ]
+      },
+      {
+       "chunk": "A:C002:0035",
+       "paragraphes": [
+        "77",
+        "78",
+        "79"
+       ]
+      }
+     ],
+     "tokens@5": 2422,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "129",
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      }
+     ],
+     "tokens@5": 2445,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0040",
+       "paragraphes": [
+        "93",
+        "94",
+        "95",
+        "96",
+        "97"
+       ]
+      }
+     ],
+     "tokens@5": 2336,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0011",
+       "paragraphes": [
+        "18",
+        "19",
+        "20",
+        "21"
+       ]
+      },
+      {
+       "chunk": "A:C002:0025",
+       "paragraphes": [
+        "53",
+        "54",
+        "55"
+       ]
+      },
+      {
+       "chunk": "A:C002:0027",
+       "paragraphes": [
+        "57",
+        "58",
+        "59",
+        "60",
+        "61"
+       ]
+      }
+     ],
+     "tokens@5": 2441,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0056",
+       "paragraphes": [
+        "def:contrat d'assurance avec éléments de participation directe",
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré",
+        "def:composante investissement",
+        "def:contrat d'investissement avec éléments de participation discrétionnaire"
+       ]
+      },
+      {
+       "chunk": "A:C002:0112",
+       "paragraphes": [
+        "B119B",
+        "B119C",
+        "B119D",
+        "B119E",
+        "B119F"
+       ]
+      },
+      {
+       "chunk": "A:C002:0055",
+       "paragraphes": [
+        "def:groupe de contrats d'assurance",
+        "def:flux de trésorerie liés aux frais d'acquisition",
+        "def:contrat d'assurance",
+        "def:services prévus au contrat d'assurance",
+        "def:contrat d'assurance avec éléments de participation directe"
+       ]
+      }
+     ],
+     "tokens@5": 2388,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0137",
+       "paragraphes": [
+        "C31",
+        "C32",
+        "C33",
+        "C34"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      }
+     ],
+     "tokens@5": 2369,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0082",
+       "paragraphes": [
+        "B55",
+        "B56",
+        "B57",
+        "B58"
+       ]
+      },
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      },
+      {
+       "chunk": "A:C002:0108",
+       "paragraphes": [
+        "B107",
+        "B108",
+        "B109",
+        "B110",
+        "B111"
+       ]
+      }
+     ],
+     "tokens@5": 2411,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0042",
+       "paragraphes": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "104"
+       ]
+      },
+      {
+       "chunk": "A:C002:0037",
+       "paragraphes": [
+        "85",
+        "86",
+        "87",
+        "87A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0045",
+       "paragraphes": [
+        "106",
+        "107",
+        "108",
+        "109",
+        "109A",
+        "110"
+       ]
+      }
+     ],
+     "tokens@5": 2456,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "A · hybrid · bge-m3": {
+   "global": {
+    "recall@1": 0.0,
+    "recall@3": 0.2,
+    "recall@5": 0.267,
+    "recall@10": 0.4,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.135,
+    "ndcg@5": 0.155,
+    "tokens@5": 2401,
+    "latence_p50_ms": 112.8,
+    "latence_p95_ms": 144.2
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.267,
+     "mrr@10": 0.135
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0067",
+       "paragraphes": [
+        "B26"
+       ]
+      },
+      {
+       "chunk": "A:C002:0056",
+       "paragraphes": [
+        "def:contrat d'assurance avec éléments de participation directe",
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré",
+        "def:composante investissement",
+        "def:contrat d'investissement avec éléments de participation discrétionnaire"
+       ]
+      },
+      {
+       "chunk": "A:C002:0042",
+       "paragraphes": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "104"
+       ]
+      }
+     ],
+     "tokens@5": 2415,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0019",
+       "paragraphes": [
+        "40",
+        "41",
+        "42",
+        "43"
+       ]
+      },
+      {
+       "chunk": "A:C002:0025",
+       "paragraphes": [
+        "53",
+        "54",
+        "55"
+       ]
+      },
+      {
+       "chunk": "A:C002:0101",
+       "paragraphes": [
+        "B94",
+        "B95",
+        "B95A",
+        "B95B"
+       ]
+      }
+     ],
+     "tokens@5": 2391,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0007",
+       "paragraphes": [
+        "7",
+        "8",
+        "8A"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0005",
+       "paragraphes": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+       ]
+      }
+     ],
+     "tokens@5": 2434,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0029",
+       "paragraphes": [
+        "64",
+        "65",
+        "65A",
+        "66"
+       ]
+      },
+      {
+       "chunk": "A:C002:0023",
+       "paragraphes": [
+        "48",
+        "49",
+        "50"
+       ]
+      },
+      {
+       "chunk": "A:C002:0013",
+       "paragraphes": [
+        "25",
+        "26",
+        "27",
+        "28",
+        "28A"
+       ]
+      }
+     ],
+     "tokens@5": 2419,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0098",
+       "paragraphes": [
+        "B86",
+        "B87",
+        "B88"
+       ]
+      },
+      {
+       "chunk": "A:C002:0100",
+       "paragraphes": [
+        "B91",
+        "B92",
+        "B93",
+        "B94"
+       ]
+      },
+      {
+       "chunk": "A:C002:0099",
+       "paragraphes": [
+        "B88",
+        "B89",
+        "B90",
+        "B91"
+       ]
+      }
+     ],
+     "tokens@5": 2369,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      },
+      {
+       "chunk": "A:C002:0076",
+       "paragraphes": [
+        "B41",
+        "B42"
+       ]
+      },
+      {
+       "chunk": "A:C002:0026",
+       "paragraphes": [
+        "55",
+        "56",
+        "57"
+       ]
+      }
+     ],
+     "tokens@5": 2402,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0040",
+       "paragraphes": [
+        "93",
+        "94",
+        "95",
+        "96",
+        "97"
+       ]
+      },
+      {
+       "chunk": "A:C002:0009",
+       "paragraphes": [
+        "11",
+        "12",
+        "13",
+        "14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 2392,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0102",
+       "paragraphes": [
+        "B95B",
+        "B95C",
+        "B95D",
+        "B95E"
+       ]
+      },
+      {
+       "chunk": "A:C002:0025",
+       "paragraphes": [
+        "53",
+        "54",
+        "55"
+       ]
+      },
+      {
+       "chunk": "A:C002:0029",
+       "paragraphes": [
+        "64",
+        "65",
+        "65A",
+        "66"
+       ]
+      }
+     ],
+     "tokens@5": 2449,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0052",
+       "paragraphes": [
+        "129",
+        "130",
+        "131",
+        "132"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0076",
+       "paragraphes": [
+        "B41",
+        "B42"
+       ]
+      }
+     ],
+     "tokens@5": 2432,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0002",
+       "paragraphes": [
+        "cons-9",
+        "cons-10",
+        "cons-11",
+        "cons-12",
+        "cons-13",
+        "cons-14"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      }
+     ],
+     "tokens@5": 2357,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0116",
+       "paragraphes": [
+        "B124",
+        "B125",
+        "B126",
+        "B127",
+        "B128"
+       ]
+      },
+      {
+       "chunk": "A:C002:0024",
+       "paragraphes": [
+        "50",
+        "51",
+        "52",
+        "53"
+       ]
+      },
+      {
+       "chunk": "A:C002:0011",
+       "paragraphes": [
+        "18",
+        "19",
+        "20",
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 2386,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0055",
+       "paragraphes": [
+        "def:groupe de contrats d'assurance",
+        "def:flux de trésorerie liés aux frais d'acquisition",
+        "def:contrat d'assurance",
+        "def:services prévus au contrat d'assurance",
+        "def:contrat d'assurance avec éléments de participation directe"
+       ]
+      },
+      {
+       "chunk": "A:C002:0056",
+       "paragraphes": [
+        "def:contrat d'assurance avec éléments de participation directe",
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré",
+        "def:composante investissement",
+        "def:contrat d'investissement avec éléments de participation discrétionnaire"
+       ]
+      },
+      {
+       "chunk": "A:C002:0123",
+       "paragraphes": [
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+       ]
+      }
+     ],
+     "tokens@5": 2471,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0121",
+       "paragraphes": [
+        "B137",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+       ]
+      },
+      {
+       "chunk": "A:C002:0000",
+       "paragraphes": [
+        "cons-1",
+        "cons-2",
+        "cons-3",
+        "cons-4",
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "A:C002:0137",
+       "paragraphes": [
+        "C31",
+        "C32",
+        "C33",
+        "C34"
+       ]
+      }
+     ],
+     "tokens@5": 2368,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0082",
+       "paragraphes": [
+        "B55",
+        "B56",
+        "B57",
+        "B58"
+       ]
+      },
+      {
+       "chunk": "A:C002:0043",
+       "paragraphes": [
+        "104",
+        "105"
+       ]
+      },
+      {
+       "chunk": "A:C002:0087",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 2357,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "A:C002:0067",
+       "paragraphes": [
+        "B26"
+       ]
+      },
+      {
+       "chunk": "A:C002:0042",
+       "paragraphes": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "104"
+       ]
+      },
+      {
+       "chunk": "A:C002:0024",
+       "paragraphes": [
+        "50",
+        "51",
+        "52",
+        "53"
+       ]
+      }
+     ],
+     "tokens@5": 2377,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.125,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · dense · bge-m3": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.2,
+    "recall@5": 0.2,
+    "recall@10": 0.2,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.133,
+    "ndcg@5": 0.151,
+    "tokens@5": 1031,
+    "latence_p50_ms": 112.7,
+    "latence_p95_ms": 141.3
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.133
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:100",
+       "paragraphes": [
+        "100"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      },
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      }
+     ],
+     "tokens@5": 980,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      },
+      {
+       "chunk": "B:C002:40",
+       "paragraphes": [
+        "40"
+       ]
+      }
+     ],
+     "tokens@5": 824,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:8",
+       "paragraphes": [
+        "8"
+       ]
+      }
+     ],
+     "tokens@5": 1356,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:23",
+       "paragraphes": [
+        "23",
+        "24"
+       ]
+      }
+     ],
+     "tokens@5": 962,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      }
+     ],
+     "tokens@5": 836,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:42",
+       "paragraphes": [
+        "42"
+       ]
+      }
+     ],
+     "tokens@5": 1235,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      }
+     ],
+     "tokens@5": 1221,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:27",
+       "paragraphes": [
+        "27",
+        "28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95C",
+       "paragraphes": [
+        "B95C"
+       ]
+      },
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      }
+     ],
+     "tokens@5": 918,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:42",
+       "paragraphes": [
+        "42"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      }
+     ],
+     "tokens@5": 1264,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      },
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 794,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      },
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:18",
+       "paragraphes": [
+        "18"
+       ]
+      }
+     ],
+     "tokens@5": 917,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B101",
+       "paragraphes": [
+        "B101"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:contrat d'assurance avec éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance avec éléments de participation directe"
+       ]
+      }
+     ],
+     "tokens@5": 916,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C3",
+       "paragraphes": [
+        "C3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C5A",
+       "paragraphes": [
+        "C5A"
+       ]
+      },
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      }
+     ],
+     "tokens@5": 895,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:42",
+       "paragraphes": [
+        "42"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#2",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1414,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:107",
+       "paragraphes": [
+        "107"
+       ]
+      }
+     ],
+     "tokens@5": 931,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · hybrid · bge-m3": {
+   "global": {
+    "recall@1": 0.133,
+    "recall@3": 0.133,
+    "recall@5": 0.2,
+    "recall@10": 0.333,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.168,
+    "ndcg@5": 0.162,
+    "tokens@5": 1087,
+    "latence_p50_ms": 111.6,
+    "latence_p95_ms": 138.4
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.168
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-5",
+       "paragraphes": [
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 901,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1062,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:8",
+       "paragraphes": [
+        "8"
+       ]
+      },
+      {
+       "chunk": "B:C002:8A",
+       "paragraphes": [
+        "8A"
+       ]
+      },
+      {
+       "chunk": "B:C002:6",
+       "paragraphes": [
+        "6",
+        "7"
+       ]
+      }
+     ],
+     "tokens@5": 1356,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:B35C",
+       "paragraphes": [
+        "B35C"
+       ]
+      }
+     ],
+     "tokens@5": 989,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      }
+     ],
+     "tokens@5": 1033,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:42",
+       "paragraphes": [
+        "42"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:ajustements liés à l'expérience",
+       "paragraphes": [
+        "def:ajustements liés à l'expérience"
+       ]
+      }
+     ],
+     "tokens@5": 1069,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      }
+     ],
+     "tokens@5": 1223,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95E",
+       "paragraphes": [
+        "B95E"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:27",
+       "paragraphes": [
+        "27",
+        "28"
+       ]
+      }
+     ],
+     "tokens@5": 805,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B58",
+       "paragraphes": [
+        "B58"
+       ]
+      },
+      {
+       "chunk": "B:C002:C9A",
+       "paragraphes": [
+        "C9A"
+       ]
+      }
+     ],
+     "tokens@5": 946,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      },
+      {
+       "chunk": "B:C002:C3",
+       "paragraphes": [
+        "C3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C32",
+       "paragraphes": [
+        "C32"
+       ]
+      }
+     ],
+     "tokens@5": 1108,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 937,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 865,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      }
+     ],
+     "tokens@5": 995,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1576,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 1445,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B0 · dense · bge-m3": {
+   "global": {
+    "recall@1": 0.067,
+    "recall@3": 0.133,
+    "recall@5": 0.133,
+    "recall@10": 0.2,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.1,
+    "ndcg@5": 0.1,
+    "tokens@5": 1133,
+    "latence_p50_ms": 115.4,
+    "latence_p95_ms": 137.8
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.1
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      },
+      {
+       "chunk": "B:C002:100",
+       "paragraphes": [
+        "100"
+       ]
+      }
+     ],
+     "tokens@5": 931,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 935,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:2",
+       "paragraphes": [
+        "2"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:8",
+       "paragraphes": [
+        "8"
+       ]
+      }
+     ],
+     "tokens@5": 1347,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:17",
+       "paragraphes": [
+        "17"
+       ]
+      }
+     ],
+     "tokens@5": 951,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 984,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      }
+     ],
+     "tokens@5": 1830,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:B72",
+       "paragraphes": [
+        "B72"
+       ]
+      },
+      {
+       "chunk": "B:C002:12",
+       "paragraphes": [
+        "12"
+       ]
+      }
+     ],
+     "tokens@5": 1344,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:27",
+       "paragraphes": [
+        "27",
+        "28"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:66A",
+       "paragraphes": [
+        "66A"
+       ]
+      }
+     ],
+     "tokens@5": 1184,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B72",
+       "paragraphes": [
+        "B72"
+       ]
+      }
+     ],
+     "tokens@5": 1308,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      }
+     ],
+     "tokens@5": 729,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      }
+     ],
+     "tokens@5": 955,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B101",
+       "paragraphes": [
+        "B101"
+       ]
+      },
+      {
+       "chunk": "B:C002:B104",
+       "paragraphes": [
+        "B104"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      }
+     ],
+     "tokens@5": 865,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C3",
+       "paragraphes": [
+        "C3"
+       ]
+      }
+     ],
+     "tokens@5": 904,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      }
+     ],
+     "tokens@5": 1219,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B26",
+       "paragraphes": [
+        "B26"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      }
+     ],
+     "tokens@5": 1505,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B0 · hybrid · bge-m3": {
+   "global": {
+    "recall@1": 0.0,
+    "recall@3": 0.133,
+    "recall@5": 0.133,
+    "recall@10": 0.267,
+    "recall@1000tok": 0.133,
+    "recall@2000tok": 0.2,
+    "mrr@10": 0.072,
+    "ndcg@5": 0.075,
+    "tokens@5": 1076,
+    "latence_p50_ms": 108.8,
+    "latence_p95_ms": 135.8
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.133,
+     "mrr@10": 0.072
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B42",
+       "paragraphes": [
+        "B42"
+       ]
+      },
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:C9A",
+       "paragraphes": [
+        "C9A"
+       ]
+      }
+     ],
+     "tokens@5": 896,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1111111111111111,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      },
+      {
+       "chunk": "B:C002:40",
+       "paragraphes": [
+        "40"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      }
+     ],
+     "tokens@5": 1255,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:8A",
+       "paragraphes": [
+        "8A"
+       ]
+      },
+      {
+       "chunk": "B:C002:6",
+       "paragraphes": [
+        "6",
+        "7"
+       ]
+      },
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      }
+     ],
+     "tokens@5": 1240,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:B35C",
+       "paragraphes": [
+        "B35C"
+       ]
+      }
+     ],
+     "tokens@5": 1038,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B87",
+       "paragraphes": [
+        "B87"
+       ]
+      }
+     ],
+     "tokens@5": 1033,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B96",
+       "paragraphes": [
+        "B96"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      }
+     ],
+     "tokens@5": 1617,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:11",
+       "paragraphes": [
+        "11"
+       ]
+      },
+      {
+       "chunk": "B:C002:12",
+       "paragraphes": [
+        "12"
+       ]
+      }
+     ],
+     "tokens@5": 847,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95E",
+       "paragraphes": [
+        "B95E"
+       ]
+      },
+      {
+       "chunk": "B:C002:66A",
+       "paragraphes": [
+        "66A"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      }
+     ],
+     "tokens@5": 769,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      }
+     ],
+     "tokens@5": 846,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      }
+     ],
+     "tokens@5": 729,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      }
+     ],
+     "tokens@5": 927,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.3333333333333333,
+     "ndcg@5": 0.5
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 737,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C1",
+       "paragraphes": [
+        "C1"
+       ]
+      },
+      {
+       "chunk": "B:C002:C4",
+       "paragraphes": [
+        "C4"
+       ]
+      },
+      {
+       "chunk": "B:C002:93",
+       "paragraphes": [
+        "93"
+       ]
+      }
+     ],
+     "tokens@5": 995,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1762,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      }
+     ],
+     "tokens@5": 1445,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · hybrid+glossaire · bge-m3": {
+   "global": {
+    "recall@1": 0.2,
+    "recall@3": 0.2,
+    "recall@5": 0.267,
+    "recall@10": 0.333,
+    "recall@1000tok": 0.267,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.223,
+    "ndcg@5": 0.229,
+    "tokens@5": 1119,
+    "latence_p50_ms": 114.6,
+    "latence_p95_ms": 166.2
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.267,
+     "mrr@10": 0.223
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-5",
+       "paragraphes": [
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 901,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1062,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      }
+     ],
+     "tokens@5": 915,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 869,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      }
+     ],
+     "tokens@5": 1033,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1204,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      }
+     ],
+     "tokens@5": 1223,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95E",
+       "paragraphes": [
+        "B95E"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:27",
+       "paragraphes": [
+        "27",
+        "28"
+       ]
+      }
+     ],
+     "tokens@5": 805,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1118,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      },
+      {
+       "chunk": "B:C002:C3",
+       "paragraphes": [
+        "C3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C32",
+       "paragraphes": [
+        "C32"
+       ]
+      }
+     ],
+     "tokens@5": 1108,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 937,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 865,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      }
+     ],
+     "tokens@5": 1299,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      }
+     ],
+     "tokens@5": 1838,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B6",
+       "paragraphes": [
+        "B6"
+       ]
+      }
+     ],
+     "tokens@5": 1611,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · hybrid+glossaire+questions · bge-m3": {
+   "global": {
+    "recall@1": 0.133,
+    "recall@3": 0.2,
+    "recall@5": 0.2,
+    "recall@10": 0.333,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.333,
+    "mrr@10": 0.187,
+    "ndcg@5": 0.175,
+    "tokens@5": 1095,
+    "latence_p50_ms": 115.2,
+    "latence_p95_ms": 183.6
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.2,
+     "mrr@10": 0.187
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 1204,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95B",
+       "paragraphes": [
+        "B95B"
+       ]
+      },
+      {
+       "chunk": "B:C002:56",
+       "paragraphes": [
+        "56"
+       ]
+      }
+     ],
+     "tokens@5": 1119,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:108",
+       "paragraphes": [
+        "108"
+       ]
+      }
+     ],
+     "tokens@5": 825,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95A",
+       "paragraphes": [
+        "B95A"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 903,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 880,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1405,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B126",
+       "paragraphes": [
+        "B126"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      }
+     ],
+     "tokens@5": 1213,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95A",
+       "paragraphes": [
+        "B95A"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 1140,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      }
+     ],
+     "tokens@5": 1118,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:3",
+       "paragraphes": [
+        "3"
+       ]
+      }
+     ],
+     "tokens@5": 915,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 961,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.14285714285714285,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:B101",
+       "paragraphes": [
+        "B101"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 916,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:C18",
+       "paragraphes": [
+        "C18"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      }
+     ],
+     "tokens@5": 1231,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1503,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      }
+     ],
+     "tokens@5": 1086,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · hybrid+glossaire+graphe · bge-m3": {
+   "global": {
+    "recall@1": 0.2,
+    "recall@3": 0.2,
+    "recall@5": 0.267,
+    "recall@10": 0.333,
+    "recall@1000tok": 0.267,
+    "recall@2000tok": 0.267,
+    "mrr@10": 0.223,
+    "ndcg@5": 0.229,
+    "tokens@5": 1110,
+    "latence_p50_ms": 120.0,
+    "latence_p95_ms": 183.0
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.267,
+     "mrr@10": 0.223
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-5",
+       "paragraphes": [
+        "cons-5"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      }
+     ],
+     "tokens@5": 901,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      },
+      {
+       "chunk": "B:C002:41",
+       "paragraphes": [
+        "41"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95",
+       "paragraphes": [
+        "B95"
+       ]
+      }
+     ],
+     "tokens@5": 1062,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      }
+     ],
+     "tokens@5": 867,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:48",
+       "paragraphes": [
+        "48"
+       ]
+      },
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 1135,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B86",
+       "paragraphes": [
+        "B86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      }
+     ],
+     "tokens@5": 966,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:57",
+       "paragraphes": [
+        "57"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1220,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      },
+      {
+       "chunk": "B:C002:35",
+       "paragraphes": [
+        "35"
+       ]
+      }
+     ],
+     "tokens@5": 1223,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B95E",
+       "paragraphes": [
+        "B95E"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      },
+      {
+       "chunk": "B:C002:27",
+       "paragraphes": [
+        "27",
+        "28"
+       ]
+      }
+     ],
+     "tokens@5": 805,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1195,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      },
+      {
+       "chunk": "B:C002:C3",
+       "paragraphes": [
+        "C3"
+       ]
+      },
+      {
+       "chunk": "B:C002:C32",
+       "paragraphes": [
+        "C32"
+       ]
+      }
+     ],
+     "tokens@5": 1108,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:53",
+       "paragraphes": [
+        "53"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 1285,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:def:contrat d'assurance sans éléments de participation directe",
+       "paragraphes": [
+        "def:contrat d'assurance sans éléments de participation directe",
+        "def:risque d'assurance",
+        "def:événement assuré"
+       ]
+      },
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 865,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.25,
+     "ndcg@5": 0.43067655807339306
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:116",
+       "paragraphes": [
+        "116"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      }
+     ],
+     "tokens@5": 1065,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B57",
+       "paragraphes": [
+        "B57"
+       ]
+      }
+     ],
+     "tokens@5": 1838,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      },
+      {
+       "chunk": "B:C002:B6",
+       "paragraphes": [
+        "B6"
+       ]
+      }
+     ],
+     "tokens@5": 1119,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    }
+   ]
+  },
+  "B · hybrid+glossaire+questions+graphe · bge-m3": {
+   "global": {
+    "recall@1": 0.133,
+    "recall@3": 0.2,
+    "recall@5": 0.267,
+    "recall@10": 0.467,
+    "recall@1000tok": 0.2,
+    "recall@2000tok": 0.4,
+    "mrr@10": 0.204,
+    "ndcg@5": 0.201,
+    "tokens@5": 1088,
+    "latence_p50_ms": 121.3,
+    "latence_p95_ms": 167.4
+   },
+   "par_niveau": {
+    "cours": {
+     "n": 15,
+     "recall@5": 0.267,
+     "mrr@10": 0.204
+    }
+   },
+   "questions": [
+    {
+     "id": "c01",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:78",
+       "paragraphes": [
+        "78"
+       ]
+      },
+      {
+       "chunk": "B:C002:B123",
+       "paragraphes": [
+        "B123"
+       ]
+      },
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      }
+     ],
+     "tokens@5": 1204,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.16666666666666666,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c02",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95B",
+       "paragraphes": [
+        "B95B"
+       ]
+      },
+      {
+       "chunk": "B:C002:56",
+       "paragraphes": [
+        "56"
+       ]
+      }
+     ],
+     "tokens@5": 1220,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c03",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:49",
+       "paragraphes": [
+        "49"
+       ]
+      },
+      {
+       "chunk": "B:C002:108",
+       "paragraphes": [
+        "108"
+       ]
+      }
+     ],
+     "tokens@5": 778,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c04",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:47",
+       "paragraphes": [
+        "47"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95A",
+       "paragraphes": [
+        "B95A"
+       ]
+      },
+      {
+       "chunk": "B:C002:21",
+       "paragraphes": [
+        "21"
+       ]
+      }
+     ],
+     "tokens@5": 855,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c05",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B92",
+       "paragraphes": [
+        "B92"
+       ]
+      },
+      {
+       "chunk": "B:C002:B91",
+       "paragraphes": [
+        "B91"
+       ]
+      },
+      {
+       "chunk": "B:C002:B89",
+       "paragraphes": [
+        "B89"
+       ]
+      }
+     ],
+     "tokens@5": 802,
+     "recall@1": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 1.0,
+     "ndcg@5": 1.0
+    },
+    {
+     "id": "c06",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:104",
+       "paragraphes": [
+        "104"
+       ]
+      },
+      {
+       "chunk": "B:C002:B41",
+       "paragraphes": [
+        "B41"
+       ]
+      }
+     ],
+     "tokens@5": 1357,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c07",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:55",
+       "paragraphes": [
+        "55"
+       ]
+      },
+      {
+       "chunk": "B:C002:B126",
+       "paragraphes": [
+        "B126"
+       ]
+      },
+      {
+       "chunk": "B:C002:106",
+       "paragraphes": [
+        "106"
+       ]
+      }
+     ],
+     "tokens@5": 1270,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c08",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:62",
+       "paragraphes": [
+        "62"
+       ]
+      },
+      {
+       "chunk": "B:C002:B95A",
+       "paragraphes": [
+        "B95A"
+       ]
+      },
+      {
+       "chunk": "B:C002:65",
+       "paragraphes": [
+        "65"
+       ]
+      }
+     ],
+     "tokens@5": 1000,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c09",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:def:passif au titre des sinistres survenus",
+       "paragraphes": [
+        "def:passif au titre des sinistres survenus"
+       ]
+      },
+      {
+       "chunk": "B:C002:C28",
+       "paragraphes": [
+        "C28"
+       ]
+      }
+     ],
+     "tokens@5": 1172,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c10",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B137",
+       "paragraphes": [
+        "B137"
+       ]
+      },
+      {
+       "chunk": "B:C002:cons-3",
+       "paragraphes": [
+        "cons-3"
+       ]
+      },
+      {
+       "chunk": "B:C002:3",
+       "paragraphes": [
+        "3"
+       ]
+      }
+     ],
+     "tokens@5": 915,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c11",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:97",
+       "paragraphes": [
+        "97"
+       ]
+      },
+      {
+       "chunk": "B:C002:69",
+       "paragraphes": [
+        "69"
+       ]
+      },
+      {
+       "chunk": "B:C002:59",
+       "paragraphes": [
+        "59"
+       ]
+      }
+     ],
+     "tokens@5": 1050,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.2,
+     "ndcg@5": 0.38685280723454163
+    },
+    {
+     "id": "c12",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B109",
+       "paragraphes": [
+        "B109",
+        "B110"
+       ]
+      },
+      {
+       "chunk": "B:C002:B101",
+       "paragraphes": [
+        "B101"
+       ]
+      },
+      {
+       "chunk": "B:C002:111",
+       "paragraphes": [
+        "111",
+        "112"
+       ]
+      }
+     ],
+     "tokens@5": 1023,
+     "recall@1": 0.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 1.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.5,
+     "ndcg@5": 0.6309297535714575
+    },
+    {
+     "id": "c13",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:C24",
+       "paragraphes": [
+        "C24"
+       ]
+      },
+      {
+       "chunk": "B:C002:C18",
+       "paragraphes": [
+        "C18"
+       ]
+      },
+      {
+       "chunk": "B:C002:118",
+       "paragraphes": [
+        "118"
+       ]
+      }
+     ],
+     "tokens@5": 1144,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c14",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:B5",
+       "paragraphes": [
+        "B5"
+       ]
+      },
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B65#1",
+       "paragraphes": [
+        "B65"
+       ]
+      }
+     ],
+     "tokens@5": 1503,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 0.0,
+     "mrr@10": 0.0,
+     "ndcg@5": 0.0
+    },
+    {
+     "id": "c15",
+     "niveau": "cours",
+     "top3": [
+      {
+       "chunk": "B:C002:130",
+       "paragraphes": [
+        "130"
+       ]
+      },
+      {
+       "chunk": "B:C002:B133",
+       "paragraphes": [
+        "B133"
+       ]
+      },
+      {
+       "chunk": "B:C002:86",
+       "paragraphes": [
+        "86"
+       ]
+      }
+     ],
+     "tokens@5": 1024,
+     "recall@1": 0.0,
+     "recall@3": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "recall@1000tok": 0.0,
+     "recall@2000tok": 1.0,
+     "mrr@10": 0.1,
+     "ndcg@5": 0.0
+    }
+   ]
+  }
+ },
+ "comparaisons": {
+  "A · bm25 → B · bm25": {
+   "recall@5": [
+    0.0,
+    -0.2,
+    0.2
+   ],
+   "recall@1000tok": [
+    0.0,
+    -0.2,
+    0.2
+   ],
+   "mrr@10": [
+    -0.035,
+    -0.107,
+    0.011
+   ]
+  },
+  "B · bm25 → B0 · bm25": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    0.001,
+    -0.017,
+    0.02
+   ]
+  },
+  "A · dense · bge-m3 → B · dense · bge-m3": {
+   "recall@5": [
+    0.0,
+    -0.2,
+    0.2
+   ],
+   "recall@1000tok": [
+    0.133,
+    0.0,
+    0.333
+   ],
+   "mrr@10": [
+    0.039,
+    -0.073,
+    0.192
+   ]
+  },
+  "A · hybrid · bge-m3 → B · hybrid · bge-m3": {
+   "recall@5": [
+    -0.067,
+    -0.267,
+    0.133
+   ],
+   "recall@1000tok": [
+    0.0,
+    -0.2,
+    0.2
+   ],
+   "mrr@10": [
+    0.033,
+    -0.086,
+    0.153
+   ]
+  },
+  "B · dense · bge-m3 → B0 · dense · bge-m3": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.033,
+    -0.089,
+    0.0
+   ]
+  },
+  "B · hybrid · bge-m3 → B0 · hybrid · bge-m3": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.095,
+    -0.207,
+    -0.01
+   ]
+  },
+  "B · bm25+glossaire → B · bm25+glossaire+questions": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.031,
+    -0.108,
+    0.022
+   ]
+  },
+  "B · bm25+glossaire → B · bm25+glossaire+graphe": {
+   "recall@5": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "recall@1000tok": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "mrr@10": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "B · bm25+glossaire → B · bm25+glossaire+questions+graphe": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.036,
+    -0.113,
+    0.013
+   ]
+  },
+  "B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+questions · bge-m3": {
+   "recall@5": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.036,
+    -0.167,
+    0.051
+   ]
+  },
+  "B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+graphe · bge-m3": {
+   "recall@5": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "recall@1000tok": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "mrr@10": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "B · hybrid+glossaire · bge-m3 → B · hybrid+glossaire+questions+graphe · bge-m3": {
+   "recall@5": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "recall@1000tok": [
+    -0.067,
+    -0.2,
+    0.0
+   ],
+   "mrr@10": [
+    -0.019,
+    -0.144,
+    0.064
+   ]
+  },
+  "B · bm25 → B · bm25+glossaire": {
+   "recall@5": [
+    0.067,
+    0.0,
+    0.2
+   ],
+   "recall@1000tok": [
+    0.067,
+    0.0,
+    0.2
+   ],
+   "mrr@10": [
+    0.067,
+    0.0,
+    0.2
+   ]
+  },
+  "B · hybrid · bge-m3 → B · hybrid+glossaire · bge-m3": {
+   "recall@5": [
+    0.067,
+    0.0,
+    0.2
+   ],
+   "recall@1000tok": [
+    0.067,
+    0.0,
+    0.2
+   ],
+   "mrr@10": [
+    0.056,
+    -0.022,
+    0.2
+   ]
+  }
+ }
+}

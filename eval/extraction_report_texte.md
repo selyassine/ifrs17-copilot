@@ -1,6 +1,6 @@
 # Évaluation de l'extracteur — mode texte
 
-Généré le 20261004-152427 par `python -m eval.eval_extraction --mode texte`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
+Généré le 20261024-153718 par `python -m eval.eval_extraction --mode texte`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
 
 | Mesure | Valeur |
 | --- | --- |
@@ -14,7 +14,7 @@ Généré le 20261004-152427 par `python -m eval.eval_extraction --mode texte`. 
 | Feu vert fiable (justes parmi les « ok ») | 15/15 |
 | Alertes sur les documents faux | — |
 | Relances de correction | 1 |
-| Latence médiane (ms) | 1255.3 |
+| Latence médiane (ms) | 6253.7 |
 
 ## Exactitude par champ
 
@@ -25,6 +25,8 @@ Généré le 20261004-152427 par `python -m eval.eval_extraction --mode texte`. 
 | unit_multiplier | 1.0 |
 | premiums | 1.0 |
 | outflows | 1.0 |
+| recoveries | 1.0 |
+| acquisition_costs | 1.0 |
 | coverage_units | 1.0 |
 | discount_rates | 1.0 |
 | risk_adjustment_pct | 1.0 |
@@ -41,7 +43,7 @@ Généré le 20261004-152427 par `python -m eval.eval_extraction --mode texte`. 
 | ext06 | recit | oui | ok | réussi | — | 293231.528 | 293231.528 | — |
 | ext07 | lignes | non | ok | réussi | — | 487.1279 | 487.1279 | — |
 | ext08 | colonnes | oui | ok | réussi | — | -301.9358 | -301.9358 | — |
-| ext09 | recit | non | ok | réussi | — | 1646.098 | 1646.108 | — |
+| ext09 | recit | non | ok | réussi | — | 1646.108 | 1646.108 | — |
 | ext10 | lignes | oui | ok | réussi | — | 273594.904 | 273594.904 | — |
 | ext11 | colonnes | non | ok | réussi | — | 1006.3176 | 1006.3176 | — |
 | ext12 | recit | oui | ok | réussi | — | -660448.3027 | -660448.3027 | — |

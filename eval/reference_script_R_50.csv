@@ -1,0 +1,51 @@
+dossier,compagnie,code_naic,branche,groupe,date_evaluation,prime,sp_attendu,VA_sorties,RA,CSM,Perte_onereux,statut,duree_couverture,methode_eligible,sinistres_attendus_total,sinistres_reels_total,ecart_reel_attendu,ecart_pct
+dossier_01.pdf,MO Employers Mut Ins Co,10191,Accidents du travail,WC-1997-10191,1997-01-01,75381,0.5042,35249.34,1057.48,39074.18,0,bénéficiaire,1,PAA (§53(b)) ou BBA,38010.75,46304,8293.25,21.8
+dossier_02.pdf,Beacon Mut Ins Co,24017,Accidents du travail,WC-1997-24017,1997-01-01,61063,0.3835,21140.04,634.2,39288.76,0,bénéficiaire,1,PAA (§53(b)) ou BBA,23414.8,38390,14975.2,64
+dossier_03.pdf,Lumbermens Underwriting Alliance,23108,Accidents du travail,WC-1997-23108,1997-01-01,49456,0.5574,24320,729.6,24406.4,0,bénéficiaire,1,PAA (§53(b)) ou BBA,27565.48,20734,-6831.48,-24.8
+dossier_04.pdf,State Fund Mut Ins Co,11347,Accidents du travail,WC-1997-11347,1997-01-01,44202,0.7501,28621.66,858.65,14721.69,0,bénéficiaire,1,PAA (§53(b)) ou BBA,33157.53,34372,1214.47,3.7
+dossier_05.pdf,FFVA Mut Ins Co,10385,Accidents du travail,WC-1997-10385,1997-01-01,40957,0.6421,23377.47,701.32,16878.2,0,bénéficiaire,1,PAA (§53(b)) ou BBA,26300.05,26049,-251.05,-1
+dossier_06.pdf,Dorinco Rein Co,33499,Auto particuliers (RC),PPA-1997-33499,1997-01-01,58653,1.0021,51809.86,1554.3,5288.84,0,bénéficiaire,1,PAA (§53(b)) ou BBA,58774.1,37788,-20986.1,-35.7
+dossier_07.pdf,Hastings Mut Ins Co,14176,Auto particuliers (RC),PPA-1997-14176,1997-01-01,32618,0.8036,23581.45,707.44,8329.1,0,bénéficiaire,1,PAA (§53(b)) ou BBA,26213.24,19629,-6584.24,-25.1
+dossier_08.pdf,Cooperativa D Seguros Multiples PR,18163,Auto particuliers (RC),PPA-1997-18163,1997-01-01,23790,0.7844,17257.11,517.71,6015.18,0,bénéficiaire,1,PAA (§53(b)) ou BBA,18660.38,18523,-137.38,-0.7
+dossier_09.pdf,Preferred Mut Ins Co,15024,Auto particuliers (RC),PPA-1997-15024,1997-01-01,22539,0.8511,17114.47,513.43,4911.09,0,bénéficiaire,1,PAA (§53(b)) ou BBA,19183.15,16951,-2232.15,-11.6
+dossier_10.pdf,State-Wide Ins Co,25275,Auto particuliers (RC),PPA-1997-25275,1997-01-01,21601,0.7166,13795.25,413.86,7391.9,0,bénéficiaire,1,PAA (§53(b)) ou BBA,15479.37,16454,974.63,6.3
+dossier_11.pdf,Century-Natl Ins Co,26905,Auto commerciale (RC),CA-1997-26905,1997-01-01,24352,0.7156,15554.49,466.63,8330.88,0,bénéficiaire,1,PAA (§53(b)) ou BBA,17426.14,16223,-1203.14,-6.9
+dossier_12.pdf,Lancer Ins Co,26077,Auto commerciale (RC),CA-1997-26077,1997-01-01,23687,0.752,15213.4,456.4,8017.2,0,bénéficiaire,1,PAA (§53(b)) ou BBA,17813.29,17304,-509.29,-2.9
+dossier_13.pdf,Vanliner Ins Co,21172,Auto commerciale (RC),CA-1997-21172,1997-01-01,21085,0.9579,17127.97,513.84,3443.19,0,bénéficiaire,1,PAA (§53(b)) ou BBA,20196.59,19258,-938.59,-4.6
+dossier_14.pdf,Church Mut Ins Co,18767,Auto commerciale (RC),CA-1997-18767,1997-01-01,16633,0.6539,9747.17,292.42,6593.41,0,bénéficiaire,1,PAA (§53(b)) ou BBA,10875.7,9276,-1599.7,-14.7
+dossier_15.pdf,Yasuda Fire & Marine Ins Co Of Amer,11126,Auto commerciale (RC),CA-1997-11126,1997-01-01,10740,1.0484,9892.3,296.77,550.93,0,bénéficiaire,1,PAA (§53(b)) ou BBA,11259.51,7752,-3507.51,-31.2
+dossier_16.pdf,Housing Authority Rrg Inc,26797,Responsabilité civile générale,OL-1997-26797,1997-01-01,18933,0.8561,12685.3,380.56,5867.15,0,bénéficiaire,1,PAA (§53(b)) ou BBA,16208.62,8431,-7777.62,-48
+dossier_17.pdf,Toa-Re Ins Co Of Amer,42439,Responsabilité civile générale,OL-1997-42439,1997-01-01,8348,0.5837,3814.99,114.45,4418.56,0,bénéficiaire,1,PAA (§53(b)) ou BBA,4873.13,7673,2799.87,57.5
+dossier_18.pdf,Federated Rural Electric Ins Corp,11118,Responsabilité civile générale,OL-1997-11118,1997-01-01,8065,1.1266,7671.5,230.15,163.35,0,bénéficiaire,1,PAA (§53(b)) ou BBA,9085.69,7141,-1944.69,-21.4
+dossier_19.pdf,Yasuda Fire & Marine Ins Co Of Amer,11126,Responsabilité civile générale,OL-1997-11126,1997-01-01,6729,0.2658,1472.8,44.18,5212.01,0,bénéficiaire,1,PAA (§53(b)) ou BBA,1788.54,1198,-590.54,-33
+dossier_20.pdf,American Agricultural Ins Co,10103,Responsabilité civile générale,OL-1997-10103,1997-01-01,6103,0.7529,3978.16,119.34,2005.49,0,bénéficiaire,1,PAA (§53(b)) ou BBA,4594.89,2095,-2499.89,-54.4
+dossier_21.pdf,Physicians Recip Insurers,41467,Responsabilité médicale,MM-1997-41467,1997-01-01,110832,1.3275,113843.03,3415.29,0,6426.32,onéreux,1,PAA (§53(b)) ou BBA,147129.41,101971,-45158.41,-30.7
+dossier_22.pdf,State Volunteer Mut Ins Co,33049,Responsabilité médicale,MM-1997-33049,1997-01-01,63383,0.9578,47262.88,1417.89,14702.24,0,bénéficiaire,1,PAA (§53(b)) ou BBA,60707.54,69355,8647.46,14.2
+dossier_23.pdf,MHA Ins Co,33111,Responsabilité médicale,MM-1997-33111,1997-01-01,21843,0.5067,9459.13,283.77,12100.1,0,bénéficiaire,1,PAA (§53(b)) ou BBA,11068.91,21954,10885.09,98.3
+dossier_24.pdf,Louisiana Med Mut Ins Co,43656,Responsabilité médicale,MM-1997-43656,1997-01-01,19268,0.6323,9525.83,285.77,9456.39,0,bénéficiaire,1,PAA (§53(b)) ou BBA,12183.46,12105,-78.46,-0.6
+dossier_25.pdf,Dentists Ins Co,40975,Responsabilité médicale,MM-1997-40975,1997-01-01,18463,0.4191,6790.44,203.71,11468.85,0,bénéficiaire,1,PAA (§53(b)) ou BBA,7738.27,9170,1431.73,18.5
+dossier_26.pdf,Beacon Mut Ins Co,24017,Accidents du travail,WC-2007-24017,2007-01-01,124865,0.7512,83435.18,2503.06,38926.77,0,bénéficiaire,1,PAA (§53(b)) ou BBA,93800.19,84833,-8967.19,-9.6
+dossier_27.pdf,Alaska Nat Ins Co,38733,Accidents du travail,WC-2007-38733,2007-01-01,124231,0.5794,62747.35,1882.42,59601.23,0,bénéficiaire,1,PAA (§53(b)) ou BBA,71982.15,47356,-24626.15,-34.2
+dossier_28.pdf,State Fund Mut Ins Co,11347,Accidents du travail,WC-2007-11347,2007-01-01,105675,0.7883,72791.37,2183.74,30699.89,0,bénéficiaire,1,PAA (§53(b)) ou BBA,83302.92,60105,-23197.92,-27.8
+dossier_29.pdf,FFVA Mut Ins Co,10385,Accidents du travail,WC-2007-10385,2007-01-01,97303,0.5569,48327.89,1449.84,47525.28,0,bénéficiaire,1,PAA (§53(b)) ou BBA,54192.3,45843,-8349.3,-15.4
+dossier_30.pdf,Church Mut Ins Co,18767,Accidents du travail,WC-2007-18767,2007-01-01,70288,0.5199,32408.11,972.24,36907.65,0,bénéficiaire,1,PAA (§53(b)) ou BBA,36542.82,35768,-774.82,-2.1
+dossier_31.pdf,Dorinco Rein Co,33499,Auto particuliers (RC),PPA-2007-33499,2007-01-01,83794,0.7599,57964.68,1738.94,24090.38,0,bénéficiaire,1,PAA (§53(b)) ou BBA,63677.35,34315,-29362.35,-46.1
+dossier_32.pdf,Ocean Harbor Cas Ins Co,12360,Auto particuliers (RC),PPA-2007-12360,2007-01-01,52108,0.6606,31975.69,959.27,19173.04,0,bénéficiaire,1,PAA (§53(b)) ou BBA,34423.44,30911,-3512.44,-10.2
+dossier_33.pdf,State-Wide Ins Co,25275,Auto particuliers (RC),PPA-2007-25275,2007-01-01,48100,0.6255,27233.08,816.99,20049.92,0,bénéficiaire,1,PAA (§53(b)) ou BBA,30085.37,27791,-2294.37,-7.6
+dossier_34.pdf,Farmers Mut Ins Co Of NE,13889,Auto particuliers (RC),PPA-2007-13889,2007-01-01,38693,0.6472,22541.58,676.25,15475.18,0,bénéficiaire,1,PAA (§53(b)) ou BBA,25042.37,24802,-240.37,-1
+dossier_35.pdf,Preferred Mut Ins Co,15024,Auto particuliers (RC),PPA-2007-15024,2007-01-01,31300,0.7012,19620.62,588.62,11090.76,0,bénéficiaire,1,PAA (§53(b)) ou BBA,21948.88,19123,-2825.88,-12.9
+dossier_36.pdf,Lancer Ins Co,26077,Auto commerciale (RC),CA-2007-26077,2007-01-01,76773,0.5888,39454.82,1183.64,36134.53,0,bénéficiaire,1,PAA (§53(b)) ou BBA,45207.32,42986,-2221.32,-4.9
+dossier_37.pdf,Harco Natl Ins Co,26433,Auto commerciale (RC),CA-2007-26433,2007-01-01,50347,0.7591,33530.04,1005.9,15811.06,0,bénéficiaire,1,PAA (§53(b)) ou BBA,38217.75,50609,12391.25,32.4
+dossier_38.pdf,Century-Natl Ins Co,26905,Auto commerciale (RC),CA-2007-26905,2007-01-01,45308,0.5265,21318.92,639.57,23349.51,0,bénéficiaire,1,PAA (§53(b)) ou BBA,23853.19,32598,8744.81,36.7
+dossier_39.pdf,Vanliner Ins Co,21172,Auto commerciale (RC),CA-2007-21172,2007-01-01,42220,0.6366,23332.02,699.96,18188.02,0,bénéficiaire,1,PAA (§53(b)) ou BBA,26877.29,22469,-4408.29,-16.4
+dossier_40.pdf,Church Mut Ins Co,18767,Auto commerciale (RC),CA-2007-18767,2007-01-01,34589,0.5898,18303.55,549.11,15736.34,0,bénéficiaire,1,PAA (§53(b)) ou BBA,20401.62,17111,-3290.62,-16.1
+dossier_41.pdf,Toa-Re Ins Co Of Amer,42439,Responsabilité civile générale,OL-2007-42439,2007-01-01,61194,0.595,28914.26,867.43,31412.31,0,bénéficiaire,1,PAA (§53(b)) ou BBA,36407.84,34991,-1416.84,-3.9
+dossier_42.pdf,United Educators Ins RRG Inc,10020,Responsabilité civile générale,OL-2007-10020,2007-01-01,60482,0.6039,28531.28,855.94,31094.78,0,bénéficiaire,1,PAA (§53(b)) ou BBA,36525.1,31697,-4828.1,-13.2
+dossier_43.pdf,Atlantic Cas Ins Co,42846,Responsabilité civile générale,OL-2007-42846,2007-01-01,49398,0.6075,24254.21,727.63,24416.16,0,bénéficiaire,1,PAA (§53(b)) ou BBA,30010.26,15725,-14285.26,-47.6
+dossier_44.pdf,THE Ins Co,12866,Responsabilité civile générale,OL-2007-12866,2007-01-01,35093,0.4617,13689.28,410.68,20993.04,0,bénéficiaire,1,PAA (§53(b)) ou BBA,16204.17,24184,7979.83,49.2
+dossier_45.pdf,Housing Authority Rrg Inc,26797,Responsabilité civile générale,OL-2007-26797,2007-01-01,23088,0.4041,7811.36,234.34,15042.29,0,bénéficiaire,1,PAA (§53(b)) ou BBA,9329.03,13865,4535.97,48.6
+dossier_46.pdf,Physicians Recip Insurers,41467,Responsabilité médicale,MM-2007-41467,2007-01-01,213118,0.2146,36457.71,1093.73,175566.56,0,bénéficiaire,1,PAA (§53(b)) ou BBA,45726.36,168090,122363.64,267.6
+dossier_47.pdf,Health Care Ind Inc,35904,Responsabilité médicale,MM-2007-35904,2007-01-01,39630,0.6602,21589.32,647.68,17393,0,bénéficiaire,1,PAA (§53(b)) ou BBA,26162.93,60734,34571.07,132.1
+dossier_48.pdf,Michigan Professional Ins Exch,31429,Responsabilité médicale,MM-2007-31429,2007-01-01,10786,0.6605,5826.89,174.81,4784.3,0,bénéficiaire,1,PAA (§53(b)) ou BBA,7124.32,5525,-1599.32,-22.4
+dossier_49.pdf,State Volunteer Mut Ins Co,33049,Responsabilité médicale,MM-2007-33049,2007-01-01,8738,1.2736,9011.33,270.34,0,543.66,onéreux,1,PAA (§53(b)) ou BBA,11129.07,10301,-828.07,-7.4
+dossier_50.pdf,Louisiana Med Mut Ins Co,43656,Responsabilité médicale,MM-2007-43656,2007-01-01,3825,0.6596,2066.23,61.99,1696.79,0,bénéficiaire,1,PAA (§53(b)) ou BBA,2523.02,1468,-1055.02,-41.8

@@ -10,16 +10,19 @@ Configurations comparées dans l'évaluation (section 6.4 du planning) :
       rerank    : cross-encoder (bge-reranker-v2-m3) qui réordonne les 20 premiers candidats
 
 Stockage des vecteurs :
-    NumpyStore  : matrice en mémoire, sauvegardée en .npy ; suffit pour quelques milliers de chunks
-    QdrantStore : Qdrant en mode embarqué (fichier local, sans serveur), avec filtres de métadonnées
+    NumpyStore  : matrice en mémoire, sauvegardée en .npy ; recherche exacte (mode par défaut historique)
+    QdrantStore : base vectorielle Qdrant, embarquée (dossier local) ou serveur (Docker), filtres de
+                  métadonnées, collection liée à l'empreinte des textes (D-052, RAG_STORE=qdrant)
 """
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import math
 import re
+import threading
 import unicodedata
 import zlib
 from collections import Counter, defaultdict
@@ -35,13 +38,7 @@ from rag.chunking import Chunk
 # --------------------------------------------------------------------------- #
 # Analyseur français pour BM25
 # --------------------------------------------------------------------------- #
-STOPWORDS = set("""
-a au aux avec ce ces cet cette dans de des du elle elles en et eux il ils je la le les leur leurs
-lui ma mais me meme mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son sur
-ta te tes toi ton tu un une vos votre vous c d j l m n s t y ete etre est sont sera peut doit doivent
-ainsi afin dont lorsque lors selon si sous entre tout tous toute toutes autre autres meme cas
-quel quelle quels quelles comment quoi quand
-""".split())
+STOPWORDS = set(["a", "au", "aux", "avec", "ce", "ces", "cet", "cette", "dans", "de", "des", "du", "elle", "elles", "en", "et", "eux", "il", "ils", "je", "la", "le", "les", "leur", "leurs", "lui", "ma", "mais", "me", "meme", "mes", "moi", "mon", "ne", "nos", "notre", "nous", "on", "ou", "par", "pas", "pour", "qu", "que", "qui", "sa", "se", "ses", "son", "sur", "ta", "te", "tes", "toi", "ton", "tu", "un", "une", "vos", "votre", "vous", "c", "d", "j", "l", "m", "n", "s", "t", "y", "ete", "etre", "est", "sont", "sera", "peut", "doit", "doivent", "ainsi", "afin", "dont", "lorsque", "lors", "selon", "si", "sous", "entre", "tout", "tous", "toute", "toutes", "autre", "autres", "meme", "cas", "quel", "quelle", "quels", "quelles", "comment", "quoi", "quand"])
 
 _SUFFIXES = sorted([
     "issements", "issement", "ements", "ement", "ations", "ation", "ateurs", "ateur", "atrices",
@@ -185,33 +182,64 @@ class NumpyStore:
         return cls(np.load(path))
 
 
-class QdrantStore:
-    """Qdrant embarqué : ``QdrantClient(path=...)``, aucun serveur ni Docker."""
+_QDRANT_LOCK = threading.Lock()
 
-    def __init__(self, path: Path, collection: str):
+
+class QdrantStore:
+    """Base vectorielle Qdrant (D-052). Deux modes, même code :
+    - embarqué : ``QdrantClient(path=...)``, un dossier local, sans serveur (un seul processus à la fois) ;
+    - serveur  : ``QdrantClient(url=...)``, par exemple le conteneur Docker de docker-compose.yml,
+      partagé entre l'API, les évaluations et d'autres outils.
+    La collection porte l'empreinte des textes encodés : un changement de découpage crée une autre
+    collection au lieu de servir des vecteurs périmés."""
+
+    def __init__(self, collection: str, path: Path | None = None, url: str = "", api_key: str = ""):
         from qdrant_client import QdrantClient
 
-        self.client = QdrantClient(path=str(path))
+        self.client = QdrantClient(url=url, api_key=api_key or None) if url else QdrantClient(path=str(path or "data/qdrant"))
         self.collection = collection
+        self.server = bool(url)
+        # fermeture propre avant l'arrêt de Python (sinon message « sys.meta_path is None » en mode embarqué)
+        import atexit
+        atexit.register(self.close)
+
+    def close(self) -> None:
+        with contextlib.suppress(Exception):
+            self.client.close()
+
+    def ensure(self, vectors: np.ndarray, chunks: list[Chunk]) -> bool:
+        """Crée et remplit la collection si elle n'existe pas encore. Renvoie True si elle a été (re)construite."""
+        if (self.client.collection_exists(self.collection)
+                and self.client.get_collection(self.collection).points_count == len(chunks)):
+            return False
+        self.build(vectors, chunks)
+        return True
 
     def build(self, vectors: np.ndarray, chunks: list[Chunk]) -> None:
-        from qdrant_client.models import Distance, PointStruct, VectorParams
+        from qdrant_client.models import Distance, PayloadSchemaType, PointStruct, VectorParams
 
         if self.client.collection_exists(self.collection):
             self.client.delete_collection(self.collection)
         self.client.create_collection(
             self.collection, vectors_config=VectorParams(size=vectors.shape[1], distance=Distance.COSINE))
+        # index de métadonnées pour filtrer par zone : utile sur le serveur ; le mode embarqué filtre sans index
+        if self.server:
+            self.client.create_payload_index(self.collection, "zone", field_schema=PayloadSchemaType.KEYWORD)
         points = [PointStruct(id=i, vector=v.tolist(),
-                              payload={"chunk_id": c.chunk_id, "zone": c.zone, "doc_id": c.doc_id})
+                              payload={"chunk_id": c.chunk_id, "zone": c.zone, "doc_id": c.doc_id,
+                                       "paragraph_ids": c.paragraph_ids, "heading": c.heading})
                   for i, (v, c) in enumerate(zip(vectors, chunks, strict=True))]
         for s in range(0, len(points), 256):
             self.client.upsert(self.collection, points=points[s:s + 256])
 
-    def search(self, qvec: np.ndarray, k: int, zones: list[str] | None = None) -> list[tuple[int, float]]:
-        from qdrant_client.models import FieldCondition, Filter, MatchAny
+    def search(self, qvec: np.ndarray, k: int, zones: list[str] | None = None,
+               exact: bool = False) -> list[tuple[int, float]]:
+        from qdrant_client.models import FieldCondition, Filter, MatchAny, SearchParams
 
         flt = Filter(must=[FieldCondition(key="zone", match=MatchAny(any=zones))]) if zones else None
-        res = self.client.query_points(self.collection, query=qvec.tolist(), limit=k, query_filter=flt)
+        with _QDRANT_LOCK:   # Qdrant embarqué : un appel à la fois (questions en parallèle, D-063)
+            res = self.client.query_points(self.collection, query=qvec.tolist(), limit=k, query_filter=flt,
+                                           search_params=SearchParams(exact=exact))
         return [(int(p.id), float(p.score)) for p in res.points]
 
 
@@ -239,15 +267,25 @@ class CrossEncoderReranker:
     vecteurs, mais trop lent pour tout le corpus : on ne l'applique qu'aux premiers candidats)."""
 
     def __init__(self, model_name: str = "BAAI/bge-reranker-v2-m3", device: str | None = None,
-                 batch_size: int = 16, max_length: int = 512):
+                 batch_size: int | None = None, max_length: int = 512):
+        # Windows : mêmes précautions que pour BGE-M3 (F-010, plantage natif 0xC0000005 sans message)
         import os
         os.environ.setdefault("OMP_NUM_THREADS", "4")
+        os.environ.setdefault("MKL_NUM_THREADS", "4")
         os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+        import torch
         from sentence_transformers import CrossEncoder
 
+        torch.set_num_threads(int(os.environ.get("RERANK_THREADS", "4")))
         self.name = model_name
-        self.batch_size = batch_size
         self.model = CrossEncoder(model_name, device=device, max_length=max_length)
+        self.device = str(self.model.device) if hasattr(self.model, "device") else "cpu"
+        gpu = self.device.startswith("cuda")
+        if gpu:
+            # carte graphique : demi-précision (≈ 1,1 Go au lieu de 2,2 Go) et lots plus grands
+            with contextlib.suppress(Exception):
+                self.model.model.half()
+        self.batch_size = batch_size or int(os.environ.get("RERANK_BATCH", "16" if gpu else "4"))
 
     def score(self, query: str, texts: list[str]) -> list[float]:
         scores = self.model.predict([(query, t) for t in texts], batch_size=self.batch_size,
@@ -299,7 +337,7 @@ class Retriever:
 
     def __init__(self, chunks: list[Chunk], encoder: Encoder | None = None,
                  vectors: np.ndarray | None = None, store: str = "numpy",
-                 qdrant_path: Path | None = None, collection: str = "chunks",
+                 qdrant_path: Path | None = None, collection: str = "chunks", qdrant_url: str = "",
                  reranker: Reranker | None = None, qindex: QuestionIndex | None = None,
                  graph: dict[int, list[int]] | None = None, options: dict | None = None):
         self.chunks = chunks
@@ -313,8 +351,9 @@ class Retriever:
             if vectors is None:
                 vectors = encoder.encode([c.embed_text for c in chunks])
             if store == "qdrant":
-                self.store = QdrantStore(qdrant_path or Path("data/qdrant"), collection)
-                self.store.build(vectors, chunks)
+                self.store = QdrantStore(f"{collection}__{texts_fingerprint(chunks)[:10]}",
+                                         path=qdrant_path, url=qdrant_url)
+                self.store.ensure(vectors, chunks)
             else:
                 self.store = NumpyStore(vectors)
 

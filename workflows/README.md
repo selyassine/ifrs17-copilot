@@ -1,89 +1,108 @@
-# Workflows n8n
+# Workflow n8n : IFRS 17 Copilot, processus complet
 
-| Fichier | Déclencheur | Appelle | Rôle |
-| --- | --- | --- | --- |
-| `01_route.json` | `POST /webhook/ifrs17/route` | `POST /v1/route` | Test du socle S1 : n8n → API → réponse |
-| `02_csm_compute.json` | `POST /webhook/ifrs17/csm` | `POST /v1/csm/compute` | Calcul du CSM à partir de données JSON |
-| `03_case_document.json` | `POST /webhook/ifrs17/case` (fichier PDF, PNG ou JPEG) | `POST /v1/case` | Dossier complet : extracteur → calculateur → RAG + vérificateur → rédacteur. Note prête → la note HTML (200) ; sinon → réponse « validation humaine » (202) avec les contrôles, les données extraites et la note provisoire |
-| `04_case_validated.json` | `POST /webhook/ifrs17/case/validated` (données JSON corrigées) | `POST /v1/case/validated` | Suite de la validation humaine : données corrigées → calcul → norme → note HTML |
-| `05_case_email.json` | `POST /webhook/ifrs17/case-email` (fichier PDF, PNG ou JPEG) | `POST /v1/case`, puis `POST /v1/case/validated` | Dossier complet **par e-mail**. Note prête → envoyée par e-mail. Sinon → e-mail de la note provisoire, puis e-mail de validation avec un **formulaire pré-rempli** (n8n attend la réponse) ; Approuver → note recalculée et envoyée ; Rejeter → e-mail de rejet |
-| `06_validation_email.json` | `POST /webhook/ifrs17/validation` (dossier déjà analysé, envoyé par l'API) | `POST /v1/case/validated` | Appelé **automatiquement par l'API** quand un dossier analysé sur le site web part en validation humaine : même e-mail et même formulaire que le 05, sans relancer l'analyse |
+**Un seul fichier à importer : `ifrs17_copilot.json`.** Il contient tout le processus, du dépôt du document
+à l'envoi de la note validée, plus la supervision et les alertes (D-064).
 
-Chaque workflow a une branche d'erreur : si l'API ne répond pas ou refuse la requête, n8n renvoie un message clair avec le code 502 au lieu de rester bloqué.
-
-## Importer
-
-1. Lancer l'API (`make serve`) puis n8n (`make n8n`) et ouvrir http://localhost:5678.
-2. Menu **Workflows → Import from file**, choisir le fichier JSON.
-3. Dans le nœud « Appel API », remplacer `change-moi` par la valeur d'`API_TOKEN` du `.env`. Si l'API tourne sur Colab, remplacer `http://127.0.0.1:8000` par l'URL du tunnel.
-   L'adresse est `127.0.0.1` et non `localhost` : Node.js résout `localhost` en IPv6 (`::1`) alors qu'uvicorn écoute en IPv4, ce qui donne `ECONNREFUSED ::1:8000` (voir docs/failures.md, F-002).
-4. Cliquer sur **Execute workflow** (mode test), puis dans un terminal :
-
-```bash
-curl -X POST http://localhost:5678/webhook-test/ifrs17/route \
-  -H "Content-Type: application/json" \
-  -d '{"request": "Comment le CSM est-il ajusté ?"}'
-
-curl -X POST http://localhost:5678/webhook-test/ifrs17/csm \
-  -H "Content-Type: application/json" \
-  -d '{"group_id": "G1", "premiums": [100, 0, 0], "outflows": [20, 20, 20], "coverage_units": [1, 1, 1]}'
+```
+ ENTRÉES (7 déclencheurs)                         AIGUILLAGE                 TRAITEMENT
+ ─────────────────────────                         ──────────                 ──────────
+ E-mail « IFRS17 » + PDF (IMAP) ──┐                             ┌─ dossier ──► /v1/case ─┬─ note prête ──► e-mail au déposant
+ Formulaire /form/ifrs17-depot ───┤                             │                        ├─ à valider ──► webhook de validation
+ POST /webhook/ifrs17/depot ──────┤                             │                        │                + accusé de réception
+                                  │                             │                        ├─ illisible ──► e-mail d'explication
+ POST /webhook/ifrs17/validation ─┤   ┌────────────┐  ┌───────┐  │                        └─ API en panne ► e-mail + alerte équipe
+   (API / site web, ou la         ├──►│ Paramètres │─►│Switch │──┼─ validation ─► note provisoire ► e-mail « Vérifier les données »
+    branche dossier ci-contre)    │   └────────────┘  └───────┘  │                (n8n attend) ► formulaire pré-rempli
+ Toutes les 15 min ───────────────┤                             │                ├─ Approuver ► /v1/case/validated ► note validée
+ Chaque lundi à 8 h ──────────────┤                             │                └─ Rejeter ──► registre + e-mail de rejet
+ Erreur du workflow ──────────────┘                             ├─ sans_document ► « aucun document joint »
+                                                                ├─ sante ──► /health ► alerte à la panne et au retour
+                                                                ├─ rapport ► /v1/dashboard ► rapport HTML par e-mail
+                                                                └─ erreur ─► e-mail d'alerte (nœud, message, lien)
 ```
 
-Dossier complet (PowerShell : `curl.exe`, livré avec Windows 10 et 11) :
+- **Un seul nœud de réglages**, « Paramètres » : adresse du valideur, expéditeur, URL de l'API, jeton.
+- **Human-in-the-loop** : tout dossier dont un contrôle échoue attend la décision d'un valideur (Send and Wait).
+  Chaque validation est une exécution séparée : un e-mail portant trois PDF ouvre trois formulaires indépendants.
+- **Note en PDF** : la note arrive dans le corps de l'e-mail (HTML) **et en pièce jointe PDF**, imprimée par
+  l'API avec Edge ou Chrome (`GET /v1/cases/{id}/note.pdf`, D-065). Si l'API ne trouve pas de navigateur,
+  l'e-mail part quand même, sans pièce jointe.
+- **Traçabilité** : chaque e-mail envoyé, chaque transmission, approbation et rejet est inscrit dans la piste
+  d'audit du registre de l'API (visible sur le site, page Dossiers).
+- **Alertes sans réglage** : le workflow contient un Error Trigger ; n8n le lance automatiquement pour toute
+  erreur de ce workflow en production (workflow d'erreur interne).
+
+## Installation (une fois, environ 15 minutes)
+
+Prérequis : l'API tourne (`.\make.ps1 serve`), n8n 2.42.3 tourne (`.\make.ps1 n8n`, Node.js 24+), http://localhost:5678.
+
+1. **Mot de passe d'application Gmail** : compte Google → Sécurité → Validation en deux étapes (activée) →
+   **Mots de passe des applications** → créer « n8n », copier les 16 caractères.
+2. **Credentials dans n8n** (Credentials → Add credential) :
+   - **SMTP** : User = votre adresse Gmail ; Password = les 16 caractères ; Host `smtp.gmail.com` ; Port `465` ; SSL/TLS activé.
+   - **IMAP** : même User et Password ; Host `imap.gmail.com` ; Port `993` ; SSL/TLS activé.
+3. **Importer** : Workflows → **Import from file** → `workflows/ifrs17_copilot.json`.
+4. **Credentials des nœuds** : ouvrir le nœud « E-mail reçu (IMAP) » et choisir le credential IMAP ; ouvrir chacun
+   des 15 nœuds « E-mail : … » et choisir le credential SMTP (n8n le propose d'office quand il n'y en a qu'un ;
+   vérifier qu'aucun nœud ne reste marqué en rouge).
+5. **Paramètres** : ouvrir le nœud « Paramètres », remplacer `votre.adresse@gmail.com` (deux fois) par votre
+   adresse et `change-moi` par la valeur d'`API_TOKEN` du `.env`. Si l'API tourne sur Colab, remplacer
+   `http://127.0.0.1:8000` par l'URL du tunnel (garder `127.0.0.1`, pas `localhost` : F-002).
+6. **Activer** le workflow (bouton *Active* / *Publish*). L'IMAP, les horaires, le formulaire et la validation
+   n'utilisent que les URL de production (`/webhook/…`, `/form/…`), qui n'existent qu'une fois le workflow activé.
+7. **Site web → n8n** : dans `.env`, la ligne suivante (inchangée), puis relancer l'API :
+
+   ```
+   N8N_VALIDATION_URL=http://127.0.0.1:5678/webhook/ifrs17/validation
+   ```
+
+Si les anciens workflows séparés (`par_etape/`) sont encore importés, les **désactiver** : ils déclarent les
+mêmes chemins de webhook et n8n refuserait d'activer le workflow unique.
+
+**Ne jamais réexporter avec vos vraies valeurs** : remettre `votre.adresse@gmail.com` et `change-moi` avant de
+committer. Les identifiants SMTP/IMAP restent dans n8n ; ils ne sont pas dans le fichier exporté.
+
+## Essayer chaque flux
+
+| Flux | Comment le déclencher | Résultat attendu |
+| --- | --- | --- |
+| Dossier, note directe | e-mail à vous-même, objet `IFRS17 test`, pièce jointe `data/synth/ext01.pdf` | la note en 1 à 3 min, dans l'e-mail et en PDF joint |
+| Dossier à valider | même chose avec `data/synth_hard/dur10.pdf` (deux groupes) | accusé de réception, puis (valideur) note provisoire et e-mail « Vérifier les données » |
+| Validation | cliquer **Vérifier les données**, corriger si besoin, **Approuver** | note validée (déposant en copie) ; **Rejeter** → e-mail de rejet |
+| Formulaire | ouvrir http://localhost:5678/form/ifrs17-depot | mêmes e-mails que par l'IMAP |
+| Webhook (démo sans boîte mail) | voir ci-dessous | mêmes e-mails |
+| Site web | page « Analyser un dossier » avec `dur10.pdf` | « E-mail envoyé au valideur », puis le formulaire par e-mail |
+| E-mail sans document | e-mail `IFRS17` sans pièce jointe | réponse « aucun document joint » |
+| Santé de l'API | arrêter l'API | « API injoignable » au contrôle suivant (15 min au plus), « API rétablie » au redémarrage |
+| Rapport | ouvrir le déclencheur « Chaque lundi à 8 h » → **Execute step** | le rapport de la semaine par e-mail |
+| Alerte d'erreur | provoquer une erreur en production (ex. jeton faux dans Paramètres puis dépôt) | e-mail « alerte n8n » |
 
 ```powershell
-curl.exe -X POST http://localhost:5678/webhook-test/ifrs17/case -F "file=@data/synth/ext01.pdf" -o note.html
-start note.html
+curl.exe -X POST http://localhost:5678/webhook/ifrs17/depot -F "file=@data/synth_hard/dur10.pdf" -F "email=votre.adresse@gmail.com"
 ```
 
-Une réponse en 1 à 3 minutes (6 agents, 8 à 12 appels LLM). Avec `data/synth_hard/dur10.pdf` (deux groupes), la
-réponse est un JSON « validation humaine » : corriger `donnees_extraites` puis l'envoyer au workflow 04.
+n8n répond aussitôt « Workflow was started » ; la suite arrive par e-mail. Sans champ `email`, la note part au valideur.
 
-## Workflow 05 : validation humaine par e-mail et formulaire
+Le lien du formulaire de validation pointe vers `http://localhost:5678` : cliquer depuis l'ordinateur où tourne
+n8n. L'état « API en panne » est gardé dans les données statiques du workflow, conservées seulement en production.
+Documents fictifs uniquement.
 
-Le workflow 05 envoie les résultats par e-mail et fait valider les dossiers douteux par un humain, sans quitter sa boîte mail :
+## Pour la démonstration
 
-1. le dossier passe par `/v1/case` ;
-2. **note prête** → la note HTML part par e-mail ;
-3. **validation humaine** → deux e-mails : la note provisoire (HTML), puis un e-mail « à valider » qui liste les contrôles non passés, avec un bouton **Vérifier les données** ; n8n met l'exécution en attente ;
-4. le bouton ouvre un **formulaire n8n pré-rempli** avec les données extraites (groupe, devise, unité, primes, sorties, unités de couverture, taux, ajustement pour risque) ; l'humain corrige et choisit **Approuver** ou **Rejeter** ;
-5. Approuver → `/v1/case/validated` recalcule tout (calcul, norme, note) et la note validée part par e-mail ; Rejeter → e-mail de rejet avec le commentaire ; donnée illisible ou API en panne → e-mail d'erreur.
+1. Montrer le workflow dans l'éditeur : les notes jaunes, vertes et violettes délimitent les six branches.
+2. Envoyer `dur10.pdf` par le formulaire, ouvrir l'onglet **Executions** pendant l'analyse.
+3. Montrer l'accusé de réception, puis l'e-mail du valideur ; corriger, **Approuver**.
+4. Ouvrir la note validée, puis le dossier sur le site (page Dossiers) : sa piste d'audit montre le dépôt,
+   l'analyse, la transmission, l'approbation (avec l'adresse du valideur) et l'envoi.
 
-Il utilise le nœud **Send Email** (SMTP), opération *Send and Wait for Response*, réponse *Custom Form* définie en JSON : c'est ce qui permet de pré-remplir le formulaire. Il faut une version récente de n8n : `.\make.ps1 n8n` lance n8n 2.42.3, qui demande Node.js 24 ou plus.
+Prévoir un enregistrement vidéo de ce parcours au cas où le réseau ou Gmail ferait défaut le jour J.
 
-### Mettre en place l'e-mail (Gmail, 10 minutes, une seule fois)
+## Fichiers
 
-1. Sur le compte Google : **Sécurité → Validation en deux étapes** (à activer si ce n'est pas fait), puis **Mots de passe des applications** → créer un mot de passe nommé « n8n ». Google affiche 16 caractères : les copier. C'est ce mot de passe, pas celui du compte, que n8n utilise.
-2. Dans n8n : **Credentials → Add credential → SMTP** : User = votre adresse Gmail ; Password = les 16 caractères ; Host = `smtp.gmail.com` ; Port = `465` ; SSL/TLS = activé. **Save** (n8n teste la connexion).
-3. Importer `05_case_email.json`. Ouvrir chacun des 6 nœuds « E-mail : … » et choisir ce credential SMTP.
-4. Ouvrir le nœud **Paramètres** et remplacer `votre.adresse@gmail.com` (deux fois) par votre adresse, et `change-moi` par la valeur d'`API_TOKEN`.
-5. **Ne jamais réexporter le workflow avec votre vraie adresse ou votre jeton** : remettre les valeurs d'exemple avant de committer. Les identifiants SMTP restent dans n8n, ils ne sont pas dans le fichier exporté.
+- `ifrs17_copilot.json` : le workflow à importer (le livrable).
+- `generer.py` : le script qui l'écrit (`python workflows/generer.py`). Après une modification faite dans
+  l'interface de n8n, réexporter plutôt le workflow (Download) par-dessus `ifrs17_copilot.json`.
+- `par_etape/` : les onze workflows séparés construits pendant le projet (historique, D-041, D-059).
 
-### Depuis le site web : e-mail automatique (workflow 06)
-
-Quand un dossier analysé sur le site (`http://127.0.0.1:8000`, page « Analyser un dossier ») part en validation humaine, l'API envoie aussitôt le dossier au workflow 06 : le valideur reçoit la note provisoire et l'e-mail avec le formulaire, sans aucun bouton à cliquer sur le site. La page affiche « E-mail envoyé au valideur » (ou la raison de l'échec). L'analyse n'est pas relancée : n8n reçoit le résultat déjà calculé.
-
-1. Importer `06_validation_email.json`, choisir le credential SMTP dans ses 6 nœuds « E-mail : … », remplir le nœud **Paramètres** comme pour le 05, puis activer le workflow.
-2. Ajouter dans `.env` la ligne suivante, puis relancer l'API (`.\make.ps1 serve`) :
-
-```
-N8N_VALIDATION_URL=http://127.0.0.1:5678/webhook/ifrs17/validation
-```
-
-Sans cette ligne, le site fonctionne comme avant et indique « E-mail non envoyé ». Un dossier dont la note est prête n'envoie pas d'e-mail depuis le site : la note s'affiche directement.
-
-### Lancer un dossier (workflow 05)
-
-Activer le workflow (bouton **Active** ou **Publish** selon la version), puis, dans PowerShell :
-
-```powershell
-curl.exe -X POST http://localhost:5678/webhook/ifrs17/case-email -F "file=@data/synth_hard/dur10.pdf"
-```
-
-La réponse arrive en 1 à 3 minutes (`statut`, `case_id`). Avec `dur10` (deux groupes de contrats), vous recevez la note provisoire et l'e-mail « à valider ». Cliquez sur **Vérifier les données**, vérifiez le groupe retenu (corrigez-le si besoin), puis **Approuver** : la note validée arrive quelques instants plus tard. Avec `data/synth/ext01.pdf`, la note arrive directement.
-
-Le lien du formulaire pointe vers `http://localhost:5678` : il faut cliquer depuis l'ordinateur où tourne n8n. Documents fictifs uniquement.
-
-En mode test l'URL contient `webhook-test` ; une fois le workflow activé, c'est `webhook`.
-
-Ces fichiers ont été écrits à la main et doivent être importés une première fois pour vérifier qu'ils correspondent à votre version de n8n. Après toute modification dans l'interface, **réexporter** le workflow ici (Download) et committer : c'est le livrable demandé par le sujet. Penser à remettre `change-moi` à la place du vrai jeton avant de committer.
+Ce fichier a été généré à partir des paramètres des nœuds lus dans le code source de n8n 2.42.3 et ses nœuds
+Code ont été exécutés hors de n8n ; il **doit être importé et essayé une fois dans n8n** avant la soutenance.

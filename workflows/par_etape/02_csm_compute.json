@@ -1,0 +1,121 @@
+{
+  "name": "02 — Calcul du CSM",
+  "nodes": [
+    {
+      "id": "48c6103b-1de5-5893-af43-ec5762b91c33",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "a1ae83d3-5c3a-5086-afdf-952981af4290",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ifrs17/csm",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "f7e7ebbe-fdff-5b13-adac-3a9cb8b61e2d",
+      "name": "Appel API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/v1/csm/compute",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "change-moi"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "131481ae-15fd-5a55-bc85-06eca6236e2f",
+      "name": "Réponse OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        -100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "0f713f09-b84b-5184-b371-8afa69c5a9fd",
+      "name": "Réponse erreur",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"erreur\": \"Le service IA est indisponible ou a refusé la requête.\", \"detail\": $json.error ?? $json } }}",
+        "options": {
+          "responseCode": 502
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Appel API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API": {
+      "main": [
+        [
+          {
+            "node": "Réponse OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Réponse erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

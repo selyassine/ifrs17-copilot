@@ -1,0 +1,137 @@
+{
+ "date": "20261024-153528",
+ "documents": [
+  {
+   "id": "lc01",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 197090.57,
+   "lic_attendu": 197090.57,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc02",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 17634.74,
+   "lic_attendu": 17634.74,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc03",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 126098.26,
+   "lic_attendu": 126098.26,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc04",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 25872.48,
+   "lic_attendu": 25872.48,
+   "verdict": "juste"
+  },
+  {
+   "id": "lc05",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "a_verifier",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 199577.4,
+   "lic_attendu": 199577.4,
+   "verdict": "juste mais a verifier"
+  },
+  {
+   "id": "lc06",
+   "piege": "",
+   "attendu": "exact",
+   "statut": "a_verifier",
+   "double_lecture": "concordante",
+   "relances": 1,
+   "problemes": [
+    "discount_rates[0] = 0.0559 introuvable dans le document",
+    "discount_rates[1] = 0.0574 introuvable dans le document",
+    "discount_rates[2] = 0.0576 introuvable dans le document",
+    "discount_rates[3] = 0.0578 introuvable dans le document",
+    "discount_rates[4] = 0.058 introuvable dans le document"
+   ],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 16605.87,
+   "lic_attendu": 16605.87,
+   "verdict": "juste mais a verifier"
+  },
+  {
+   "id": "lc07",
+   "piege": "cumul_en_recul",
+   "attendu": "alerte",
+   "statut": "echec",
+   "double_lecture": "impossible",
+   "relances": 1,
+   "problemes": [
+    "données : Value error, ligne 4 (1991) : 2 valeurs au lieu de 7 (triangle en escalier attendu)"
+   ],
+   "triangle_juste": false,
+   "lic_juste": false,
+   "lic": null,
+   "verdict": "echec sur"
+  },
+  {
+   "id": "lc08",
+   "piege": "unite_absente",
+   "attendu": "exact",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "relances": 0,
+   "problemes": [],
+   "triangle_juste": true,
+   "lic_juste": true,
+   "lic": 65955.25,
+   "lic_attendu": 65955.25,
+   "verdict": "juste"
+  }
+ ],
+ "autres": [
+  {
+   "fichier": "dossier_C_farmbureau_cloture_1997.pdf",
+   "statut": "ok",
+   "double_lecture": "concordante",
+   "problemes": [],
+   "provision": 18322.18,
+   "bel": 16099.31,
+   "ra": 1535.42,
+   "lic": 17634.74,
+   "erreur_mack": 2805.54
+  }
+ ]
+}

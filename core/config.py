@@ -41,6 +41,10 @@ class Settings:
     rag_strategy: str = field(default_factory=lambda: _env("RAG_STRATEGY", "B"))
     rag_mode: str = field(default_factory=lambda: _env("RAG_MODE", "bm25"))
     rag_embed_model: str = field(default_factory=lambda: _env("RAG_EMBED_MODEL"))
+    # stockage des vecteurs (D-052) : numpy (fichier .npy en mémoire) ou qdrant (base vectorielle)
+    rag_store: str = field(default_factory=lambda: _env("RAG_STORE", "numpy"))
+    qdrant_url: str = field(default_factory=lambda: _env("QDRANT_URL"))          # vide : Qdrant embarqué
+    qdrant_api_key: str = field(default_factory=lambda: _env("QDRANT_API_KEY"))
     rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
     # version du prompt rag_answer : v2 mesurée et retenue (D-024) ; 1 pour reproduire la v1
     rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "2")))
@@ -58,6 +62,12 @@ class Settings:
     # Réponses de référence aux questions fixes de la note (data/norm_reference.json, D-037)
     use_norm_reference: bool = field(default_factory=lambda: _env("NORM_REFERENCE", "1") == "1")
     norm_reference_path: Path = field(default_factory=lambda: ROOT / "data" / "norm_reference.json")
+    # coefficient de variation des sorties : niveau de confiance de l'ajustement pour risque (D-056)
+    ra_cv: float = field(default_factory=lambda: float(_env("RA_CV", "0.15")))
+    # document à plusieurs groupes : une lecture et une note par groupe (D-078) ; 0 = validation humaine (D-032)
+    multi_group: bool = field(default_factory=lambda: _env("MULTI_GROUPE", "1") == "1")
+    # note actuarielle (D-055) : entité affichée en page de garde
+    note_entity: str = field(default_factory=lambda: _env("NOTE_ENTITY", "Compagnie d'assurance fictive (projet pédagogique)"))
     # Voix : Whisper sur Groq (même clé que le LLM) (D-035)
     speech_model: str = field(default_factory=lambda: _env("SPEECH_MODEL", "whisper-large-v3-turbo"))
     # Vision (lecture d'images) : Gemini via son point d'accès compatible OpenAI (D-029)
@@ -79,6 +89,17 @@ class Settings:
         default_factory=lambda: ROOT / _env("TRACE_PATH", "logs/traces.jsonl")
     )
     budget_usd: float = field(default_factory=lambda: float(_env("BUDGET_USD", "20")))
+    # registre des dossiers, piste d'audit et comptes (D-058) ; fichier SQLite hors Git
+    registry_path: Path = field(default_factory=lambda: ROOT / _env("REGISTRY_PATH", "data/registry.db"))
+    # questions à la norme d'un dossier traitées en parallèle (D-063) ; 1 = l'une après l'autre
+    norm_parallel: int = field(default_factory=lambda: int(_env("NORM_PARALLEL", "1")))
+    # état du Copilot sauvegardé après chaque nœud du graphe (checkpointer LangGraph, D-061)
+    copilot_checkpoints: Path = field(default_factory=lambda: ROOT / _env("COPILOT_CHECKPOINTS", "data/copilot_checkpoints.db"))
+    # navigateur qui imprime la note en PDF (D-065) ; vide = Edge, Chrome ou Chromium trouvé automatiquement
+    note_pdf_browser: str = field(default_factory=lambda: _env("NOTE_PDF_BROWSER"))
+    # premier compte administrateur, créé au démarrage si la base n'a encore aucun compte
+    admin_username: str = field(default_factory=lambda: _env("ADMIN_USERNAME"))
+    admin_password: str = field(default_factory=lambda: _env("ADMIN_PASSWORD"))
 
 
 @lru_cache

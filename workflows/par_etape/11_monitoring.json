@@ -1,0 +1,427 @@
+{
+  "name": "11 — Supervision : santé de l'API et rapport hebdomadaire",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "203aec81-06cb-5eeb-9939-078130fbb7b0",
+      "name": "Toutes les 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow. Le jeton reste « change-moi » dans le fichier\n// commité ; mettez la valeur d'API_TOKEN dans n8n. Contrôle de santé de l'API.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les alertes et les dossiers à valider\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n};\nreturn [{ json: { parametres } }];\n"
+      },
+      "id": "10528f5c-0ac3-55b7-ab09-8e79cbb76013",
+      "name": "Paramètres (santé)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.parametres.api }}/health",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "2795413b-f2f0-57c0-8486-b18e83dee7b3",
+      "name": "Santé de l'API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare à l'état précédent (gardé dans le workflow) : une alerte à la panne, une au retour,\n// jamais une toutes les 15 minutes. Les données statiques ne persistent qu'en production (workflow activé).\nconst memo = $getWorkflowStaticData('global');\nconst ok = $input.first().json.status === 'ok';\nconst avant = memo.etat ?? 'ok';\nmemo.etat = ok ? 'ok' : 'panne';\nconst p = $('Paramètres (santé)').first().json.parametres;\nconst detail = ok ? '' : String($input.first().json.error?.message ?? JSON.stringify($input.first().json)).slice(0, 500);\nreturn [{ json: { parametres: p, changement: memo.etat !== avant, etat: memo.etat, detail,\n  version: $input.first().json.version ?? '' } }];\n"
+      },
+      "id": "a587267b-a62e-5eee-8ec8-cf871d807c44",
+      "name": "État changé ? (API répond)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare à l'état précédent (gardé dans le workflow) : une alerte à la panne, une au retour,\n// jamais une toutes les 15 minutes. Les données statiques ne persistent qu'en production (workflow activé).\nconst memo = $getWorkflowStaticData('global');\nconst ok = $input.first().json.status === 'ok';\nconst avant = memo.etat ?? 'ok';\nmemo.etat = ok ? 'ok' : 'panne';\nconst p = $('Paramètres (santé)').first().json.parametres;\nconst detail = ok ? '' : String($input.first().json.error?.message ?? JSON.stringify($input.first().json)).slice(0, 500);\nreturn [{ json: { parametres: p, changement: memo.etat !== avant, etat: memo.etat, detail,\n  version: $input.first().json.version ?? '' } }];\n"
+      },
+      "id": "80fb9737-bdb1-5c13-a4c7-a9eb68340636",
+      "name": "État changé ? (API muette)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "78052c40-dd7e-5d02-975f-e99539a601b4",
+              "leftValue": "={{ $json.changement }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7b717c0b-eb38-5775-a3cb-09d8d19b4429",
+      "name": "Alerter ? (répond)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "2e7d976c-6570-5508-bb35-ea6c70ef005b",
+              "leftValue": "={{ $json.changement }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7cae0cb8-1b34-50a4-ba99-9d059d310e0b",
+      "name": "Alerter ? (muette)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        920,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.parametres.expediteur }}",
+        "toEmail": "={{ $json.parametres.valideur }}",
+        "subject": "=IFRS 17 · API {{ $json.etat === 'ok' ? 'rétablie' : 'injoignable' }}",
+        "emailFormat": "text",
+        "text": "={{ $json.etat === 'ok' ? 'L\\'API répond de nouveau (version ' + $json.version + ').' : 'L\\'API ne répond pas au contrôle de santé : ' + $json.detail + '\\nLes dossiers reçus par e-mail ou formulaire échoueront tant qu\\'elle est arrêtée. Relancer : .\\\\make.ps1 serve' }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2ae956d5-cd7c-5c99-af70-9b2181fd0855",
+      "name": "E-mail : état de l'API",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1160,
+        0
+      ],
+      "webhookId": "2f8cf331-bdc6-5ec5-a81c-f9088c4f2544"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "78ccc58f-f7c0-5eb0-b9ce-2721fedabf96",
+      "name": "Chaque lundi à 8 h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow. Le jeton reste « change-moi » dans le fichier\n// commité ; mettez la valeur d'API_TOKEN dans n8n. Rapport hebdomadaire.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les alertes et les dossiers à valider\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n};\nreturn [{ json: { parametres } }];\n"
+      },
+      "id": "6c165433-78c0-5b21-9bce-b23dd25e1243",
+      "name": "Paramètres (rapport)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.parametres.api }}/v1/dashboard?days=7",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $json.parametres.jeton }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "80ad3569-4d10-5c3d-82e5-7651046731ed",
+      "name": "Tableau de bord",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        400
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst p = $('Paramètres (rapport)').first().json.parametres;\nconst pct = x => `${Math.round((x || 0) * 100)} %`;\nconst s = d.par_statut || {};\nconst semaine = (d.par_jour || []).reduce((a, j) => a + j.dossiers, 0);\nconst ligne = (k, v) => `<tr><td style=\"padding:6px 12px;border-bottom:1px solid #ddd\">${k}</td><td style=\"padding:6px 12px;border-bottom:1px solid #ddd;text-align:right\"><b>${v}</b></td></tr>`;\nconst attente = (d.en_attente || []).map(w => `<li>${w.case_id} (depuis ${w.depuis.slice(0, 10)})</li>`).join('') || '<li>aucun</li>';\nconst html = `<div style=\"font-family:Segoe UI,Arial,sans-serif;color:#1B2A41;max-width:620px\">\n<h2 style=\"font-family:Georgia,serif\">IFRS 17 Copilot · rapport de la semaine</h2>\n<table style=\"border-collapse:collapse;width:100%\">${[\n  ligne('Dossiers déposés sur 7 jours', semaine), ligne('Dossiers au registre (total)', d.dossiers),\n  ligne('Note produite sans intervention', pct(d.taux_note_directe)), ligne('Validation humaine demandée', pct(d.taux_validation_humaine)),\n  ligne('Validés / rejetés', `${s.validee || 0} / ${s.rejetee || 0}`), ligne('En attente d\\'un valideur', s.validation_humaine || 0),\n  ligne('Durée médiane d\\'analyse', d.duree_mediane_s == null ? '—' : `${Math.round(d.duree_mediane_s)} s`),\n  ligne('Appels LLM par dossier', d.appels_llm_moyens), ligne('Coût des modèles', `${d.cout_total_usd} $`),\n].join('')}</table>\n<h3 style=\"font-family:Georgia,serif\">En attente de validation</h3><ul>${attente}</ul>\n<p style=\"color:#6B7A8F;font-size:13px\">Détail et piste d'audit : site, pages Tableau de bord et Dossiers.</p></div>`;\nreturn [{ json: { parametres: p, html } }];\n"
+      },
+      "id": "367c4309-2dc6-54fb-920f-5a8332f980c7",
+      "name": "Mettre en forme le rapport",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.parametres.expediteur }}",
+        "toEmail": "={{ $json.parametres.valideur }}",
+        "subject": "=IFRS 17 · rapport de la semaine du {{ $now.minus({ days: 7 }).toFormat('dd/MM') }} au {{ $now.toFormat('dd/MM/yyyy') }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "66b77af3-40fc-58cb-987a-7ba620523738",
+      "name": "E-mail : rapport hebdomadaire",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        300
+      ],
+      "webhookId": "71a676c7-6079-51ca-b9ba-c0b0d9b7676b"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres (rapport)').first().json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres (rapport)').first().json.parametres.valideur }}",
+        "subject": "=IFRS 17 · rapport hebdomadaire impossible",
+        "emailFormat": "text",
+        "text": "=Le tableau de bord n'a pas pu être lu : {{ String($json.error?.message ?? $json.error ?? '').slice(0, 500) }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "7e003daf-93f8-5153-a9e5-0c86d1a3af8f",
+      "name": "E-mail : rapport impossible",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        500
+      ],
+      "webhookId": "87e12d6b-a90a-59f0-87a8-7896558f032f"
+    }
+  ],
+  "connections": {
+    "Toutes les 15 minutes": {
+      "main": [
+        [
+          {
+            "node": "Paramètres (santé)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres (santé)": {
+      "main": [
+        [
+          {
+            "node": "Santé de l'API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Santé de l'API": {
+      "main": [
+        [
+          {
+            "node": "État changé ? (API répond)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "État changé ? (API muette)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "État changé ? (API répond)": {
+      "main": [
+        [
+          {
+            "node": "Alerter ? (répond)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "État changé ? (API muette)": {
+      "main": [
+        [
+          {
+            "node": "Alerter ? (muette)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alerter ? (répond)": {
+      "main": [
+        [
+          {
+            "node": "E-mail : état de l'API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alerter ? (muette)": {
+      "main": [
+        [
+          {
+            "node": "E-mail : état de l'API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chaque lundi à 8 h": {
+      "main": [
+        [
+          {
+            "node": "Paramètres (rapport)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres (rapport)": {
+      "main": [
+        [
+          {
+            "node": "Tableau de bord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tableau de bord": {
+      "main": [
+        [
+          {
+            "node": "Mettre en forme le rapport",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : rapport impossible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mettre en forme le rapport": {
+      "main": [
+        [
+          {
+            "node": "E-mail : rapport hebdomadaire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

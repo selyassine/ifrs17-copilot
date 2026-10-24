@@ -1,0 +1,119 @@
+{
+ "version": "2",
+ "historique": [
+  {
+   "version": "1",
+   "date": "2026-10-21",
+   "modification": "création du registre des hypothèses (D-077)"
+  },
+  {
+   "version": "2",
+   "date": "2026-10-21",
+   "modification": "calibration du RA sur clrd2025.csv"
+  }
+ ],
+ "ajustement_risque": {
+  "methode": "quantile (value at risk) d'une loi lognormale de la valeur actuelle des sorties, CV mesuré par back-testing (actuariat/calibration.py)",
+  "niveau_cible": 0.75,
+  "cv_defaut": 0.15,
+  "cv_defaut_justification": "hypothèse non calibrée : branche non indiquée dans le document",
+  "branche_non_calibree": "plus forte volatilité calibrée (prudence : historique insuffisant)",
+  "branches": {
+   "CA": {
+    "code": "CA",
+    "label": "Auto commerciale (RC)",
+    "cohorts": 67,
+    "kept": 67,
+    "sigma_log": 0.265662,
+    "cv": 0.270419,
+    "bias": 0.96413,
+    "ratio_p10": 0.6349,
+    "ratio_p90": 1.3242,
+    "ra_pct": {
+     "0.65": 0.069378,
+     "0.75": 0.154767,
+     "0.85": 0.271316,
+     "0.9": 0.356858,
+     "0.995": 0.913649
+    },
+    "source": "clrd2025.csv"
+   },
+   "OL": {
+    "code": "OL",
+    "label": "Responsabilité civile générale",
+    "cohorts": 58,
+    "kept": 58,
+    "sigma_log": 0.570841,
+    "cv": 0.620662,
+    "bias": 1.021096,
+    "ratio_p10": 0.4133,
+    "ratio_p90": 1.734,
+    "ra_pct": {
+     "0.65": 0.058684,
+     "0.75": 0.248692,
+     "0.85": 0.535274,
+     "0.9": 0.765851,
+     "0.995": 2.696771
+    },
+    "source": "clrd2025.csv"
+   },
+   "PA": {
+    "code": "PA",
+    "label": "Auto particuliers (RC)",
+    "cohorts": 67,
+    "kept": 67,
+    "sigma_log": 0.144412,
+    "cv": 0.145168,
+    "bias": 0.95081,
+    "ratio_p10": 0.7374,
+    "ratio_p90": 1.1137,
+    "ra_pct": {
+     "0.65": 0.046255,
+     "0.75": 0.090872,
+     "0.85": 0.149407,
+     "0.9": 0.190822,
+     "0.995": 0.435558
+    },
+    "source": "clrd2025.csv"
+   },
+   "WC": {
+    "code": "WC",
+    "label": "Accidents du travail",
+    "cohorts": 53,
+    "kept": 53,
+    "sigma_log": 0.339558,
+    "cv": 0.349584,
+    "bias": 0.935241,
+    "ratio_p10": 0.6044,
+    "ratio_p90": 1.3353,
+    "ra_pct": {
+     "0.65": 0.075934,
+     "0.75": 0.18694,
+     "0.85": 0.342158,
+     "0.9": 0.458649,
+     "0.995": 1.263682
+    },
+    "source": "clrd2025.csv"
+   }
+  },
+  "calibre_le": "2026-10-21"
+ },
+ "projection": {
+  "methode": "Chain Ladder (facteurs pondérés par les volumes) sur les paiements cumulés, sinistralité attendue = S/P ultime moyen des survenances passées, information arrêtée au 31/12 précédent",
+  "queue": "facteur 9→10 égal au facteur 8→9 (non observable sur 10 ans)",
+  "selection": "compagnies « Single », prime ≥ 1 000 k$, triangle complet, S/P attendu entre 0,2 et 2"
+ },
+ "paa": {
+  "duree_max_mois": 12,
+  "regle": "§53(b) : couverture d'un an au plus → PAA permise sans test ; au-delà, modèle général",
+  "actualisation_lic": "actualisée si des règlements sont attendus au-delà de 12 mois (§59(b) non applicable)",
+  "frais_acquisition_en_charge": false
+ },
+ "conventions": {
+  "primes": "encaissées en début de période",
+  "sinistres_et_frais": "payés en fin de période",
+  "recouvrements": "encaissés en fin de période (B65 k)",
+  "frais_acquisition": "payés en début de période, sans RA (B65 e, §28A)",
+  "taux": "courbe spot fournie par le document ; à défaut, taux plat du document"
+ }
+}

@@ -15,6 +15,9 @@ PDF client ──► documents.py ──► texte + tableaux (cellules « | ») 
 | `extract.py` | Agent Extracteur, trois modes : **texte** (couche texte du PDF → Groq), **vision** (image seule → Gemini), **hybride** (couche texte + image → Gemini). Puis validation Pydantic → ancrage des chiffres → une relance si besoin |
 | `synth_hard.py` | 10 documents piégés : ligne Total, instruction cachée, unités dans les en-têtes, tableau en page 2, photo dégradée, colonne « Total des sorties », millions ; et 3 cas qui doivent lever une alerte (ajustement absent, unités absentes, deux groupes) |
 | `vision.py` | Rendu des pages PDF en images, détection du format, client Gemini (point d'accès compatible OpenAI) |
+| `spreadsheet.py` | Classeurs Excel (.xlsx) et CSV : chaque feuille visible devient un tableau « | » lu comme la couche texte d'un PDF ; provenance à la cellule ; formule sans valeur (bloquant), feuille cachée (signalée), .xls refusé (D-079) |
+| `excel_cases.py` | Jeu d'évaluation des tableurs : les 15 documents de référence en Excel ou CSV (4 mises en page) et 7 pièges, dont un montant au format pourcentage (F-021) |
+| `real_cas.py` | Documents à montants réels (CAS Schedule P) pour la campagne de tests (D-070, D-071) |
 | `speech.py` | Question vocale : Whisper (Groq) avec une consigne de vocabulaire IFRS 17 ; WER et termes reconnus |
 
 ## Contrôle d'ancrage

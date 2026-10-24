@@ -1,0 +1,494 @@
+{
+  "name": "09 — Traitement d'un dossier (sous-workflow commun)",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "b9cb05fc-d935-589f-ba1d-8216b8e0628d",
+      "name": "Appelé par 07 ou 08",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// À ADAPTER : les seuls réglages du workflow. Le jeton reste « change-moi » dans le fichier\n// commité ; mettez la valeur d'API_TOKEN dans n8n. Sous-workflow : appelé par 07 (e-mail) et 08 (formulaire), un élément par document.\nconst parametres = {\n  valideur: 'votre.adresse@gmail.com',             // reçoit les alertes et les dossiers à valider\n  expediteur: 'Copilote IFRS 17 <votre.adresse@gmail.com>',  // l'adresse du compte SMTP\n  api: 'http://127.0.0.1:8000',\n  jeton: 'change-moi',\n  validation: 'http://127.0.0.1:5678/webhook/ifrs17/validation',  // workflow 06 (activé)\n};\nreturn { json: { ...$input.item.json, parametres }, binary: $input.item.binary };\n"
+      },
+      "id": "de118d1a-16f8-541a-a080-24fba339da4e",
+      "name": "Paramètres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/case",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "document"
+            },
+            {
+              "parameterType": "formData",
+              "name": "source",
+              "value": "={{ $json.source }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "submitter",
+              "value": "={{ $json.deposant }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "6d12fd6d-d137-5b8c-b22c-6c7ab100dc72",
+      "name": "Appel API /v1/case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1c3f62c9-6cd1-56d9-a507-03d2540df8d2",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "note_prete",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3970ac2f-f25f-54a9-94b5-23e1fa18d418",
+      "name": "Note prête ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · note prête · {{ $json.portfolio?.group_id ?? '' }} (dossier {{ $json.case_id }})",
+        "emailFormat": "html",
+        "html": "={{ $json.note_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8a7676bd-769b-5af8-a5b5-02c9a5762da9",
+      "name": "E-mail : note au déposant",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        -240
+      ],
+      "webhookId": "56cbecfb-3e33-55b5-bcf5-507079c8425b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/cases/{{ $json.case_id ?? $('Appel API /v1/case').item.json.case_id }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'email_note_envoyee', detail: { a: $('Paramètres').item.json.deposant, canal: $('Paramètres').item.json.source } }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "b9e7ae00-7477-5b58-85ed-c5baa2c48d4f",
+      "name": "Registre : note envoyée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        -240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "37e00b56-317f-50aa-9ff3-eb1b340db8b8",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "validation_humaine",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "385676ad-881c-5c56-bc80-da6e62e16ddc",
+      "name": "À valider ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.validation }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$json, deposant: $('Paramètres').item.json.deposant }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "395609e3-a6ca-5487-b1c0-2df8b605b122",
+      "name": "Transmettre au workflow 06",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        -60
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · dossier {{ $('Appel API /v1/case').item.json.case_id }} reçu, en cours de validation",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nVotre dossier {{ $('Appel API /v1/case').item.json.case_id }} ({{ $('Paramètres').item.json.nom_fichier }}) a bien été analysé. Un contrôle automatique demande l'avis d'un valideur avant diffusion de la note : vous la recevrez dès sa décision.\n\nContrôles en cours de revue :\n{{ ($('Appel API /v1/case').item.json.controls || []).map(c => '- ' + c).join('\\n') }}\n\nRéférence à rappeler : {{ $('Appel API /v1/case').item.json.case_id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8d477eb4-249f-5c6a-9f29-c7477711e7b0",
+      "name": "E-mail : accusé de réception",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1400,
+        -60
+      ],
+      "webhookId": "f9fdc6fc-4750-50d0-9def-d06ae80b9fce"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Paramètres').item.json.parametres.api }}/v1/cases/{{ $json.case_id ?? $('Appel API /v1/case').item.json.case_id }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Token",
+              "value": "={{ $('Paramètres').item.json.parametres.jeton }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'transmis_validation', detail: { workflow: '06', valideur: $('Paramètres').item.json.parametres.valideur } }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "60cd2e0e-b503-5ad9-91bd-ada41141a718",
+      "name": "Registre : transmis au valideur",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        -60
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · dossier {{ $json.case_id }} : document inexploitable",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nLe document {{ $('Paramètres').item.json.nom_fichier }} n'a pas pu être exploité :\n{{ ($json.controls || []).map(c => '- ' + c).join('\\n') }}\n\nMerci d'envoyer un PDF ou une image lisible de l'état du portefeuille (primes, sinistres et frais, unités de couverture, taux).",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "23bf4b9a-3b5a-52ab-a0e9-0017fd7969be",
+      "name": "E-mail : document inexploitable",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1160,
+        120
+      ],
+      "webhookId": "0f388df4-98bd-5b25-9893-805f4e89602c"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.deposant }}",
+        "subject": "=IFRS 17 · votre dossier n'a pas pu être traité",
+        "emailFormat": "text",
+        "text": "=Bonjour,\n\nLe document {{ $('Paramètres').item.json.nom_fichier }} n'a pas pu être traité ({{ String($json.error?.message ?? $json.error ?? 'erreur inconnue').slice(0, 300) }}).\n\nS'il s'agit d'un scan, vérifiez qu'il est lisible ; sinon l'équipe a été prévenue et reviendra vers vous.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "cd3971ae-f503-5871-a2f2-9979ad54c144",
+      "name": "E-mail : incident (déposant)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        240
+      ],
+      "webhookId": "8506d20c-5e9a-5834-b060-8743606018f6"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Paramètres').item.json.parametres.expediteur }}",
+        "toEmail": "={{ $('Paramètres').item.json.parametres.valideur }}",
+        "subject": "=IFRS 17 · échec d'un dossier reçu par {{ $('Paramètres').item.json.source }}",
+        "emailFormat": "text",
+        "text": "=Déposant : {{ $('Paramètres').item.json.deposant }}\nDocument : {{ $('Paramètres').item.json.nom_fichier }}\nErreur : {{ JSON.stringify($json.error ?? $json).slice(0, 1500) }}\n\nLe dossier est visible dans le registre (site, page Dossiers) avec son statut d'échec.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "81e0986b-215c-5891-b398-bdf76f252ddd",
+      "name": "E-mail : alerte équipe",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        240
+      ],
+      "webhookId": "2dcc05a7-8fae-5f1a-964d-2bc650eab718"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Résumé renvoyé au workflow appelant (07 ou 08).\nconst r = $('Appel API /v1/case').item.json;\nreturn { json: { case_id: r.case_id, statut: r.status, deposant: $('Paramètres').item.json.deposant } };\n"
+      },
+      "id": "29fcaca2-dffc-5429-b276-980dc354fc82",
+      "name": "Résultat",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        -120
+      ]
+    }
+  ],
+  "connections": {
+    "Appelé par 07 ou 08": {
+      "main": [
+        [
+          {
+            "node": "Paramètres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paramètres": {
+      "main": [
+        [
+          {
+            "node": "Appel API /v1/case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel API /v1/case": {
+      "main": [
+        [
+          {
+            "node": "Note prête ?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : incident (déposant)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : incident (déposant)": {
+      "main": [
+        [
+          {
+            "node": "E-mail : alerte équipe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Note prête ?": {
+      "main": [
+        [
+          {
+            "node": "E-mail : note au déposant",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "À valider ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : note au déposant": {
+      "main": [
+        [
+          {
+            "node": "Registre : note envoyée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registre : note envoyée": {
+      "main": [
+        [
+          {
+            "node": "Résultat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "À valider ?": {
+      "main": [
+        [
+          {
+            "node": "Transmettre au workflow 06",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E-mail : document inexploitable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transmettre au workflow 06": {
+      "main": [
+        [
+          {
+            "node": "E-mail : accusé de réception",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail : accusé de réception": {
+      "main": [
+        [
+          {
+            "node": "Registre : transmis au valideur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registre : transmis au valideur": {
+      "main": [
+        [
+          {
+            "node": "Résultat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

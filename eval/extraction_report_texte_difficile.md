@@ -1,6 +1,6 @@
 # Évaluation de l'extracteur — mode texte_difficile
 
-Généré le 20261004-152115 par `python -m eval.eval_extraction --mode texte_difficile`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
+Généré le 20261024-154038 par `python -m eval.eval_extraction --mode texte_difficile`. Modèle : `openai/gpt-oss-120b` ; documents : `eval/extraction_cases.jsonl` (synthétiques, vérité connue).
 
 | Mesure | Valeur |
 | --- | --- |
@@ -14,7 +14,7 @@ Généré le 20261004-152115 par `python -m eval.eval_extraction --mode texte_di
 | Feu vert fiable (justes parmi les « ok ») | 7/7 |
 | Alertes sur les documents faux | — |
 | Relances de correction | 1 |
-| Latence médiane (ms) | 1205.2 |
+| Latence médiane (ms) | 1472.1 |
 
 ## Exactitude par champ
 
@@ -25,6 +25,8 @@ Généré le 20261004-152115 par `python -m eval.eval_extraction --mode texte_di
 | unit_multiplier | 1.0 |
 | premiums | 1.0 |
 | outflows | 1.0 |
+| recoveries | 1.0 |
+| acquisition_costs | 1.0 |
 | coverage_units | 1.0 |
 | discount_rates | 1.0 |
 | risk_adjustment_pct | 1.0 |
