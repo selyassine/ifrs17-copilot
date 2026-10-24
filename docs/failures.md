@@ -312,6 +312,40 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
 - **Leçon :** une fausse alerte est sûre mais coûte un humain ; la mesure par le vrai modèle trouve des cas que
   la vérité synthétique ne montre pas (même famille que F-019).
 
+## F-025 — Dossier C en Excel : triangle non reconnu, échec sûr
+
+- **Date / auteur :** 24/10/2026, équipe (essai sur le site avec le classeur du camarade).
+- **Attendu :** le classeur `3_dossier_C_farmbureau_cloture.xlsx` (4 feuilles : lisez-moi, triangle, courbe des taux
+  avec formules, hypothèses) traité comme le PDF du dossier C : LIC.
+- **Obtenu :** « document inexploitable » : le dossier est parti vers la lecture d'un état de portefeuille, qui a
+  refusé des données incohérentes (9 taux pour 10 primes). Échec sûr : aucun chiffre faux.
+- **Cause :** la relecture du triangle par le code (qui décide aussi qu'un document est un triangle) attendait des
+  lignes sans case vide ; dans le classeur, l'escalier laisse des cases vides et une colonne « dernier cumul connu »
+  termine chaque ligne. Les jeux de test (PDF et un classeur généré par nous) n'avaient pas cette mise en page.
+- **Décision :** cases vides ignorées ; colonne finale égale au dernier cumul reconnue et retirée (par la relecture
+  du code, et dans la lecture du modèle s'il la recopie). Vérifié sans LLM : classeur reconnu, LIC 17 634,48 avec les
+  taux exacts du classeur (17 634,74 avec les taux arrondis du PDF) ; aucun des 70 documents LRC connus n'est pris
+  pour un triangle. Test `test_triangle_excel_cases_vides_et_dernier_cumul`.
+- **Leçon :** un document fait par quelqu'un d'autre trouve ce que nos générateurs ne montrent pas (F-019, F-024).
+
+## F-026 — Copilot LIC : chiffres justes, mais une monnaie et une explication fausses
+
+- **Date / auteur :** 24/10/2026, équipe (mesure unique du jeu gelé `lic`, D-087, puis relecture humaine).
+- **Mesure automatique :** chiffre attendu 6/6, piège refusé 1/1, bon outil 5/6.
+- **Relecture humaine : 3/6 sans défaut.** l04 : « 3 242,85 € » pour un dossier en milliers de USD (monnaie
+  inventée) ; l03 : 1997 pèse 39 % de la provision « car son S/P ultime n'est que de 44,6 % » — faux : c'est
+  parce qu'elle est peu développée (facteur restant 4,27) ; un S/P bas la ferait au contraire peser moins ;
+  l05 : avec un facteur de queue, « la meilleure estimation restant à 17 200,03 » alors qu'elle passe de 16 099 à
+  17 200 (le chiffre est juste, le mot trompe).
+- **Cause :** le contrôle vérifie les nombres et l'unité qui les suit (« points », « % »), pas la monnaie ni le
+  raisonnement ; l'outil par survenance ne donnait pas le facteur restant, le modèle a inventé une cause.
+- **Décision :** monnaie contrôlée par le code (une monnaie autre que celle du dossier est refusée, pour les deux
+  Copilot) ; l'outil par survenance donne le facteur restant et la part déjà payée de l'ultime. Les explications
+  causales restent hors de portée d'un contrôle par le code : la relecture humaine reste nécessaire (F-017). Pas de
+  nouvelle mesure sur ce jeu, qui a servi à trouver les défauts.
+- **Leçon :** « chiffre juste » n'est pas « réponse juste » ; la relecture humaine trouve ce que les mesures
+  automatiques comptent comme réussi (même leçon que F-011 et F-018).
+
 ## Gabarit
 
 ```

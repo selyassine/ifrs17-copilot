@@ -254,3 +254,13 @@ def test_repli_choisit_l_outil_par_mots_cles(tmp_path):
     bad = {"action": "repondre", "reponse": "La marge disparaît avec 7,77 points."}
     res = Copilot(DossierTools(P), scripted(tmp_path, [bad, bad])).ask("Quelle translation des taux annule la marge ?")
     assert res.source == "code" and "sensibilites" in res.answer
+
+
+def test_monnaie_differente_refusee_f026():
+    """Mesure LIC (l04) : « 3 242,85 € » pour un dossier en milliers de USD → rejeté par le code."""
+    from agents.copilot import currency_issues
+
+    assert currency_issues("Il faut 3 242,85 €.", "USD")
+    assert currency_issues("Il faut 3 242,85 milliers de USD.", "USD") == []
+    assert currency_issues("La CSM est de 12,40 milliers d'euros.", "EUR") == []
+    assert currency_issues("Soit 12,40 dinars.", "EUR")

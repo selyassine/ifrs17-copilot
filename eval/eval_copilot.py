@@ -5,6 +5,7 @@
     python -m eval.eval_copilot --jeu test   # 10 questions de test gelées avant la mesure (D-068) : une seule exécution
     python -m eval.eval_copilot --jeu test2  # 10 nouvelles questions gelées pour la v4 (D-084) : une seule exécution
     python -m eval.eval_copilot --jeu injections   # 5 pièges neufs après F-023 (D-086) : une seule exécution
+    python -m eval.eval_copilot --jeu lic    # 6 questions sur le dossier C (triangle, D-087) : une seule exécution
 
 Le chiffre attendu de chaque question n'est pas écrit à la main : il est calculé par les mêmes outils
 (moteur de calcul) au moment de l'évaluation, puis cherché dans la réponse de l'agent. Mesures :
@@ -28,7 +29,7 @@ from pathlib import Path
 
 from agents.copilot import Copilot, DossierTools, norm_search_with
 from agents.memory import context_block, tool_digest
-from agents.schemas import PortfolioData
+from agents.schemas import PortfolioData, TriangleData
 from core.config import get_settings
 from core.llm import LLMClient, LLMError
 from multimodal.documents import numbers_in_text
@@ -37,7 +38,14 @@ from rag.service import IndexMissing, get_retriever, retrieval_options
 HERE = Path(__file__).parent
 QUESTION_FILES = {"mise_au_point": "copilot_questions.jsonl", "test": "copilot_questions_test.jsonl",
                   "test2": "copilot_questions_test2.jsonl",    # test2 : gelé le 24/10/2026 pour la v4 (D-084)
-                  "injections": "copilot_questions_injections.jsonl"}   # 5 pièges neufs, gelés après F-023 (D-086)
+                  "injections": "copilot_questions_injections.jsonl",   # 5 pièges neufs, gelés après F-023 (D-086)
+                  "lic": "copilot_questions_lic.jsonl"}   # Copilot d'un dossier de sinistres survenus (D-087)
+
+
+def triangles() -> dict[str, dict]:
+    """Triangles du jeu LIC (vérités de eval/lic_cases.jsonl), pour les questions du Copilot LIC."""
+    path = HERE / "lic_cases.jsonl"
+    return {json.loads(x)["id"]: json.loads(x)["truth"] for x in path.read_text(encoding="utf-8").splitlines() if x.strip()}
 
 
 def expected_value(tools: DossierTools, spec: dict | None) -> str | None:
@@ -152,11 +160,17 @@ def main() -> None:
                 continue
             memory, used = context_block([{"question": prev["question"], "answer": prev["reponse"],
                                            "tools": prev.get("resultats", [])}], {}), 1
-        tools = DossierTools(PortfolioData(**truth[q["dossier"]]), ra_cv=s.ra_cv,
-                             norm_search=norm_search_with(s, client, loader, f"eval:{q['id']}"))
+        norm = norm_search_with(s, client, loader, f"eval:{q['id']}")
+        if q.get("triangle"):                     # dossier de sinistres survenus (D-087)
+            from agents.copilot_lic import LicTools
+            tools, prompt_id = LicTools(TriangleData(**triangles()[q["triangle"]]), norm_search=norm), "copilot_lic"
+        else:
+            tools = DossierTools(PortfolioData(**truth[q["dossier"]]), ra_cv=s.ra_cv, norm_search=norm)
+            prompt_id = "copilot_agent"
         expected = expected_value(tools, q.get("attendu"))
         try:
-            res = Copilot(tools, client, case_id=f"eval:{q['id']}", memory=memory, memory_used=used).ask(q["question"])
+            res = Copilot(tools, client, case_id=f"eval:{q['id']}", memory=memory, memory_used=used,
+                          prompt_id=prompt_id).ask(q["question"])
         except LLMError as exc:
             print(f"[{n}/{len(questions)}] {q['id']} ERREUR LLM : {str(exc)[:120]}")
             continue

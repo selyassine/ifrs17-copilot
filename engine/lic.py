@@ -209,3 +209,29 @@ def compute_lic(cumulative: list[list[float]], discount_rates: float | list[floa
 def level_of(result: LicResult, ra: float) -> float:
     """Niveau de confiance d'un RA donné (pour comparer à un RA annoncé par le document)."""
     return confidence_level(result.bel, result.cv, ra)
+
+
+@dataclass
+class BfCheck:
+    """Contrôle de cohérence par Bornhuetter-Ferguson (D-087) : provision si les années récentes avaient le S/P ultime
+    moyen des années mûres. Ce n'est pas l'estimation retenue : l'écart avec Chain Ladder mesure ce que la
+    projection doit à la tendance des années récentes, que l'actuaire doit juger."""
+    prior_loss_ratio: float
+    mature_years: list[str]
+    reserves: list[float]
+    total: float
+
+
+def bornhuetter_ferguson(result: LicResult, min_development: int = 6) -> BfCheck | None:
+    """S/P a priori = S/P ultime Chain Ladder, pondéré par les primes, des années ayant au moins ``min_development``
+    retards observés ; provision BF = S/P a priori × prime × (1 − 1 / facteur restant). None sans primes."""
+    rows = result.rows
+    if not rows or any(x.premium is None or x.premium <= 0 for x in rows):
+        return None
+    n = len(rows)
+    mature = [x for i, x in enumerate(rows) if n - i >= min_development]
+    if not mature:
+        return None
+    prior = sum(x.ultimate for x in mature) / sum(x.premium for x in mature)
+    res = [prior * x.premium * (1 - 1 / x.development) if x.development and x.development > 0 else 0.0 for x in rows]
+    return BfCheck(prior_loss_ratio=prior, mature_years=[x.label for x in mature], reserves=res, total=sum(res))

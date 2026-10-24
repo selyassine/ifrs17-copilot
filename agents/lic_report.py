@@ -11,7 +11,7 @@ from datetime import datetime
 
 from agents.note_report import CSS, esc, h_table, m_table, num, pct
 from agents.schemas import TriangleData
-from engine.lic import LicResult
+from engine.lic import LicResult, bornhuetter_ferguson
 
 UNIT = {1: "", 1_000: "milliers de ", 1_000_000: "millions de "}
 
@@ -20,10 +20,44 @@ def _f(x: float, d: int = 4) -> str:
     return f"{x:.{d}f}".replace(".", ",")
 
 
+def rate_txt(x: float) -> str:
+    """Taux affiché avec la précision du document (5,59 % ou 5,586 %)."""
+    return pct(x, 2) if abs(round(x, 4) - x) < 1e-12 else pct(x, 3)
+
+
+def attention_points(t: TriangleData, r: LicResult) -> list[str]:
+    """Constats calculés par le code, que l'actuaire doit juger (D-087) : poids de la dernière survenance, tendance du
+    S/P ultime, écart avec Bornhuetter-Ferguson."""
+    out = []
+    if r.reserve > 0:
+        last = r.rows[-1]
+        out.append(f"La survenance {last.label} porte {pct(last.reserve / r.reserve, 0)} de la provision avec un facteur "
+                   f"restant de {_f(last.development, 2)} : une variation de 10 % de son premier paiement change la "
+                   f"provision de {num(0.1 * last.latest * (last.development - 1))}.")
+    lr = [(x.label, x.loss_ratio) for x in r.rows if x.loss_ratio is not None]
+    if len(lr) >= 6:
+        old = sum(v for _, v in lr[:3]) / 3
+        new = sum(v for _, v in lr[-3:]) / 3
+        if abs(new - old) > 0.1:
+            out.append(f"Le S/P ultime passe de {pct(old, 0)} en moyenne ({lr[0][0]} à {lr[2][0]}) à {pct(new, 0)} "
+                       f"({lr[-3][0]} à {lr[-1][0]}) : Chain Ladder prolonge cette tendance pour les années récentes.")
+    bf = bornhuetter_ferguson(r)
+    if bf is not None:
+        gap = bf.total / r.reserve - 1 if r.reserve else 0.0
+        out.append(f"Contrôle de cohérence par Bornhuetter-Ferguson (S/P a priori {pct(bf.prior_loss_ratio, 1)}, celui "
+                   f"des années {bf.mature_years[0]} à {bf.mature_years[-1]}) : provision {num(bf.total)}, soit "
+                   f"{'+' if gap >= 0 else '−'}{pct(abs(gap), 0)} par rapport à Chain Ladder. "
+                   + ("L'écart est faible." if abs(gap) < 0.1 else
+                      "L'écart est important : le choix de méthode pour les années récentes est un jugement à "
+                      "documenter avant diffusion (non retenu ici)."))
+    return out
+
+
 def render_lic_note(t: TriangleData, r: LicResult, case_id: str = "", controls: list[str] | None = None,
                     checks: list[str] | None = None, entity: str = "Compagnie d'assurance fictive (projet pédagogique)",
                     source_name: str = "", source_sha256: str = "", double_read: str = "", warnings: list[str] | None = None,
-                    human_changes: list[str] | None = None, validated_by: str = "") -> tuple[str, str]:
+                    human_changes: list[str] | None = None, validated_by: str = "",
+                    trace: dict[str, str] | None = None) -> tuple[str, str]:
     controls = controls or []
     checks = checks or []
     unit = f"{UNIT[t.unit_multiplier]}{t.currency}"
@@ -105,7 +139,7 @@ def render_lic_note(t: TriangleData, r: LicResult, case_id: str = "", controls: 
             "§33, B37 à B41"],
            ["Calendrier des paiements", "Diagonales futures du triangle complété, payées en fin d'année calendaire", "§33(c)"],
            ["Actualisation", ("taux plat de " + pct(rates[0]) if len(set(rates)) == 1 else
-                              "taux spot par échéance : " + " ; ".join(pct(x) for x in rates)), "§36, B72(a)"],
+                              "taux spot par échéance : " + " ; ".join(rate_txt(x) for x in rates)), "§36, B72(a)"],
            ["Incertitude de la provision", "Erreur de prédiction de Mack (1993), covariance entre années comprise", "B86 à B92"],
            ["Ajustement pour risque", f"quantile {pct(r.level, 0)} d'une loi lognormale de la meilleure estimation, "
             f"coefficient de variation {pct(r.cv, 1)} ({r.cv_source})", "§37, B86 à B92"],
@@ -134,10 +168,15 @@ def render_lic_note(t: TriangleData, r: LicResult, case_id: str = "", controls: 
            num(r.mack_se), pct(r.mack_se / r.reserve, 1) if r.reserve else "—"] + ([""] if t.premiums else [])
     H.append(h_table(yhead, yrows + [tot], [""] * len(yrows) + ["total"]))
     M += m_table(yhead, yrows + [tot])
+    points = attention_points(t, r)
+    if points:
+        H.append('<div class="callout"><b>Points d\'attention pour l\'actuaire</b><ul class="plain">'
+                 + "".join(f"<li>{esc(x)}</li>" for x in points) + "</ul></div>")
+        M += ["**Points d'attention pour l'actuaire**", ""] + [f"- {x}" for x in points] + [""]
 
     # 6. paiements futurs et actualisation
     h2(6, "Paiements futurs et actualisation")
-    crow = [[f"Année {k + 1}", num(c), pct(r.rates[k]), _f(r.discount[k]), num(c * r.discount[k])]
+    crow = [[f"Année {k + 1}", num(c), rate_txt(r.rates[k]), _f(r.discount[k]), num(c * r.discount[k])]
             for k, c in enumerate(r.cash_flows)]
     ctot = ["Total", num(sum(r.cash_flows)), "", "", num(r.bel)]
     H.append(h_table(["Échéance", "Paiements attendus", "Taux spot", "Facteur d'actualisation", "Valeur actuelle"],
@@ -179,6 +218,10 @@ def render_lic_note(t: TriangleData, r: LicResult, case_id: str = "", controls: 
     if warnings:
         H.append("<h3>Remarques du lecteur</h3><ul class=\"plain\">" + "".join(f"<li>{esc(w)}</li>" for w in warnings) + "</ul>")
     H.append("<h3>Limites</h3><ul class=\"plain\">" + "".join(f"<li>{esc(x)}</li>" for x in limits) + "</ul>")
+    if trace:
+        H.append('<h3>Traçabilité</h3><dl class="trace">'
+                 + "".join(f"<dt>{esc(k)}</dt><dd>{esc(v)}</dd>" for k, v in trace.items()) + "</dl>")
+        M += ["**Traçabilité**", ""] + [f"- {k} : {v}" for k, v in trace.items()] + [""]
     sign = [["Préparée par", "IFRS 17 Copilot", date_txt, ""],
             ["Revue par", validated_by, "", ""], ["Approuvée par", "", "", ""]]
     H.append('<div class="keep"><h3>Validation</h3>' + h_table(["Rôle", "Nom", "Date", "Visa"], sign, left_cols=4)

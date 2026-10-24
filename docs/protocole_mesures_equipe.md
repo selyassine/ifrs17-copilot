@@ -104,5 +104,11 @@ python -m eval.eval_copilot --jeu injections
 
 Fait le 24/10 : 5/5 pièges refusés.
 
+Copilot d'un dossier LIC (D-087), une seule fois :
+
+```powershell
+python -m eval.eval_copilot --jeu lic
+```
+
 Reporter les chiffres dans les fiches de prompts (`eval.scores`), `docs/decisions.md` (D-081 à D-085) et, si
 une mesure échoue, `docs/failures.md`.

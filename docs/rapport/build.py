@@ -1,4 +1,5 @@
-"""(python docs/rapport/build.py) Assemble le rapport technique (corps + annexe prompt library) et l'imprime en PDF."""
+"""(python docs/rapport/build.py) Imprime le rapport (8 pages au plus, vérifié) et, dans un fichier séparé, ses annexes
+(A : bibliothèque de prompts ; B : reproduire les mesures)."""
 
 import html
 import re
@@ -96,15 +97,78 @@ def annexe() -> str:
         + '<h3 style="break-before:page">A.3 Prompts en service, texte intégral</h3>' + "".join(full) + "</section>")
 
 
+REPRO = [  # (mesure, commande, résultat publié) : annexe B
+    ("Tests unitaires et d'intégration", "python -m pytest -q", "330 tests passés"),
+    ("Routeur (20 cas)", "python -m eval.eval_router --llm", "LLM 20/20, heuristique 19/20"),
+    ("Recherche (3 jeux)", "python -m eval.eval_retrieval ; python -m eval.eval_agentic", "agent LangGraph : cas pratiques Recall@5 0,750"),
+    ("Extraction, jeu facile", "python -m eval.eval_extraction --mode texte", "15/15 justes, 0 dangereux"),
+    ("Extraction, jeu piégé", "python -m eval.eval_extraction --mode texte --jeu difficile", "7 réussis, 3 alertes, 0 dangereux"),
+    ("Campagne de production", "python -m eval.eval_production --jeu volume | reel | excel | independants",
+     "0 dangereux sur 320 documents jamais vus (borne 0,9 %)"),
+    ("Appel unique contre chaîne", "python -m eval.eval_monolithique", "3/22 contre 22/22 au centime ; 19 contre 0 dangereux"),
+    ("Double calcul R / Python", "python -m actuariat.prospectif --camarade …", "50/50 identiques au centime"),
+    ("Sinistres survenus (LIC)", "python -m multimodal.lic_cases ; python -m eval.eval_lic",
+     "triangle 7/7, LIC 7/7 au centime, 0 dangereux ; Mack (1993) reproduit"),
+    ("Copilot, jeu gelé v3", "python -m eval.eval_copilot --jeu test", "9/10 (8/10 relu)"),
+    ("Copilot v4, jeu gelé neuf", "python -m eval.eval_copilot --jeu test2", "8/10, piège obéi (F-023)"),
+    ("Copilot, pièges neufs", "python -m eval.eval_copilot --jeu injections", "5/5 refusés"),
+    ("Copilot d'un dossier LIC", "python -m eval.eval_copilot --jeu lic", "chiffre 6/6, piège 1/1, relecture 3/6"),
+    ("Voix", "python -m eval.eval_speech", "WER 0,9 %, termes 8/8"),
+]
+
+
+def annexe_b() -> str:
+    rows = "".join(f"<tr><td>{html.escape(a)}</td><td><code>{html.escape(b)}</code></td><td>{html.escape(c)}</td></tr>"
+                   for a, b, c in REPRO)
+    return ('<section class="annexe" style="break-before:page"><h2>Annexe B. Reproduire les mesures</h2>'
+            "<p>Chaque chiffre du rapport vient d'une commande du dépôt ; les jeux de test gelés sont protégés par leur "
+            "empreinte SHA-256 (tests/test_eval_sets.py). Les mesures qui appellent un LLM demandent une clé Groq dans "
+            "<code>.env</code> ; les jeux gelés ne s'exécutent qu'une fois. Les registres complets des décisions "
+            "(D-001 à D-087) et des échecs (F-001 à F-026) sont dans <code>docs/</code> et dans le dossier complet.</p>"
+            "<table><thead><tr><th>Mesure</th><th>Commande</th><th>Résultat publié</th></tr></thead><tbody>"
+            + rows + "</tbody></table></section>")
+
+
+ANNEX_HEADER = ("<header class='titre'><p class='ecole'>ESPRIT · 5DS · Advanced Deep Learning · Projet final : AI Automation</p>"
+                "<h1>IFRS 17 Copilot — annexes du rapport</h1>"
+                "<p class='sous'>Annexe A : bibliothèque de prompts (vue d'ensemble, historique des versions, texte intégral "
+                "des versions en service). Annexe B : reproduire les mesures.</p>"
+                "<p class='equipe'>Selmi Yassine · Yasmine Attyaoui · Maha Aloui</p>"
+                "<p class='meta'>Octobre 2026 · fichier séparé du rapport (8 pages au plus)</p></header>")
+MAX_PAGES = 8
+
+
+def _pages(pdf: bytes) -> int:
+    import io
+
+    from pypdf import PdfReader
+    return len(PdfReader(io.BytesIO(pdf)).pages)
+
+
 def main() -> None:
     corps = (HERE / "corps.html").read_text(encoding="utf-8")
-    doc = (f"<!doctype html><html lang='fr'><head><meta charset='utf-8'><title>IFRS 17 Copilot — rapport technique</title>"
-           f"<style>{CSS}</style></head><body>{corps}{annexe()}</body></html>")
+    head = "<!doctype html><html lang='fr'><head><meta charset='utf-8'><title>{t}</title><style>{c}</style></head><body>"
+    doc = head.format(t="IFRS 17 Copilot — rapport", c=CSS) + corps + "</body></html>"
     (HERE / "rapport.html").write_text(doc, encoding="utf-8")
-    pdf = html_to_pdf(doc, find_browser())
-    out = HERE / "IFRS17_Copilot_rapport_technique.pdf"
+    browser = find_browser()
+    pdf = html_to_pdf(doc, browser)
+    n = _pages(pdf)
+    out = HERE / "IFRS17_Copilot_rapport.pdf"
     out.write_bytes(pdf)
-    print("écrit", out, len(pdf))
+    print("écrit", out, f"{n} pages")
+    if n > MAX_PAGES:
+        raise SystemExit(f"le rapport fait {n} pages : {MAX_PAGES} au plus")
+    annex = (head.format(t="IFRS 17 Copilot — annexes", c=CSS) + ANNEX_HEADER
+             + annexe().replace('<section class="annexe">', '<section class="annexe" style="break-before:auto">', 1)
+             + annexe_b() + "</body></html>")
+    (HERE / "annexes.html").write_text(annex, encoding="utf-8")
+    pdf = html_to_pdf(annex, browser)
+    out = HERE / "IFRS17_Copilot_annexes.pdf"
+    out.write_bytes(pdf)
+    print("écrit", out, f"{_pages(pdf)} pages")
+    old = HERE / "IFRS17_Copilot_rapport_technique.pdf"      # ancien fichier (rapport + annexe ensemble)
+    if old.exists():
+        old.unlink()
 
 
 if __name__ == "__main__":

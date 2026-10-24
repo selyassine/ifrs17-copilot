@@ -52,7 +52,8 @@ from engine.risk import confidence_level, ra_at_level
 from multimodal.documents import numbers_in_text, parse_number
 
 MAX_TOOL_CALLS = 5
-CALC_TOOLS = {"donnees_du_dossier", "evaluer_scenario", "sensibilites", "niveau_de_confiance", "projection_resultat"}
+CALC_TOOLS = {"donnees_du_dossier", "evaluer_scenario", "sensibilites", "niveau_de_confiance", "projection_resultat",
+              "par_survenance", "paiements_futurs"}
 CORRECTION_HINT = ("Recopie uniquement des nombres des résultats d'outils (ou de la mémoire) et ne cite que les "
                    "paragraphes renvoyés par rechercher_norme. Si un chiffre te manque, appelle l'outil qui le donne : "
                    "chiffres centraux et CSM libérée la première période → donnees_du_dossier ; scénario « et si » → "
@@ -114,6 +115,7 @@ class DossierTools:
         self.cv = ra_cv
         self.norm_search = norm_search
         self.unit = unit_label(portfolio)
+        self.currency = portfolio.currency
 
     def tools(self) -> dict[str, Tool]:
         out = [
@@ -345,6 +347,19 @@ def answer_issues(answer: str, question: str, observations: list[dict], n_period
     return sorted(set(issues))
 
 
+_CURRENCIES = {"EUR": r"€|\beuros?\b|\bEUR\b", "USD": r"\$|\bdollars?\b|\bUSD\b", "TND": r"\bdinars?\b|\bTND\b|\bDT\b",
+               "MAD": r"\bdirhams?\b|\bMAD\b", "GBP": r"£|\blivres? sterling\b|\bGBP\b", "CHF": r"\bCHF\b|\bfrancs? suisses?\b"}
+
+
+def currency_issues(answer: str, currency: str) -> list[str]:
+    """Mesure LIC du 24/10 (F-026) : « 3 242,85 € » pour un dossier en milliers de USD. Une monnaie citée dans la
+    réponse doit être celle du dossier."""
+    if not currency:
+        return []
+    wrong = [c for c, pat in _CURRENCIES.items() if c != currency.upper() and re.search(pat, answer, re.I)]
+    return [f"monnaie {', '.join(wrong)} citée alors que le dossier est en {currency} : recopie l'unité de l'outil"] if wrong else []
+
+
 def fallback_tool(question: str) -> tuple[str, dict]:
     """Outil de repli choisi par le code, sans LLM (mots-clés), quand le modèle n'en a appelé aucun."""
     q = question.lower()
@@ -402,16 +417,18 @@ class CopilotResult:
 
 class Copilot:
     def __init__(self, tools: DossierTools, client: LLMClient, case_id: str = "", memory: str = "",
-                 memory_refs: set[str] | None = None, memory_used: int = 0, checkpointer: Any = None):
+                 memory_refs: set[str] | None = None, memory_used: int = 0, checkpointer: Any = None,
+                 prompt_id: str = "copilot_agent"):
         self.tools = tools.tools()
-        self.n_periods = tools.p.n_periods
+        self.n_periods = getattr(tools, "n_periods", None) or tools.p.n_periods
+        self.currency = getattr(tools, "currency", "")
         self.client = client
         self.case_id = case_id
         self.memory = memory
         self.memory_refs = set(memory_refs or ())
         self.memory_used = memory_used
         self.checkpointer = checkpointer
-        self.spec = load_prompt("copilot_agent")
+        self.spec = load_prompt(prompt_id)
 
     # -------------------------------------------------------------- nœuds
     def start_messages(self, question: str) -> list[dict]:
@@ -474,7 +491,7 @@ class Copilot:
         answer = str(d.get("reponse") or "").strip()
         obs = state.get("observations", [])
         issues = (answer_issues(answer, state["question"], obs, self.n_periods, state.get("memory", ""), self.memory_refs)
-                  if answer else ["réponse vide"])
+                  + currency_issues(answer, self.currency) if answer else ["réponse vide"])
         steps = state.get("steps", []) + [{"noeud": "verifier", "problemes": issues}]
         if not issues:
             return {"answer": answer, "source": "llm", "sources": d.get("sources") or [], "steps": steps}
@@ -492,6 +509,8 @@ class Copilot:
         if obs:
             return obs
         name, args = fallback_tool(question)
+        if name not in self.tools:
+            name, args = "donnees_du_dossier", {}
         if name not in self.tools:
             return obs
         return [{"outil": name, "arguments": args, "resultat": self.tools[name].run(**args)}]

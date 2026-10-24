@@ -67,7 +67,8 @@ def parse_triangle(doc: DocumentText) -> ParsedTriangle | None:
         while j < len(lines) and (mm := _YEAR_ROW.match(lines[j])):
             cells = _cells(lines[j])
             first = cells[0][len(mm.group(1)):].strip() if cells else ""
-            raw = ([first] if first else []) + cells[1:]
+            # classeur : les cases vides de l'escalier (« | | ») sont ignorées (dossier C en Excel, 24/10)
+            raw = [c for c in ([first] if first else []) + cells[1:] if c.strip()]
             vals = [parse_number(c) for c in raw]
             if any(v is None for v in vals) or not vals:
                 break
@@ -78,14 +79,19 @@ def parse_triangle(doc: DocumentText) -> ParsedTriangle | None:
         n = len(rows)
         if n >= 3:
             lens = [len(v) for _, v in rows]
-            for p in (0, 1):
-                if all(n - i + p == L for i, L in enumerate(lens)):
-                    cand = ParsedTriangle(years=[y for y, _ in rows],
-                                          premiums=[v[0] for _, v in rows] if p else None,
-                                          triangle=[v[p:] for _, v in rows])
-                    if best is None or n > len(best.years):
-                        best = cand
-                    break
+            # p : colonne de primes en tête ; q : colonne « dernier cumul connu » en fin de ligne, égale à la
+            # dernière valeur de l'escalier (présentation courante dans un classeur)
+            for p, q in ((0, 0), (1, 0), (0, 1), (1, 1)):
+                if not all(n - i + p + q == L for i, L in enumerate(lens)):
+                    continue
+                if q and not all(abs(v[-1] - v[-2]) < 0.005 for _, v in rows if len(v) >= 2 + p):
+                    continue
+                cand = ParsedTriangle(years=[y for y, _ in rows],
+                                      premiums=[v[0] for _, v in rows] if p else None,
+                                      triangle=[v[p:len(v) - q] for _, v in rows])
+                if best is None or n > len(best.years):
+                    best = cand
+                break
         k = max(j, k + 1)
     return best
 
@@ -137,7 +143,14 @@ def _clean(data: dict) -> tuple[dict, list[str], str, list[str]]:
             fields[k] = v / 100
             notes.append(f"{k} : pourcentage converti en décimal")
     if "triangle" in fields and isinstance(fields["triangle"], list):
-        fields["triangle"] = [_coerce(r) if isinstance(r, list) else r for r in fields["triangle"]]
+        tri = [_coerce(r) if isinstance(r, list) else r for r in fields["triangle"]]
+        n = len(tri)
+        if (n >= 3 and all(isinstance(r, list) and len(r) == n - i + 1 for i, r in enumerate(tri))
+                and all(isinstance(r[-1], int | float) and isinstance(r[-2], int | float) and abs(r[-1] - r[-2]) < 0.005
+                        for r in tri if len(r) >= 2)):
+            tri = [r[:-1] for r in tri]
+            notes.append("triangle : colonne « dernier cumul » recopiée en fin de ligne, retirée par le code")
+        fields["triangle"] = tri
     if "origin_years" in fields and isinstance(fields["origin_years"], list):
         fields["origin_years"] = [str(y).strip() for y in fields["origin_years"]]
     return fields, missing, remarks, notes

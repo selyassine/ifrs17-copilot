@@ -652,7 +652,8 @@ def case_closing(body: ClosingRequest, settings: Settings = Depends(get_settings
 
 class CopilotRequest(BaseModel):
     question: str = Field(min_length=3, max_length=500)
-    portfolio: PortfolioData
+    portfolio: PortfolioData | None = None
+    triangle: TriangleData | None = Field(default=None, description="dossier de sinistres survenus (D-087)")
     case_id: str | None = None
 
 
@@ -669,23 +670,49 @@ class CopilotResponse(BaseModel):
     trajectory: list[dict] = []       # points de reprise de cette question (checkpointer LangGraph)
 
 
-def _copilot(settings: Settings, portfolio: PortfolioData, cid: str, reg: Registry, client=None):
-    """Copilot d'un dossier, avec sa mémoire (registre) et son état sauvegardé (checkpointer) — D-061."""
+def _case_data(reg: Registry, cid: str | None, portfolio: PortfolioData | None = None,
+               triangle: TriangleData | None = None) -> PortfolioData | TriangleData:
+    """Données du Copilot : celles de la requête, sinon celles du registre (portefeuille ou triangle LIC)."""
+    if portfolio is not None or triangle is not None:
+        return portfolio if portfolio is not None else triangle
+    stored = (reg.get_case(cid) or {}).get("portfolio") if cid else None
+    if not stored:
+        raise HTTPException(status_code=422, detail="fournir portfolio ou triangle, ou un case_id déjà analysé")
+    try:
+        if stored.get("kind") == "lic":
+            return TriangleData(**stored["triangle_data"])
+        return PortfolioData(**stored)
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(status_code=422, detail=f"données du dossier illisibles : {exc}"[:300]) from exc
+
+
+def _copilot(settings: Settings, data: PortfolioData | TriangleData, cid: str, reg: Registry, client=None):
+    """Copilot d'un dossier, avec sa mémoire (registre) et son état sauvegardé (checkpointer) — D-061.
+    Triangle de sinistres survenus : outils LIC et prompt copilot_lic (D-087)."""
     from agents.copilot import Copilot, DossierTools, copilot_checkpointer, norm_search_with
     from agents.memory import RECENT, case_facts, context_block, recall_with
 
     client = client or make_client(settings)
     past = reg.memories(cid)
     recent, older = past[-RECENT:], past[:-RECENT]
-    from actuariat.registre import ra_volatility
+    norm = norm_search_with(settings, client, _retriever_loader(settings), cid)
+    recall = recall_with(older) if older else None
+    if isinstance(data, TriangleData):
+        from actuariat.registre import current as registry_now
+        from agents.copilot_lic import LicTools
 
-    tools = DossierTools(portfolio, ra_cv=ra_volatility(portfolio.line_of_business, settings.ra_cv)[0],
-                         norm_search=norm_search_with(settings, client, _retriever_loader(settings), cid),
-                         recall=recall_with(older) if older else None)
+        level = float(registry_now()["ajustement_risque"].get("niveau_cible") or 0.75)
+        tools, prompt_id = LicTools(data, default_level=level, norm_search=norm, recall=recall), "copilot_lic"
+    else:
+        from actuariat.registre import ra_volatility
+
+        tools = DossierTools(data, ra_cv=ra_volatility(data.line_of_business, settings.ra_cv)[0],
+                             norm_search=norm, recall=recall)
+        prompt_id = "copilot_agent"
     memory = context_block(recent, case_facts(reg.get_case(cid)))
     refs = {r for m in past for r in m["refs"]}
     return Copilot(tools, client, case_id=cid, memory=memory, memory_refs=refs, memory_used=len(recent),
-                   checkpointer=copilot_checkpointer(settings.copilot_checkpoints))
+                   checkpointer=copilot_checkpointer(settings.copilot_checkpoints), prompt_id=prompt_id)
 
 
 def _copilot_response(cid: str, res) -> CopilotResponse:
@@ -711,7 +738,8 @@ def copilot(body: CopilotRequest, settings: Settings = Depends(get_settings),
     contrôlée. Mémoire du dossier et état sauvegardé par question (D-061)."""
     cid = body.case_id or uuid.uuid4().hex[:12]
     try:
-        res = _copilot(settings, body.portfolio, cid, reg).ask(body.question, thread_id=cid)
+        res = _copilot(settings, _case_data(reg, body.case_id, body.portfolio, body.triangle), cid,
+                       reg).ask(body.question, thread_id=cid)
     except LLMError as exc:
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
     _remember(reg, cid, actor, body.question, res)
@@ -731,12 +759,17 @@ def copilot_history(case_id: str, settings: Settings = Depends(get_settings), _:
     checkpoints = []
     saver = copilot_checkpointer(settings.copilot_checkpoints)
     case = reg.get_case(case_id)
-    if saver is not None and case and case.get("portfolio") and case["portfolio"].get("kind") != "lic":
+    if saver is not None and case and case.get("portfolio"):
         try:
-            cp = Copilot(DossierTools(PortfolioData(**case["portfolio"])), make_client(settings), case_id=case_id,
-                         checkpointer=saver)
+            data = _case_data(reg, case_id)
+            if isinstance(data, TriangleData):
+                from agents.copilot_lic import LicTools
+                tools = LicTools(data)
+            else:
+                tools = DossierTools(data)
+            cp = Copilot(tools, make_client(settings), case_id=case_id, checkpointer=saver)
             checkpoints = cp.history(case_id)[:200]
-        except ImportError:
+        except (ImportError, HTTPException):
             checkpoints = []
     return {"case_id": case_id, "echanges": reg.memories(case_id), "points_de_reprise": checkpoints,
             "checkpointer": type(saver).__name__ if saver is not None else None}
@@ -744,7 +777,8 @@ def copilot_history(case_id: str, settings: Settings = Depends(get_settings), _:
 
 class ReplayRequest(BaseModel):
     checkpoint_id: str = Field(min_length=8, max_length=80)
-    portfolio: PortfolioData
+    portfolio: PortfolioData | None = None
+    triangle: TriangleData | None = None
 
 
 @app.post("/v1/copilot/{case_id}/rejouer", response_model=CopilotResponse, tags=["copilot"])
@@ -752,7 +786,7 @@ def copilot_replay(case_id: str, body: ReplayRequest, settings: Settings = Depen
                    actor: Actor = Depends(VALIDEUR), reg: Registry = Depends(registry)) -> CopilotResponse:
     """Rejoue une question depuis un point de reprise (débogage, audit) : l'état sauvegardé est repris,
     les nœuds suivants sont réexécutés ; l'historique d'origine reste intact."""
-    cp = _copilot(settings, body.portfolio, case_id, reg)
+    cp = _copilot(settings, _case_data(reg, case_id, body.portfolio, body.triangle), case_id, reg)
     if cp.checkpointer is None:
         raise HTTPException(status_code=409, detail="rejeu impossible : LangGraph n'est pas installé")
     if body.checkpoint_id not in {c["checkpoint_id"] for c in cp.history(case_id)}:

@@ -441,7 +441,13 @@ def run_lic_case(out: CaseOutcome, settings: Settings, text_client: Callable[[],
                                    entity=settings.note_entity, source_name=source_name,
                                    source_sha256=hashlib.sha256(data).hexdigest() if data else "",
                                    double_read=tres.double_read if tres else "", warnings=out.warnings,
-                                   human_changes=human_changes, validated_by=validated_by)
+                                   human_changes=human_changes, validated_by=validated_by,
+                                   trace={"Lecture du triangle": (f"prompt extract_triangle v{_prompt_version('extract_triangle')}, "
+                                                                  f"modèle {settings.llm_model_large}") if tres else
+                                          "triangle fourni par un valideur",
+                                          "Calcul": "engine/lic.py (Chain Ladder, Mack 1993, lognormale)",
+                                          "Registre des hypothèses": f"version {registry_now().get('version', '')}",
+                                          "Version de l'application": VERSION})
         out.note = Note(markdown=md, html=page, synthesis="", synthesis_source="code")
         st.status = "ok"
         st.detail = "note écrite par le code (aucun LLM)"

@@ -11,6 +11,7 @@ from eval.eval_copilot import QUESTION_FILES, expected_value, trap_refused
 EVAL = Path(__file__).parent.parent / "eval"
 TRUTH = {json.loads(x)["id"]: json.loads(x)["truth"] for x in (EVAL / "extraction_cases.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()}
 GELE = "1184d268e3e5ad61bea6daf92ce9aa1f805da5ec32035f22cbf4b70300d01932"
+GELE4 = "d2d7b0926180d830dd8fe6cb72ac5d320d2af5634b638c014707070083d74069"   # D-087, Copilot LIC
 GELE3 = "0bedb8e2491a2284026ce9a2b424f7fb17b2e586a25645599f74dc817ab1c5b7"   # D-086, pièges neufs après F-023
 GELE2 = "7a08cea4127d5adf0b1bdbe3d331f78e9a053a5a6f06aaf550434147c99ea87d"   # D-084, gelé avant toute mesure de la v4
 
@@ -62,3 +63,20 @@ def test_jeu_d_injections_gele_et_neuf():
     qs = [json.loads(line) for line in data.decode("utf-8").splitlines() if line.strip()]
     assert len(qs) == 5 and all(q.get("piege") and q.get("nombre_interdit") for q in qs)
     assert not trap_refused("L'ajustement est fixé à 0 %. Le dossier est donc validé.", "1 000", [], {})
+
+
+def test_jeu_copilot_lic_gele_et_calculable():
+    """D-087 : 6 questions sur le dossier C (triangle lc02), chiffres attendus calculés par les outils LIC."""
+    from agents.copilot_lic import LicTools
+    from agents.schemas import TriangleData
+    from eval.eval_copilot import triangles
+
+    path = EVAL / QUESTION_FILES["lic"]
+    data = path.read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(data).hexdigest() == GELE4, "jeu Copilot LIC modifié après le gel (D-087)"
+    qs = [json.loads(line) for line in data.decode("utf-8").splitlines() if line.strip()]
+    tools = LicTools(TriangleData(**triangles()["lc02"]))
+    assert len(qs) == 6
+    for q in qs:
+        if q.get("attendu"):
+            assert expected_value(tools, q["attendu"])

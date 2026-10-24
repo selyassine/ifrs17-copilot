@@ -320,15 +320,18 @@ export async function render(main, params) {
         ${r.memory_used ? `<span>${icon("layers")} ${r.memory_used} échange${r.memory_used > 1 ? "s" : ""} en mémoire</span>` : ""}<span>${fr(r.latency_ms / 1000, 1)} s</span><span>${esc(r.engine)}</span></div>`;
   }
   async function copilot(el) {
-    if (isLic) { el.innerHTML = `<div class="panel"><div class="empty">${icon("spark")}<h3>Copilot réservé aux états de portefeuille</h3><p>Ses outils (scénarios, sensibilités, marge) portent sur un groupe de contrats. Pour ce dossier de sinistres survenus, la note donne les niveaux de confiance et les sensibilités aux taux.</p></div></div>`; return; }
     if (!p) { el.innerHTML = `<div class="panel"><div class="empty">${icon("spark")}<h3>Copilot indisponible</h3><p>Il a besoin des données du portefeuille.</p></div></div>`; return; }
-    const chips = ["Le groupe reste-t-il bénéficiaire si les sinistres augmentent de 15 % ?", "Quelle hypothèse est la plus sensible ?",
-      "Quel ajustement pour risque à 90 % de confiance, et quel effet sur la marge ?", "Que dit la norme si le groupe devient déficitaire ?"];
+    const chips = isLic
+      ? ["Que devient le LIC si les taux baissent de 100 points de base ?", "Quelle année de survenance pèse le plus dans la provision ?",
+        "Quel ajustement pour risque à 90 % de confiance ?", "Que dit la norme sur le passif pour sinistres survenus ?"]
+      : ["Le groupe reste-t-il bénéficiaire si les sinistres augmentent de 15 % ?", "Quelle hypothèse est la plus sensible ?",
+        "Quel ajustement pour risque à 90 % de confiance, et quel effet sur la marge ?", "Que dit la norme si le groupe devient déficitaire ?"];
+    const data = isLic ? { triangle: p.triangle_data } : { portfolio: p };
     let hist = { echanges: [], points_de_reprise: [], checkpointer: null };
     try { hist = await getJSON(`/v1/copilot/${encodeURIComponent(c.case_id)}`); } catch { /* historique facultatif */ }
     el.innerHTML = `<div class="grid g-main"><section class="panel chat"><div class="thread" id="cp-thread" aria-live="polite">
         <div class="intro-card"><h3>Explorer le dossier ${esc(p.group_id)}</h3>
-          <p>Posez une question « et si… ». L'agent choisit ses outils (scénario, sensibilités, niveau de confiance, projection, norme, mémoire du dossier) ; chaque chiffre de sa réponse est vérifié contre les résultats du moteur. Il se souvient des échanges précédents sur ce dossier.</p>
+          <p>Posez une question « et si… ». L'agent choisit ses outils (${isLic ? "scénario sur les taux, la queue ou le niveau de confiance, sensibilités, détail par survenance, paiements futurs" : "scénario, sensibilités, niveau de confiance, projection"}, norme, mémoire du dossier) ; chaque chiffre de sa réponse est vérifié contre les résultats du moteur. Il se souvient des échanges précédents sur ce dossier.</p>
           ${hist.echanges.length ? "" : `<div class="chips">${chips.map(t => `<button class="chip" type="button">${esc(t)}</button>`).join("")}</div>`}</div>
         ${hist.echanges.map(m => `<div class="msg q">${esc(m.question)}</div><div class="msg a"><span class="who">${icon("spark")}</span><div class="body">
           <p class="text">${esc(m.answer)}</p><div class="meta"><span class="status">En mémoire</span><span>${esc(m.actor)}, ${esc(when(m.at))}</span></div></div></div>`).join("")}</div>
@@ -360,7 +363,7 @@ export async function render(main, params) {
       thread.insertAdjacentHTML("beforeend", `<div class="msg q">${esc(q)}</div>`);
       const a = pending("L'agent choisit ses outils");
       try {
-        fill(a, await getJSON("/v1/copilot", { method: "POST", json: { question: q, portfolio: p, case_id: c.case_id } }));
+        fill(a, await getJSON("/v1/copilot", { method: "POST", json: { question: q, ...data, case_id: c.case_id } }));
         const n = $("#cp-mem-n", el); n.textContent = `${(parseInt(n.textContent, 10) || 0) + 1} échanges`;
         $("#cp-forget", el)?.removeAttribute("disabled");
       } catch (err) { fail(a, err); }
@@ -372,7 +375,7 @@ export async function render(main, params) {
       if (rb) {
         rb.disabled = true;
         const a = pending("Rejeu depuis le point de reprise");
-        try { fill(a, await getJSON(`/v1/copilot/${encodeURIComponent(c.case_id)}/rejouer`, { method: "POST", json: { checkpoint_id: rb.dataset.replay, portfolio: p } }), "Rejeu depuis un point de reprise"); }
+        try { fill(a, await getJSON(`/v1/copilot/${encodeURIComponent(c.case_id)}/rejouer`, { method: "POST", json: { checkpoint_id: rb.dataset.replay, ...data } }), "Rejeu depuis un point de reprise"); }
         catch (err) { fail(a, err); }
         rb.disabled = false;
       }

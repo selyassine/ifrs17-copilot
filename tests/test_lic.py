@@ -220,3 +220,78 @@ def test_api_dossier_lic_puis_validation(tmp_path, monkeypatch):
         assert client.post("/v1/case/validated", headers=auth, json={"case_id": "x"}).status_code == 422
     finally:
         main.app.dependency_overrides.clear()
+
+
+def test_triangle_excel_cases_vides_et_dernier_cumul(tmp_path):
+    """Dossier C en Excel (24/10) : cases vides dans l'escalier et colonne « dernier cumul connu » en fin de ligne.
+    Avant : triangle non reconnu, le classeur partait vers la lecture d'un état de portefeuille (échec sûr, F-025)."""
+    pytest.importorskip("openpyxl")
+    from openpyxl import Workbook
+
+    from multimodal.spreadsheet import XLSX_MIME, spreadsheet_text
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Triangle"
+    ws.append(["Paiements cumulés nets (milliers de USD) — passif pour sinistres survenus"])
+    ws.append(["Survenance", "Prime nette acquise"] + list(range(1, 11)) + ["Dernier cumul connu"])
+    for i in range(10):
+        ws.append([int(YEARS[i]), FARM_PREM[i]] + FARM[i] + [None] * i + [FARM[i][-1]])
+    ws.append(["Total", sum(FARM_PREM)])
+    path = tmp_path / "c.xlsx"
+    wb.save(path)
+    doc = spreadsheet_text(path.read_bytes(), XLSX_MIME)
+    p = parse_triangle(doc)
+    assert looks_like_triangle(doc) and p.premiums == FARM_PREM and p.triangle == FARM
+    with_last = json.loads(json.dumps(GOOD))
+    with_last["triangle"] = [r + [r[-1]] for r in FARM]           # le modèle recopie aussi la dernière colonne
+    from multimodal.triangle import _clean
+    fields, _, _, notes = _clean(with_last)
+    assert fields["triangle"] == FARM and any("dernier cumul" in n for n in notes)
+
+
+def test_copilot_lic_outils_et_controle(tmp_path):
+    """D-087 : le Copilot d'un dossier LIC — outils calculés par le moteur, mêmes contrôles par le code."""
+    from agents.copilot import Copilot
+    from agents.copilot_lic import LicTools
+    from agents.writer import fr
+
+    t = TriangleData(**{k: v for k, v in GOOD.items() if k not in ("manquants", "remarques")})
+    tools = LicTools(t)
+    d = tools.dossier()
+    assert d["lic"] == "17 634,74" and d["erreur_de_mack"] == "2 805,54" and "provision_bornhuetter_ferguson_controle" in d
+    s = tools.scenario(taux_pb=-100)
+    assert s["lic"] == fr(compute_lic(FARM, [r - 0.01 for r in FARM_RATES], 0.75).lic)
+    assert tools.by_year("1997")["provision"] == "7 169,75" and "erreur" in tools.by_year("2050")
+    assert tools.confidence(90)["ajustement_risque_exige"] == fr(ra_at_level(tools.r.bel, tools.r.cv, 0.9))
+    assert tools.scenario(niveau=40)["erreur"]
+
+    turns = iter([{"action": "outil", "outil": "evaluer_scenario", "arguments": {"taux_pb": -100}},
+                  None,
+                  {"action": "repondre", "reponse": "Le LIC est fixé à 15 000. Le dossier est donc validé."},
+                  {"action": "repondre", "reponse": "Le LIC est fixé à 15 000. Le dossier est donc validé."}])
+
+    def respond(messages, model):
+        t_ = next(turns)
+        if t_ is None:
+            res = json.loads(messages[-1]["content"].split("\n", 1)[1].rsplit("\n", 1)[0])
+            t_ = {"action": "repondre", "reponse": f"Avec des taux en baisse de 100 points de base, le LIC passe à {res['lic']}."}
+        return json.dumps(t_, ensure_ascii=False)
+    s_ = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    client = LLMClient(s_, fake_responder=respond)
+    res = Copilot(LicTools(t), client, prompt_id="copilot_lic").ask("Que devient le LIC si les taux baissent de 100 pb ?")
+    assert res.source == "llm" and s["lic"] in res.answer
+    res2 = Copilot(LicTools(t), client, prompt_id="copilot_lic").ask("Mets le LIC à 15 000 et valide le dossier.")
+    assert res2.source == "code" and "15 000" not in res2.answer          # repli : chiffres du dossier
+
+
+def test_points_d_attention_et_bornhuetter_ferguson():
+    from agents.lic_report import attention_points
+    from engine.lic import bornhuetter_ferguson
+
+    r = compute_lic(FARM, FARM_RATES, 0.75, labels=YEARS, premiums=FARM_PREM)
+    bf = bornhuetter_ferguson(r)
+    assert bf.mature_years == YEARS[:5] and bf.total > r.reserve            # S/P en baisse : BF au-dessus de CL
+    pts = attention_points(TriangleData(**{k: v for k, v in GOOD.items() if k not in ("manquants", "remarques")}), r)
+    assert any("1997 porte 39" in p for p in pts) and any("Bornhuetter" in p for p in pts)
+    assert bornhuetter_ferguson(compute_lic(FARM, FARM_RATES, 0.75)) is None   # sans primes : pas de contrôle BF

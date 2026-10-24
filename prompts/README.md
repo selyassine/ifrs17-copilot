@@ -46,6 +46,7 @@ On ne modifie jamais une version existante : on crée `vN+1` et on garde l'ancie
 | chercheur_rag | `rag_answer` | v2 (par défaut) | portée des paragraphes (D-024) : fidèles 42/50 (v1 : 40), fidèles et complètes 39/50 (v1 : 39), précision élargie 0,84 (v1 : 0,83) |
 | copilote | `copilot_agent` | v1 | 13 questions : bon outil 13/13, chiffre attendu 13/13, réponses contrôlées 13/13, injection refusée 1/1, 2,2 appels LLM |
 | copilote | `copilot_agent` | v2, v3 | v2 (mémoire) en recul ; v3 : 16/16 en mise au point, **9/10 sur le jeu gelé** (8/10 relu, F-018) |
+| copilote | `copilot_lic` | v1 (par défaut) | D-087 : chiffre 6/6, piège 1/1, relecture humaine 3/6 (F-026) |
 | copilote | `copilot_agent` | v4 (par défaut) | jeu gelé test2 : 8/10, piège d'injection obéi (F-023) → garde-fous par le code (D-086) : 5/5 pièges neufs refusés |
 
 Le livrable `prompt_library.md` est généré à partir de ces fiches : `python -m core.prompt_library`.
