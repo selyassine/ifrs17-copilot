@@ -176,7 +176,38 @@ def synthesis_issues(text: str, f: dict, allowed_refs: set[str]) -> list[str]:
     for m in DOUBLE_NEGATION.finditer(text):
         issues.append(f"double négation : « {m.group(0).strip()} » (écrire la valeur absolue après "
                       "« diminue », ou « varie de » avec le signe)")
+    issues += shock_claim_issues(text, f)
+    if TECH_TOKEN.search(text):
+        issues.append(f"jargon technique recopié des faits : « {TECH_TOKEN.search(text).group(0)} » (l'écrire en français)")
     return sorted(set(issues))
+
+
+TECH_TOKEN = re.compile(r"\b(?:true|false|None|null)\b|=\s*(?:vrai|faux)", re.I)
+
+
+def _norm_label(s: str) -> str:
+    return re.sub(r"\s+", " ", s.replace("\u2212", "-").replace("\u00a0", " ").replace("\u202f", " ")).strip().lower()
+
+
+def shock_claim_issues(text: str, f: dict) -> list[str]:
+    """Notes du dossier B (24/10, F-027) : le commentaire disait que « Sinistres et frais -10 % » fait basculer le
+    groupe, ce qui est faux (ce choc augmente la CSM). Chaque choc cité entre guillemets dans une phrase qui parle de
+    bascule doit vraiment faire changer le groupe de statut ; une phrase qui nie la bascule (« aucun », « ne … pas »)
+    est laissée."""
+    shocks = {_norm_label(x["choc"]): x for x in f.get("sensibilites") or []}
+    if not shocks:
+        return []
+    out = []
+    for sentence in re.split(r"(?<=[.;!?])\s+", text):
+        low = sentence.lower()
+        if "bascul" not in low or re.search(r"\baucun|\bne\b[^.]{0,40}\bpas\b|\bsans\b", low):
+            continue
+        for m in re.finditer(r"«\s*([^»]{3,60}?)\s*»", sentence):
+            shock = shocks.get(_norm_label(m.group(1)))
+            if shock is not None and not shock["bascule"]:
+                out.append(f"le choc « {m.group(1).strip()} » ne fait pas basculer le groupe (faits : bascule non) ; "
+                           "ne cite comme bascules que les chocs marqués comme tels")
+    return out
 
 
 # « diminue de -37,80 », « une baisse de −150,00 » : le sens est dit deux fois, et à l'envers (write_note v3)

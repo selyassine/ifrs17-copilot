@@ -346,6 +346,23 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
 - **Leçon :** « chiffre juste » n'est pas « réponse juste » ; la relecture humaine trouve ce que les mesures
   automatiques comptent comme réussi (même leçon que F-011 et F-018).
 
+## F-027 — Notes A et B : commentaire des sensibilités faux, mais accepté
+
+- **Date / auteur :** 24/10/2026, équipe (relecture des notes des dossiers A, photo, et B, scan, du camarade).
+- **Données et calculs :** justes dans les deux notes (CSM 194 092,14 et 869,88, identiques au calcul de
+  référence ; volatilité et niveau de confiance du document lus, D-082 : 12,4 % et 15,1 %, 75 %).
+- **Obtenu :** note B : « Plusieurs chocs (« Sinistres et frais -10 % », « Primes -10 % »…) font également basculer
+  le groupe » — faux pour le premier, qui augmente la CSM, et le choc de taux −100 pb, qui fait basculer, est
+  oublié ; le résumé de B cite le §43 pour la marge de sécurité, sans rapport. Note A : « (bascule = false) »,
+  jargon recopié des faits.
+- **Cause :** le contrôle des textes vérifie les nombres et l'existence des paragraphes, pas l'affirmation qui les
+  entoure (même famille que F-011 et F-017).
+- **Décision :** contrôle par le code : un choc cité entre guillemets dans une phrase qui parle de bascule doit
+  vraiment faire basculer le groupe ; « true / false » refusé. Le §43 mal employé reste du ressort de la
+  relecture humaine (grille, point N1).
+- **Leçon :** une note dont tous les contrôles passent peut encore contenir une phrase fausse ; la relecture de
+  l'actuaire n'est pas une formalité.
+
 ## Gabarit
 
 ```

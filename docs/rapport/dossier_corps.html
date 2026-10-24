@@ -15,7 +15,7 @@
 <li>Les composants en détail</li><li>Toutes les techniques employées</li><li>Tests automatisés et évaluations</li>
 <li>Ce qui a été essayé puis rejeté</li><li>Ce qui n'a pas été pris en compte, et pourquoi</li><li>Échecs rencontrés et leçons</li>
 <li>Limites, dernières mesures et suite</li><li>Livrables et mode d'emploi</li></ol>
-<p>Annexe A : registre complet des décisions (D-001 à D-087). Annexe B : journal complet des échecs (F-001 à F-026).</p></nav>
+<p>Annexe A : registre complet des décisions (D-001 à D-087). Annexe B : journal complet des échecs (F-001 à F-027).</p></nav>
 
 <h2>1. Le projet en une page</h2>
 <p><strong>Le besoin.</strong> Sous IFRS 17, un actuaire évalue chaque groupe de contrats d'assurance : il lit l'état du portefeuille (primes, sinistres, frais, unités de couverture, taux), calcule les flux de trésorerie d'exécution, l'ajustement pour risque (RA) et la marge sur services contractuels (CSM), retrouve dans la norme les règles qui fondent chaque traitement, puis rédige une note justifiée et la fait valider. C'est long, répétitif et sensible aux erreurs de saisie.</p>
@@ -23,7 +23,7 @@
 <p><strong>Le principe qui a guidé tous les choix :</strong> <em>le LLM lit, cherche et rédige ; il ne calcule jamais, et chacune de ses sorties est contrôlée par le code.</em></p>
 <table><thead><tr><th>Chiffre clé</th><th>Valeur</th></tr></thead><tbody>
 <tr><td>Tests automatisés</td><td>297 (30 fichiers), CI GitHub Actions avec un LLM factice</td></tr>
-<tr><td>Décisions consignées et motivées</td><td>87 (D-001 à D-087), échecs documentés : 26</td></tr>
+<tr><td>Décisions consignées et motivées</td><td>87 (D-001 à D-087), échecs documentés : 27</td></tr>
 <tr><td>Prompts versionnés</td><td>13 prompts, 28 versions, 15 techniques</td></tr>
 <tr><td>Jeux d'évaluation</td><td>10 fichiers, 230 cas (questions, documents, enregistrements)</td></tr>
 <tr><td>Endpoints de l'API</td><td>37 (FastAPI)</td></tr>
@@ -232,7 +232,7 @@
 </tbody></table>
 
 <h2>10. Échecs rencontrés et leçons</h2>
-<p>Les 26 échecs sont décrits en entier dans l'annexe B. Les leçons qui ont le plus changé le projet :</p>
+<p>Les 27 échecs sont décrits en entier dans l'annexe B. Les leçons qui ont le plus changé le projet :</p>
 <ul class="lecons">
 <li><strong>Mesurer l'extraction avant d'accuser la recherche</strong> (F-003) : la moitié des termes de la norme étaient coupés par pypdf.</li>
 <li><strong>Un mécanisme de secours doit être visible</strong> (F-008) : le routeur LLM échouait en silence et l'heuristique prenait le relais, ce qui faussait la mesure.</li>

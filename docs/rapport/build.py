@@ -124,7 +124,7 @@ def annexe_b() -> str:
             "<p>Chaque chiffre du rapport vient d'une commande du dépôt ; les jeux de test gelés sont protégés par leur "
             "empreinte SHA-256 (tests/test_eval_sets.py). Les mesures qui appellent un LLM demandent une clé Groq dans "
             "<code>.env</code> ; les jeux gelés ne s'exécutent qu'une fois. Les registres complets des décisions "
-            "(D-001 à D-087) et des échecs (F-001 à F-026) sont dans <code>docs/</code> et dans le dossier complet.</p>"
+            "(D-001 à D-087) et des échecs (F-001 à F-027) sont dans <code>docs/</code> et dans le dossier complet.</p>"
             "<table><thead><tr><th>Mesure</th><th>Commande</th><th>Résultat publié</th></tr></thead><tbody>"
             + rows + "</tbody></table></section>")
 

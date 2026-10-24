@@ -160,3 +160,21 @@ def test_hypotheses_declarees_par_le_document_d082():
     assert "grille, point H3" in note.markdown and "callout warn" in note.html
     sans = write_note(GOOD, compute_csm(GOOD), [], [], ["ok"], client, "c", NoteContext(case_id="c", ra_cv=0.35))
     assert "Le document annonce" not in sans.markdown
+
+
+def test_commentaire_bascule_fausse_refusee_f027():
+    """Note du dossier B (24/10) : un choc cité comme « faisant basculer » le groupe alors qu'il ne le fait pas, et
+    « bascule = false » recopié des faits (dossier A) → rejetés par le code."""
+    r = compute_csm(BAD)
+    f = facts(BAD, r, [], sensitivities(BAD, r))
+    flips = [s["choc"] for s in f["sensibilites"] if s["bascule"]]
+    stays = [s["choc"] for s in f["sensibilites"] if not s["bascule"]]
+    assert stays
+    bad = f"Plusieurs chocs (« {stays[0]} ») font basculer le groupe."
+    assert any("ne fait pas basculer" in i for i in synthesis_issues(bad, f, set()))
+    if flips:
+        assert not [i for i in synthesis_issues(f"Le choc « {flips[0]} » fait basculer le groupe.", f, set())
+                    if "basculer" in i]
+    assert not [i for i in synthesis_issues(f"Aucun choc ne fait basculer le groupe, pas même « {stays[0]} ».", f, set())
+                if "basculer" in i]
+    assert any("jargon" in i for i in synthesis_issues("Aucun choc ne bascule (bascule = false).", f, set()))

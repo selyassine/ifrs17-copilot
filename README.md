@@ -16,7 +16,7 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Évaluation de la recherche | [`docs/rapport/evaluation_recherche.pdf`](docs/rapport/evaluation_recherche.pdf) | requêtes de test, résultats, commentaires ; rapports détaillés dans `eval/` |
 | Dossier complet du projet (chronologie, composants, techniques, tests, rejets) | [`docs/rapport/IFRS17_Copilot_dossier_complet.pdf`](docs/rapport/IFRS17_Copilot_dossier_complet.pdf) | document interne de préparation de l'oral ; `python docs/rapport/build_dossier.py` |
 | Campagne de tests « prêt pour la production ? » (4 niveaux) | [`docs/campagne_tests.md`](docs/campagne_tests.md) | volume, photos, données réelles CAS, documents de camarades, robustesse ; critères fixés d'avance |
-| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 87 décisions motivées et mesurées, 26 échecs documentés |
+| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 87 décisions motivées et mesurées, 27 échecs documentés |
 
 Les PDF du rapport se régénèrent avec `python docs/rapport/build.py` et `python docs/rapport/build_annexes.py` (Edge, Chrome ou Chromium).
 
