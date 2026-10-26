@@ -51,3 +51,29 @@ def test_endpoint_audio(tmp_path, monkeypatch):
         assert bad.status_code == 415
     finally:
         main.app.dependency_overrides.clear()
+
+
+def test_endpoint_transcrire_pour_le_copilot(tmp_path, monkeypatch):
+    """D-089 : la question à l'oral du Copilot est transcrite puis renvoyée en texte ; formats contrôlés."""
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    from fastapi.testclient import TestClient
+
+    import api.main as main
+    from core.config import get_settings
+
+    settings = Settings(llm_provider="fake", api_token="secret", trace_path=tmp_path / "t.jsonl", rag_mode="bm25")
+    main.app.dependency_overrides[get_settings] = lambda: settings
+    monkeypatch.setattr(main, "speech_fake", lambda: (lambda data, name: "Et si les taux baissent de 100 points ?"))
+    try:
+        c = TestClient(main.app)
+        r = c.post("/v1/transcrire", headers={"X-API-Token": "secret"}, files={"file": ("q.webm", b"a", "audio/webm")})
+        assert r.status_code == 200, r.text
+        assert r.json()["texte"] == "Et si les taux baissent de 100 points ?"
+        assert c.post("/v1/transcrire", headers={"X-API-Token": "secret"},
+                      files={"file": ("q.txt", b"x", "text/plain")}).status_code == 415
+        monkeypatch.setattr(main, "speech_fake", lambda: (lambda data, name: " "))
+        assert c.post("/v1/transcrire", headers={"X-API-Token": "secret"},
+                      files={"file": ("q.webm", b"a", "audio/webm")}).status_code == 422
+    finally:
+        main.app.dependency_overrides.clear()

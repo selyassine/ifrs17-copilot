@@ -363,9 +363,161 @@ Une entrée par échec : ce qu'on attendait, ce qui s'est passé, la cause, ce q
 - **Leçon :** une note dont tous les contrôles passent peut encore contenir une phrase fausse ; la relecture de
   l'actuaire n'est pas une formalité.
 
+## F-028 — Copilot : une question hors sujet produit une réponse absurde
+
+- **Date / auteur :** 24/10/2026, équipe (essai sur le site, dossier PREV-2023-A).
+- **Obtenu :** « definir lionel messi » → le modèle appelle donnees_du_dossier « pour respecter la règle d'au moins
+  un appel d'outil » (v4), répond avec des dates (1987, 2022…), le contrôle refuse deux fois, et la réponse de repli
+  affiche les données du dossier. Aucun chiffre faux livré, mais une réponse sans rapport avec la question, gardée
+  en mémoire.
+- **Cause :** la règle v4 « au moins un outil » (ajoutée contre F-018) ne prévoit pas la question hors sujet ; le
+  Copilot n'avait pas de refus hors périmètre, contrairement à l'assistant normatif (routeur, D-021).
+- **Décision :** filtre par le code avant le modèle (D-088) ; la question hors sujet n'entre pas dans la mémoire.
+  Pour effacer l'échange déjà enregistré : bouton « Effacer la mémoire » du dossier.
+- **Leçon :** chaque règle ajoutée pour corriger un cas crée un nouveau cas limite (même famille que F-023).
+
 ## Gabarit
 
 ```
+## F-029 — Copilot : réponse de repli illisible, effet sur la marge rejeté, graphes perdus au rechargement
+
+- **Date / auteur :** 25/10/2026, équipe (essai sur le site, dossier PREV-2023-A).
+- **Obtenu :**
+  1. « Quel ajustement pour risque à 90 % de confiance, et quel effet sur la marge ? » → texte du modèle rejeté deux
+     fois (3 appels), puis réponse de repli affichée en JSON brut (`- niveau_de_confiance : {"niveau_demande": …}`) ;
+  2. « comment calculer le CSM » → la recherche dans la norme refuse (pas d'étapes de calcul dans les passages),
+     puis 2 appels de plus au modèle pour rien, 30,4 s, et le refus affiché en JSON ;
+  3. après un rechargement de la page, les graphes des réponses disparaissent (seul le texte est en mémoire) ;
+  4. des `**gras**` et des `[def:…]` apparaissent tels quels dans le texte.
+- **Cause :** (1) l'outil `niveau_de_confiance` donnait la CSM à 90 % mais pas la CSM centrale ni l'écart : le modèle
+  soustrayait lui-même, et le contrôle (nombre absent des outils, D-086) rejetait à juste titre ; la réponse de repli
+  n'avait jamais été écrite pour être lue. (2) le Copilot repassait par le modèle après une réponse de la norme déjà
+  vérifiée (ou un refus). (3) la mémoire ne gardait qu'un résumé des valeurs simples (`tool_digest`), pas les
+  tableaux. (4) le texte était affiché échappé, sans mise en forme.
+- **Décision :** D-090 — l'outil donne la CSM centrale et la variation ; `donnees_du_dossier` donne le calcul de la
+  CSM (et du LIC) écrit par le code ; réponse de repli en phrases ; raccourci pour une question sur la règle seule ;
+  résultats d'outils gardés avec l'échange ; mise en forme sûre du texte ; explication de chaque graphe.
+- **Leçon :** un contrôle strict (aucun nombre non fondé) exige que les outils donnent tous les nombres utiles à la
+  réponse, y compris les écarts ; sinon le contrôle rejette des réponses justes et la latence augmente.
+
+## F-030 — Copilot : questions sur « notre calcul » refusées, calcul expliqué sans outil
+
+- **Date / auteur :** 25/10/2026, équipe (essai sur le site après D-090, dossier PREV-2023-A).
+- **Obtenu :** « es ce que notre calcul est corrrect ?? » et « quelle est le demarche de notre calcul » → refus
+  « hors sujet » du filtre (D-088) ; « comment calculer le CSM » → le modèle répond sans outil, en termes vagues et en
+  partie faux (« prise en compte de la libération de la CSM déjà reconnue ») ; badge « Chiffres vérifiés » alors
+  qu'aucun chiffre n'était donné.
+- **Cause :** la liste des mots du domaine du filtre ne contenait ni « calcul », ni « démarche », ni « correct » ;
+  le contrôle ne porte que sur les nombres et les paragraphes : une réponse sans chiffre passait toujours.
+- **Décision :** mots du domaine ajoutés (calcul, démarche, méthode, formule, correct, vérifier, étape, expliquer,
+  notre, nos, données, note) ; une question sur le calcul ou la démarche répondue sans outil est rejetée et le modèle
+  doit appeler `donnees_du_dossier` (calcul détaillé du moteur, D-090), sinon la réponse de repli donne ce calcul ;
+  badge « Réponse contrôlée, sans outil » quand aucun outil n'a servi. Les questions hors sujet restent refusées.
+- **Leçon :** même famille que F-023 et F-028 : chaque filtre par mots-clés a des trous ; les tests portent sur les
+  cas réels rencontrés (tests/test_copilot_reponses.py).
+
+## F-031 — Assistant normatif : temps affiché 0,9 s pour une réponse de près de 2 minutes
+
+- **Date / auteur :** 25/10/2026, équipe (question « Comment la marge sur services contractuels est-elle libérée en
+  résultat ? »).
+- **Obtenu :** le site affiche 0,9 s ; l'utilisateur attend près de 2 minutes.
+- **Cause :** `/v1/ask` renvoyait la durée de la seule rédaction de la réponse (`answer_question`), sans le routeur,
+  l'agent de recherche (planifier, chercher, évaluer les passages), le vérificateur, le chargement de l'index ni les
+  attentes du quota Groq (HTTP 429), qui n'étaient enregistrées nulle part.
+- **Décision :** D-091 — durée totale mesurée de bout en bout, décomposée par agent à partir de la trace ; chaque
+  attente du quota est inscrite dans la trace (`quota_waits`, `quota_wait_s`) ; le site affiche le total et le détail.
+- **Leçon :** un indicateur de latence doit mesurer ce que vit l'utilisateur ; une mesure partielle cache la vraie
+  cause (ici, très probablement l'attente du quota par minute).
+
+## F-032 — « c quoi le PAA », « C quoi le LRC » refusées ; relance « seulement §1 ?? » filtrée
+
+- **Date / auteur :** 25/10/2026, équipe (essais sur le site).
+- **Obtenu :** l'assistant normatif refuse « c quoi le PAA » (passages §53, §70A, §59, B126, §69) et « C quoi le LRC et
+  comment le calculer » (§8A, §56, B123, §51, §41) ; le Copilot refuse « seulement $1 ?? » comme hors sujet juste
+  après une réponse sur la norme.
+- **Cause :** (1) la recherche ne remonte pas la définition officielle (annexe A) d'une abréviation : « LRC » →
+  « passif au titre de la couverture restante » est ajouté par le glossaire, mais la définition reste hors des 5
+  premiers passages (BM25 : 57, 46, B95, 51, 50) ; le modèle refuse alors faute de définition. « BEL » n'était pas
+  dans le glossaire. (2) le filtre hors sujet (D-088) ne reconnaissait pas une courte relance d'un échange en cours.
+- **Décision :** D-092 — une question de définition place la définition officielle en tête des passages (et §53
+  pour le PAA, §33 pour le BEL, qui n'ont pas de définition) ; relance courte acceptée quand il y a une mémoire et
+  qu'elle contient un chiffre, un § ou un mot de relance. Mesure sans modèle (BM25 + glossaire) : jeu de mise au
+  point Recall@5 0,663 → 0,703 ; cas pratiques et quiz du cours inchangés (aucune question touchée).
+- **Leçon :** les utilisateurs écrivent « c quoi le LRC », pas « Qu'est-ce que le passif au titre de la couverture
+  restante ? » ; nos jeux de test ne contenaient presque pas d'abréviations ni de langage oral.
+
+## F-033 — Latence : secours chez le même fournisseur (300 s par appel), refus du PAA et de la VFA
+
+- **Date / auteur :** 25/10/2026, équipe (`python -m eval.diagnostic --depuis 2026-10-25 --questions`, 542 appels,
+  rapport `eval/diagnostic_report.md`).
+- **Obtenu :** 19 appels de plus de 20 s. Les plus longs passent au modèle de secours `qwen/qwen3.8-27b`, hébergé chez
+  Groq comme le principal : 302 s par appel pour le Copilot et la rédaction (5 attentes de quota de 60 s). Vision du
+  PDF scanné : le modèle principal échoue deux fois, le secours répond en 103 s et 77 s. Deux appels de 11 h et 2 h :
+  mise en veille du PC. Batterie de 15 questions : 13 bien traitées, médiane 11,7 s, 5 à 7 appels par question,
+  jusqu'à 19 s d'attente du quota ; « c quoi le PAA » et « c quoi la VFA » refusés.
+- **Cause :** (1) un secours chez le même fournisseur subit le même genre de quota ; aucune limite au temps total
+  d'attente d'un appel. (2) règle 3 du prompt `rag_answer` v2 : les paragraphes d'un cas particulier (méthode
+  d'affectation des primes, participation directe) ne répondent pas à une question générale ; le modèle l'applique
+  aussi quand la question porte sur ce cas.
+- **Décision :** D-093 — budget d'attente par appel (`LLM_MAX_WAIT_S` = 45 s), secours à placer chez un autre
+  fournisseur (Gemini, déjà utilisé pour la vision), configuration affichée et signalée par le diagnostic, erreur du
+  modèle principal dans le rapport ; prompt `rag_answer` v3 (règle 3 précisée), à mesurer avant d'en faire la version
+  par défaut.
+- **Leçon :** un secours n'aide que s'il ne partage pas la limite du principal ; et sans budget de temps, une suite
+  de « nouvel essai » bien intentionnés devient cinq minutes d'attente.
+
+## F-034 — Mesures v2/v3 du 25/10 faussées par les réglages de production (secours, budget d'attente)
+
+- **Date / auteur :** 25/10/2026, équipe (`eval_rag` v2 et v3 sur les cas pratiques et le quiz du cours).
+- **Obtenu :** v3 : 30/30 et 15/15 questions traitées. v2 : 3 cas pratiques perdus (p21, p25, p27) et 8 refus en fin de
+  série, alors que les mêmes passages étaient trouvés en v3 (p23 : B96 dans les extraits en v3, absent en v2) ; quiz du
+  cours : 5 questions perdues, deux exécutions (la première interrompue par les erreurs). Erreurs : « quota du modèle
+  principal encore épuisé | secours (gemini) : attente au-delà du budget ». Le `.env` contenait `LLM_MAX_WAIT_S=5`
+  (consigne ambiguë de notre part : le réglage visé était `LLM_QUOTA_MAX_WAIT_S`).
+- **Cause :** les évaluations utilisaient les réglages du site (D-092, D-093) : bascule sur le modèle de secours et
+  budget d'attente. Une mesure doit au contraire garder un seul modèle et attendre le quota : sinon des questions sont
+  perdues ou répondues par un autre modèle, et la comparaison v2/v3 mesure le quota, pas le prompt.
+- **Décision :** D-096 — mode mesure pour toutes les évaluations (pas de secours, attente sans limite) ; le rapport
+  `eval_rag` signale une mesure incomplète (questions perdues, appels au secours). Les quatre exécutions du 25/10 sont
+  publiées telles quelles et **ne servent pas à décider** ; v2 et v3 sont remesurées en mode mesure, une fois chacune,
+  quel que soit le résultat.
+- **Leçon :** les réglages qui améliorent la production (secours, délais courts) doivent être coupés pendant une mesure ;
+  et une consigne de configuration doit nommer exactement la variable.
+
+## F-035 — La recherche de l'agent n'est pas reproductible : « parfois juste, parfois faux »
+
+- **Date / auteur :** 26/10/2026, équipe (remesure v2/v3 en mode mesure, mêmes questions, même configuration).
+- **Obtenu :** pour une même question, les passages donnés au modèle changent d'une exécution à l'autre : plafond de
+  la recherche 0,65 (exécution v2) contre 0,717 (exécution v3) sur les cas pratiques ; p08, p13, p16 trouvent le bon
+  paragraphe dans une exécution et pas dans l'autre, p25 et p29 l'inverse. « qu'est-ce que le RA ? » répondu dans un
+  diagnostic, refusé dans le suivant. Les prompts de l'agent sont pourtant à température 0.
+- **Cause :** le modèle servi par Groq (gpt-oss-120b) n'est pas déterministe à température 0 ; l'agent de recherche
+  (planifier → requêtes → évaluer les passages) amplifie ces écarts : une requête ou une note de pertinence différente
+  change les extraits retenus. C'est l'explication la plus probable des réponses tantôt justes, tantôt refusées vues
+  sur le site.
+- **Décision :** à ce stade, on le mesure et on le dit (D-097) : un écart de 1 à 3 questions sur 30 entre deux
+  configurations est dans le bruit ; les comparaisons sont faites question par question (discordances, test de
+  McNemar). Pistes : garder toujours les passages de la recherche directe en plus de ceux de l'agent ; mettre en
+  cache le plan d'une question ; mesurer la stabilité (même configuration exécutée deux fois).
+- **Leçon :** un agent à plusieurs appels de modèle ajoute de la variance ; une seule exécution par configuration
+  ne suffit pas à départager deux versions proches.
+
+## F-036 — Copilot : demandes de graphe refusées, toujours le même graphe, LIC confondu avec le PAA
+
+- **Date / auteur :** 26/10/2026, équipe (dossier WC-1997-388, onglet Copilot).
+- **Obtenu :** « changer le graphe qui vous avez toujours fournie », « changer cette graphe il est toujours le meme »,
+  « donner sous forme d'un graphe » → refus « hors sujet » ; cinq réponses de suite avec le même graphe (calcul de la
+  CSM) ; « cette dossier est LIC ?? » → « n'est pas évalué sous l'approche simplifiée (PAA / LIC) » (le LIC n'est pas
+  une méthode) ; « CSM libérée en période 1 : 204 941,89 » supérieure à la CSM initiale 194 092,14, sans explication.
+- **Cause :** mots « graphe », « schéma »… absents du filtre (D-088) ; aucun moyen de demander une autre vue ;
+  l'outil ne disait pas la nature du passif ; la libération est juste (unités de couverture toutes en année 1 dans le
+  document, CSM désactualisée avant libération) mais la désactualisation n'était pas affichée.
+- **Décision :** D-099 — demande de graphe traitée par le code (vue choisie par les mots, ou vue suivante pour « changer
+  le graphe »), graphe de la CSM restante par période, graphe identique replié, nature du dossier et désactualisation
+  donnés par l'outil.
+- **Leçon :** l'utilisateur parle de l'interface (« le graphe ») autant que du dossier : le filtre et les outils doivent
+  couvrir les deux.
+
 ## F-0xx — <titre court>
 - Date / auteur :
 - Attendu :

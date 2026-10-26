@@ -1,0 +1,1150 @@
+{
+ "date": "20261026-002518",
+ "prompt_version": 3,
+ "agregats": {
+  "questions": 30,
+  "refus_corrects_pieges": "0/0",
+  "faux_refus": "2/30",
+  "reponses_avec_citation_inventee_avant_correction": "0/28",
+  "reponses_corrigees": 0,
+  "citations_invalides_apres_verification": 0,
+  "precision_citations": 0.549,
+  "precision_elargie": 0.698,
+  "couverture_citations": 0.732,
+  "au_moins_un_bon_paragraphe": 0.75,
+  "plafond_recherche": 0.717,
+  "verdicts_verificateur": {
+   "ok": 22,
+   "validation_humaine": 8
+  },
+  "latence_p50_ms": 10630.7
+ },
+ "tokens": {
+  "tokens_entree": 256514,
+  "tokens_sortie": 54256,
+  "appels_llm": 172
+ },
+ "reponses": [
+  {
+   "id": "p01",
+   "niveau": "cas_pratique",
+   "question": "Un fabricant d'électroménager offre deux ans de réparations gratuites sur ses lave-linge. Cette garantie relève-t-elle d'IFRS 17 ?",
+   "gold": [
+    "7"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Cette garantie de réparations gratuites offerte par le fabricant est exclue du champ d'application d'IFRS 17, car il s'agit d'une garantie fournie à un client par le fabricant liée à la vente d'un bien [§7].",
+   "cited": [
+    "7"
+   ],
+   "provided": [
+    "6",
+    "7",
+    "B26",
+    "B28",
+    "B29",
+    "def:contrat d'assurance",
+    "def:groupe de contrats d'assurance"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 14868.8,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p01",
+   "verdict": "ok",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p02",
+   "niveau": "cas_pratique",
+   "question": "Une société de dépannage automobile facture un abonnement annuel fixe couvrant un nombre illimité d'interventions. Peut-elle appliquer IFRS 15 plutôt qu'IFRS 17 ?",
+   "gold": [
+    "8"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, la société peut appliquer IFRS 15 à cet abonnement si les trois conditions du paragraphe §8 sont remplies: le prix n’est pas fixé en fonction d’une évaluation du risque du client, le contrat prévoit la prestation de services plutôt que des paiements d’indemnisation, et le risque d’assurance transféré résulte principalement de l’utilisation des services par le client [§8].",
+   "cited": [
+    "8"
+   ],
+   "provided": [
+    "6",
+    "7",
+    "8",
+    "B17",
+    "C23",
+    "def:contrat d'assurance sans éléments de participation directe",
+    "def:risque d'assurance",
+    "def:événement assuré"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 11544.7,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p02",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p03",
+   "niveau": "cas_pratique",
+   "question": "Nous avons vendu au même client deux polices dont la seconde annule exactement le risque de la première. Faut-il les analyser séparément ?",
+   "gold": [
+    "9"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Le paragraphe §13 indique que, après avoir appliqué les critères de séparation des composantes (paragraphes 11 et 12), l'entité doit appliquer IFRS 17 à toutes les composantes restantes du contrat d'assurance hôte, mais il ne précise pas comment traiter deux polices dont le risque s'annule mutuellement. Ainsi, les extraits fournis ne permettent pas de conclure si les deux polices doivent être analysées séparément ou conjointement.",
+   "cited": [
+    "13"
+   ],
+   "provided": [
+    "122",
+    "13",
+    "45",
+    "B121",
+    "B31"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - non_soutenu : [13] il ne précise pas comment traiter deux polices dont le risque s'annule mutuellement\n- non_soutenu : Ainsi, les extraits fournis ne permettent pas de conclure..."
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 19847.3,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p03",
+   "verdict": "validation_humaine",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p04",
+   "niveau": "cas_pratique",
+   "question": "Un contrat de retraite contient une part d'épargne qu'une banque pourrait vendre seule. Doit-on la sortir du contrat d'assurance ?",
+   "gold": [
+    "11"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, la part d'épargne doit être séparée du contrat d'assurance car elle constitue une composante investissement distincte lorsqu'elle peut être vendue séparément sur le même marché ou juridiction. Selon le paragraphe B31, une composante investissement est distincte si elle n'est pas étroitement liée à la composante assurance et si un contrat équivalent peut être vendu séparément [§B31]. Le paragraphe B32 précise que l'absence de lien étroit (ex. la valeur ou l'avantage de l'une ne dépend pas de l'autre) justifie la séparation [§B32]. L'entité doit donc appliquer la séparation prévue au paragraphe 11 [§11].",
+   "cited": [
+    "B31",
+    "B32",
+    "11"
+   ],
+   "provided": [
+    "11",
+    "13",
+    "B119B",
+    "B31",
+    "B32"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 11148.5,
+   "precision": 0.3333333333333333,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p04",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p05",
+   "niveau": "cas_pratique",
+   "question": "Notre police santé inclut un abonnement à une salle de sport sans lien avec le risque assuré. Comment traiter ce service ?",
+   "gold": [
+    "12"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'entité doit séparer de la police d'assurance l'abonnement à la salle de sport, car il s'agit d'un bien ou d'un service distinct du service prévu au contrat d'assurance et le titulaire peut en profiter isolément ou avec d'autres ressources disponibles [§B34]. Elle doit appliquer le paragraphe 7 d'IFRS 15 pour comptabiliser cette promesse selon les règles d'IFRS 15, en répartissant les flux de trésorerie entrants et sortants entre la composante assurance et la composante du service de salle de sport [§12][§B33].",
+   "cited": [
+    "B34",
+    "12",
+    "B33"
+   ],
+   "provided": [
+    "12",
+    "B33",
+    "B34",
+    "B35",
+    "def:services prévus au contrat d'assurance"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 8932.7,
+   "precision": 0.3333333333333333,
+   "precision_large": 0.3333333333333333,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p05",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p06",
+   "niveau": "cas_pratique",
+   "question": "À la souscription, comment répartir un portefeuille de polices habitation entre contrats déjà perdants, contrats sans risque de le devenir et les autres ?",
+   "gold": [
+    "16"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L’entité doit d’abord identifier le portefeuille comme un ensemble de contrats présentant des risques similaires et gérés ensemble [§14]. Au moment de la souscription, si elle dispose d’informations raisonnables et justifiables permettant de conclure qu’un sous‑ensemble de polices habitation appartient au même groupe, elle peut les évaluer globalement : les contrats déjà déficitaires forment un groupe de contrats déficitaires, les contrats pour lesquels il n’existe pas de possibilité importante qu’ils deviennent déficitaires forment un groupe « sans risque de devenir déficitaire » et les contrats restants forment un autre groupe d’évaluation [§17]. En l’absence d’informations suffisantes, chaque police doit être évaluée individuellement et affectée à son groupe correspondant [§17].",
+   "cited": [
+    "14",
+    "17"
+   ],
+   "provided": [
+    "14",
+    "17",
+    "23",
+    "24",
+    "47",
+    "48"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 10112.9,
+   "precision": 0.0,
+   "precision_large": 1.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p06",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p07",
+   "niveau": "cas_pratique",
+   "question": "Une police est signée en novembre, la couverture démarre le 1er janvier mais la prime est exigible dès décembre. Quand enregistre-t-on le groupe ?",
+   "gold": [
+    "25"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "On enregistre le groupe à la première des dates suivantes: la date à laquelle le premier paiement du titulaire devient exigible, soit décembre, car elle précède la date de début de la couverture du 1er janvier. [§25]",
+   "cited": [
+    "25"
+   ],
+   "provided": [
+    "25",
+    "26",
+    "56",
+    "B126"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 7773.0,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p07",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p08",
+   "niveau": "cas_pratique",
+   "question": "Les commissions versées aux courtiers pour vendre une gamme de contrats : comment les rattacher aux groupes ?",
+   "gold": [
+    "28A"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Les commissions versées aux courtiers sont des flux de trésorerie liés aux frais d'acquisition. Elles doivent être affectées aux groupes de contrats d'assurance selon une méthode systématique et rationnelle : les commissions directement attribuables à un groupe sont affectées à ce groupe et aux groupes qui incluront les contrats attendus du renouvellement de ce groupe ; les commissions non directement attribuables à un groupe mais à un portefeuille sont réparties entre les groupes constituant le portefeuille [§B35A][§28A].",
+   "cited": [
+    "B35A",
+    "28A"
+   ],
+   "provided": [
+    "23",
+    "24",
+    "28A",
+    "B35A",
+    "C14D",
+    "C24B"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 19088.4,
+   "precision": 0.5,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p08",
+   "verdict": "ok",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p09",
+   "niveau": "cas_pratique",
+   "question": "Une filiale émet des polices en dollars alors que nos comptes sont en euros. La marge est-elle convertie au cours de clôture ?",
+   "gold": [
+    "30"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, la marge sur services contractuels doit être convertie au cours de clôture, car le groupe de contrats, y compris la marge, est considéré comme un élément monétaire lorsqu’on applique IAS 21 aux flux de trésorerie en monnaie étrangère. [§30]",
+   "cited": [
+    "30"
+   ],
+   "provided": [
+    "30",
+    "45",
+    "46",
+    "B103",
+    "C14A"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 4770.9,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p09",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p10",
+   "niveau": "cas_pratique",
+   "question": "Notre réassureur est en difficulté et son risque de défaut augmente. Cela modifie-t-il la marge du traité que nous détenons ?",
+   "gold": [
+    "67"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Non, une hausse du risque de défaut du réassureur n'entraîne pas d'ajustement de la marge sur services contractuels du traité détenu, car les variations de flux de trésorerie liées au risque de non‑exécution du réassureur ne sont pas rattachées aux services futurs. [§67]",
+   "cited": [
+    "67"
+   ],
+   "provided": [
+    "131",
+    "64",
+    "67",
+    "B113",
+    "B19"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2826.2,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p10",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p11",
+   "niveau": "cas_pratique",
+   "question": "Chaque année nous pouvons revoir entièrement le tarif de chaque assuré selon son risque. Jusqu'où projeter les primes de ces contrats renouvelables ?",
+   "gold": [
+    "34"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L’entité doit projeter les primes en tenant compte de tous les flux de trésorerie compris dans le périmètre du contrat, sans inclure d’autres flux [§B61]. Elle ne doit projeter les primes que dans la mesure où elle a la capacité pratique de fixer, à la date de renouvellement, un prix qui reflète intégralement les risques du contrat ou du portefeuille, en se basant sur les mêmes critères que pour un nouveau contrat équivalent [§B64].",
+   "cited": [
+    "B61",
+    "B64"
+   ],
+   "provided": [
+    "106",
+    "66",
+    "B126",
+    "B61",
+    "B64"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2736.3,
+   "precision": 0.0,
+   "precision_large": 1.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p11",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p12",
+   "niveau": "cas_pratique",
+   "question": "Quelle courbe de taux retenir pour actualiser des engagements de rentes très peu liquides ?",
+   "gold": [
+    "36",
+    "B80"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Il faut partir d’une courbe de taux sans risque liquide et l’ajuster pour tenir compte des différences de liquidité propres aux rentes très peu liquides ; c’est l’approche ascendante qui consiste à modifier la courbe de taux sans risque afin de refléter les caractéristiques de liquidité du groupe de contrats d’assurance concerné [§B80]. L’entité peut également, selon l’approche descendante, se baser sur une courbe de taux implicite à la juste valeur d’un portefeuille d’actifs de référence, mais elle doit alors éliminer les facteurs non liés à l’évaluation des contrats d’assurance, sans obligation d’ajuster la courbe pour les différences de liquidité [§B81].",
+   "cited": [
+    "B80",
+    "B81"
+   ],
+   "provided": [
+    "B79",
+    "B80",
+    "B81",
+    "B83",
+    "B84"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 8092.5,
+   "precision": 0.5,
+   "precision_large": 1.0,
+   "coverage": 0.5,
+   "retrieval_ceiling": 0.5,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p12",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p13",
+   "niveau": "cas_pratique",
+   "question": "Pour des contrats en unités de compte avec participation directe, la hausse des fonds revenant à l'assureur change-t-elle la marge ?",
+   "gold": [
+    "45"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, pour les contrats en unités de compte avec participation directe, une hausse de la part revenant à l’assureur de la juste valeur des éléments sous‑jacents entraîne un ajustement de la marge sur services contractuels, donc de la CSM [§B112]. Cet ajustement fait partie des variations décrites au paragraphe 45 qui doivent être prises en compte dans le calcul de la marge à la clôture [§45].",
+   "cited": [
+    "B112",
+    "45"
+   ],
+   "provided": [
+    "45",
+    "B104",
+    "B112",
+    "B113",
+    "B114"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 18964.9,
+   "precision": 0.5,
+   "precision_large": 0.5,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p13",
+   "verdict": "ok",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p14",
+   "niveau": "cas_pratique",
+   "question": "En méthode simplifiée, la hausse des sinistres laisse penser que notre portefeuille auto annuel perd de l'argent. Quel calcul faire ?",
+   "gold": [
+    "57"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "En appliquant la méthode simplifiée, il faut d’abord mesurer l’augmentation du passif au titre des sinistres survenus (charges afférentes aux activités d’assurance) conformément au paragraphe §42 [§42]. Cette variation doit être reconnue en charges de la période. Ensuite, il faut répartir la marge sur services contractuels (CSM) existante entre les unités de couverture fournies et celles à fournir, puis comptabiliser en résultat net la part correspondant aux unités réellement fournies durant la période, comme indiqué au paragraphe §B119 [§B119]. Le résultat net reflétera donc la somme de l’augmentation du passif pour les sinistres et de la portion de CSM reconnue. Aucun détail de calcul chiffré n’est fourni dans les extraits ; il manque les règles de calcul exactes de la variation du passif et de la répartition du CSM.",
+   "cited": [
+    "42",
+    "B119"
+   ],
+   "provided": [
+    "130",
+    "42",
+    "43",
+    "53",
+    "B119"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - non_soutenu : Le résultat net reflétera donc la somme de l’augmentation du passif pour les sinistres et de la portion de CSM reconnue."
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 22194.9,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p14",
+   "verdict": "validation_humaine",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p15",
+   "niveau": "cas_pratique",
+   "question": "Nos contrats voyage durent trois mois et suivent la méthode simplifiée. Peut-on passer tout de suite en charges les frais de commercialisation ?",
+   "gold": [
+    "59"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, l'entité peut choisir de comptabiliser en charges les frais de commercialisation dès leur engagement, puisque la période de couverture de chaque contrat (trois mois) n'excède pas un an [§59].",
+   "cited": [
+    "59"
+   ],
+   "provided": [
+    "28A",
+    "28B",
+    "55",
+    "59",
+    "B95E"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 12918.3,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p15",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p16",
+   "niveau": "cas_pratique",
+   "question": "Un contrat d'épargne sans risque d'assurance significatif mais avec participation aux bénéfices discrétionnaire : relève-t-il d'IFRS 17, et avec quelles adaptations ?",
+   "gold": [
+    "71"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, un contrat d'épargne sans risque d'assurance important mais avec participation aux bénéfices discrétionnaire relève d'IFRS 17 [cons-5]. Les dispositions sont adaptées comme suit : la date de comptabilisation initiale est celle où l'entité devient partie au contrat [§71]; les flux de trésorerie pris en compte sont ceux découlant d’une obligation substantielle de remise de trésorerie, l’entité n’ayant pas d’obligation substantielle si elle peut fixer un prix reflétant intégralement la somme promise et les risques afférents [§71]; la marge sur services contractuels est répartie de façon systématique sur la durée du groupe de contrats, reflétant la prestation de services d’investissement [§71]. Les extraits ne précisent pas les modalités de mesure du CSM ni les exigences de divulgation, informations manquantes.",
+   "cited": [
+    "71",
+    "cons-5"
+   ],
+   "provided": [
+    "71",
+    "B100",
+    "B105",
+    "B7",
+    "cons-5"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - non_soutenu : Les extraits ne précisent pas les modalités de mesure du CSM ni les exigences de divulgation, informations manquantes."
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 15540.0,
+   "precision": 0.5,
+   "precision_large": 0.5,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p16",
+   "verdict": "validation_humaine",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p17",
+   "niveau": "cas_pratique",
+   "question": "Un prêt immobilier est couvert par une assurance emprunteur dont le capital assuré diminue chaque année. Comment répartir la marge entre les années de couverture ?",
+   "gold": [
+    "B119"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'entité doit définir des unités de couverture correspondant au volume de services prévus chaque année, qui diminue avec le capital assuré. Elle répartit alors la marge sur services contractuels à la clôture de chaque période de façon proportionnelle aux unités de couverture réellement fournies pendant l'année, puis comptabilise en résultat net la part affectée à ces unités. Ainsi, chaque année reçoit une portion de la marge proportionnelle à la couverture effective de cette année, reflétant la diminution du capital assuré. [§B119] [§43]",
+   "cited": [
+    "B119",
+    "43"
+   ],
+   "provided": [
+    "38",
+    "43",
+    "50",
+    "B119",
+    "B99"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : HTTP 400 : {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"{\\\"analyse\\\":[{\\\"phrase\\\":\\\"L'entité doit définir des unités de"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 11919.3,
+   "precision": 0.5,
+   "precision_large": 0.5,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p17",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "p18",
+   "niveau": "cas_pratique",
+   "question": "Certains portefeuilles sont en position d'actif et d'autres de passif. Peut-on les compenser sur une seule ligne au bilan ?",
+   "gold": [
+    "78"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Non, IFRS 17 impose de présenter séparément les portefeuilles d’assurance ou de réassurance qui sont des actifs et ceux qui sont des passifs, il n’est donc pas permis de les compenser sur une même ligne du bilan. [§78]",
+   "cited": [
+    "78"
+   ],
+   "provided": [
+    "14",
+    "78",
+    "B106"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 6715.1,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p18",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p19",
+   "niveau": "cas_pratique",
+   "question": "En cas de rachat, la somme restituée à l'assuré peut-elle figurer dans le chiffre d'affaires et dans les charges de sinistres ?",
+   "gold": [
+    "85"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne contiennent aucune information sur le traitement comptable des rachats ou sur l'inclusion des sommes restituées dans le chiffre d'affaires ou les charges de sinistres.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "102",
+    "103",
+    "85",
+    "87A",
+    "B122",
+    "B70"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 567.2,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p19",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p20",
+   "niveau": "cas_pratique",
+   "question": "La désactualisation de nos engagements et l'effet des variations de taux : sur quelle ligne du compte de résultat ?",
+   "gold": [
+    "87"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Aucun extrait fourni ne précise la ligne du compte de résultat où enregistrer la désactualisation des engagements ou l'effet des variations de taux.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "B113",
+    "B117",
+    "B117A",
+    "B74",
+    "B99",
+    "C15"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 764.3,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p20",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p21",
+   "niveau": "cas_pratique",
+   "question": "Les frais de gestion des sinistres et une quote-part des frais généraux entrent-ils dans les flux projetés du contrat ?",
+   "gold": [
+    "B65"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, les frais de gestion des sinistres sont inclus dans les flux de trésorerie projetés du contrat [§B65] et une quote‑part des frais généraux fixes ou variables directement imputables à l'exécution des contrats d'assurance doit également être allouée aux groupes de contrats, donc incluse dans les flux projetés [§B65]",
+   "cited": [
+    "B65"
+   ],
+   "provided": [
+    "105",
+    "B41",
+    "B65",
+    "B66"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 14588.1,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p21",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p22",
+   "niveau": "cas_pratique",
+   "question": "Doit-on intégrer les revenus de nos placements financiers dans les flux projetés des contrats ?",
+   "gold": [
+    "B66"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Non, les rendements des placements ne doivent pas être inclus dans l'estimation des flux de trésorerie des contrats d'assurance [§B66].",
+   "cited": [
+    "B66"
+   ],
+   "provided": [
+    "33",
+    "34",
+    "B66",
+    "B71",
+    "C12"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 7420.6,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p22",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p23",
+   "niveau": "cas_pratique",
+   "question": "Des primes encaissées cette année pour la couverture des années suivantes ont dépassé les prévisions. La marge change-t-elle ?",
+   "gold": [
+    "B96"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, la marge sur services contractuels doit être ajustée lorsque les primes encaissées dépassent les prévisions, car cela constitue une variation liée à l'expérience découlant des primes reçues pour des services futurs [§B96].",
+   "cited": [
+    "B96"
+   ],
+   "provided": [
+    "56",
+    "B126",
+    "B54",
+    "B96",
+    "B97"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 7757.8,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p23",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p24",
+   "niveau": "cas_pratique",
+   "question": "Nous couvrons par des dérivés le risque financier des garanties de nos contrats avec participation. Pouvons-nous éviter de faire passer cet effet dans la marge ?",
+   "gold": [
+    "B115"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, si les conditions du paragraphe B115 sont remplies, l'entité peut choisir de ne pas comptabiliser dans la marge sur services contractuels la variation liée à l'effet du risque financier lorsqu’elle atténue ce risque au moyen de dérivés ; toutefois, pour pouvoir exercer ce choix, l'entité doit d’abord avoir documenté un objectif et une stratégie d’atténuation du risque financier conformément au paragraphe B116 [§B115][§B116].",
+   "cited": [
+    "B115",
+    "B116"
+   ],
+   "provided": [
+    "87",
+    "B113",
+    "B115",
+    "B116",
+    "C17"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 22344.0,
+   "precision": 0.5,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p24",
+   "verdict": "ok",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p25",
+   "niveau": "cas_pratique",
+   "question": "En méthode simplifiée, comment étaler la prime d'un contrat annuel dont les sinistres se concentrent en hiver ?",
+   "gold": [
+    "B126"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "En appliquant la méthode d'affectation des primes simplifiée, l'entité peut reconnaître la prime sur la période de couverture du contrat, à condition que celle‑ci n'excède pas un an ; ainsi la prime annuelle peut être étalée de façon linéaire sur l'année, même si les sinistres surviennent principalement en hiver. De plus, l'entité peut comptabiliser immédiatement en charges les frais d'acquisition liés à ce groupe de contrats, dès leur engagement, dès lors que la période de couverture reste inférieure à un an.",
+   "cited": [
+    "53",
+    "59"
+   ],
+   "provided": [
+    "53",
+    "59",
+    "B41"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : HTTP 400 : {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"{\\\"analyse\\\":[{\\\"phrase\\\":\\\"En appliquant la méthode d'affectat"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 5763.1,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p25",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "p26",
+   "niveau": "cas_pratique",
+   "question": "Nous publions des comptes semestriels. Les estimations du premier semestre doivent-elles être revues dans les comptes annuels ?",
+   "gold": [
+    "B137"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Oui, les estimations utilisées pour les états financiers intermédiaires du premier semestre doivent être revues et mises à jour lors de la préparation des états financiers annuels. L'entité doit examiner les estimations établies à la fin de la période intermédiaire et les actualiser pour refléter fidèlement la situation à la date de clôture et l’évolution au cours de l’année [§B54]. De plus, le choix de la méthode comptable concernant la modification ou non du traitement des estimations intermédiaires s’applique à tous les groupes de contrats et doit être cohérent entre les états intermédiaires et annuels [§B137].",
+   "cited": [
+    "B54",
+    "B137"
+   ],
+   "provided": [
+    "B137",
+    "B54",
+    "B56",
+    "B59",
+    "B60"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 9752.6,
+   "precision": 0.5,
+   "precision_large": 0.5,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p26",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "p27",
+   "niveau": "cas_pratique",
+   "question": "À la transition, impossible de reconstituer l'historique de contrats souscrits il y a quinze ans. Comment fixer leur marge ?",
+   "gold": [
+    "C5",
+    "C20"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Si l'entité ne dispose pas d'informations raisonnables et justifiables pour appliquer le paragraphe C14B, elle doit établir à zéro la marge sur services contractuels à la date de transition pour les groupes de contrats concernés [§C14D]. Cette règle s'applique lorsqu'il est impossible de reconstituer l'historique des contrats souscrits, comme dans le cas décrit. Aucun autre dispositif des paragraphes cités ne précise une alternative, il manque donc une information suffisante pour appliquer la méthode du paragraphe C14B.",
+   "cited": [
+    "C14D"
+   ],
+   "provided": [
+    "C12",
+    "C14A",
+    "C14B",
+    "C14D",
+    "C15"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - non_soutenu : [C14D] Première phrase : mise à zéro de l'ajustement de la marge, pas de la marge elle‑même.\n- hors_sujet : Deuxième phrase invoque une condition non mentionnée dans les extraits.\n- non_soutenu : Troisième phrase n'est pas supportée par les extraits."
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 17746.2,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p27",
+   "verdict": "validation_humaine",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p28",
+   "niveau": "cas_pratique",
+   "question": "Quels tableaux de passage entre soldes d'ouverture et de clôture doit-on publier en annexe ?",
+   "gold": [
+    "100"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Il faut publier des tableaux de rapprochement des soldes d'ouverture et de clôture pour chaque élément comptable requis:\n- le passif net (ou l'actif net) au titre de la couverture restante, les éléments de perte éventuels et le passif au titre des sinistres survenus ; pour les contrats évalués selon la méthode d'affectation des primes, les estimations de la valeur actualisée des flux de trésorerie futurs et l'ajustement au titre du risque non financier [§100];\n- pour les contrats n'étant pas évalués selon cette méthode, les estimations de la valeur actualisée des flux de trésorerie futurs, l'ajustement au titre du risque non financier et la marge sur services contractuels [§101];\n- le rapprochement des actifs liés aux frais d'acquisition [§105A];\n- le rapprochement de la marge sur services contractuels et du produit des activités d'assurance à la date de transition, ventilé selon les trois catégories de contrats (rétrospective modifiée, juste valeur, autres) [§114];\n- le calcul de la marge sur services contractuels en tenant compte des nouveaux contrats, de l'intérêt capitalisé, des variations des flux de trésorerie d'exécution, des écarts de change et du produit des activités d'assurance [§44].",
+   "cited": [
+    "100",
+    "101",
+    "105A",
+    "114",
+    "44"
+   ],
+   "provided": [
+    "100",
+    "101",
+    "105A",
+    "114",
+    "44"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : HTTP 400 : {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"{\\\"analyse\\\":[{\\\"phrase\\\":\\\"Il faut publier des tableaux de rap"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1598.4,
+   "precision": 0.2,
+   "precision_large": 0.2,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p28",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "p29",
+   "niveau": "cas_pratique",
+   "question": "Que publier sur l'effet d'une hausse de la mortalité ou d'une baisse des taux sur le résultat et les capitaux propres ?",
+   "gold": [
+    "128"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L’entité doit indiquer que toute hausse de la mortalité ou toute baisse des taux d’intérêt entraîne une ré‑estimation des flux de trésorerie futurs, ce qui peut conduire à un ajustement de la marge sur services contractuels (CSM) et donc à une variation du résultat et des capitaux propres [§B57] [§B58] [§B99]. Les paragraphes B57 et B58 précisent que les estimations doivent être mises à jour en fonction des nouvelles informations sur la mortalité ou les taux, tandis que le paragraphe B99 explique que les changements qui modifient l’engagement se traduisent par un ajustement du CSM, impactant le résultat et les capitaux propres. L’extrait B56 illustre que des augmentations importantes de la mortalité peuvent résulter de facteurs durables ou temporaires, mais il ne quantifie pas l’impact sur le résultat ou les capitaux propres.",
+   "cited": [
+    "B57",
+    "B58",
+    "B99",
+    "B56"
+   ],
+   "provided": [
+    "B112",
+    "B56",
+    "B57",
+    "B58",
+    "B99"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - non_soutenu : [B99] Première phrase affirme que hausse de mortalité ou baisse de taux entraîne automatiquement un ajustement du CSM, ce qui n’est pas indiqué dans les extraits cités.\n- non_soutenu : [B57, B58, B99] preuve introuvable dans le paragraphe cité pour « Les paragraphes B57 et B58 précisent que les estimations doivent être mises à jo… »"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 15470.5,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p29",
+   "verdict": "validation_humaine",
+   "first_verdict": "a_corriger",
+   "rounds": 1
+  },
+  {
+   "id": "p30",
+   "niveau": "cas_pratique",
+   "question": "Un assureur couvre l'aggravation de sinistres déjà survenus chez une autre société. Quel est l'événement assuré ?",
+   "gold": [
+    "B5"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'événement assuré est la détermination du coût final des demandes d'indemnisation liées à un sinistre déjà survenu, c’est‑à‑dire la découverte ou l’évaluation de la perte après que l’événement à l’origine du sinistre s’est produit [§B5]",
+   "cited": [
+    "B5"
+   ],
+   "provided": [
+    "130",
+    "B4",
+    "B5",
+    "def:contrat d'assurance sans éléments de participation directe",
+    "def:passif au titre des sinistres survenus",
+    "def:risque d'assurance",
+    "def:événement assuré"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 8677.5,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261026-002518-p30",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  }
+ ]
+}

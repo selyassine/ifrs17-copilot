@@ -45,6 +45,9 @@ def check(name: str, ok: bool, detail: str, rows: list) -> None:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--api", default="http://127.0.0.1:8000")
     ap.add_argument("--dossiers", type=int, default=0, help="dossiers complets envoyés l'un après l'autre")

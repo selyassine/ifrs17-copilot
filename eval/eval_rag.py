@@ -94,14 +94,23 @@ def aggregate(rows: list[dict]) -> dict:
     }
 
 
-def render_report(stamp: str, settings, agg: dict, rows: list[dict]) -> str:
+def render_report(stamp: str, settings, agg: dict, rows: list[dict], errors: list[str] | None = None,
+                  fallback_calls: int = 0) -> str:
+    errors = errors or []
+    warn = []
+    if errors or fallback_calls:
+        warn = ["> **Mesure incomplète, à ne pas comparer** (D-096) : "
+                + (f"{len(errors)} question(s) perdue(s) sur une erreur du modèle ({', '.join(errors)})" if errors else "")
+                + (" ; " if errors and fallback_calls else "")
+                + (f"{fallback_calls} appel(s) passé(s) au modèle de secours" if fallback_calls else "")
+                + ". Relancer quand le quota est frais.", ""]
     lines = [
         "# Évaluation des réponses de l'agent RAG", "",
         f"Généré le {stamp} par `python -m eval.eval_rag`. Prompt : `rag_answer` v{settings.rag_prompt_version} ; "
         f"modèle : `{settings.llm_model_large}` ; "
         f"routeur : `{settings.router_mode}` ; recherche : `{settings.rag_mode}` "
         f"(découpage {settings.rag_strategy}, glossaire {'oui' if settings.rag_glossary else 'non'}).", "",
-        "| Mesure | Valeur |", "| --- | --- |",
+        *warn, "| Mesure | Valeur |", "| --- | --- |",
     ]
     labels = {
         "questions": "Questions évaluées",
@@ -150,6 +159,9 @@ def render_answers(rows: list[dict]) -> str:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--pause", type=float, default=15.0, help="secondes entre deux questions")
@@ -193,6 +205,7 @@ def main() -> None:
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     print(f"Prompt rag_answer v{settings.rag_prompt_version} (RAG_PROMPT_VERSION dans .env), "
           f"réécriture de la question : {'oui' if settings.rag_rewrite else 'non'} (RAG_REWRITE)")
+    errors: list[str] = []
     for i, q in enumerate(questions, 1):
         case_id = f"eval-{stamp}-{q['id']}"
         try:
@@ -205,6 +218,7 @@ def main() -> None:
             row["rounds"] = res.rounds
         except LLMError as exc:
             print(f"[{i}/{len(questions)}] {q['id']} ERREUR LLM : {str(exc)[:150]}")
+            errors.append(q["id"])
             continue
         rows.append(row)
         with partial.open("a", encoding="utf-8") as f:
@@ -223,6 +237,7 @@ def main() -> None:
     agg_tokens = {"tokens_entree": sum(t.get("tokens_in", 0) for t in traces),
                   "tokens_sortie": sum(t.get("tokens_out", 0) for t in traces),
                   "appels_llm": len([t for t in traces if t.get("kind") == "llm"])}
+    fallback_calls = sum(1 for t in traces if t.get("kind") == "llm" and t.get("fallback"))
 
     (out_dir / f"rag_answers_{stamp}.json").write_text(
         json.dumps({"date": stamp, "prompt_version": settings.rag_prompt_version,
@@ -237,12 +252,15 @@ def main() -> None:
     suffix += "_questions" if settings.rag_questions else ""
     suffix += "_rerank" if settings.rag_rerank_model else ""
     report = HERE / ((f"rag_answer_report{suffix}.md") if v == 1 else f"rag_answer_report_v{v}{suffix}.md")
-    report.write_text(render_report(stamp, settings, agg, rows), encoding="utf-8")
+    report.write_text(render_report(stamp, settings, agg, rows, errors, fallback_calls), encoding="utf-8")
 
     print("\n== Résultats")
     for k, v in {**agg, **agg_tokens}.items():
         print(f"  {k:52} {v}")
     partial.unlink(missing_ok=True)
+    if errors or fallback_calls:
+        print(f"\n⚠ Mesure incomplète : {len(errors)} question(s) en erreur, {fallback_calls} appel(s) au secours — "
+              "à relancer quand le quota est frais (D-096).")
     print(f"\n→ eval/{report.name} et eval/results/rag_answers_{stamp}.md (relecture humaine)")
 
 

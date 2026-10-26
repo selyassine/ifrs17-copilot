@@ -91,6 +91,9 @@ def render(stamp: str, model: str, rows: list[dict], extra: list[dict]) -> str:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--fichier", action="append", default=[], help="dossier supplémentaire sans vérité (répétable)")
     ap.add_argument("--pause", type=float, default=6.0)

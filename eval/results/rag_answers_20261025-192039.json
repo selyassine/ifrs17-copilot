@@ -1,0 +1,405 @@
+{
+ "date": "20261025-192039",
+ "prompt_version": 2,
+ "agregats": {
+  "questions": 10,
+  "refus_corrects_pieges": "0/0",
+  "faux_refus": "2/10",
+  "reponses_avec_citation_inventee_avant_correction": "0/8",
+  "reponses_corrigees": 0,
+  "citations_invalides_apres_verification": 0,
+  "precision_citations": 0.104,
+  "precision_elargie": 0.375,
+  "couverture_citations": 0.25,
+  "au_moins_un_bon_paragraphe": 0.25,
+  "plafond_recherche": 0.3,
+  "verdicts_verificateur": {
+   "ok": 2,
+   "validation_humaine": 7
+  },
+  "latence_p50_ms": 1349.1
+ },
+ "tokens": {
+  "tokens_entree": 46127,
+  "tokens_sortie": 9025,
+  "appels_llm": 48
+ },
+ "reponses": [
+  {
+   "id": "c01",
+   "niveau": "cours",
+   "question": "Combien de types de passifs a-t-on dans le modèle général, et quels sont-ils ?",
+   "gold": [
+    "40"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Dans le modèle général IFRS 17, il existe deux types de passifs : le passif au titre des sinistres survenus et le passif au titre de la couverture restante [def:passif au titre des sinistres survenus] [def:passif au titre de la couverture restante].",
+   "cited": [
+    "def:passif au titre des sinistres survenus",
+    "def:passif au titre de la couverture restante"
+   ],
+   "provided": [
+    "46",
+    "78",
+    "B42",
+    "def:passif au titre de la couverture restante",
+    "def:passif au titre des sinistres survenus"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1129.4,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c01",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c05",
+   "niveau": "cours",
+   "question": "Quelles méthodes peut-on utiliser pour calculer l'ajustement au titre du risque non financier ?",
+   "gold": [
+    "B92"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'entité peut choisir librement la méthode d'estimation qu'elle juge la plus appropriée, en privilégiant une approche concise et informative pour permettre la comparaison avec d'autres entités [§B92]. Si elle n'utilise pas la méthode des niveaux de confiance, elle doit préciser la méthode appliquée et le niveau de confiance équivalent [§B92]. IFRS 17 n'impose aucune méthode particulière; l'ajustement doit simplement refléter l'indemnité que l'entité exigerait pour assumer le risque non financier, en tenant compte de la fréquence, de la gravité, de la durée du contrat, de la largeur de la distribution de probabilités et du degré d'incertitude [§B91]. Le concept de base consiste à mesurer l'indemnité qui rendrait l'entité indifférente entre un passif incertain et un passif à flux fixes, ce qui guide le choix de la méthode d'estimation [§B87].",
+   "cited": [
+    "B92",
+    "B91",
+    "B87"
+   ],
+   "provided": [
+    "B86",
+    "B87",
+    "B91",
+    "B92",
+    "C14"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7672, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 3205.3,
+   "precision": 0.3333333333333333,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c05",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c08",
+   "niveau": "cours",
+   "question": "J'ai vendu un contrat annuel à tacite reconduction et j'anticipe son renouvellement pendant 3 ans. Que dois-je comptabiliser ?",
+   "gold": [
+    "34"
+   ],
+   "intent": "hors_perimetre",
+   "refused": true,
+   "refusal_reason": "Cette demande ne porte pas sur IFRS 17 : je ne peux répondre qu'à des questions sur la norme.",
+   "answer": null,
+   "cited": [],
+   "provided": [],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 0.0,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c08",
+   "verdict": null,
+   "first_verdict": null,
+   "rounds": 0
+  },
+  {
+   "id": "c09",
+   "niveau": "cours",
+   "question": "Les sinistres augmentent depuis deux ans par rapport aux estimations initiales. Qu'impose IFRS 17 ?",
+   "gold": [
+    "44"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "IFRS 17 impose à l'entité de réviser ses estimations de flux de trésorerie pour les sinistres afin qu’elles reflètent fidèlement la situation à la date de clôture et l’évolution sur la période, en utilisant l’ensemble des informations raisonnables et justifiables disponibles sans coûts excessifs [§B54]. Elle doit tenir compte des informations sur les sinistres déjà déclarés et des données historiques ajustées aux circonstances actuelles lors de cette mise à jour [§B41]. Les variations résultant de ces changements d’estimations doivent être présentées séparément dans les rapprochements exigés, notamment les changements d’estimations qui entraînent un ajustement de la marge sur services contractuels et les pertes ou reprises sur les groupes de contrats déficitaires [§104].",
+   "cited": [
+    "B54",
+    "B41",
+    "104"
+   ],
+   "provided": [
+    "104",
+    "130",
+    "B41",
+    "B54",
+    "B60"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7592, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 4038.7,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c09",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c10",
+   "niveau": "cours",
+   "question": "Quels sont les trois modèles comptables d'IFRS 17 ?",
+   "gold": [
+    "32"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne contiennent pas d'information sur les trois modèles comptables d'IFRS 17.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "55",
+    "59",
+    "89",
+    "B113"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 581.7,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c10",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c11",
+   "niveau": "cours",
+   "question": "Quelles sont les conditions d'éligibilité à la méthode d'affectation des primes ?",
+   "gold": [
+    "53"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Pour pouvoir appliquer la méthode d'affectation des primes, l'entité doit, à la date de création du groupe, satisfaire l'une des deux conditions suivantes : (a) elle s'attend raisonnablement à ce que l'évaluation du passif au titre de la couverture restante obtenue par la méthode simplifiée ne diffère pas de manière significative de celle obtenue avec les dispositions des paragraphes 32 à 52 ; ou (b) la période de couverture de chaque contrat du groupe n'excède pas un an [§53]. La condition (a) n'est pas remplie si l'entité anticipe une variabilité importante des flux de trésorerie d'exécution qui affecterait l'évaluation du passif, par exemple en raison de dérivés incorporés ou d'une longue durée de couverture [§54].",
+   "cited": [
+    "53",
+    "54"
+   ],
+   "provided": [
+    "53",
+    "54",
+    "59",
+    "97",
+    "B126"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6894, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1378.8,
+   "precision": 0.5,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c11",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c12",
+   "niveau": "cours",
+   "question": "Qu'est-ce qu'un contrat d'assurance avec éléments de participation directe ?",
+   "gold": [
+    "B101"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Un contrat d'assurance avec éléments de participation directe est un contrat dans lequel : (a) le titulaire de police a droit à une part d’un portefeuille d’éléments sous‑jacent clairement défini, (b) l’entité s’attend à verser au titulaire une somme correspondant à une part substantielle du rendement obtenu sur la juste valeur de ces éléments, et (c) toute variation des sommes à verser est attribuable, de façon substantielle, à la variation de la juste valeur des éléments sous‑jacent. [def:contrat d'assurance avec éléments de participation directe]",
+   "cited": [
+    "def:contrat d'assurance avec éléments de participation directe"
+   ],
+   "provided": [
+    "111",
+    "112",
+    "B101",
+    "B109",
+    "B110",
+    "def:contrat d'assurance avec éléments de participation directe",
+    "def:contrat d'assurance sans éléments de participation directe",
+    "def:risque d'assurance",
+    "def:événement assuré"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7199, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1319.4,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c12",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c13",
+   "niveau": "cours",
+   "question": "À quoi sert l'option OCI sous IFRS 17 ?",
+   "gold": [
+    "88"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'option OCI permet à l'entité de ventiler les produits financiers ou charges financières d'assurance entre le résultat net et les autres éléments du résultat global, afin de présenter une partie de ces montants dans les OCI dès la date de transition et de suivre leur évolution séparément du résultat net [§C24]. Cette ventilation implique de déterminer le montant cumulatif à comptabiliser en OCI, soit rétrospectivement avec des informations justifiables, soit en le considérant comme nul, sauf pour les contrats à participation directe où le montant cumulé en OCI est égal à celui des éléments sous‑jacent [§C18]. L'entité doit également fournir un rapprochement détaillé des soldes d'ouverture et de clôture des montants cumulés présentés en OCI pour les actifs financiers évalués à la juste valeur liés aux groupes de contrats d'assurance concernés [§116].",
+   "cited": [
+    "C24",
+    "C18",
+    "116"
+   ],
+   "provided": [
+    "116",
+    "118",
+    "92",
+    "C18",
+    "C24"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7121, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1454.5,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c13",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c14",
+   "niveau": "cours",
+   "question": "J'anticipe une hausse du best estimate au titre des services futurs : le coût moyen des sinistres passe de 10 à 20. Quel est l'impact sur mon résultat ?",
+   "gold": [
+    "44"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'augmentation du best estimate des services futurs (coût moyen des sinistres passant de 10 à 20) entraîne une révision à la hausse de la valeur actuelle des flux de trésorerie futurs du passif de couverture restante, ce qui diminue la marge sur services contractuels et donc le résultat net de l'entité. [§B96]",
+   "cited": [
+    "B96"
+   ],
+   "provided": [
+    "104",
+    "37",
+    "51",
+    "B96",
+    "B97"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : HTTP 429 (quota) : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kje6zpgxf0nasawmpk5cgmex` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7224, Req | secours (gemini-"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 970.4,
+   "precision": 0.0,
+   "precision_large": 1.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c14",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  },
+  {
+   "id": "c15",
+   "niveau": "cours",
+   "question": "Des contrats auto à garantie annuelle, vendus par un partenaire, affichent un ratio sinistres sur primes de 120 %. Que dois-je faire ?",
+   "gold": [
+    "57"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Vous devez comptabiliser le résultat négatif lié à ces contrats en évaluant le passif au titre des sinistres survenus comme égal aux flux de trésorerie d'exécution relatifs aux sinistres, sans actualisation si le paiement est attendu dans un délai d'un an [§59]. Vous devez également fournir des informations sur le développement des demandes d'indemnisation, en remontant à la première période où un sinistre significatif a été constaté, afin de refléter ce ratio élevé dans les notes aux états financiers [§130].",
+   "cited": [
+    "59",
+    "130"
+   ],
+   "provided": [
+    "130",
+    "59",
+    "86",
+    "B133",
+    "B6"
+   ],
+   "warnings": [
+    "réponse à faire valider par un humain : - autre : vérificateur indisponible : principal (openai/gpt-oss-120b) : quota : attente de 8 s au-delà du budget d'attente (5 s, LLM_MAX_WAIT_S) | secours (gemini-3.5-flash-lite) : quota : attente de 10 s au-delà du budget d'attente (5 s, LLM_MAX_WAIT_S)"
+   ],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1140.1,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 2,
+   "case_id": "eval-20261025-192039-c15",
+   "verdict": "validation_humaine",
+   "first_verdict": "validation_humaine",
+   "rounds": 0
+  }
+ ]
+}

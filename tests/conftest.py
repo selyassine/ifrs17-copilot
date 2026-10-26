@@ -6,7 +6,10 @@ import pytest
 from core.config import get_settings
 
 DEFAULTS = {"RAG_REWRITE": "0", "N8N_VALIDATION_URL": "", "RAG_AGENTIC": "0", "RAG_GRAPH": "0",
-            "RAG_QUESTIONS": "0", "RAG_RERANK_MODEL": ""}
+            "RAG_QUESTIONS": "0", "RAG_RERANK_MODEL": "", "IFRS17_WARMUP": "0",
+            # D-096 : le mode mesure d'une évaluation lancée par un test ne doit pas déborder sur les tests suivants
+            "LLM_MAX_WAIT_S": "45", "LLM_QUOTA_MAX_WAIT_S": "10", "LLM_FALLBACK_MODEL": "",
+            "LLM_FALLBACK_BASE_URL": "", "LLM_FALLBACK_API_KEY": ""}
 
 
 @pytest.fixture(autouse=True)

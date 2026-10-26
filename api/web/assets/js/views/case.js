@@ -3,11 +3,22 @@
 import { $, $$, esc, fr, pct, when, ago, icon, canDo, me, api, getJSON, statusChip, emit, toast, modal, confirmAction,
   SOURCE_LABEL, ACTION_LABEL, ROLE_LABEL, unitLabel, printHTML, downloadText, refLabel, state } from "../core.js";
 import { mount, waterfall, lines, legend } from "../charts.js";
+import { mountMedia, richText, speak, canSpeak, stopSpeaking } from "../copilot_media.js";
 
 const SEAL = `<svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3">
   <circle cx="24" cy="24" r="21"/><circle cx="24" cy="24" r="16.5"/>
   ${Array.from({ length: 24 }, (_, i) => { const a = (i / 24) * Math.PI * 2; return `<path d="M${24 + 17.5 * Math.cos(a)} ${24 + 17.5 * Math.sin(a)}L${24 + 20 * Math.cos(a)} ${24 + 20 * Math.sin(a)}"/>`; }).join("")}
   <path d="M16.5 24.5l5 5 10-11" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`;
+
+/* durée lisible : « 42 s », « 3 min », « 11 h 20 min » (une analyse interrompue par la mise en veille du PC compte
+   le temps de veille) */
+function duration(ms) {
+  const s = Math.round((ms || 0) / 1000);
+  if (s < 90) return `${s} s`;
+  if (s < 5400) return `${Math.round(s / 60)} min`;
+  const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60);
+  return `${h} h${m ? ` ${m} min` : ""}`;
+}
 
 const TABS = [["synthese", "Synthèse"], ["note", "Note"], ["donnees", "Données"], ["copilot", "Copilot"], ["audit", "Piste d'audit"]];
 const ACTION_TONE = {
@@ -22,7 +33,7 @@ function lifecycle(c) {
   const failed = ["erreur", "document_illisible"].includes(c.status);
   const steps = [
     { b: "Déposé", s: `${when(c.created_at)} · ${SOURCE_LABEL[c.source] || c.source}`, k: "done" },
-    { b: "Analysé", s: failed ? "document inexploitable" : analysed ? `${c.llm_calls} appel(s) au modèle, ${fr((c.duration_ms || 0) / 1000, 0)} s` : "en cours",
+    { b: "Analysé", s: failed ? "document inexploitable" : analysed ? `${c.llm_calls} appel(s) au modèle, ${duration(c.duration_ms)}` : "en cours",
       k: failed ? "stop" : analysed ? "done" : "now" },
     { b: "Validation humaine", k: "todo", s: "" },
     { b: "Note diffusable", k: ["note_prete", "validee"].includes(c.status) ? "done" : c.status === "rejetee" ? "stop" : "todo",
@@ -300,7 +311,7 @@ export async function render(main, params) {
   /* ---------------------------------------------------------------- Copilot (D-057, mémoire et trajectoire D-061) */
   const TOOL_LABEL = { donnees_du_dossier: "Données du dossier", evaluer_scenario: "Scénario", sensibilites: "Sensibilités",
     niveau_de_confiance: "Niveau de confiance", projection_resultat: "Projection du résultat", rechercher_norme: "Recherche dans la norme",
-    memoire_du_dossier: "Mémoire du dossier" };
+    memoire_du_dossier: "Mémoire du dossier", par_survenance: "Détail par survenance", paiements_futurs: "Paiements futurs" };
   const NODE_LABEL = { decider: "décider", agir: "agir", verifier: "vérifier" };
   const args = a => Object.entries(a || {}).map(([k, v]) => `${k.replace(/_/g, " ")} ${v}`).join(", ");
   function trajectoryHTML(r) {
@@ -313,11 +324,13 @@ export async function render(main, params) {
     return `<ol class="traj">${steps}</ol>${cps.length ? `<p class="traj-h">Points de reprise sauvegardés</p><ul class="cps">${cps.map((cp, i) =>
       `<li><span>n° ${i + 1} · avant « ${esc(NODE_LABEL[cp.prochaine[0]] || cp.prochaine[0])} »</span>${canDo("valideur") ? `<button class="btn sm ghost" data-replay="${esc(cp.checkpoint_id)}">${icon("refresh")}Rejouer d'ici</button>` : ""}</li>`).join("")}</ul>` : ""}`;
   }
+  const listenBtn = () => canSpeak() ? `<button class="btn sm ghost listen" type="button" data-listen aria-pressed="false" title="Lire la réponse à voix haute">${icon("volume")}Écouter</button>` : "";
   function answerHTML(r, label = "") {
-    return `${label ? `<span class="status info" style="margin-bottom:8px">${esc(label)}</span>` : ""}<p class="text">${esc(r.answer)}</p>
+    return `${label ? `<span class="status info" style="margin-bottom:8px">${esc(label)}</span>` : ""}<div class="text rich">${richText(r.answer)}</div>
+      <div class="cp-media-slot"></div>
       <details class="tools"><summary>Trajectoire : ${r.tools.length} outil${r.tools.length > 1 ? "s" : ""}, ${r.llm_calls} appel${r.llm_calls > 1 ? "s" : ""} au modèle</summary>${trajectoryHTML(r)}</details>
-      <div class="meta">${r.source === "llm" ? `<span class="status ok">Chiffres vérifiés</span>` : `<span class="status warn">Réponse construite par le code</span>`}
-        ${r.memory_used ? `<span>${icon("layers")} ${r.memory_used} échange${r.memory_used > 1 ? "s" : ""} en mémoire</span>` : ""}<span>${fr(r.latency_ms / 1000, 1)} s</span><span>${esc(r.engine)}</span></div>`;
+      <div class="meta">${r.source === "llm" ? `<span class="status ok">${r.tools.length ? "Chiffres vérifiés" : "Réponse contrôlée, sans outil"}</span>` : `<span class="status warn">Réponse construite par le code</span>`}
+        ${r.memory_used ? `<span>${icon("layers")} ${r.memory_used} échange${r.memory_used > 1 ? "s" : ""} en mémoire</span>` : ""}<span title="${r.duree?.appels ? esc(`${r.duree.appels} appel(s) au modèle, ${fr(r.duree.modele_ms / 1000, 1)} s${r.duree.attente_quota_s ? `, dont ${fr(r.duree.attente_quota_s, 1)} s d'attente du quota Groq` : ""}`) : ""}">${fr(r.latency_ms / 1000, 1)} s${r.duree?.attente_quota_s ? ` (quota : ${fr(r.duree.attente_quota_s, 0)} s)` : ""}</span><span>${esc(r.engine)}</span>${listenBtn()}</div>`;
   }
   async function copilot(el) {
     if (!p) { el.innerHTML = `<div class="panel"><div class="empty">${icon("spark")}<h3>Copilot indisponible</h3><p>Il a besoin des données du portefeuille.</p></div></div>`; return; }
@@ -333,11 +346,11 @@ export async function render(main, params) {
         <div class="intro-card"><h3>Explorer le dossier ${esc(p.group_id)}</h3>
           <p>Posez une question « et si… ». L'agent choisit ses outils (${isLic ? "scénario sur les taux, la queue ou le niveau de confiance, sensibilités, détail par survenance, paiements futurs" : "scénario, sensibilités, niveau de confiance, projection"}, norme, mémoire du dossier) ; chaque chiffre de sa réponse est vérifié contre les résultats du moteur. Il se souvient des échanges précédents sur ce dossier.</p>
           ${hist.echanges.length ? "" : `<div class="chips">${chips.map(t => `<button class="chip" type="button">${esc(t)}</button>`).join("")}</div>`}</div>
-        ${hist.echanges.map(m => `<div class="msg q">${esc(m.question)}</div><div class="msg a"><span class="who">${icon("spark")}</span><div class="body">
-          <p class="text">${esc(m.answer)}</p><div class="meta"><span class="status">En mémoire</span><span>${esc(m.actor)}, ${esc(when(m.at))}</span></div></div></div>`).join("")}</div>
+        ${hist.echanges.map((m, i) => `<div class="msg q">${esc(m.question)}</div><div class="msg a" data-mem="${i}"><span class="who">${icon("spark")}</span><div class="body">
+          <div class="text rich">${richText(m.answer)}</div><div class="cp-media-slot"></div><div class="meta"><span class="status">En mémoire</span><span>${esc(m.actor)}, ${esc(when(m.at))}</span>${listenBtn()}</div></div></div>`).join("")}</div>
       <form class="composer" id="cp-form"><label class="sr" for="cp-q">Question</label>
         <textarea class="input" id="cp-q" rows="1" placeholder="Votre question sur ce dossier, ou une suite : « et à 20 % ? »" required></textarea>
-        <span></span><button class="btn primary" type="submit">${icon("send")}Demander</button></form></section>
+        <button class="icon-btn mic" id="cp-mic" type="button" aria-label="Poser la question à l'oral">${icon("mic")}</button><button class="btn primary" type="submit">${icon("send")}Demander</button></form></section>
       <aside class="stack">
         <section class="panel"><div class="panel-head"><h2>Mémoire du dossier</h2><span class="meta" id="cp-mem-n">${hist.echanges.length} échange${hist.echanges.length > 1 ? "s" : ""}</span></div>
           <div class="panel-body stack" style="gap:12px;font-size:14px;color:var(--ink-2)">
@@ -347,6 +360,9 @@ export async function render(main, params) {
           <p>${hist.checkpointer ? `Après chaque étape, le graphe LangGraph enregistre son état (${esc(hist.checkpointer)}) : <b>${hist.points_de_reprise.length}</b> points de reprise pour ce dossier. Ouvrez la trajectoire d'une réponse pour la rejouer depuis l'un d'eux.` : "LangGraph n'est pas installé : le Copilot tourne sans sauvegarde d'état."}</p></div></section>
       </aside></div>`;
     const thread = $("#cp-thread", el);
+    // graphes des échanges en mémoire : redessinés à partir des résultats d'outils gardés avec l'échange (D-090)
+    const seen = new Set();       // graphes déjà montrés dans ce fil (repliés s'ils reviennent identiques)
+    hist.echanges.forEach((m, i) => { const a = $(`[data-mem="${i}"]`, thread); if (a && m.observations?.length) mountMedia($(".cp-media-slot", a), { tools: m.observations }, { lic: isLic, unit, caseId: c.case_id, seen }); });
     thread.scrollTop = thread.scrollHeight;
     const pending = text => {
       const a = document.createElement("div");
@@ -355,7 +371,12 @@ export async function render(main, params) {
       thread.append(a); a.scrollIntoView({ block: "nearest", behavior: "smooth" });
       return a;
     };
-    const fill = (a, r, label) => { a.classList.remove("thinking"); $(".body", a).innerHTML = answerHTML(r, label); };
+    const fill = (a, r, label) => {
+      a.classList.remove("thinking");
+      $(".body", a).innerHTML = answerHTML(r, label);
+      a._answer = r.answer;
+      mountMedia($(".cp-media-slot", a), r, { lic: isLic, unit, caseId: c.case_id, seen });     // graphes et tableaux (D-089)
+    };
     const fail = (a, err) => { a.classList.remove("thinking"); $(".body", a).innerHTML = `<div class="callout bad">${icon("alert")}<span>${esc(err.message)}</span></div>`; };
     async function ask(q) {
       if (!q.trim()) return;
@@ -369,6 +390,8 @@ export async function render(main, params) {
       } catch (err) { fail(a, err); }
     }
     el.addEventListener("click", async e => {
+      const lb = e.target.closest("[data-listen]");
+      if (lb) { const m = lb.closest(".msg"); speak(m._answer || $(".text", m)?.textContent || "", lb); return; }
       const chip = e.target.closest(".chip");
       if (chip) { ask(chip.textContent); return; }
       const rb = e.target.closest("[data-replay]");
@@ -388,6 +411,37 @@ export async function render(main, params) {
     const qa = $("#cp-q", el);
     qa.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#cp-form", el).requestSubmit(); } });
     $("#cp-form", el).addEventListener("submit", e => { e.preventDefault(); const q = qa.value; qa.value = ""; ask(q); });
+
+    /* question à l'oral : enregistrement dans le navigateur, Whisper (/v1/transcrire), puis question écrite (D-089) */
+    let rec = null;
+    const mic = $("#cp-mic", el);
+    mic.addEventListener("click", async () => {
+      if (rec?.state === "recording") { rec.stop(); return; }
+      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") { toast("Ce navigateur ne permet pas d'enregistrer le micro.", "warn"); return; }
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch { toast("Accès au micro refusé : autorisez-le dans le navigateur.", "warn"); return; }
+      const chunks = [];
+      rec = new MediaRecorder(stream);
+      rec.ondataavailable = ev => chunks.push(ev.data);
+      rec.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        mic.classList.remove("recording"); mic.setAttribute("aria-label", "Poser la question à l'oral");
+        const type = rec.mimeType || "audio/webm";
+        const ext = type.includes("ogg") ? "ogg" : type.includes("mp4") ? "m4a" : "webm";
+        const form = new FormData();
+        form.append("file", new File([new Blob(chunks, { type })], `question.${ext}`, { type }));
+        mic.disabled = true;
+        try {
+          const t = await getJSON("/v1/transcrire", { method: "POST", form });
+          ask(t.texte);
+        } catch (err) { toast(`Transcription impossible : ${err.message}`, "bad"); }
+        mic.disabled = false;
+      };
+      rec.start();
+      mic.classList.add("recording"); mic.setAttribute("aria-label", "Arrêter et envoyer la question");
+      toast("Enregistrement en cours : cliquez de nouveau sur le micro pour envoyer.", "info");
+    });
+    unmounts.push(() => { stopSpeaking(); if (rec?.state === "recording") rec.stop(); });
   }
 
   /* ---------------------------------------------------------------- audit */

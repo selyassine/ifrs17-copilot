@@ -182,6 +182,9 @@ def run_case(mode: str, case: dict, client: LLMClient, case_id: str) -> Extracti
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["texte", "vision", "hybride"], default="texte")
     ap.add_argument("--jeu", choices=["facile", "difficile"], default="facile",

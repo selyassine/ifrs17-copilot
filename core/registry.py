@@ -159,6 +159,9 @@ class Registry:
             self.db.execute("PRAGMA journal_mode=WAL")
             self.db.execute("PRAGMA foreign_keys=ON")
             self.db.executescript(SCHEMA)
+            cols = {r["name"] for r in self.db.execute("PRAGMA table_info(memories)")}
+            if "observations" not in cols:     # D-090 : résultats complets des outils, pour redessiner les graphes
+                self.db.execute("ALTER TABLE memories ADD COLUMN observations TEXT NOT NULL DEFAULT '[]'")
 
     # ------------------------------------------------------------------ audit
     def add_event(self, case_id: str, actor: str, action: str, detail: dict | None = None) -> dict:
@@ -188,22 +191,26 @@ class Registry:
 
     # ------------------------------------------------------------------ mémoire du Copilot (D-061)
     def add_memory(self, case_id: str, actor: str, question: str, answer: str, source: str,
-                   tools: list | None = None, refs: list[str] | None = None) -> dict:
+                   tools: list | None = None, refs: list[str] | None = None,
+                   observations: list | None = None) -> dict:
         """Mémoire épisodique : un échange déjà contrôlé (réponse acceptée par le code ou écrite par lui)."""
         row = {"case_id": case_id, "at": now(), "actor": actor, "question": question[:500], "answer": answer[:4000],
                "source": source, "tools": json.dumps(tools or [], ensure_ascii=False),
-               "refs": json.dumps(refs or [], ensure_ascii=False)}
+               "refs": json.dumps(refs or [], ensure_ascii=False),
+               "observations": json.dumps(observations or [], ensure_ascii=False, default=str)}
         with self._lock:
-            cur = self.db.execute("INSERT INTO memories (case_id, at, actor, question, answer, source, tools, refs) "
-                                  "VALUES (:case_id, :at, :actor, :question, :answer, :source, :tools, :refs)", row)
-        return {**row, "id": cur.lastrowid, "tools": tools or [], "refs": refs or []}
+            cur = self.db.execute("INSERT INTO memories (case_id, at, actor, question, answer, source, tools, refs, "
+                                  "observations) VALUES (:case_id, :at, :actor, :question, :answer, :source, :tools, "
+                                  ":refs, :observations)", row)
+        return {**row, "id": cur.lastrowid, "tools": tools or [], "refs": refs or [], "observations": observations or []}
 
     def memories(self, case_id: str, limit: int = 50) -> list[dict]:
         """Échanges du dossier, du plus ancien au plus récent."""
         with self._lock:
             rows = self.db.execute("SELECT * FROM memories WHERE case_id = ? ORDER BY id DESC LIMIT ?",
                                    (case_id, limit)).fetchall()
-        return [{**dict(r), "tools": json.loads(r["tools"]), "refs": json.loads(r["refs"])} for r in rows][::-1]
+        return [{**dict(r), "tools": json.loads(r["tools"]), "refs": json.loads(r["refs"]),
+                 "observations": json.loads(r["observations"] or "[]")} for r in rows][::-1]
 
     def forget(self, case_id: str) -> int:
         with self._lock:
@@ -499,6 +506,39 @@ def llm_usage(trace_path: Path, case_id: str, offset: int = 0) -> dict:
                 tokens += int(rec.get("tokens_in") or 0) + int(rec.get("tokens_out") or 0)
                 cost += float(rec.get("cost_usd") or 0)
     return {"llm_calls": calls, "tokens": tokens, "cost_usd": round(cost, 6)}
+
+
+AGENT_LABEL = {"routeur": "routeur", "chercheur_rag": "recherche et rédaction", "verificateur": "vérificateur",
+               "copilote": "Copilot", "extracteur": "lecture du document", "redacteur": "rédaction de la note"}
+
+
+def llm_timing(trace_path: Path, case_id: str, offset: int = 0) -> dict:
+    """Temps passé dans les appels au modèle pour une requête (D-091), lu dans la trace à partir de ``offset`` :
+    nombre d'appels, durée par agent, attente du quota (HTTP 429), appels passés au modèle de secours."""
+    out = {"appels": 0, "modele_ms": 0.0, "attente_quota_s": 0.0, "secours": 0, "par_agent": {}}
+    if not trace_path.exists():
+        return out
+    with trace_path.open(encoding="utf-8") as f:
+        f.seek(offset)
+        for line in f:
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            if rec.get("kind") != "llm" or not str(rec.get("case_id", "")).endswith(case_id):
+                continue
+            ms = float(rec.get("latency_ms") or 0)
+            out["appels"] += 1
+            out["modele_ms"] += ms
+            out["attente_quota_s"] += float(rec.get("quota_wait_s") or 0)
+            out["secours"] += 1 if rec.get("fallback") else 0
+            a = AGENT_LABEL.get(rec.get("agent", ""), rec.get("agent") or "autre")
+            slot = out["par_agent"].setdefault(a, {"appels": 0, "ms": 0.0})
+            slot["appels"] += 1
+            slot["ms"] = round(slot["ms"] + ms, 1)
+    out["modele_ms"] = round(out["modele_ms"], 1)
+    out["attente_quota_s"] = round(out["attente_quota_s"], 1)
+    return out
 
 
 def main() -> None:

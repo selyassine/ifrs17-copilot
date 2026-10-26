@@ -116,6 +116,9 @@ def aggregate(rows: list[dict], key: str) -> dict:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--jeu", choices=["facile", "difficile", "tous"], default="tous")
     ap.add_argument("--limit", type=int, default=None)

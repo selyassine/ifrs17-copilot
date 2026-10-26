@@ -351,9 +351,20 @@ class Retriever:
             if vectors is None:
                 vectors = encoder.encode([c.embed_text for c in chunks])
             if store == "qdrant":
-                self.store = QdrantStore(f"{collection}__{texts_fingerprint(chunks)[:10]}",
-                                         path=qdrant_path, url=qdrant_url)
-                self.store.ensure(vectors, chunks)
+                try:
+                    self.store = QdrantStore(f"{collection}__{texts_fingerprint(chunks)[:10]}",
+                                             path=qdrant_path, url=qdrant_url)
+                    self.store.ensure(vectors, chunks)
+                except RuntimeError as exc:
+                    if "already accessed" not in str(exc):
+                        raise
+                    # D-095 : Qdrant local n'accepte qu'un processus (l'API préchauffée le garde ouvert) ; mêmes vecteurs
+                    # en mémoire, recherche exacte par cosinus comme Qdrant local
+                    import logging
+                    logging.getLogger(__name__).warning("Qdrant local déjà ouvert par un autre processus : recherche "
+                                                        "dense en mémoire (mêmes vecteurs, recherche exacte)")
+                    self.store = NumpyStore(vectors)
+                    self.store_fallback = "numpy (Qdrant local occupé)"
             else:
                 self.store = NumpyStore(vectors)
 
@@ -396,7 +407,29 @@ class Retriever:
             cand = ranked[: max(self.RERANK_DEPTH, k)]
             scores = self.reranker.score(original, [self.chunks[i].embed_text for i, _ in cand])
             ranked = sorted(((i, sc) for (i, _), sc in zip(cand, scores, strict=True)), key=lambda x: -x[1])
+        if expand:
+            ranked = self._definitions_first(original, ranked, allowed)
         return [Hit(rank=r + 1, score=s, chunk=self.chunks[i]) for r, (i, s) in enumerate(ranked[:k])]
+
+    def _definitions_first(self, query: str, ranked: list[tuple[int, float]],
+                           allowed: np.ndarray | None) -> list[tuple[int, float]]:
+        """D-092 : pour « c quoi le LRC ? », la définition officielle (annexe A) passe en tête, puis les paragraphes
+        d'ancrage d'une notion sans définition (PAA → §53) ; le reste du classement suit, sans doublon."""
+        from rag.query import definition_targets
+
+        if not hasattr(self, "_defs"):
+            self._defs = {}
+            for i, c in enumerate(self.chunks):
+                for pid in c.paragraph_ids:
+                    self._defs.setdefault(pid, i)
+        defs, anchors = definition_targets(query, [p for p in self._defs if p.startswith("def:")])
+        pinned = [self._defs[p] for p in [*defs, *anchors] if p in self._defs
+                  and (allowed is None or allowed[self._defs[p]])]
+        if not pinned:
+            return ranked
+        top = ranked[0][1] if ranked else 1.0
+        seen = set(dict.fromkeys(pinned))
+        return [(i, top + 1.0) for i in dict.fromkeys(pinned)] + [(i, s) for i, s in ranked if i not in seen]
 
     def _with_neighbours(self, ranked: list[tuple[int, float]], k: int,
                          allowed: np.ndarray | None) -> list[tuple[int, float]]:

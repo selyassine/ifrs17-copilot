@@ -124,6 +124,9 @@ def rescore(path: Path) -> None:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--jeu", choices=sorted(QUESTION_FILES), default="mise_au_point",
@@ -160,7 +163,7 @@ def main() -> None:
                 continue
             memory, used = context_block([{"question": prev["question"], "answer": prev["reponse"],
                                            "tools": prev.get("resultats", [])}], {}), 1
-        norm = norm_search_with(s, client, loader, f"eval:{q['id']}")
+        norm = norm_search_with(s, client, loader, f"eval:{q['id']}", cache=False)   # mesure sans cache (D-089)
         if q.get("triangle"):                     # dossier de sinistres survenus (D-087)
             from agents.copilot_lic import LicTools
             tools, prompt_id = LicTools(TriangleData(**triangles()[q["triangle"]]), norm_search=norm), "copilot_lic"

@@ -35,6 +35,9 @@ HERE = Path(__file__).parent
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--jeu", choices=["facile", "difficile"], default="facile")
     ap.add_argument("--limit", type=int, default=3)

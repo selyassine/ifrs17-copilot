@@ -33,6 +33,10 @@ class Settings:
     llm_fallback_api_key: str = field(default_factory=lambda: _env("LLM_FALLBACK_API_KEY"))
     llm_fallback_model: str = field(default_factory=lambda: _env("LLM_FALLBACK_MODEL"))
     llm_timeout_s: float = field(default_factory=lambda: float(_env("LLM_TIMEOUT_S", "60")))
+    # D-092 : au-delà de cette attente de quota (s), passer au modèle de secours s'il est configuré ; -1 = toujours attendre
+    llm_quota_max_wait_s: float = field(default_factory=lambda: float(_env("LLM_QUOTA_MAX_WAIT_S", "10")))
+    # D-093 : attente totale permise par appel (quota et nouveaux essais, principal et secours) ; -1 = sans limite
+    llm_max_wait_s: float = field(default_factory=lambda: float(_env("LLM_MAX_WAIT_S", "45")))
     llm_max_retries: int = field(default_factory=lambda: int(_env("LLM_MAX_RETRIES", "2")))
 
     router_mode: str = field(default_factory=lambda: _env("ROUTER_MODE", "heuristic"))
@@ -46,8 +50,8 @@ class Settings:
     qdrant_url: str = field(default_factory=lambda: _env("QDRANT_URL"))          # vide : Qdrant embarqué
     qdrant_api_key: str = field(default_factory=lambda: _env("QDRANT_API_KEY"))
     rag_glossary: bool = field(default_factory=lambda: _env("RAG_GLOSSARY", "1") == "1")
-    # version du prompt rag_answer : v2 mesurée et retenue (D-024) ; 1 pour reproduire la v1
-    rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "2")))
+    # version du prompt rag_answer : v3 retenue (D-098) ; 2 pour reproduire la mesure de D-024, 1 pour la v1
+    rag_prompt_version: int = field(default_factory=lambda: int(_env("RAG_PROMPT_VERSION", "3")))
     # réécriture de la question par le LLM avant la recherche (D-045) ; 0 tant que le gain n'est pas mesuré
     rag_rewrite: bool = field(default_factory=lambda: _env("RAG_REWRITE", "0") == "1")
     # options de recherche avancées (D-048, D-049), chacune mesurée avant d'être activée

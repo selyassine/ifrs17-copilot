@@ -44,6 +44,9 @@ def resolve(path: str) -> Path | None:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     settings = get_settings()
     if settings.llm_provider == "fake":
         raise SystemExit("LLM_PROVIDER=fake : configurer Groq dans .env avant cette évaluation.")

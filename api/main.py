@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import queue
 import re
 import threading
 import time
 import uuid
+from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
 
@@ -55,11 +57,38 @@ class UTF8JSONResponse(JSONResponse):
     media_type = "application/json; charset=utf-8"
 
 
+WARMUP: dict = {"etat": "non lancé", "duree_s": None}
+
+
+def warm_up(settings: Settings | None = None) -> None:
+    """D-094 : charge l'index de la norme et le modèle d'embedding au démarrage, en arrière-plan. Mesure du 25/10 :
+    67 s de chargement de BGE-M3 payées par la première question après chaque démarrage."""
+    s = settings or get_settings()
+    WARMUP.update(etat="en cours", duree_s=None)
+    t0 = time.perf_counter()
+    try:
+        model = s.rag_embed_model if s.rag_mode in ("dense", "hybrid") else ""
+        r = get_retriever(s.rag_strategy, model, **retrieval_options(s))
+        if r.encoder is not None:
+            r.encoder.encode(["préchauffage"], is_query=True)      # premier encodage : initialisation du modèle
+        WARMUP.update(etat="prêt", duree_s=round(time.perf_counter() - t0, 1))
+    except Exception as exc:  # noqa: BLE001 — sans index, l'API démarre quand même (la recherche signalera l'erreur)
+        WARMUP.update(etat=f"échec : {type(exc).__name__}: {exc}"[:300], duree_s=round(time.perf_counter() - t0, 1))
+
+
+@asynccontextmanager
+async def lifespan(_app):
+    if os.environ.get("IFRS17_WARMUP", "1") == "1":
+        threading.Thread(target=warm_up, name="prechauffage", daemon=True).start()
+    yield
+
+
 app = FastAPI(
     title="IFRS 17 Copilot",
     version=VERSION,
     description="Services IA appelés par les workflows n8n.",
     default_response_class=UTF8JSONResponse,
+    lifespan=lifespan,
 )
 
 
@@ -93,6 +122,7 @@ def health(settings: Settings = Depends(get_settings)) -> dict:
         "llm_provider": settings.llm_provider,
         "router_mode": settings.router_mode,
         "rag": rag_status(settings),
+        "prechauffage": WARMUP,            # D-094 : index de la norme chargé au démarrage
         "registre": {"comptes": registry(settings).has_users()},
     }
 
@@ -205,7 +235,9 @@ class AskResponse(BaseModel):
     sources: list[dict]
     warnings: list[str]
     corrections: int
-    latency_ms: float
+    latency_ms: float = Field(description="durée totale de la requête, du routeur à la vérification (D-091)")
+    duree: dict = Field(default_factory=dict, description="décomposition : modèle par agent, attente du quota, "
+                        "recherche des passages et chargement de l'index")
 
 
 def make_client(settings: Settings) -> LLMClient:
@@ -219,9 +251,15 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
     case_id = body.case_id or uuid.uuid4().hex[:12]
     mode = settings.rag_mode
     model = settings.rag_embed_model if mode in ("dense", "hybrid") else ""
+    t0, offset, load = time.perf_counter(), _trace_offset(settings), {"ms": 0.0}
+
+    def retriever():
+        t = time.perf_counter()
+        r = get_retriever(settings.rag_strategy, model, **retrieval_options(settings))
+        load["ms"] += (time.perf_counter() - t) * 1000      # long au premier appel : chargement de BGE-M3 (D-091)
+        return r
     try:
-        res = run_ask(body.question, settings, make_client(settings),
-                      lambda: get_retriever(settings.rag_strategy, model, **retrieval_options(settings)), k=body.k, case_id=case_id)
+        res = run_ask(body.question, settings, make_client(settings), retriever, k=body.k, case_id=case_id)
     except IndexMissing as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except LLMError as exc:
@@ -231,7 +269,19 @@ def ask(body: AskRequest, settings: Settings = Depends(get_settings)) -> AskResp
                        rounds=res.rounds, small_talk=res.small_talk,
                        sources=rag.sources if rag else [], warnings=res.warnings,
                        corrections=rag.corrections if rag else 0,
-                       latency_ms=rag.latency_ms if rag else 0.0)
+                       **request_timing(settings, case_id, offset, t0, load["ms"]))
+
+
+def request_timing(settings: Settings, case_id: str, offset: int, t0: float, index_ms: float = 0.0) -> dict:
+    """Durée totale d'une requête et sa décomposition (D-091). Avant, l'assistant normatif affichait la seule
+    rédaction de la réponse (0,9 s) pour une requête de près de 2 minutes."""
+    from core.registry import llm_timing
+
+    total = (time.perf_counter() - t0) * 1000
+    t = llm_timing(settings.trace_path, case_id, offset)
+    return {"latency_ms": round(total, 1),
+            "duree": {**t, "total_ms": round(total, 1), "index_ms": round(index_ms, 1),
+                      "autre_ms": round(max(0.0, total - t["modele_ms"] - index_ms), 1)}}
 
 
 # --------------------------------------------------------------------------- #
@@ -668,6 +718,7 @@ class CopilotResponse(BaseModel):
     engine: str
     memory_used: int = 0              # échanges passés placés dans le contexte (mémoire épisodique)
     trajectory: list[dict] = []       # points de reprise de cette question (checkpointer LangGraph)
+    duree: dict = {}                  # décomposition du temps (D-091) : modèle par agent, quota, reste
 
 
 def _case_data(reg: Registry, cid: str | None, portfolio: PortfolioData | None = None,
@@ -727,7 +778,24 @@ def _remember(reg: Registry, cid: str, actor: Actor, question: str, res) -> None
     from agents.rag_agent import normalize_ref
     refs = sorted({r for m in _re.finditer(r"\[([^\[\]]{1,60})\]", res.answer) for r in normalize_ref(m.group(1))})
     from agents.memory import tool_digest
-    reg.add_memory(cid, actor.name, question, res.answer, res.source, tool_digest(res.observations), refs)
+    reg.add_memory(cid, actor.name, question, res.answer, res.source, tool_digest(res.observations), refs,
+                   graph_observations(res.observations))
+
+
+def graph_observations(observations: list[dict], limit: int = 60_000) -> list[dict]:
+    """Résultats d'outils gardés avec l'échange pour redessiner ses graphes au rechargement (D-090) : outils de calcul
+    seulement (le texte de la norme est déjà dans la réponse), taille bornée."""
+    out, size = [], 0
+    for o in observations:
+        r = o.get("resultat")
+        if o.get("outil") in ("rechercher_norme", "memoire_du_dossier") or not isinstance(r, dict) or r.get("erreur"):
+            continue
+        n = len(json.dumps(r, ensure_ascii=False, default=str))
+        if size + n > limit:
+            break
+        out.append({"outil": o.get("outil"), "arguments": o.get("arguments") or {}, "resultat": r})
+        size += n
+    return out
 
 
 @app.post("/v1/copilot", response_model=CopilotResponse)
@@ -737,17 +805,44 @@ def copilot(body: CopilotRequest, settings: Settings = Depends(get_settings),
     projection, norme, mémoire) pour répondre sur un dossier ; outils en lecture seule, réponse
     contrôlée. Mémoire du dossier et état sauvegardé par question (D-061)."""
     cid = body.case_id or uuid.uuid4().hex[:12]
+    t0, offset = time.perf_counter(), _trace_offset(settings)
     try:
         res = _copilot(settings, _case_data(reg, body.case_id, body.portfolio, body.triangle), cid,
                        reg).ask(body.question, thread_id=cid)
     except LLMError as exc:
         raise HTTPException(status_code=502, detail=f"LLM indisponible : {exc}"[:500]) from exc
-    _remember(reg, cid, actor, body.question, res)
+    if res.engine != "filtre du code":            # une question hors sujet n'entre pas dans la mémoire (D-088)
+        _remember(reg, cid, actor, body.question, res)
     if reg.get_case(cid) is not None:
         reg.add_event(cid, actor.name, "question_copilot", {"question": body.question[:200],
                                                             "outils": [o["outil"] for o in res.observations],
                                                             "memoire": res.memory_used})
-    return _copilot_response(cid, res)
+    out = _copilot_response(cid, res)
+    out.duree = request_timing(settings, cid, offset, t0)["duree"]
+    return out
+
+
+class TranscriptionResponse(BaseModel):
+    texte: str
+    duree_s: float = 0.0
+    modele: str = ""
+
+
+@app.post("/v1/transcrire", response_model=TranscriptionResponse, tags=["copilot"])
+def transcribe_question(file: UploadFile = File(...), settings: Settings = Depends(get_settings),
+                        _: Actor = Depends(ANALYSTE)) -> TranscriptionResponse:
+    """Question à l'oral pour le Copilot (D-089) : Whisper renvoie le texte, que le site affiche puis envoie
+    à /v1/copilot comme une question écrite. Mêmes formats et même vocabulaire IFRS 17 que /v1/ask/audio."""
+    name = file.filename or "question.webm"
+    if audio_type(name) is None:
+        raise HTTPException(status_code=415, detail="audio non pris en charge : mp3, wav, m4a, ogg, webm, flac")
+    try:
+        tr = transcribe(file.file.read(), name, settings, fake=speech_fake())
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"transcription impossible : {exc}"[:500]) from exc
+    if len(tr.text) < 2:
+        raise HTTPException(status_code=422, detail="aucune parole reconnue dans l'audio")
+    return TranscriptionResponse(texte=tr.text[:500], duree_s=tr.duration_s, modele=tr.model)
 
 
 @app.get("/v1/copilot/{case_id}", tags=["copilot"])
@@ -828,8 +923,18 @@ def favicon() -> FileResponse:
     return FileResponse(WEB_DIR / "assets" / "img" / "favicon.svg", media_type="image/svg+xml")
 
 
+class RevalidatedStaticFiles(StaticFiles):
+    """Fichiers du site toujours revérifiés (ETag) : après une mise à jour, le navigateur ne garde pas un ancien
+    module JavaScript à côté d'un nouveau (erreur « does not provide an export named … »)."""
+
+    def file_response(self, *args, **kwargs):
+        resp = super().file_response(*args, **kwargs)
+        resp.headers["Cache-Control"] = "no-cache"
+        return resp
+
+
 if WEB_DIR.exists():
-    app.mount("/app", StaticFiles(directory=WEB_DIR, html=True), name="web")
+    app.mount("/app", RevalidatedStaticFiles(directory=WEB_DIR, html=True), name="web")
 
 
 @app.post("/v1/case/stream")

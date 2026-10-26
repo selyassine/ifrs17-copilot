@@ -33,6 +33,9 @@ HERE = Path(__file__).parent
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--questions", type=Path, default=HERE / "rag_questions.jsonl")
     ap.add_argument("--limit", type=int, default=None)

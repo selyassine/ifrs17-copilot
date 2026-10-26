@@ -4,6 +4,19 @@ import { $, $$, esc, fr, icon, getJSON, toast, refLabel } from "../core.js";
 const STARTERS = ["Comment la marge sur services contractuels est-elle libérée en résultat ?", "Quand un groupe de contrats est-il déficitaire dès l'origine ?",
   "À quelles conditions peut-on appliquer la méthode d'affectation des primes ?", "Comment l'ajustement pour risque est-il défini ?"];
 
+/* D-091 : d'où vient le temps de réponse (le modèle agent par agent, l'attente du quota, la recherche) */
+function timingHTML(d) {
+  if (!d || !d.total_ms) return "";
+  const sec = ms => `${fr(ms / 1000, 1)} s`;
+  const agents = Object.entries(d.par_agent || {}).map(([k, v]) => `<li><span>${esc(k)}</span><span>${v.appels} appel${v.appels > 1 ? "s" : ""}, ${sec(v.ms)}</span></li>`).join("");
+  return `<details class="tools timing"><summary>Temps de réponse : ${sec(d.total_ms)}, dont ${sec(d.modele_ms)} dans ${d.appels} appel${d.appels > 1 ? "s" : ""} au modèle</summary>
+    <ul class="timing-list">${agents}
+      ${d.attente_quota_s ? `<li class="warn"><span>dont attente du quota Groq (HTTP 429)</span><span>${fr(d.attente_quota_s, 1)} s</span></li>` : ""}
+      ${d.secours ? `<li><span>appels passés au modèle de secours</span><span>${d.secours}</span></li>` : ""}
+      ${d.index_ms > 500 ? `<li><span>chargement de l'index de la norme (premier appel)</span><span>${sec(d.index_ms)}</span></li>` : ""}
+      <li><span>recherche des passages et contrôles du code</span><span>${sec(d.autre_ms)}</span></li></ul></details>`;
+}
+
 export async function render(main) {
   main.innerHTML = `<div class="page">
     <div class="page-head"><div><h1>Assistant normatif</h1>
@@ -46,13 +59,14 @@ export async function render(main) {
     const cites = Object.fromEntries((a.citations || []).map(c => [c.paragraph_id, c]));
     const html = esc(a.answer).replace(/\[([^[\]]{1,60})\]/g, (m, ref) => {
       const id = ref.replace("§", "").trim();
-      return cites[id] ? `<button class="cite" type="button" data-ref="${esc(id)}" aria-expanded="false" title="${esc(refLabel(id, true))}">${esc(ref)}</button>` : m;
+      return cites[id] ? `<button class="cite" type="button" data-ref="${esc(id)}" aria-expanded="false" title="${esc(refLabel(id, true))}">${esc(id.startsWith("def:") ? `définition « ${id.slice(4)} »` : ref)}</button>` : m;
     });
     const v = r.verdict;
     body.innerHTML = `<p class="text">${html}</p>
       <div class="meta">${!v ? "" : v.status === "ok" ? `<span class="status ok">Relue et validée</span>` : `<span class="status warn">À valider par un humain</span>`}
         <span>${(a.citations || []).length} paragraphe${(a.citations || []).length > 1 ? "s" : ""} cité${(a.citations || []).length > 1 ? "s" : ""}</span>
-        ${r.rounds ? "<span>1 correction demandée par le vérificateur</span>" : ""}<span>${fr(r.latency_ms / 1000, 1)} s</span></div>`;
+        ${r.rounds ? "<span>1 correction demandée par le vérificateur</span>" : ""}<span>${fr(r.latency_ms / 1000, 1)} s</span></div>
+      ${timingHTML(r.duree)}`;
     node._cites = cites;
     const first = $(".cite", body);
     if (first) showCite(first, cites);

@@ -32,8 +32,10 @@ fournisseur) : il fonctionne avec tout modèle compatible OpenAI et avec le LLM 
 
 from __future__ import annotations
 
+import copy
 import json
 import re
+import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -100,6 +102,22 @@ class Tool:
     run: Callable[..., dict]
 
 
+def csm_formula(r) -> str:
+    """Calcul de la CSM à l'origine, écrit par le code avec les montants du moteur (D-090)."""
+    primes = r.pv_inflows - r.pv_recoveries
+    net = r.pv_inflows - r.pv_outflows - r.pv_acquisition - r.risk_adjustment
+    terms = [f"valeur actuelle des primes {fr(primes)}"]
+    if r.pv_recoveries > 0:
+        terms.append(f"+ recouvrements {fr(r.pv_recoveries)}")
+    terms += [f"− sorties {fr(r.pv_outflows)}"]
+    if r.pv_acquisition > 0:
+        terms.append(f"− frais d'acquisition {fr(r.pv_acquisition)}")
+    terms.append(f"− ajustement pour risque {fr(r.risk_adjustment)}")
+    end = (f"CSM {fr(r.initial_csm)}" if net >= 0
+           else f"{fr(net)} : montant négatif, donc CSM nulle et perte {fr(r.initial_loss_component)} (groupe déficitaire)")
+    return " ".join(terms) + f" = {end}"
+
+
 def _status(onerous: bool) -> str:
     return "déficitaire" if onerous else "bénéficiaire"
 
@@ -120,14 +138,16 @@ class DossierTools:
     def tools(self) -> dict[str, Tool]:
         out = [
             Tool("donnees_du_dossier", "Résumé du dossier : groupe, durée, unité, ajustement pour risque, résultats "
-                 "centraux (CSM ou perte), CSM libérée la première période.", NoArgs, self.dossier),
+                 "centraux (CSM ou perte), CSM libérée la première période, et le détail du calcul de la CSM "
+                 "(« comment est calculée la CSM de ce dossier »).", NoArgs, self.dossier),
             Tool("evaluer_scenario", "Recalcule le groupe avec des hypothèses modifiées (sinistres, primes, taux, "
                  "ajustement pour risque) et compare au scénario central.", ScenarioArgs, self.scenario),
             Tool("sensibilites", "Tableau des 6 chocs standard et seuils de bascule : de combien les sinistres "
                  "doivent monter (groupe bénéficiaire) ou baisser (groupe déficitaire) pour que le résultat à l'origine "
                  "s'annule, et translation des taux équivalente.", NoArgs, self.sensitivities),
             Tool("niveau_de_confiance", "Ajustement pour risque exigé à un niveau de confiance donné et son effet "
-                 "sur la CSM ; niveau de confiance de l'ajustement retenu.", LevelArgs, self.confidence),
+                 "sur la CSM (CSM centrale, variation) ; niveau de confiance de l'ajustement retenu.", LevelArgs,
+                 self.confidence),
             Tool("projection_resultat", "Compte de résultat IFRS 17 attendu par période (produits, résultat des "
                  "services, charges financières) dans le scénario central.", NoArgs, self.projection),
         ]
@@ -143,13 +163,20 @@ class DossierTools:
     def dossier(self) -> dict:
         r, p = self.r, self.p
         return {"groupe": p.group_id, "unite": self.unit, "periodes": p.n_periods,
+                # F-036 : « ce dossier est LIC ? » → « non… approche simplifiée (PAA / LIC) » : la nature du passif manquait
+                "nature_du_dossier": "passif au titre de la couverture restante (LRC), modèle général : CSM calculée à "
+                                     "l'origine ; ce n'est pas un dossier de sinistres survenus (LIC)",
                 "ajustement_risque_pourcentage": pct(p.risk_adjustment_pct),
                 "valeur_actuelle_primes": fr(r.pv_inflows - r.pv_recoveries),
                 **({"valeur_actuelle_recouvrements": fr(r.pv_recoveries)} if r.pv_recoveries > 0 else {}),
                 "valeur_actuelle_sorties": fr(r.pv_outflows),
                 "ajustement_risque": fr(r.risk_adjustment), "flux_execution": fr(r.fulfilment_cash_flows),
                 "csm_initiale": fr(r.initial_csm), "perte_initiale": fr(r.initial_loss_component),
+                "frais_d_acquisition": fr(r.pv_acquisition),
+                "calcul_de_la_csm": csm_formula(r),
                 "liberation_csm_premiere_periode": fr(r.rollforward[0].release) if r.rollforward else "0,00",
+                # la CSM est désactualisée avant d'être libérée : la libération peut dépasser la CSM initiale
+                "desactualisation_csm_premiere_periode": fr(r.rollforward[0].interest_accretion) if r.rollforward else "0,00",
                 "volatilite_registre": pct(self.cv, 1),
                 **({"volatilite_declaree_par_le_document": pct(p.declared_cv, 1)} if p.declared_cv else {}),
                 **({"niveau_de_confiance_declare_par_le_document": pct(p.declared_confidence, 1)}
@@ -188,6 +215,10 @@ class DossierTools:
         return {"niveau_demande": f"{fr(niveau, 1)} %", "ajustement_risque_exige": fr(ra),
                 "ajustement_risque_exige_en_pourcentage_des_sorties": pct(ra / r.pv_outflows) if r.pv_outflows else "0,00 %",
                 "csm_initiale": fr(max(-fcf, 0.0)), "perte_initiale": fr(max(fcf, 0.0)), "statut": _status(fcf > 0),
+                "csm_centrale": fr(r.initial_csm), "perte_centrale": fr(r.initial_loss_component),
+                # effet sur la marge calculé par le code : sans lui, le modèle soustrayait lui-même et sa réponse
+                # était rejetée (nombre absent des outils) — exemple du 25/10, PREV-2023-A à 90 %
+                "variation_du_resultat_a_l_origine": signed(-fcf - (r.initial_csm - r.initial_loss_component)),
                 "ajustement_risque_retenu": fr(r.risk_adjustment),
                 "niveau_de_confiance_retenu": pct(confidence_level(r.pv_outflows, self.cv, r.risk_adjustment), 1),
                 "hypothese": f"loi lognormale, coefficient de variation {pct(self.cv, 0)}"}
@@ -196,9 +227,12 @@ class DossierTools:
         pr = projection(self.p, self.r)
         if pr is None:
             return {"erreur": "projection non disponible : ajustements de service futur fournis"}
+        closing = {c.period: c.closing for c in self.r.rollforward}
         return {"par_periode": [{"periode": x.period, "produits": fr(x.insurance_revenue),
                                  "resultat_des_services": fr(x.insurance_service_result),
-                                 "charges_financieres": fr(x.insurance_finance_expense)} for x in pr.rows],
+                                 "charges_financieres": fr(x.insurance_finance_expense),
+                                 **({"csm_fin_de_periode": fr(closing[x.period])} if x.period in closing else {})}
+                                for x in pr.rows],
                 "total_produits": fr(pr.totals["insurance_revenue"]),
                 "total_resultat_des_services": fr(pr.totals["insurance_service_result"]),
                 "total_charges_financieres": fr(pr.totals["insurance_finance_expense"])}
@@ -210,20 +244,55 @@ class DossierTools:
         return self.norm_search(question) if self.norm_search else {"erreur": "norme non indexée"}
 
 
+NORM_CACHE_MAX = 256
+_norm_cache: dict[tuple, dict] = {}
+_norm_cache_lock = threading.Lock()
+
+
+def norm_cache_key(question: str, settings) -> tuple:
+    """Même question (casse, espaces et ponctuation finale ignorés) et même configuration de la recherche :
+    un changement d'index, de modèle d'embedding ou de version de prompt donne une autre clé (D-089)."""
+    q = re.sub(r"\s+", " ", question.strip().lower()).rstrip(" ?!.")
+    return (q, settings.rag_strategy, settings.rag_mode, settings.rag_embed_model, settings.rag_store,
+            settings.rag_agentic, settings.rag_prompt_version, settings.rag_glossary, settings.rag_rerank_model,
+            settings.verifier_enabled, settings.llm_model_large, settings.llm_model_small)
+
+
+def clear_norm_cache() -> None:
+    with _norm_cache_lock:
+        _norm_cache.clear()
+
+
 def norm_search_with(settings, client: LLMClient, retriever_loader: Callable | None,
-                     case_id: str = "") -> Callable[[str], dict] | None:
-    """Outil de recherche branché sur la chaîne habituelle : agent RAG (et LangGraph) + vérificateur."""
+                     case_id: str = "", cache: bool = True) -> Callable[[str], dict] | None:
+    """Outil de recherche branché sur la chaîne habituelle : agent RAG (et LangGraph) + vérificateur.
+
+    Cache (D-089) : une réponse acceptée par le vérificateur est réutilisée pour la même question et la même
+    configuration ; la réponse est identique, seule la latence change. Un refus, une réponse à corriger ou une
+    erreur n'est jamais gardé."""
     if retriever_loader is None:
         return None
     from agents.pipeline import verified_answer
 
     def search(question: str) -> dict:
+        key = norm_cache_key(question, settings)
+        with _norm_cache_lock:
+            hit = _norm_cache.get(key) if cache else None
+        if hit is not None:
+            return {**copy.deepcopy(hit), "cache": True}
         res = verified_answer(question, settings, client, retriever_loader(), case_id=case_id)
         a = res.answer
         if a.refused:
             return {"reponse": None, "refus": a.refusal_reason}
-        return {"reponse": a.answer, "verdict": res.verdict.status.value if res.verdict else "non vérifié",
-                "citations": [{"paragraphe": c.paragraph_id, "extrait": c.quote} for c in a.citations]}
+        out = {"reponse": a.answer, "verdict": res.verdict.status.value if res.verdict else "non vérifié",
+               "citations": [{"paragraphe": c.paragraph_id, "extrait": c.quote} for c in a.citations]}
+        if not cache or out["verdict"] not in ("ok", "non vérifié"):   # à corriger ou à relire : jamais réutilisée
+            return out
+        with _norm_cache_lock:
+            if len(_norm_cache) >= NORM_CACHE_MAX:
+                _norm_cache.pop(next(iter(_norm_cache)))
+            _norm_cache[key] = copy.deepcopy(out)
+        return out
     return search
 
 
@@ -310,6 +379,9 @@ ACTION_CLAIM = re.compile(
     r"|\bannoncée?s?\s+à\b|\bje\s+(?:valide|confirme la validation)", re.I)
 
 
+_NEEDS_TOOL = re.compile(r"calcul|d[ée]march|m[ée]thod|formul|correct|v[ée]rifi|[ée]tape|comment (?:est|se|on|calcul)", re.I)
+
+
 def answer_issues(answer: str, question: str, observations: list[dict], n_periods: int,
                   memory: str = "", memory_refs: set[str] | None = None) -> list[str]:
     """Nombres et paragraphes non fondés. La mémoire (échanges déjà contrôlés) compte comme source."""
@@ -341,6 +413,11 @@ def answer_issues(answer: str, question: str, observations: list[dict], n_period
         issues.append("la réponse ne donne aucun chiffre des résultats d'outils : indique le montant ou le "
                       "pourcentage qui répond (CSM ou perte, variation, seuil), recopié du résultat")
     issues += unit_mismatches(answer, question, observations)
+    if not observations and _NEEDS_TOOL.search(question):
+        # F-030 : « comment calculer la CSM » répondu sans outil, en termes vagues et en partie faux (« prise en compte
+        # de la CSM déjà libérée ») ; aucun nombre, donc aucun contrôle ne s'appliquait
+        issues.append("question sur le calcul ou la démarche du dossier répondue sans outil : appelle "
+                      "donnees_du_dossier (calcul détaillé, montants du moteur) et explique ce calcul avec ses chiffres")
     if ACTION_CLAIM.search(answer):
         issues.append("la réponse annonce une modification ou une validation : le Copilot ne peut ni modifier les "
                       "données ni valider un dossier ; refuse la demande et donne les chiffres des outils")
@@ -360,6 +437,75 @@ def currency_issues(answer: str, currency: str) -> list[str]:
     return [f"monnaie {', '.join(wrong)} citée alors que le dossier est en {currency} : recopie l'unité de l'outil"] if wrong else []
 
 
+GREETING_ANSWER = ("Bonjour ! Posez-moi une question sur ce dossier : un scénario « et si… », une sensibilité, le niveau "
+                   "de confiance de l'ajustement pour risque, le résultat attendu ou une règle d'IFRS 17.")
+OFF_TOPIC_ANSWER = ("Je réponds seulement sur ce dossier et sur IFRS 17 (scénarios, sensibilités, niveau de confiance, "
+                    "résultat, passif, règles de la norme). Cette question en sort : reformulez-la à propos du dossier.")
+_DOMAIN = re.compile(
+    r"group|contrat|dossier|portefeuille|csm|marge|sinistr|prim|taux|perte|d[ée]ficit|b[ée]n[ée]fic|rentab|on[ée]reu|"
+    r"\blic\b|\blrc\b|\bra\b|ajustement|risque|confiance|quantile|norme|ifrs|paragraph|§|provision|survenance|"
+    r"triangle|mack|chain|ladder|bornhuetter|queue|sc[ée]nario|sensib|hypoth|hausse|baiss|augment|dimin|r[ée]sultat|"
+    r"produit|charge|flux|actualis|\bbel\b|estimation|passif|lib[ée]r|unit[ée]|couverture|projection|p[ée]riode|"
+    r"ann[ée]e|paiement|r[ée]assurance|frais|acquisition|recouvr|\bpaa\b|\bvfa\b|valid|approuv|comit[ée]|direction|"
+    r"m[ée]moire|pr[ée]c[ée]dent|combien|montant|chiffre|duration|volatilit|coefficient|seuil|bascul|choc|"
+    r"actuari|assur|comptab|bilan|cl[ôo]ture|[ée]valuation|niveau de|l['’]outil|analys|r[ée]sum|synth[èe]s|d[ée]tail|interpr[ée]t|comment(?:e|aire)\b|recommand|conclu|\bpb\b|points? de base|"
+    # F-030 : « est-ce que notre calcul est correct ? », « quelle est la démarche de notre calcul » refusées à tort
+    r"calcul|d[ée]march|m[ée]thod|formul|correct|v[ée]rifi|contr[ôo]l|[ée]tape|expliqu|\bnotre\b|\bnos\b|"
+    r"\bmod[èe]le\b|chain|hypoth|donn[ée]e|note\b|"
+    # F-036 : « changer le graphe », « donner sous forme d'un graphe » refusées à tort
+    r"graph|sch[ée]ma|courbe|diagramme|visuali|tableau|figure|illustr|dessin", re.I)
+
+
+def off_topic(question: str, has_memory: bool = False) -> bool:
+    """Vrai si la question ne parle ni du dossier ni d'IFRS 17 (aucun mot du domaine). Une question de suite
+    (« Et à 25 % ? », « Avec 1,02 ? », « Et pourquoi ? ») reste permise : elle commence par « et », « avec », « si »
+    ou « à » et elle est courte ou chiffrée."""
+    q = question.strip()
+    if _DOMAIN.search(q):
+        return False
+    relance = re.search(r"[\d§$]", q) or re.match(
+        r"^(?:et|avec|si|à|a|sans|alors|donc|seulement|uniquement|juste|pourquoi|comment ça|vraiment|oui|non|ok|"
+        r"d'accord|tu es s[uû]re?|s[uû]re?|c'est tout|pas plus|plus de d[ée]tails?)\b", q, re.I)
+    if has_memory and relance and len(re.findall(r"\w+", q)) <= 6:
+        # F-032 : « seulement $1 ?? » après une réponse sur la norme : une courte relance d'un échange en cours n'est
+        # pas hors sujet ; le modèle a la mémoire pour la comprendre (les contrôles s'appliquent toujours)
+        return False
+    follow = re.match(r"^(?:et|avec|si|à|a|sans|alors|donc)\b", q, re.I) is not None
+    return not (follow and (re.search(r"\d", q) or len(q.split()) <= 6))
+
+
+_DOSSIER_NUMBERS = re.compile(
+    r"\d|combien|montant|chiffre|et si|sc[ée]nario|sensib|niveau de confiance|projection|survenance|paiement|"
+    r"\bce (?:dossier|groupe|portefeuille)|\b(?:notre|cette|ce) (?:dossier|groupe)|le groupe|du groupe|de ce|"
+    r"reste[- ]t[- ]il|devient|passe|vaut|valeur|bénéficiaire|déficitaire|perte de|choc|hausse|baisse|augment|diminu", re.I)
+
+
+GRAPH_REQUEST = re.compile(r"graph|sch[ée]ma|courbe|diagramme|visuali|figure|illustr|dessin|sous forme d", re.I)
+# vues proposées dans l'ordre, pour « un autre graphe » (D-099) ; une vue = (outil, arguments, mots qui la désignent)
+GRAPH_VIEWS = {
+    "portefeuille": [("donnees_du_dossier", {}, r"calcul|compos|csm initiale|d[ée]compos"),
+                     ("projection_resultat", {}, r"p[ée]riode|[ée]volution|projection|r[ée]sultat|produit|lib[ée]r|temps|ann[ée]e"),
+                     ("sensibilites", {}, r"sensib|choc|hypoth|bascul|seuil"),
+                     ("niveau_de_confiance", {"niveau": 90.0}, r"confiance|ajustement|risque|\bra\b")],
+    "lic": [("donnees_du_dossier", {}, r"calcul|compos|bel|lic\b"),
+            ("par_survenance", {}, r"survenance|ann[ée]e|provision|triangle"),
+            ("paiements_futurs", {}, r"paiement|calendrier|flux|actualis|[ée]volution|temps"),
+            ("sensibilites", {}, r"sensib|choc|taux|queue|hypoth|confiance")],
+}
+
+
+def graph_request(question: str) -> bool:
+    """Demande de graphe sur le dossier (« donner sous forme d'un graphe », « changer le graphe ») : le code choisit la
+    vue et l'explique, sans appel au modèle (D-099). Une question sur la norme suit le chemin habituel."""
+    return bool(GRAPH_REQUEST.search(question)) and not re.search(r"§|paragraphe|norme|ifrs", question, re.I)
+
+
+def pure_norm_question(question: str) -> bool:
+    """Question sur la règle seule (aucun chiffre du dossier demandé) : la réponse vérifiée de la recherche dans la
+    norme suffit, sans nouvel appel au modèle pour la reformuler (D-090)."""
+    return _DOSSIER_NUMBERS.search(question) is None
+
+
 def fallback_tool(question: str) -> tuple[str, dict]:
     """Outil de repli choisi par le code, sans LLM (mots-clés), quand le modèle n'en a appelé aucun."""
     q = question.lower()
@@ -371,17 +517,15 @@ def fallback_tool(question: str) -> tuple[str, dict]:
         return "sensibilites", {}
     if re.search(r"durée|sur toute|total|par période|par année|chaque année|projection|produits des activités", q):
         return "projection_resultat", {}
+    # calcul, démarche, vérification du calcul → données du dossier, qui portent le calcul détaillé (D-090)
     return "donnees_du_dossier", {}
 
 
 def fallback_answer(observations: list[dict]) -> str:
-    """Réponse écrite par le code : les résultats d'outils, sans interprétation."""
-    if not observations:
-        return "Je n'ai pas pu obtenir de résultat fiable pour cette question."
-    parts = ["Réponse construite à partir des résultats des outils (le texte du modèle n'a pas passé le contrôle) :"]
-    for o in observations:
-        parts.append(f"- {o['outil']} : {json.dumps(o.get('resultat'), ensure_ascii=False)[:600]}")
-    return "\n".join(parts)
+    """Réponse écrite par le code : les résultats d'outils en phrases, sans interprétation ni JSON (D-090)."""
+    from agents.copilot_text import fallback_text
+
+    return fallback_text(observations)
 
 
 # --------------------------------------------------------------------------- #
@@ -480,6 +624,28 @@ class Copilot:
             except ValidationError as exc:
                 result = {"erreur": "arguments invalides : " + "; ".join(e["msg"] for e in exc.errors())[:300]}
         obs = {"outil": name, "arguments": raw, "resultat": result}
+        if (name == "rechercher_norme" and not state.get("observations") and isinstance(result, dict)
+                and pure_norm_question(state["question"])):
+            # D-090 : la réponse de l'agent RAG est déjà vérifiée (ou c'est un refus motivé) ; la faire reformuler par
+            # le Copilot coûtait 1 à 3 appels au modèle de plus (exemple du 25/10 : refus, 3 appels, 30 s)
+            from agents.copilot_text import describe
+
+            ok = bool(result.get("reponse")) and result.get("verdict") in ("ok", "non vérifié")
+            if ok or result.get("refus"):
+                found = [obs]
+                if not ok and re.search(r"calcul|formule|d[ée]termin|mesur|compos", state["question"], re.I) \
+                        and "donnees_du_dossier" in self.tools:
+                    # « comment calculer la CSM » sans passage assez précis : le calcul du dossier, fait par le moteur
+                    found.insert(0, {"outil": "donnees_du_dossier", "arguments": {},
+                                     "resultat": self.tools["donnees_du_dossier"].run()})
+                return {"observations": found, "answer": "\n\n".join(describe(o) for o in found),
+                        "source": "llm" if ok else "code",
+                        "sources": ["rechercher_norme"],
+                        "steps": state.get("steps", []) + [
+                            {"noeud": "agir", "outil": name, "arguments": raw, "erreur": None},
+                            {"noeud": "verifier", "problemes": [],
+                             "pensee": "question sur la règle seule : réponse vérifiée de la norme reprise telle quelle"
+                             if ok else "aucun passage suffisant dans la norme : réponse écrite par le code"}]}
         return {"observations": state.get("observations", []) + [obs],
                 "steps": state.get("steps", []) + [{"noeud": "agir", "outil": name, "arguments": raw,
                                                      "erreur": result.get("erreur") if isinstance(result, dict) else None}],
@@ -499,8 +665,8 @@ class Copilot:
             return {"corrections": state.get("corrections", 0) + 1, "steps": steps, "answer": "",
                     "messages": state["messages"] + [{"role": "user", "content": "Le contrôle a trouvé : "
                                                       + " ; ".join(issues) + ". " + CORRECTION_HINT}]}
-        return {"answer": fallback_answer(self._fallback_observations(obs, state["question"])), "source": "code",
-                "steps": steps}
+        fb = self._fallback_observations(obs, state["question"])     # gardées : le site en tire le graphe (D-090)
+        return {"answer": fallback_answer(fb), "source": "code", "observations": fb, "steps": steps}
 
     def _fallback_observations(self, obs: list[dict], question: str = "") -> list[dict]:
         """F-018 (t07) et mesure test2 (u03, u05) : aucun outil appelé → le code choisit l'outil par mots-clés
@@ -533,7 +699,7 @@ class Copilot:
         g.add_node("verifier", self.verify)
         g.add_edge(START, "decider")
         g.add_conditional_edges("decider", self.route_decision, {"agir": "agir", "verifier": "verifier"})
-        g.add_edge("agir", "decider")
+        g.add_conditional_edges("agir", self.route_verification, {"fin": END, "decider": "decider"})
         g.add_conditional_edges("verifier", self.route_verification, {"fin": END, "decider": "decider"})
         return g.compile(checkpointer=self.checkpointer)
 
@@ -546,15 +712,16 @@ class Copilot:
                 node = self.route_decision(state)
             elif node == "agir":
                 state = {**state, **self.act(state)}
+                if self.route_verification(state) == "fin":
+                    return state
                 node = "decider"
             else:
                 state = {**state, **self.verify(state)}
                 if self.route_verification(state) == "fin":
                     return state
                 node = "decider"
-        return {**state, "answer": fallback_answer(self._fallback_observations(state.get("observations", []),
-                                                                                state.get("question", ""))),
-                "source": "code"}
+        fb = self._fallback_observations(state.get("observations", []), state.get("question", ""))
+        return {**state, "answer": fallback_answer(fb), "observations": fb, "source": "code"}
 
     LIMIT = 4 * (MAX_TOOL_CALLS + MAX_CORRECTIONS + 2)
 
@@ -572,6 +739,17 @@ class Copilot:
 
     def ask(self, question: str, thread_id: str | None = None) -> CopilotResult:
         t0 = time.perf_counter()
+        if off_topic(question, bool(self.memory)):
+            # D-088 : question sans rapport avec le dossier (« définir Lionel Messi ») → refus poli par le code, sans
+            # appel au modèle ; avant, la règle « au moins un outil » produisait un repli absurde (données du dossier)
+            polite = re.match(r"^\s*(?:bonjour|bonsoir|salut|hello|merci|au revoir)\b", question, re.I)
+            return CopilotResult(answer=GREETING_ANSWER if polite else OFF_TOPIC_ANSWER, source="code", observations=[],
+                                 steps=[{"noeud": "filtre", "pensee": "question hors du dossier et d'IFRS 17 : refus sans "
+                                                                     "appel au modèle"}],
+                                 llm_calls=0, latency_ms=round((time.perf_counter() - t0) * 1000, 1),
+                                 engine="filtre du code", memory_used=self.memory_used)
+        if graph_request(question):
+            return self._graph_answer(question, t0)
         state = self.initial_state(question)
         try:
             graph = self.build_graph()
@@ -585,6 +763,30 @@ class Copilot:
         final = graph.invoke(state, cfg)
         run = [c for c in self.history(thread_id, graph) if c["checkpoint_id"] not in before] if "configurable" in cfg else []
         return self._result(final, engine, t0, run[::-1])
+
+    def _graph_answer(self, question: str, t0: float) -> CopilotResult:
+        """D-099 : vue choisie par les mots de la question, sinon la première vue pas encore montrée dans la mémoire
+        (« changer le graphe », « un autre graphe ») ; texte d'explication écrit par le code avec les chiffres du moteur."""
+        from agents.copilot_text import describe
+
+        views = GRAPH_VIEWS["lic" if "par_survenance" in self.tools else "portefeuille"]
+        views = [v for v in views if v[0] in self.tools]
+        asked = [v for v in views if re.search(v[2], question, re.I)]
+        other = re.search(r"chang|autre|diff[ée]rent|nouveau|toujours le m[êe]me", question, re.I)
+        shown = set(re.findall(r"\b(" + "|".join(t for t, _, _ in views) + r")\b", self.memory))
+        if asked and not other:
+            name, args, _ = asked[0]
+        else:
+            fresh = [v for v in views if v[0] not in shown]
+            name, args, _ = (fresh or views[1:] or views)[0]
+        obs = {"outil": name, "arguments": args, "resultat": self.tools[name].run(**args)}
+        intro = "Voici une autre vue du dossier. " if other else ""
+        return CopilotResult(answer=intro + describe(obs) + " Le graphe ci-dessous est construit avec les montants du moteur.",
+                             source="code", observations=[obs],
+                             steps=[{"noeud": "graphe", "pensee": f"demande de graphe : vue « {name} » choisie par le code"},
+                                    {"noeud": "agir", "outil": name, "arguments": args, "erreur": None}],
+                             llm_calls=0, latency_ms=round((time.perf_counter() - t0) * 1000, 1),
+                             engine="graphe du code", memory_used=self.memory_used)
 
     def history(self, thread_id: str | None, graph: Any = None) -> list[dict]:
         """Points de reprise du fil (le plus récent d'abord) : prochaine étape, question, réponse."""

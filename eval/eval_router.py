@@ -66,6 +66,9 @@ def evaluate(router, cases: list[dict]) -> dict:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--llm", action="store_true")
     ap.add_argument("--version", type=int, default=None)

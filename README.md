@@ -12,11 +12,11 @@ Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il li
 | Dépôt et instructions | ce README (installation ci-dessous) | Windows (PowerShell) ou Linux/macOS, sans Docker |
 | Rapport technique (8 pages au plus, vérifié à la génération) | [`docs/rapport/IFRS17_Copilot_rapport.pdf`](docs/rapport/IFRS17_Copilot_rapport.pdf) | outils, LLM, prompt engineering, RAG, multimodalité, agents, évaluation, sécurité |
 | Annexes du rapport (fichier séparé) | [`docs/rapport/IFRS17_Copilot_annexes.pdf`](docs/rapport/IFRS17_Copilot_annexes.pdf) | A : bibliothèque de prompts ; B : commandes pour reproduire chaque mesure |
-| Bibliothèque de prompts (fichier séparé) | [`prompt_library.md`](prompt_library.md) et [`docs/rapport/prompt_library.pdf`](docs/rapport/prompt_library.pdf) | générée à partir des 28 fiches versionnées de `prompts/` |
+| Bibliothèque de prompts (fichier séparé) | [`prompt_library.md`](prompt_library.md) et [`docs/rapport/prompt_library.pdf`](docs/rapport/prompt_library.pdf) | générée à partir des 29 fiches versionnées de `prompts/` |
 | Évaluation de la recherche | [`docs/rapport/evaluation_recherche.pdf`](docs/rapport/evaluation_recherche.pdf) | requêtes de test, résultats, commentaires ; rapports détaillés dans `eval/` |
 | Dossier complet du projet (chronologie, composants, techniques, tests, rejets) | [`docs/rapport/IFRS17_Copilot_dossier_complet.pdf`](docs/rapport/IFRS17_Copilot_dossier_complet.pdf) | document interne de préparation de l'oral ; `python docs/rapport/build_dossier.py` |
 | Campagne de tests « prêt pour la production ? » (4 niveaux) | [`docs/campagne_tests.md`](docs/campagne_tests.md) | volume, photos, données réelles CAS, documents de camarades, robustesse ; critères fixés d'avance |
-| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 87 décisions motivées et mesurées, 27 échecs documentés |
+| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 99 décisions motivées et mesurées, 36 échecs documentés |
 
 Les PDF du rapport se régénèrent avec `python docs/rapport/build.py` et `python docs/rapport/build_annexes.py` (Edge, Chrome ou Chromium).
 

@@ -241,6 +241,9 @@ def write_report(data: dict) -> None:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--jeu", choices=["volume", "reel", "prospectif", "excel", "photos", "independants"], default=None)
     ap.add_argument("--mode", choices=["texte", "vision"], default=None,

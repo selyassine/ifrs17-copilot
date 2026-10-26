@@ -61,6 +61,9 @@ def kappa(tp: int, fp: int, fn: int, tn: int) -> float:
 
 
 def main() -> None:
+    from eval import mode_mesure
+
+    mode_mesure()
     ap = argparse.ArgumentParser()
     ap.add_argument("--answers", type=Path, default=HERE / "results" / "rag_answers_20261004-015143.json")
     ap.add_argument("--labels", type=Path, default=HERE / "rag_human_labels.jsonl")

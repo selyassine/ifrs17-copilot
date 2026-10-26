@@ -45,6 +45,8 @@ class LLMFatal(LLMError):
 
 
 MAX_RATE_LIMIT_WAITS = 5
+# D-092 : modèle principal bloqué par son quota par minute → jusqu'à quand (horloge monotone), par modèle
+_BLOCKED: dict[str, float] = {}
 
 
 @dataclass
@@ -108,11 +110,19 @@ class LLMClient:
         trace: dict[str, Any] | None = None,
     ) -> LLMResponse:
         model_id = self.resolve_model(model)
+        fast = bool(self.s.llm_fallback_model) and self.s.llm_quota_max_wait_s >= 0
+        # D-093 : budget d'attente (quota, nouveaux essais) pour tout l'appel, principal et secours compris. Mesure du
+        # 25/10 : le secours sur le même fournisseur attendait son propre quota 5 × 60 s = 300 s par appel.
+        deadline = time.monotonic() + self.s.llm_max_wait_s if self.s.llm_max_wait_s >= 0 else None
         with traced(self.s.trace_path, kind="llm", model=model_id, **(trace or {})) as rec:
             try:
+                if fast and _BLOCKED.get(model_id, 0.0) > time.monotonic():
+                    rec["quota_skipped"] = True          # quota encore épuisé : directement au modèle de secours
+                    raise LLMRateLimit("quota du modèle principal encore épuisé", wait=0.0)
                 resp = self._call_with_retries(
                     messages, model_id, temperature, max_tokens, json_mode,
-                    self.s.llm_base_url, self.s.llm_api_key,
+                    self.s.llm_base_url, self.s.llm_api_key, rec,
+                    max_wait=self.s.llm_quota_max_wait_s if fast else None, deadline=deadline,
                 )
             except LLMError as primary_error:
                 if not self.s.llm_fallback_model:
@@ -123,7 +133,7 @@ class LLMClient:
                     resp = self._call_with_retries(
                         messages, self.s.llm_fallback_model, temperature, max_tokens, json_mode,
                         self.s.llm_fallback_base_url or self.s.llm_base_url,
-                        self.s.llm_fallback_api_key or self.s.llm_api_key,
+                        self.s.llm_fallback_api_key or self.s.llm_api_key, rec, deadline=deadline,
                     )
                 except LLMError as fallback_error:
                     # les deux causes sont utiles au diagnostic (F-009)
@@ -135,7 +145,8 @@ class LLMClient:
 
     # ------------------------------------------------------------------ #
     def _call_with_retries(self, messages, model, temperature, max_tokens, json_mode,
-                           base_url, api_key) -> LLMResponse:
+                           base_url, api_key, rec: dict | None = None,
+                           max_wait: float | None = None, deadline: float | None = None) -> LLMResponse:
         last: Exception | None = None
         attempt, waits = 0, 0
         while attempt <= self.s.llm_max_retries:
@@ -147,14 +158,35 @@ class LLMClient:
                 last, waits = exc, waits + 1
                 if waits > MAX_RATE_LIMIT_WAITS:
                     break
-                time.sleep(min(exc.wait, 60))
+                if max_wait is not None and exc.wait > max_wait:
+                    # D-092 : un modèle de secours est prêt ; attendre 30 à 60 s le quota du principal coûtait jusqu'à
+                    # plusieurs minutes par requête. On bascule tout de suite et on retient le blocage.
+                    _BLOCKED[model] = time.monotonic() + exc.wait
+                    if rec is not None:
+                        rec["quota_switch"] = True
+                    raise exc
+                pause = min(exc.wait, 60)
+                if deadline is not None and time.monotonic() + pause > deadline:
+                    if rec is not None:
+                        rec["wait_budget_exceeded"] = True
+                    raise LLMError(f"quota : attente de {pause:.0f} s au-delà du budget d'attente "
+                                   f"({self.s.llm_max_wait_s:.0f} s, LLM_MAX_WAIT_S)") from exc
+                if rec is not None:          # temps perdu à attendre le quota, visible dans la trace (D-091)
+                    rec["quota_waits"] = rec.get("quota_waits", 0) + 1
+                    rec["quota_wait_s"] = round(rec.get("quota_wait_s", 0.0) + pause, 1)
+                time.sleep(pause)
             except LLMError as exc:
                 last = exc
                 if not exc.retryable:
                     raise
                 attempt += 1
+                if rec is not None:
+                    rec["retries"] = rec.get("retries", 0) + 1
                 if attempt <= self.s.llm_max_retries:
-                    time.sleep(min(2 ** attempt, 8))
+                    pause = min(2 ** attempt, 8)
+                    if deadline is not None and time.monotonic() + pause > deadline:
+                        break
+                    time.sleep(pause)
         raise LLMError(f"échec après {attempt} tentatives et {waits} attentes de quota : {last}")
 
     def _call_once(self, messages, model, temperature, max_tokens, json_mode,

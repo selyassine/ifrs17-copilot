@@ -227,7 +227,8 @@ def test_sans_outil_le_repli_donne_les_chiffres_du_dossier(tmp_path):
     chiffres de donnees_du_dossier au lieu de « pas de résultat fiable »."""
     bad = {"action": "repondre", "reponse": "Oui, le groupe est onéreux : perte de 12,34."}
     res = Copilot(DossierTools(P), scripted(tmp_path, [bad, bad])).ask("Ce groupe est-il onéreux ?")
-    assert res.source == "code" and "donnees_du_dossier" in res.answer and "12,34" not in res.answer
+    assert res.source == "code" and [o["outil"] for o in res.observations] == ["donnees_du_dossier"]
+    assert "12,34" not in res.answer
     assert fr(compute_csm(P).initial_csm) in res.answer
 
 
@@ -253,7 +254,8 @@ def test_repli_choisit_l_outil_par_mots_cles(tmp_path):
     assert fallback_tool("Quel RA pour un niveau de confiance de 90 % ?") == ("niveau_de_confiance", {"niveau": 90.0})
     bad = {"action": "repondre", "reponse": "La marge disparaît avec 7,77 points."}
     res = Copilot(DossierTools(P), scripted(tmp_path, [bad, bad])).ask("Quelle translation des taux annule la marge ?")
-    assert res.source == "code" and "sensibilites" in res.answer
+    assert res.source == "code" and [o["outil"] for o in res.observations] == ["sensibilites"]
+    assert "Effet des chocs standard" in res.answer
 
 
 def test_monnaie_differente_refusee_f026():
@@ -264,3 +266,22 @@ def test_monnaie_differente_refusee_f026():
     assert currency_issues("Il faut 3 242,85 milliers de USD.", "USD") == []
     assert currency_issues("La CSM est de 12,40 milliers d'euros.", "EUR") == []
     assert currency_issues("Soit 12,40 dinars.", "EUR")
+
+
+def test_question_hors_sujet_refusee_sans_appel_f028(tmp_path):
+    """Essai du site (24/10) : « definir lionel messi » → le modèle appelait un outil (règle v4), inventait des dates,
+    puis le repli affichait les données du dossier. Désormais : refus poli par le code, aucun appel au modèle."""
+    import json as _json
+
+    from agents.copilot import OFF_TOPIC_ANSWER, off_topic
+
+    calls = []
+    s = Settings(llm_provider="fake", llm_max_retries=0, trace_path=tmp_path / "t.jsonl")
+    client = LLMClient(s, fake_responder=lambda m, mo: calls.append(1) or _json.dumps({"action": "repondre", "reponse": "x"}))
+    res = Copilot(DossierTools(P), client).ask("definir lionel messi")
+    assert res.answer == OFF_TOPIC_ANSWER and res.llm_calls == 0 and not calls
+    assert "Bonjour" in Copilot(DossierTools(P), client).ask("Bonjour").answer
+    for q in ("Et à 25 % ?", "Et pourquoi ?", "comment calculer RA", "Quelle hypothèse est la plus sensible ?",
+              "Que devient le LIC si les taux baissent de 100 points de base ?"):
+        assert not off_topic(q, True), q
+    assert off_topic("Qui a gagné la coupe du monde 2022 ?") and off_topic("comment faire une pizza ?")

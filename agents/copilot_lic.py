@@ -54,7 +54,8 @@ class LicTools:
     def tools(self) -> dict[str, Tool]:
         out = [
             Tool("donnees_du_dossier", "Résumé du dossier de sinistres survenus : provision non actualisée, meilleure "
-                 "estimation actualisée (BEL), erreur de Mack, ajustement pour risque, LIC, niveau de confiance.",
+                 "estimation actualisée (BEL), erreur de Mack, ajustement pour risque, LIC, niveau de confiance, et le "
+                 "détail du calcul du LIC.",
                  NoArgs, self.dossier),
             Tool("evaluer_scenario", "Recalcule le LIC avec des hypothèses modifiées : translation des taux, niveau "
                  "de confiance, facteur de queue, volatilité imposée ; compare au scénario central.",
@@ -80,11 +81,16 @@ class LicTools:
     def dossier(self) -> dict:
         r, t = self.r, self.t
         return {"portefeuille": t.portfolio_id, "unite": self.unit, "annees_de_survenance": t.n_years,
+                "nature_du_dossier": "passif au titre des sinistres survenus (LIC) : provision pour les sinistres déjà "
+                                     "survenus (Chain Ladder, Mack), sans CSM",
                 "date_de_cloture": t.valuation_date or "non indiquée",
                 "provision_non_actualisee": fr(r.reserve), "meilleure_estimation_bel": fr(r.bel),
                 "effet_actualisation": fr(r.discount_effect), "erreur_de_mack": fr(r.mack_se),
                 "coefficient_de_variation": pct(r.cv, 1), "niveau_de_confiance": pct(r.level, 0),
                 "ajustement_risque": fr(r.risk_adjustment), "lic": fr(r.lic), "duration_annees": fr(r.duration),
+                "calcul_du_lic": (f"provision non actualisée {fr(r.reserve)} {'−' if r.discount_effect >= 0 else '+'} "
+                                  f"effet de l'actualisation {fr(abs(r.discount_effect))} = BEL {fr(r.bel)} ; "
+                                  f"BEL {fr(r.bel)} + ajustement pour risque {fr(r.risk_adjustment)} = LIC {fr(r.lic)}"),
                 **({"provision_bornhuetter_ferguson_controle": fr(bf.total),
                     "s_p_a_priori_bf": pct(bf.prior_loss_ratio, 1)} if (bf := bornhuetter_ferguson(r)) else {})}
 
@@ -118,7 +124,8 @@ class LicTools:
         ra = ra_at_level(r.bel, r.cv, niveau / 100)
         return {"niveau_demande": f"{fr(niveau, 1)} %", "ajustement_risque_exige": fr(ra),
                 "ajustement_risque_exige_en_pourcentage_du_bel": pct(ra / r.bel) if r.bel else "0,00 %",
-                "lic": fr(r.bel + ra), "ajustement_risque_retenu": fr(r.risk_adjustment),
+                "lic": fr(r.bel + ra), "lic_central": fr(r.lic), "variation_du_lic": signed(r.bel + ra - r.lic),
+                "ajustement_risque_retenu": fr(r.risk_adjustment),
                 "niveau_de_confiance_retenu": pct(confidence_level(r.bel, r.cv, r.risk_adjustment), 1),
                 "hypothese": f"loi lognormale, coefficient de variation {pct(r.cv, 1)} ({r.cv_source})"}
 

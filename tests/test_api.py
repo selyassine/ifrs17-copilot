@@ -125,6 +125,8 @@ def test_ask_reponse_citee(client, monkeypatch, tmp_path):
     body = r.json()
     assert body["answer"]["citations"][0]["paragraph_id"] == "B119"
     assert body["sources"][0]["paragraph_ids"] == ["B119"]
+    # D-091 : la durée affichée est celle de toute la requête, avec sa décomposition
+    assert body["latency_ms"] == body["duree"]["total_ms"] > 0 and {"appels", "par_agent", "autre_ms"} <= set(body["duree"])
 
 
 GOOD_EXTRACTION = {"group_id": "AB-1", "currency": "EUR", "unit_multiplier": 1000,
@@ -422,6 +424,9 @@ def test_copilot_memoire_et_historique(client, monkeypatch):
     assert "Résultats d'outils : donnees_du_dossier" in seen[-1]          # chiffres du moteur gardés en mémoire
     h = client.get("/v1/copilot/M-1", headers=AUTH).json()
     assert [e["question"] for e in h["echanges"]] == ["Le groupe est-il bénéficiaire ?", "Et maintenant ?"]
+    # D-090 : les résultats d'outils sont gardés avec l'échange, pour redessiner les graphes après un rechargement
+    assert h["echanges"][0]["observations"][0]["outil"] == "donnees_du_dossier"
+    assert "calcul_de_la_csm" in h["echanges"][0]["observations"][0]["resultat"]
     assert client.delete("/v1/copilot/M-1/memoire", headers=AUTH).json()["effaces"] == 2
 
 
@@ -470,3 +475,20 @@ def test_modifications_du_valideur_dans_la_note(client, monkeypatch, tmp_path):
     assert "unité : 1000 → 1000000" in r.json()["note_html"] and "Modifications du valideur" in r.json()["note_html"]
     ev = [e for e in client.get("/v1/cases/u-1", headers=AUTH).json()["evenements"] if e["action"] == "validation_approuvee"]
     assert ev and ev[-1]["detail"]["modifications"] == ["unité : 1000 → 1000000"]
+
+
+def test_fichiers_du_site_reverifies(client):
+    """Un module JavaScript mis à jour n'est pas gardé en cache à côté d'un ancien (export introuvable)."""
+    r = client.get("/app/assets/js/charts.js")
+    assert r.status_code == 200 and "export function columns" in r.text
+    assert r.headers["cache-control"] == "no-cache"
+
+
+def test_prechauffage_de_l_index(tmp_path, monkeypatch):
+    """D-094 : l'index de la norme est chargé au démarrage ; son état est visible dans /health."""
+    import api.main as main
+
+    calls = []
+    monkeypatch.setattr(main, "get_retriever", lambda *a, **k: calls.append(a) or type("R", (), {"encoder": None})())
+    main.warm_up(Settings(llm_provider="fake", rag_mode="bm25", trace_path=tmp_path / "t.jsonl"))
+    assert calls and main.WARMUP["etat"] == "prêt" and main.WARMUP["duree_s"] is not None

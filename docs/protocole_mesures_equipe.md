@@ -112,3 +112,49 @@ python -m eval.eval_copilot --jeu lic
 
 Reporter les chiffres dans les fiches de prompts (`eval.scores`), `docs/decisions.md` (D-081 à D-085) et, si
 une mesure échoue, `docs/failures.md`.
+
+## 5. Diagnostic de la latence et des refus (D-092)
+
+À lancer **avant** de changer quoi que ce soit d'autre, quota frais (attendre une minute sans requête) :
+
+```powershell
+python -m eval.diagnostic --depuis 2026-10-24              # analyse des traces existantes, aucun appel au modèle
+python -m eval.diagnostic --depuis 2026-10-25 --questions  # + 15 questions écrites comme un utilisateur (≈ 90 appels)
+```
+
+Envoyer `eval/diagnostic_report.md` : appels lents par agent et par modèle, cause probable (quota, nouvel essai,
+secours), dossiers les plus longs, questions refusées à tort. Puis, si un secours est configuré dans le `.env`
+(voir `.env.example`), relancer la batterie une fois pour comparer la latence.
+
+### Après le diagnostic du 25/10 (D-093)
+
+1. Dans le `.env` : secours chez Gemini (voir `.env.example`), `LLM_MAX_WAIT_S=45`.
+2. `python -m eval.diagnostic --depuis 2026-10-26 --questions` : latence avec le nouveau secours.
+3. Prompt `rag_answer` v3, une seule fois chacun, dans cet ordre (quota frais, pauses comprises) :
+
+```powershell
+$env:RAG_PROMPT_VERSION=3; python -m eval.eval_rag                                   # mise au point (56 questions)
+$env:RAG_PROMPT_VERSION=3; python -m eval.eval_rag --questions eval\cas_pratiques.jsonl
+$env:RAG_PROMPT_VERSION=3; python -m eval.eval_rag --questions eval\course_quiz.jsonl
+$env:RAG_PROMPT_VERSION=3; python -m eval.diagnostic --questions                     # PAA et VFA
+Remove-Item Env:RAG_PROMPT_VERSION
+```
+
+v3 n'est retenue (`RAG_PROMPT_VERSION=3` dans le `.env`) que si les jeux de test ne baissent pas ; sinon on garde v2
+et on publie le résultat dans `docs/failures.md`.
+
+### Remesure v2 / v3 en mode mesure (D-096, après F-034)
+
+Les évaluations coupent maintenant d'elles-mêmes le secours et le budget d'attente (message « Mode mesure » au début).
+Corriger aussi le `.env` : `LLM_MAX_WAIT_S=45` et `LLM_QUOTA_MAX_WAIT_S=5` (et non `LLM_MAX_WAIT_S=5`).
+Quatre exécutions, une fois chacune, API arrêtée, de préférence en deux séances (quota) :
+
+```powershell
+$env:RAG_PROMPT_VERSION=2; python -m eval.eval_rag --questions eval\cas_pratiques.jsonl
+$env:RAG_PROMPT_VERSION=3; python -m eval.eval_rag --questions eval\cas_pratiques.jsonl
+$env:RAG_PROMPT_VERSION=2; python -m eval.eval_rag --questions eval\course_quiz.jsonl
+$env:RAG_PROMPT_VERSION=3; python -m eval.eval_rag --questions eval\course_quiz.jsonl
+Remove-Item Env:RAG_PROMPT_VERSION
+```
+
+Un rapport marqué « Mesure incomplète » ne compte pas : le noter dans `docs/failures.md` et relancer plus tard.

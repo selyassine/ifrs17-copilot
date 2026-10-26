@@ -1,0 +1,579 @@
+{
+ "date": "20261025-183408",
+ "prompt_version": 3,
+ "agregats": {
+  "questions": 15,
+  "refus_corrects_pieges": "0/0",
+  "faux_refus": "4/15",
+  "reponses_avec_citation_inventee_avant_correction": "0/11",
+  "reponses_corrigees": 0,
+  "citations_invalides_apres_verification": 0,
+  "precision_citations": 0.22,
+  "precision_elargie": 0.389,
+  "couverture_citations": 0.455,
+  "au_moins_un_bon_paragraphe": 0.455,
+  "plafond_recherche": 0.4,
+  "verdicts_verificateur": {
+   "ok": 15,
+   "validation_humaine": 0
+  },
+  "latence_p50_ms": 1956.2
+ },
+ "tokens": {
+  "tokens_entree": 111695,
+  "tokens_sortie": 22403,
+  "appels_llm": 81
+ },
+ "reponses": [
+  {
+   "id": "c01",
+   "niveau": "cours",
+   "question": "Combien de types de passifs a-t-on dans le modèle général, et quels sont-ils ?",
+   "gold": [
+    "40"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne précisent pas le nombre de types de passifs dans le modèle général, même s'ils définissent des éléments comme le passif au titre de la couverture restante [def:passif au titre de la couverture restante] et le passif au titre des sinistres survenus [def:passif au titre des sin",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "51",
+    "78",
+    "B123",
+    "def:passif au titre de la couverture restante",
+    "def:passif au titre des sinistres survenus"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1438.4,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c01",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c02",
+   "niveau": "cours",
+   "question": "À quelle maille doit-on comptabiliser et évaluer les passifs d'assurance ?",
+   "gold": [
+    "16"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "L'entité doit identifier les portefeuilles de contrats d'assurance, un portefeuille étant constitué de contrats qui comportent des risques similaires et sont gérés ensemble [§14]. L'entité doit diviser tout portefeuille de contrats d'assurance émis en constituant au moins un groupe de contrats déficitaires à la comptabilisation initiale, un groupe sans possibilité importante de le devenir, et un groupe constitué des autres contrats [§16]. Un groupe de contrats d'assurance n'est constitué que d'un seul contrat si tel est le résultat de l'application de ces règles [§23]. L'entité doit constituer les groupes au moment de la comptabilisation initiale, ajouter des contrats par application du paragraphe 28, et ne doit pas en revoir la composition par la suite [§24].",
+   "cited": [
+    "14",
+    "16",
+    "23",
+    "24"
+   ],
+   "provided": [
+    "14",
+    "15",
+    "16",
+    "20",
+    "21",
+    "23",
+    "24"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1956.2,
+   "precision": 0.25,
+   "precision_large": 0.75,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c02",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c03",
+   "niveau": "cours",
+   "question": "Qu'est-ce qu'un contrat onéreux selon IFRS 17 ?",
+   "gold": [
+    "47"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Les extraits fournis utilisent la terminologie de « contrat déficitaire » plutôt que « contrat onéreux ». Un contrat d'assurance est déficitaire à la date de comptabilisation initiale si la somme des flux de trésorerie d'exécution affectés, des flux de trésorerie liés aux frais d'acquisition comptabilisés antérieurement et des flux de trésorerie découlant du contrat correspond à une sortie de trésorerie nette [§47]. L'entité doit comptabiliser en résultat net la perte correspondant à cette sortie de trésorerie nette pour que la valeur comptable du passif soit égale aux flux de trésorerie d'exécution et que la marge sur services contractuels soit nulle [§47]. Par la suite, un groupe de contrats devient déficitaire si, lors d'une évaluation ultérieure, certains montants (tels que des variations défavorables de flux de trésorerie d'exécution ou la diminution de la part de l'entité dans les éléments sous-jacents pour les contrats avec éléments de participation directe) excèdent la valeur comptable de la marge sur services contractuels [§48].",
+   "cited": [
+    "47",
+    "48"
+   ],
+   "provided": [
+    "21",
+    "47",
+    "48",
+    "49",
+    "def:groupe de contrats d'assurance"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2641.3,
+   "precision": 0.5,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c03",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c04",
+   "niveau": "cours",
+   "question": "Un groupe de contrats initialement onéreux devient profitable : que faut-il faire ?",
+   "gold": [
+    "50"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne contiennent pas d'informations sur le traitement d'un groupe de contrats initialement onéreux qui devient profitable.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "38",
+    "48",
+    "50",
+    "66",
+    "B71"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 951.3,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c04",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c05",
+   "niveau": "cours",
+   "question": "Quelles méthodes peut-on utiliser pour calculer l'ajustement au titre du risque non financier ?",
+   "gold": [
+    "B92"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "La norme IFRS 17 n'impose pas de méthode d'estimation particulière pour déterminer l'ajustement au titre du risque non financier [§B91]. L'entité doit faire appel au jugement pour choisir sa méthode d'estimation, en privilégiant une approche qui fournit des informations concises et instructives permettant de comparer sa performance à celle d'autres entités [§B92]. L'entité peut notamment utiliser la technique des niveaux de confiance ou une autre méthode, à condition dans ce cas d'indiquer la technique appliquée ainsi que le niveau de confiance auquel correspond son résultat [§B92, §119].",
+   "cited": [
+    "B91",
+    "B92",
+    "119"
+   ],
+   "provided": [
+    "119",
+    "B91",
+    "B92"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1944.4,
+   "precision": 0.3333333333333333,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c05",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c06",
+   "niveau": "cours",
+   "question": "Comment comptabiliser un écart d'expérience sur les sinistres de la période ?",
+   "gold": [
+    "B97"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Pour la comptabilisation, les variations liées aux services passés correspondent aux variations des flux de trésorerie d'exécution liés aux sinistres survenus [§104]. De plus, l'entité doit comptabiliser en produits et en charges les variations de la valeur comptable du passif au titre des sinistres survenus, telles que les charges afférentes aux activités d'assurance liées à l'augmentation du passif et aux variations ultérieures des flux de trésorerie d'exécution relatifs aux sinistres survenus [§42]. Le passif au titre des sinistres survenus représente notamment l'obligation d'instruire et de régler les demandes d'indemnisation valides pour les événements assurés déjà produits [def:passif au titre des sinistres survenus].",
+   "cited": [
+    "104",
+    "42",
+    "def:passif au titre des sinistres survenus"
+   ],
+   "provided": [
+    "104",
+    "42",
+    "def:ajustements liés à l'expérience",
+    "def:passif au titre de la couverture restante",
+    "def:passif au titre des sinistres survenus"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1832.5,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c06",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c07",
+   "niveau": "cours",
+   "question": "Où comptabiliser les primes sous IFRS 17 ?",
+   "gold": [
+    "83"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Sous IFRS 17, lors de la comptabilisation initiale, un groupe de contrats d'assurance est évalué comme la somme des flux de trésorerie d'exécution et de la marge sur services contractuels [§32]. L'entité ne doit pas comptabiliser à titre de passif ou d'actif des montants se rattachant à des primes attendues qui n'entrent pas dans le périmètre du contrat d'assurance [§35]. Lorsque l'entité applique la méthode d'affectation des primes, elle évalue le passif au titre de la couverture restante en prenant en compte les primes reçues lors de la comptabilisation initiale [§55], ainsi que les primes reçues au cours de la période pour les périodes de reporting ultérieures [§55]. Dans le cadre de contrats d'assurance acquis lors d'un transfert ou d'un regroupement d'entreprises, la contrepartie reçue ou payée en échange des contrats sert d'approximation des primes reçues ou payées [§B95].",
+   "cited": [
+    "32",
+    "35",
+    "55",
+    "B95"
+   ],
+   "provided": [
+    "32",
+    "35",
+    "55",
+    "B94",
+    "B95"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2159.9,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c07",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c08",
+   "niveau": "cours",
+   "question": "J'ai vendu un contrat annuel à tacite reconduction et j'anticipe son renouvellement pendant 3 ans. Que dois-je comptabiliser ?",
+   "gold": [
+    "34"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne contiennent pas de paragraphe permettant de répondre à la question sur la comptabilisation d'un contrat annuel à tacite reconduction et son renouvellement anticipé.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "62A",
+    "B61",
+    "B63",
+    "B95E",
+    "C28"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 985.6,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c08",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c09",
+   "niveau": "cours",
+   "question": "Les sinistres augmentent depuis deux ans par rapport aux estimations initiales. Qu'impose IFRS 17 ?",
+   "gold": [
+    "44"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "En cas de développement des demandes d'indemnisation, IFRS 17 impose à l'entité de fournir des informations sur les sinistres réels comparativement aux estimations antérieures de leur montant non actualisé [§130]. Ces informations sur le développement des demandes d'indemnisation doivent remonter à la première période au cours de laquelle est survenu un sinistre significatif pour lequel il subsiste une incertitude relative au montant et au calendrier des paiements à la date de clôture, sans obligation toutefois de remonter au-delà de dix ans [§130]. De plus, l'entité n'est pas tenue de fournir ces informations pour les sinistres dont l'incertitude est habituellement levée en un an, mais elle doit présenter un rapprochement entre ces informations et la valeur comptable totale des groupes de contrats d'assurance [§130].",
+   "cited": [
+    "130"
+   ],
+   "provided": [
+    "130",
+    "42",
+    "67",
+    "B41",
+    "def:passif au titre des sinistres survenus"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2235.9,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c09",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c10",
+   "niveau": "cours",
+   "question": "Quels sont les trois modèles comptables d'IFRS 17 ?",
+   "gold": [
+    "32"
+   ],
+   "intent": "question_norme",
+   "refused": true,
+   "refusal_reason": "Les extraits fournis ne décrivent pas les trois modèles comptables d'IFRS 17.",
+   "answer": null,
+   "cited": [],
+   "provided": [
+    "53",
+    "69",
+    "89",
+    "B101",
+    "B104"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1438.0,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c10",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c11",
+   "niveau": "cours",
+   "question": "Quelles sont les conditions d'éligibilité à la méthode d'affectation des primes ?",
+   "gold": [
+    "53"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Pour la méthode d'affectation des primes, l'entité peut simplifier l'évaluation d'un groupe de contrats d'assurance si elle s'attend raisonnablement à ce que l'évaluation du passif au titre de la couverture restante ne diffère pas de manière significative de celle obtenue par l'application des dispositions générales, ou si la période de couverture de chacun des contrats du groupe n'excède pas un an [§53].",
+   "cited": [
+    "53"
+   ],
+   "provided": [
+    "101",
+    "18",
+    "50",
+    "53",
+    "97"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1901.3,
+   "precision": 1.0,
+   "precision_large": 1.0,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c11",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c12",
+   "niveau": "cours",
+   "question": "Qu'est-ce qu'un contrat d'assurance avec éléments de participation directe ?",
+   "gold": [
+    "B101"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Un contrat d'assurance avec éléments de participation directe est défini comme un contrat d'assurance qui, en substance, constitue un contrat pour des services liés à l'investissement, dans lequel l'entité promet un rendement en fonction d'éléments sous-jacents [§B101]. À l'origine, les conditions contractuelles précisent que le titulaire de police a droit à une part d'un portefeuille d'éléments sous-jacents clairement défini [def:contrat d'assurance avec éléments de participation directe]. L'entité s'attend à verser au titulaire une somme correspondant à une part substantielle du rendement obtenu sur la juste valeur de ces éléments [def:contrat d'assurance avec éléments de participation directe]. De plus, elle s'attend à ce que toute variation des sommes à verser soit attribuable, dans une proportion substantielle, à la variation de la juste valeur des éléments sous-jacents [def:contrat d'assurance avec éléments de participation directe]. L'entité doit déterminer si ces conditions sont respectées en se fondant sur ses attentes au moment de la passation du contrat, et ne doit pas les réévaluer à moins que le contrat ne soit modifié [E4].",
+   "cited": [
+    "B101",
+    "def:contrat d'assurance avec éléments de participation directe",
+    "B102"
+   ],
+   "provided": [
+    "B101",
+    "B102",
+    "B104",
+    "def:contrat d'assurance avec éléments de participation directe"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2250.7,
+   "precision": 0.3333333333333333,
+   "precision_large": 0.3333333333333333,
+   "coverage": 1.0,
+   "retrieval_ceiling": 1.0,
+   "at_least_one": true,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c12",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c13",
+   "niveau": "cours",
+   "question": "À quoi sert l'option OCI sous IFRS 17 ?",
+   "gold": [
+    "88"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Sous IFRS 17, l'entité qui choisit d'appliquer une méthode comptable spécifique pour ventiler les produits financiers ou charges financières d'assurance doit présenter dans les autres éléments du résultat global (OCI) l'écart entre ces produits ou charges financières évalués et le total de ceux de la période [§90]. L'entité doit expliquer les méthodes qu'elle utilise pour déterminer le montant des produits financiers ou charges financières d'assurance comptabilisé en résultat net lorsqu'elle choisit cette ventilation [§118].",
+   "cited": [
+    "90",
+    "118"
+   ],
+   "provided": [
+    "116",
+    "118",
+    "87A",
+    "90",
+    "C24"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1541.0,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c13",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c14",
+   "niveau": "cours",
+   "question": "J'anticipe une hausse du best estimate au titre des services futurs : le coût moyen des sinistres passe de 10 à 20. Quel est l'impact sur mon résultat ?",
+   "gold": [
+    "44"
+   ],
+   "intent": "calcul",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Dans la mesure où les variations de la marge sur services contractuels ne compensent pas les variations des flux de trésorerie d'exécution afférents au passif au titre de la couverture restante, l'entité doit comptabiliser des produits et des charges pour refléter ces variations [§46]. Les informations à fournir doivent présenter séparément les variations liées aux services futurs, incluant les changements des estimations qui n'entraînent pas d'ajustement de la marge sur services contractuels, c'est-à-dire les pertes sur les groupes de contrats déficitaires et les reprises de telles pertes [§104].",
+   "cited": [
+    "46",
+    "104"
+   ],
+   "provided": [
+    "104",
+    "46",
+    "51",
+    "B113",
+    "B97"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 1520.5,
+   "precision": 0.0,
+   "precision_large": 0.0,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c14",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  },
+  {
+   "id": "c15",
+   "niveau": "cours",
+   "question": "Des contrats auto à garantie annuelle, vendus par un partenaire, affichent un ratio sinistres sur primes de 120 %. Que dois-je faire ?",
+   "gold": [
+    "57"
+   ],
+   "intent": "question_norme",
+   "refused": false,
+   "refusal_reason": null,
+   "answer": "Pour un groupe de contrats déficitaires, l'entité doit comptabiliser en résultat net la perte correspondant à la sortie de trésorerie nette de sorte que la marge sur services contractuels soit nulle [§47]. Elle ajoute un élément de perte au passif au titre de la couverture restante pour représenter les pertes comptabilisées, et cet élément sert à déterminer les reprises présentées en résultat net [§49]. Un groupe peut aussi devenir déficitaire lors d'une évaluation ultérieure si certains montants excèdent la valeur comptable de la marge sur services contractuels [§48]. De plus, un groupe de contrats déficitaires doit être comptabilisé dès la date à laquelle il devient déficitaire si celle-ci est la plus hâtive [§25]. L'entité peut en outre simplifier l'évaluation si la période de couverture n'excède pas un an [§53].",
+   "cited": [
+    "47",
+    "49",
+    "48",
+    "25",
+    "53"
+   ],
+   "provided": [
+    "25",
+    "47",
+    "48",
+    "49",
+    "53"
+   ],
+   "warnings": [],
+   "corrections": 0,
+   "invalid_before_correction": 0,
+   "latency_ms": 2393.0,
+   "precision": 0.0,
+   "precision_large": 0.2,
+   "coverage": 0.0,
+   "retrieval_ceiling": 0.0,
+   "at_least_one": false,
+   "prompt_version": 3,
+   "case_id": "eval-20261025-183408-c15",
+   "verdict": "ok",
+   "first_verdict": "ok",
+   "rounds": 0
+  }
+ ]
+}
