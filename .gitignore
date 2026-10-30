@@ -8,6 +8,7 @@ data/*
 
 # Python
 .venv/
+venv/
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -34,3 +35,6 @@ models/
 # Sorties de démo (curl)
 /note.html
 /dossier.json
+
+# Sorties de test
+/note_test.pdf
