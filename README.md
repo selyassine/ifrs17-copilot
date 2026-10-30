@@ -31,7 +31,7 @@
 | Recherche dans la norme : agent LangGraph vs recherche simple | Recall@5 **0,517 → 0,750** (protocole pré-enregistré, 30 cas pratiques) |
 | Questions vocales (Whisper + vocabulaire IFRS 17) | WER **0,9 %** (4,8 % sans vocabulaire) |
 | Garde-fous contre l'injection de prompt | 5/5 pièges refusés après correction par le code |
-| Tests automatisés | 329 fonctions de test, CI GitHub Actions |
+| Tests automatisés | 370+ tests, CI GitHub Actions |
 
 ## Architecture
 
