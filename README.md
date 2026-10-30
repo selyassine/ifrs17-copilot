@@ -14,6 +14,16 @@
 
 > Projet académique : projet final du module *Advanced Deep Learning* (ESPRIT, 5ᵉ année Data Science), sujet « AI Automation ». Le moteur couvre un périmètre simplifié de la norme et n'a aucune valeur de conseil comptable.
 
+## Aperçu de l'application
+
+| Analyse d'un dossier, agent par agent | Fiche dossier : marge sur services contractuels |
+| :-: | :-: |
+| <img src="api/web/assets/img/produit/chaine-agents.webp" alt="Chaîne d'agents" width="100%"> | <img src="api/web/assets/img/produit/fiche-dossier.webp" alt="Fiche dossier" width="100%"> |
+| **Copilot : questions « et si… » aux chiffres vérifiés** | **Note actuarielle IFRS 17 générée** |
+| <img src="api/web/assets/img/produit/copilot.webp" alt="Copilot" width="100%"> | <img src="api/web/assets/img/produit/note.webp" alt="Note actuarielle" width="100%"> |
+| **Assistant normatif : réponses citées de la norme** | **Piste d'audit chaînée par SHA-256** |
+| <img src="api/web/assets/img/produit/assistant-normatif.webp" alt="Assistant normatif" width="100%"> | <img src="api/web/assets/img/produit/piste-audit.webp" alt="Piste d'audit" width="100%"> |
+
 ## En bref
 
 - **Le LLM ne calcule jamais.** Les chiffres viennent d'un moteur actuariel en Python pur (modèle général, PAA, Chain Ladder et erreur de Mack) ; le code vérifie que chaque nombre de la note provient du moteur.
