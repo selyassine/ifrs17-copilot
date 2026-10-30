@@ -1,57 +1,64 @@
 # IFRS 17 Copilot
 
-Copilote multi-agent pour l'analyse de contrats d'assurance sous IFRS 17 : il lit un document (PDF, image, question vocale), retrouve les paragraphes de la norme applicables, calcule la marge sur services contractuels (CSM) et livre une note justifiée et citée. Le tout est déclenché de bout en bout par n8n.
+**Un copilote multi-agent qui lit un dossier d'assurance (PDF, scan, Excel, question vocale), calcule la marge sur services contractuels (CSM) et le passif pour sinistres survenus, puis rédige une note actuarielle IFRS 17 citée et vérifiée, avec validation humaine.**
 
-> Projet pédagogique. Le moteur de calcul couvre un périmètre simplifié (modèle général) et n'a aucune valeur de conseil comptable.
+[![CI](https://github.com/selyassine/ifrs17-copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/selyassine/ifrs17-copilot/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-agents-1C3C3C)
+![n8n](https://img.shields.io/badge/n8n-workflow-EA4B71?logo=n8n&logoColor=white)
+![Qdrant](https://img.shields.io/badge/Qdrant-RAG-DC244C)
+![Licence MIT](https://img.shields.io/badge/licence-MIT-green)
 
-## Livrables du projet final (Advanced DL, ESPRIT 5DS)
+![Vue d'ensemble de l'espace de travail](api/web/assets/img/produit/vue-ensemble.webp)
 
-| Livrable | Fichier | Remarque |
-| --- | --- | --- |
-| Workflow n8n (tout le processus, un seul fichier) | [`workflows/ifrs17_copilot.json`](workflows/ifrs17_copilot.json) | installation et essais : [`workflows/README.md`](workflows/README.md) |
-| Dépôt et instructions | ce README (installation ci-dessous) | Windows (PowerShell) ou Linux/macOS, sans Docker |
-| Rapport technique (8 pages au plus, vérifié à la génération) | [`docs/rapport/IFRS17_Copilot_rapport.pdf`](docs/rapport/IFRS17_Copilot_rapport.pdf) | outils, LLM, prompt engineering, RAG, multimodalité, agents, évaluation, sécurité |
-| Annexes du rapport (fichier séparé) | [`docs/rapport/IFRS17_Copilot_annexes.pdf`](docs/rapport/IFRS17_Copilot_annexes.pdf) | A : bibliothèque de prompts ; B : commandes pour reproduire chaque mesure |
-| Bibliothèque de prompts (fichier séparé) | [`prompt_library.md`](prompt_library.md) et [`docs/rapport/prompt_library.pdf`](docs/rapport/prompt_library.pdf) | générée à partir des 29 fiches versionnées de `prompts/` |
-| Évaluation de la recherche | [`docs/rapport/evaluation_recherche.pdf`](docs/rapport/evaluation_recherche.pdf) | requêtes de test, résultats, commentaires ; rapports détaillés dans `eval/` |
-| Dossier complet du projet (chronologie, composants, techniques, tests, rejets) | [`docs/rapport/IFRS17_Copilot_dossier_complet.pdf`](docs/rapport/IFRS17_Copilot_dossier_complet.pdf) | document interne de préparation de l'oral ; `python docs/rapport/build_dossier.py` |
-| Campagne de tests « prêt pour la production ? » (4 niveaux) | [`docs/campagne_tests.md`](docs/campagne_tests.md) | volume, photos, données réelles CAS, documents de camarades, robustesse ; critères fixés d'avance |
-| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 99 décisions motivées et mesurées, 36 échecs documentés |
+> Projet académique : projet final du module *Advanced Deep Learning* (ESPRIT, 5ᵉ année Data Science), sujet « AI Automation ». Le moteur couvre un périmètre simplifié de la norme et n'a aucune valeur de conseil comptable.
 
-Les PDF du rapport se régénèrent avec `python docs/rapport/build.py` et `python docs/rapport/build_annexes.py` (Edge, Chrome ou Chromium).
+## En bref
 
-## État (fin de projet, octobre 2026)
+- **Le LLM ne calcule jamais.** Les chiffres viennent d'un moteur actuariel en Python pur (modèle général, PAA, Chain Ladder et erreur de Mack) ; le code vérifie que chaque nombre de la note provient du moteur.
+- **Chaque affirmation est sourcée.** Un RAG sur le règlement (UE) 2021/2036 (397 paragraphes) cite les paragraphes de la norme ; un agent vérificateur contrôle chaque phrase, et les cas douteux partent en validation humaine.
+- **Tout est mesuré.** Jeux de test gelés avant le développement, intervalles de confiance bootstrap, registre de 99 décisions motivées et journal de 36 échecs documentés.
+- **Bout en bout.** Dépôt par e-mail, formulaire ou webhook, analyse, validation humaine par formulaire pré-rempli et note finale : un seul workflow n8n, une API FastAPI et une interface web.
 
-| Composant | Statut |
+## Résultats clés
+
+| Mesure | Résultat |
 | --- | --- |
-| Schémas Pydantic des 6 agents | fait, testé |
-| Moteur CSM v0 (§38, §44, §47, B119) | fait, 10 tests contre calculs manuels |
-| Client LLM (tout fournisseur compatible, repli, réessais, traces) | fait, testé avec un fournisseur factice |
-| Routeur (heuristique + LLM) | fait ; heuristique 95 % sur 20 cas |
-| API FastAPI : `/health`, `/v1/route`, `/v1/csm/compute` | fait |
-| Workflows n8n 01 à 11 (construits étape par étape) | remplacés par le workflow unique ; conservés dans `workflows/par_etape/` |
-| Notebooks Colab (test T4, fine-tuning de BGE-M3) | exécutés ; fine-tuning mesuré et non retenu (D-046) |
-| RAG : ingestion du règlement 2021/2036 (397 paragraphes), découpages A/B, BM25, dense, hybride, `/v1/search` | fait ; dense à mesurer avec BGE-M3 |
-| Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
-| Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
-| Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2, titres hiérarchiques) : 43/50 sans erreur, 37/50 complètes ; optimisation arrêtée (D-026) |
-| Extracteur multimodal : PDF texte (Groq), image ou scan (Gemini), hybride ; contrôle d'ancrage ; `POST /v1/extract`, `POST /v1/case/document` | 15/15 documents justes dans les 3 modes ; jeu de 10 pièges : 0 cas dangereux (double lecture des scans) |
-| Vérificateur (LLM-juge : soutien et portée de chaque phrase) + boucle de correction bornée → validation humaine ; `verdict` dans `/v1/ask` | juge ancré (v2) : 5/7 erreurs détectées, 6/41 fausses alertes, kappa 0,46 (v1 : 3/7, 3/41, 0,38) |
-| Question vocale : Whisper (Groq) avec vocabulaire IFRS 17 → même chaîne que `/v1/ask` ; `POST /v1/ask/audio` | 8 enregistrements : WER 0,9 % avec vocabulaire IFRS 17 (4,8 % sans), termes reconnus 8/8 (6/8 sans) |
-| **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; appelés par le workflow n8n | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) ; note et validation humaine par e-mail, formulaire pré-rempli (`workflows/README.md`) |
-| **Interface web** (`/app/`) : dossier suivi en direct (flux SSE), données extraites corrigeables puis validées, questions écrites ou vocales à la norme, résultats mesurés | servie par l'API, sans dépendance externe ; 2 tests |
-| **Moteur complet du cours** : modèle général pluriannuel (`POST /v1/csm/rollforward` : BEL au taux courant, OCI, RA, écarts d'expérience, perte, compte de résultat) et PAA (`POST /v1/paa/position`) | exemples chiffrés d'un cours IFRS 17 retrouvés à l'euro près (tests/test_engine_cours.py) ; quiz du cours = jeu d'évaluation hors échantillon |
-| **Adaptation du modèle d'embedding** (mesurée, non retenue) : paires question → passage générées par le LLM, filtre de fuite contre les jeux de test, négatifs difficiles BM25, entraînement contrastif de BGE-M3 sur Colab T4 (`python -m rag.finetune`, notebooks/01) | critères fixés avant l'entraînement ; quiz Recall@5 0,200 → 0,200, jeu principal sans écart significatif : non retenu (D-046, F-013) |
-| **RAG avancé et agentique** : agent de recherche **LangGraph** (planifier → chercher → évaluer les passages → nouvelle recherche bornée), Graph RAG sur les renvois de la norme, reranker cross-encoder, query indexing | protocole pré-enregistré (30 cas pratiques gelés avant le développement) ; cas pratiques Recall@5 0,517 → **0,750** avec l'agent (retenu), 0,683 avec index des questions + graphe sans LLM ; les deux ne s'additionnent pas (D-048 à D-051) |
-| **Base vectorielle Qdrant** : embarquée ou serveur (Docker), métadonnées et filtre par zone, collection liée à l'empreinte des textes | mêmes résultats que la recherche exacte NumPy (tests/test_qdrant.py, `python -m rag.qdrant_sync`) (D-052) |
-| **Registre, comptes et piste d'audit** : chaque dossier inscrit (canal, déposant, empreinte du document, statut, chiffres, note, coût) ; événements chaînés par SHA-256 ; rôles analyste, valideur, admin ; tableau de bord, registre et administration dans le site | tests/test_registry.py, tests/test_api.py ; altération de la piste détectée (D-058) |
-| **Périmètre actuariel élargi** (D-071 à D-078) : recouvrements (B65 k), frais d'acquisition (B65 e), PAA dans la note (§53 à §59), RA calibré par branche (§119), première clôture (`POST /v1/case/cloture`), plusieurs groupes par document, registre des hypothèses versionné, grille de relecture | double calcul avec le script R de l'équipe : 50/50 dossiers identiques au centime ; back-testing de 50 dossiers réels et 25 premières clôtures (rapprochement exact) ; 297 tests |
-| **Classeurs Excel (.xlsx) et CSV** (D-079) : chaque feuille devient un tableau lu comme un PDF, provenance à la cellule, formules sans valeur et feuilles cachées signalées | 1er lot : 17/19 CSM justes, 1 cas dangereux (montant au format %, F-021), corrigé par un contrôle de vraisemblance (D-080) ; jeu corrigé de 22 classeurs (dont 7 pièges) : CSM 19/19, 3/3 alertes, 0 dangereux |
-| **Unité ancrée et hypothèses du RA annoncées** (D-081, D-082) : l'unité des montants doit être écrite dans le document ; volatilité et niveau de confiance du document lus et rapprochés du registre dans la note | 0 fausse alerte d'unité sur 187 documents connus et sur 75 documents lus par le LLM, 338/338 erreurs simulées détectées ; dossier A : RA au quantile 75 % avec son CV, 65 % avec le registre |
-| **Passif pour sinistres survenus (LIC)** (D-083) : triangle reconnu, lu par le LLM et relu par le code ; Chain Ladder, erreur de Mack, actualisation, RA ; note écrite par le code ; site et n8n | Mack (1993) reproduit au franc près ; 8 triangles CAS lus par le LLM : triangle juste 7/7, LIC au centime 7/7, 0 dangereux ; dossier C : LIC 17 634,74 |
-| **Copilot et note d'un dossier LIC** (D-087) : outils propres (scénario taux, queue, niveau de confiance ; détail par survenance ; paiements futurs), points d'attention et contrôle Bornhuetter-Ferguson dans la note | jeu gelé de 6 questions : chiffre 6/6, piège 1/1, relecture humaine 3/6 (F-026) |
-| **Copilot v4** (D-084) et **mesures d'équipe** (D-085, [`docs/protocole_mesures_equipe.md`](docs/protocole_mesures_equipe.md)) | v4 sur 10 questions gelées : 8/10, **piège d'injection obéi** (F-023) → garde-fous par le code (D-086) : 5/5 pièges neufs refusés ; routeur externe, photos, n8n |
-| **Processus n8n complet en un seul workflow** (`workflows/ifrs17_copilot.json`, D-064) : dépôt par e-mail (IMAP), formulaire ou webhook, analyse, validation humaine par formulaire pré-rempli, accusés de réception, traces dans le registre, alertes d'erreur, supervision de l'API et rapport hebdomadaire | paramètres vérifiés dans le code source de n8n 2.42.3, 14 tests ; essai réel le 19/10/2026 (Windows, Gmail) : note prête avec PDF, validation humaine complète jusqu'à la note validée |
+| Double calcul de la CSM contre un script R indépendant | **50/50 dossiers identiques au centime** |
+| Passif pour sinistres survenus (Chain Ladder + Mack) | Mack (1993) reproduit exactement ; 8 triangles réels CAS lus par le LLM : LIC juste 7/7, **0 cas dangereux** |
+| Extraction multimodale (PDF texte, scan, hybride) | 15/15 documents justes ; 10 documents piégés : **0 cas dangereux** |
+| Recherche dans la norme : agent LangGraph vs recherche simple | Recall@5 **0,517 → 0,750** (protocole pré-enregistré, 30 cas pratiques) |
+| Questions vocales (Whisper + vocabulaire IFRS 17) | WER **0,9 %** (4,8 % sans vocabulaire) |
+| Garde-fous contre l'injection de prompt | 5/5 pièges refusés après correction par le code |
+| Tests automatisés | 329 fonctions de test, CI GitHub Actions |
+
+## Architecture
+
+```
+n8n (e-mail, formulaire, webhook) ──► FastAPI ──► Orchestrateur + Routeur
+                                                   ├── Extracteur multimodal   PDF, scan, Excel, voix
+                                                   ├── Chercheur RAG           citations de la norme (§)
+                                                   ├── Calculateur             moteur IFRS 17 en Python pur
+                                                   ├── Vérificateur            LLM-juge + contrôles du code
+                                                   └── Rédacteur               note HTML / PDF
+                                  Copilot (agent LangGraph à outils) · serveur MCP (lecture seule)
+n8n (sortie) ◄── note par e-mail, validation humaine, piste d'audit chaînée par SHA-256
+```
+
+**Stack :** Python, FastAPI, Pydantic, LangGraph, Qdrant, BM25 + embeddings BGE-M3, reranker cross-encoder, Groq (gpt-oss, Whisper), Gemini (vision), n8n, SQLite, GitHub Actions.
+
+## Auteur
+
+Conçu et développé par **Yassine Selmi** (élève ingénieur à ESPRIT, option Data Science, et étudiant en Master Actuariat à Le Mans Université) — [github.com/selyassine](https://github.com/selyassine).
+
+## Sommaire
+
+- [Installation](#installation-sans-docker)
+- [Interface web](#interface-web)
+- [Architecture détaillée](#architecture-détaillée)
+- [Structure du dépôt](#structure)
+- [Livrables et état détaillé du projet](#livrables-et-état-détaillé)
 
 ## Installation (sans Docker)
 
@@ -60,7 +67,7 @@ Prérequis : **Python 3.11 ou 3.12**, **Node.js 24 ou plus** (n8n 2.42, version 
 **Linux / macOS**
 
 ```bash
-git clone <url-du-depot> && cd ifrs17-copilot
+git clone https://github.com/selyassine/ifrs17-copilot.git && cd ifrs17-copilot
 make setup                 # crée .venv, installe, copie .env.example en .env
 source .venv/bin/activate
 make test                  # tous les tests doivent passer
@@ -71,7 +78,7 @@ make n8n                   # (autre terminal) n8n sur http://localhost:5678
 **Windows (PowerShell)**
 
 ```powershell
-git clone <url-du-depot>; cd ifrs17-copilot
+git clone https://github.com/selyassine/ifrs17-copilot.git; cd ifrs17-copilot
 .\make.ps1 setup
 .\.venv\Scripts\Activate.ps1
 .\make.ps1 test
@@ -241,7 +248,7 @@ Pages ajoutées : **Tableau de bord** (dossiers, taux de note directe et de vali
 
 Sans aucun compte (développement), le site reste ouvert comme avant et le jeton d'API (`API_TOKEN`, `change-moi` par défaut) se règle dans le bouton **Réglages** ; il reste dans le navigateur. Documents fictifs uniquement : les niveaux gratuits de Groq et Gemini peuvent utiliser les données envoyées.
 
-## Architecture
+## Architecture détaillée
 
 ```
 n8n (déclencheurs) ──► FastAPI ──► Orchestrateur + Routeur
@@ -281,3 +288,58 @@ Le LLM ne fait jamais de calcul (D-005) ; toutes les sorties d'agent sont valid�
 - Aucun document du corpus, aucune clé API, aucune sortie de notebook dans Git (`nbstripout` s'en charge).
 - Chaque choix technique va dans `docs/decisions.md`, chaque échec dans `docs/failures.md`.
 - Un composant est « fini » quand il est appelable par l'API, testé, mesuré et expliqué par une deuxième personne.
+
+## Livrables et état détaillé
+
+### Livrables du projet final (Advanced DL, ESPRIT 5DS)
+
+| Livrable | Fichier | Remarque |
+| --- | --- | --- |
+| Workflow n8n (tout le processus, un seul fichier) | [`workflows/ifrs17_copilot.json`](workflows/ifrs17_copilot.json) | installation et essais : [`workflows/README.md`](workflows/README.md) |
+| Dépôt et instructions | ce README (installation ci-dessous) | Windows (PowerShell) ou Linux/macOS, sans Docker |
+| Rapport technique (8 pages au plus, vérifié à la génération) | [`docs/rapport/IFRS17_Copilot_rapport.pdf`](docs/rapport/IFRS17_Copilot_rapport.pdf) | outils, LLM, prompt engineering, RAG, multimodalité, agents, évaluation, sécurité |
+| Annexes du rapport (fichier séparé) | [`docs/rapport/IFRS17_Copilot_annexes.pdf`](docs/rapport/IFRS17_Copilot_annexes.pdf) | A : bibliothèque de prompts ; B : commandes pour reproduire chaque mesure |
+| Bibliothèque de prompts (fichier séparé) | [`prompt_library.md`](prompt_library.md) et [`docs/rapport/prompt_library.pdf`](docs/rapport/prompt_library.pdf) | générée à partir des 29 fiches versionnées de `prompts/` |
+| Évaluation de la recherche | [`docs/rapport/evaluation_recherche.pdf`](docs/rapport/evaluation_recherche.pdf) | requêtes de test, résultats, commentaires ; rapports détaillés dans `eval/` |
+| Dossier complet du projet (chronologie, composants, techniques, tests, rejets) | [`docs/rapport/IFRS17_Copilot_dossier_complet.pdf`](docs/rapport/IFRS17_Copilot_dossier_complet.pdf) | document interne de préparation de l'oral ; `python docs/rapport/build_dossier.py` |
+| Campagne de tests « prêt pour la production ? » (4 niveaux) | [`docs/campagne_tests.md`](docs/campagne_tests.md) | volume, photos, données réelles CAS, documents de camarades, robustesse ; critères fixés d'avance |
+| Registre des décisions, journal des échecs | [`docs/decisions.md`](docs/decisions.md), [`docs/failures.md`](docs/failures.md) | 99 décisions motivées et mesurées, 36 échecs documentés |
+
+Les PDF du rapport se régénèrent avec `python docs/rapport/build.py` et `python docs/rapport/build_annexes.py` (Edge, Chrome ou Chromium).
+
+### État (fin de projet, octobre 2026)
+
+| Composant | Statut |
+| --- | --- |
+| Schémas Pydantic des 6 agents | fait, testé |
+| Moteur CSM v0 (§38, §44, §47, B119) | fait, 10 tests contre calculs manuels |
+| Client LLM (tout fournisseur compatible, repli, réessais, traces) | fait, testé avec un fournisseur factice |
+| Routeur (heuristique + LLM) | fait ; heuristique 95 % sur 20 cas |
+| API FastAPI : `/health`, `/v1/route`, `/v1/csm/compute` | fait |
+| Workflows n8n 01 à 11 (construits étape par étape) | remplacés par le workflow unique ; conservés dans `workflows/par_etape/` |
+| Notebooks Colab (test T4, fine-tuning de BGE-M3) | exécutés ; fine-tuning mesuré et non retenu (D-046) |
+| RAG : ingestion du règlement 2021/2036 (397 paragraphes), découpages A/B, BM25, dense, hybride, `/v1/search` | fait ; dense à mesurer avec BGE-M3 |
+| Évaluation du retrieval (56 questions, IC bootstrap) | BM25 fait : `eval/retrieval_report.md` |
+| Routeur LLM (Groq gpt-oss-20b) | 100 % sur 20 cas |
+| Agent RAG : réponse citée et vérifiée, refus, `POST /v1/ask` | 56 questions : 6/6 pièges refusés, 0 faux refus, 0 citation inventée ; relecture humaine (prompt v2, titres hiérarchiques) : 43/50 sans erreur, 37/50 complètes ; optimisation arrêtée (D-026) |
+| Extracteur multimodal : PDF texte (Groq), image ou scan (Gemini), hybride ; contrôle d'ancrage ; `POST /v1/extract`, `POST /v1/case/document` | 15/15 documents justes dans les 3 modes ; jeu de 10 pièges : 0 cas dangereux (double lecture des scans) |
+| Vérificateur (LLM-juge : soutien et portée de chaque phrase) + boucle de correction bornée → validation humaine ; `verdict` dans `/v1/ask` | juge ancré (v2) : 5/7 erreurs détectées, 6/41 fausses alertes, kappa 0,46 (v1 : 3/7, 3/41, 0,38) |
+| Question vocale : Whisper (Groq) avec vocabulaire IFRS 17 → même chaîne que `/v1/ask` ; `POST /v1/ask/audio` | 8 enregistrements : WER 0,9 % avec vocabulaire IFRS 17 (4,8 % sans), termes reconnus 8/8 (6/8 sans) |
+| **Rédacteur** (note HTML/Markdown, graphique, synthèse dont chaque nombre et chaque paragraphe sont vérifiés) et **orchestrateur** : `POST /v1/case` (document → note), `POST /v1/case/validated` (après validation humaine) ; appelés par le workflow n8n | 10 dossiers piégés de bout en bout : 0 cas dangereux, CSM juste 7/7, synthèses acceptées 9/9 ; démo n8n → note validée ; réponses de référence (`python -m agents.reference`) ; note et validation humaine par e-mail, formulaire pré-rempli (`workflows/README.md`) |
+| **Interface web** (`/app/`) : dossier suivi en direct (flux SSE), données extraites corrigeables puis validées, questions écrites ou vocales à la norme, résultats mesurés | servie par l'API, sans dépendance externe ; 2 tests |
+| **Moteur complet du cours** : modèle général pluriannuel (`POST /v1/csm/rollforward` : BEL au taux courant, OCI, RA, écarts d'expérience, perte, compte de résultat) et PAA (`POST /v1/paa/position`) | exemples chiffrés d'un cours IFRS 17 retrouvés à l'euro près (tests/test_engine_cours.py) ; quiz du cours = jeu d'évaluation hors échantillon |
+| **Adaptation du modèle d'embedding** (mesurée, non retenue) : paires question → passage générées par le LLM, filtre de fuite contre les jeux de test, négatifs difficiles BM25, entraînement contrastif de BGE-M3 sur Colab T4 (`python -m rag.finetune`, notebooks/01) | critères fixés avant l'entraînement ; quiz Recall@5 0,200 → 0,200, jeu principal sans écart significatif : non retenu (D-046, F-013) |
+| **RAG avancé et agentique** : agent de recherche **LangGraph** (planifier → chercher → évaluer les passages → nouvelle recherche bornée), Graph RAG sur les renvois de la norme, reranker cross-encoder, query indexing | protocole pré-enregistré (30 cas pratiques gelés avant le développement) ; cas pratiques Recall@5 0,517 → **0,750** avec l'agent (retenu), 0,683 avec index des questions + graphe sans LLM ; les deux ne s'additionnent pas (D-048 à D-051) |
+| **Base vectorielle Qdrant** : embarquée ou serveur (Docker), métadonnées et filtre par zone, collection liée à l'empreinte des textes | mêmes résultats que la recherche exacte NumPy (tests/test_qdrant.py, `python -m rag.qdrant_sync`) (D-052) |
+| **Registre, comptes et piste d'audit** : chaque dossier inscrit (canal, déposant, empreinte du document, statut, chiffres, note, coût) ; événements chaînés par SHA-256 ; rôles analyste, valideur, admin ; tableau de bord, registre et administration dans le site | tests/test_registry.py, tests/test_api.py ; altération de la piste détectée (D-058) |
+| **Périmètre actuariel élargi** (D-071 à D-078) : recouvrements (B65 k), frais d'acquisition (B65 e), PAA dans la note (§53 à §59), RA calibré par branche (§119), première clôture (`POST /v1/case/cloture`), plusieurs groupes par document, registre des hypothèses versionné, grille de relecture | double calcul avec le script R de l'équipe : 50/50 dossiers identiques au centime ; back-testing de 50 dossiers réels et 25 premières clôtures (rapprochement exact) ; 297 tests |
+| **Classeurs Excel (.xlsx) et CSV** (D-079) : chaque feuille devient un tableau lu comme un PDF, provenance à la cellule, formules sans valeur et feuilles cachées signalées | 1er lot : 17/19 CSM justes, 1 cas dangereux (montant au format %, F-021), corrigé par un contrôle de vraisemblance (D-080) ; jeu corrigé de 22 classeurs (dont 7 pièges) : CSM 19/19, 3/3 alertes, 0 dangereux |
+| **Unité ancrée et hypothèses du RA annoncées** (D-081, D-082) : l'unité des montants doit être écrite dans le document ; volatilité et niveau de confiance du document lus et rapprochés du registre dans la note | 0 fausse alerte d'unité sur 187 documents connus et sur 75 documents lus par le LLM, 338/338 erreurs simulées détectées ; dossier A : RA au quantile 75 % avec son CV, 65 % avec le registre |
+| **Passif pour sinistres survenus (LIC)** (D-083) : triangle reconnu, lu par le LLM et relu par le code ; Chain Ladder, erreur de Mack, actualisation, RA ; note écrite par le code ; site et n8n | Mack (1993) reproduit au franc près ; 8 triangles CAS lus par le LLM : triangle juste 7/7, LIC au centime 7/7, 0 dangereux ; dossier C : LIC 17 634,74 |
+| **Copilot et note d'un dossier LIC** (D-087) : outils propres (scénario taux, queue, niveau de confiance ; détail par survenance ; paiements futurs), points d'attention et contrôle Bornhuetter-Ferguson dans la note | jeu gelé de 6 questions : chiffre 6/6, piège 1/1, relecture humaine 3/6 (F-026) |
+| **Copilot v4** (D-084) et **mesures d'équipe** (D-085, [`docs/protocole_mesures_equipe.md`](docs/protocole_mesures_equipe.md)) | v4 sur 10 questions gelées : 8/10, **piège d'injection obéi** (F-023) → garde-fous par le code (D-086) : 5/5 pièges neufs refusés ; routeur externe, photos, n8n |
+| **Processus n8n complet en un seul workflow** (`workflows/ifrs17_copilot.json`, D-064) : dépôt par e-mail (IMAP), formulaire ou webhook, analyse, validation humaine par formulaire pré-rempli, accusés de réception, traces dans le registre, alertes d'erreur, supervision de l'API et rapport hebdomadaire | paramètres vérifiés dans le code source de n8n 2.42.3, 14 tests ; essai réel le 19/10/2026 (Windows, Gmail) : note prête avec PDF, validation humaine complète jusqu'à la note validée |
+
+## Licence
+
+Code distribué sous licence MIT : voir [`LICENSE`](LICENSE). Les polices embarquées gardent leurs propres licences (`api/web/assets/fonts/`).
