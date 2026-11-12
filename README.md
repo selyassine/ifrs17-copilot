@@ -12,6 +12,8 @@
 
 ![Vue d'ensemble de l'espace de travail](api/web/assets/img/produit/vue-ensemble.webp)
 
+> **In English.** A multi-agent copilot that reads an insurance file (PDF, scan, Excel or a spoken question), computes the contractual service margin (CSM) and the liability for incurred claims with a pure-Python actuarial engine, then drafts a cited and verified IFRS 17 note with human sign-off. The language model never computes: every figure in the note is traced back to the engine. Documentation is in French.
+
 > Projet académique : projet final du module *Advanced Deep Learning* (ESPRIT, 5ᵉ année Data Science), sujet « AI Automation ». Le moteur couvre un périmètre simplifié de la norme et n'a aucune valeur de conseil comptable.
 
 ## Aperçu de l'application
